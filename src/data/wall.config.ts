@@ -311,6 +311,31 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: 'The lower half of each array fed the musicians onstage; the upper half threw to the crowd. The PA was the monitoring — there were no wedges. Drives the "how it worked" overlay.',
   },
 
+  'dimensions.arrayStandoff': {
+    confidence: 'estimated',
+    sources: ['photos', 'derived'],
+    note: 'How far the stacks stand proud of the front plane of the towers. Not documented. Set to a little over one cabinet depth, because the photographs plainly show stacks in front of the steel rather than inside it.',
+  },
+  'structure.ramp': {
+    confidence: 'guessed',
+    sources: ['derived'],
+    note: 'INVENTED. The ramp at stage left is on no drawing and in no photograph. The deck is ten feet up, so first-person mode needs a way to climb onto the stage or it is unreachable. Pure scene-making.',
+  },
+  'structure.guyWires': {
+    confidence: 'guessed',
+    sources: ['photos'],
+    note: 'Diagonal guy wires are unmistakable in the photographs, but nothing records their gauge or their pattern. Diameter and spacing are both invented.',
+  },
+  'materials.palette': {
+    confidence: 'estimated',
+    sources: ['photos', 'anderson', 'derived'],
+    note: 'Every colour, roughness and metalness value is an interpretation of black-and-white and faded colour film, lit by a stage rig that is itself a reconstruction. The materials are plausible, not measured. The one hard fact underneath them is that the cabinets were 14-ply Finnish birch and the surviving one is painted matte black.',
+  },
+  'band.instruments': {
+    confidence: 'estimated',
+    sources: ['derived'],
+    note: 'The instruments are honest silhouettes at true size, not replicas. Which instruments were on that stage in 1974 is reasonably established; their exact geometry here is not modelled from the objects.',
+  },
   'structure.scaffold': {
     confidence: 'confirmed',
     sources: ['blueprints'],

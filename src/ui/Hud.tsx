@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { assertInventory, FT, wall } from '../data/wall.config';
+import { ARRAYS, assertInventory, CHANNELS, FT, wall, type ChannelId } from '../data/wall.config';
 import { allCells, driverTally, envelope, faceCoverage } from '../geometry/arrays';
 import { scaffoldTubes } from '../geometry/scaffold';
+import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { NavMode, SceneOptions } from '../scene/Scene';
 import { VIEWS, type ViewId } from '../scene/views';
-import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import { NavPanel } from './NavPanel';
 import { area, long, short, UNIT_LABEL, type UnitSystem } from './units';
 
@@ -20,6 +20,15 @@ export function Hud({
   setNavMode,
   stopIndex,
   goToStop,
+  units,
+  setUnits,
+  selected,
+  setSelected,
+  isolated,
+  setIsolated,
+  explode,
+  setExplode,
+  openAbout,
 }: {
   options: SceneOptions;
   setOptions: (o: SceneOptions) => void;
@@ -32,9 +41,16 @@ export function Hud({
   setNavMode: (m: NavMode) => void;
   stopIndex: number;
   goToStop: (i: number) => void;
+  units: UnitSystem;
+  setUnits: (u: UnitSystem) => void;
+  selected: string | null;
+  setSelected: (id: string | null) => void;
+  isolated: ChannelId | null;
+  setIsolated: (c: ChannelId | null) => void;
+  explode: number;
+  setExplode: (v: number) => void;
+  openAbout: () => void;
 }) {
-  // Feet and inches by default: it is what the Wall was drawn and built in.
-  const [units, setUnits] = useState<UnitSystem>('imperial');
   // On a narrow window the panel would cover the thing it describes.
   const [open, setOpen] = useState(() => window.innerWidth >= 900);
   const [inventoryError, setInventoryError] = useState<string | null>(null);
@@ -47,6 +63,16 @@ export function Hud({
       cover: faceCoverage(cells, wall.dimensions.arrayHeight),
       tubes: scaffoldTubes().length,
     };
+  }, []);
+
+  /** Arrays grouped by subsystem, so the list reads the way the PA was built. */
+  const bySystem = useMemo(() => {
+    const groups = new Map<string, typeof ARRAYS>();
+    for (const b of ARRAYS) {
+      const sys = CHANNELS[b.channel].system;
+      groups.set(sys, [...(groups.get(sys) ?? []), b]);
+    }
+    return [...groups.entries()];
   }, []);
 
   useEffect(() => {
@@ -67,17 +93,16 @@ export function Hud({
     <div className={open ? 'hud' : 'hud hud--closed'}>
       <header>
         <h1>The Wall of Sound</h1>
-        <p>Grateful Dead touring PA, 1974 — stage 2: grey-box at true scale</p>
+        <p>Grateful Dead touring PA, 1974</p>
         <div className="header-actions">
           <button className="collapse" onClick={() => setOpen(!open)} aria-expanded={open}>
             {open ? 'Hide panel' : 'Show panel'}
           </button>
-          <button
-            className="collapse"
-            onClick={() => setUnits(units === 'imperial' ? 'metric' : 'imperial')}
-            title="Switch units"
-          >
+          <button className="collapse" onClick={() => setUnits(units === 'imperial' ? 'metric' : 'imperial')}>
             {UNIT_LABEL[units]}
+          </button>
+          <button className="collapse" onClick={openAbout}>
+            About <kbd>I</kbd>
           </button>
         </div>
       </header>
@@ -87,6 +112,58 @@ export function Hud({
           {t.total} drivers · {L(stats.env.width)} wide · {L(wall.dimensions.totalHeight)} tall
         </p>
       )}
+
+      <NavPanel navMode={navMode} setNavMode={setNavMode} stopIndex={stopIndex} goToStop={goToStop} />
+
+      <section>
+        <h2>Subsystems</h2>
+        <p className="hint">
+          Point at any array to highlight it, or pick one here. Six independent systems on eleven channels.
+        </p>
+        {bySystem.map(([system, blocks]) => (
+          <div key={system} className="system">
+            <h3>{system === 'drums' ? 'drums & kick' : system.replace(/([A-Z])/g, ' $1').toLowerCase()}</h3>
+            <ul className="array-list">
+              {blocks.map((b) => (
+                <li key={b.id}>
+                  <button
+                    onClick={() => setSelected(selected === b.id ? null : b.id)}
+                    aria-current={selected === b.id}
+                  >
+                    <span className="swatch" style={{ background: CHANNELS[b.channel].color }} aria-hidden="true" />
+                    {b.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        {isolated && (
+          <button className="isolate" onClick={() => setIsolated(null)}>
+            Showing only {CHANNELS[isolated].label.toLowerCase()} — show everything
+          </button>
+        )}
+      </section>
+
+      <section>
+        <h2>Take it apart</h2>
+        <label className="slider">
+          <span>Exploded view</span>
+          <input
+            type="range"
+            min={0}
+            max={1}
+            step={0.01}
+            value={explode}
+            onChange={(e) => setExplode(Number(e.target.value))}
+            aria-valuetext={`${Math.round(explode * 100)} per cent apart`}
+          />
+        </label>
+        <p className="hint">
+          Pulls each subsystem away from the centreline along its own axis. Press <kbd>X</kbd> to snap between
+          assembled and apart.
+        </p>
+      </section>
 
       <section>
         <h2>Drivers</h2>
@@ -106,7 +183,6 @@ export function Hud({
         <h2>Measured in the model</h2>
         <dl>
           <dt>Array width</dt><dd>{L(stats.env.width)}</dd>
-          <dt>Array depth</dt><dd>{L(stats.env.depth)}</dd>
           <dt>Top of speakers</dt><dd>{L(stats.env.maxY + wall.dimensions.stageDeckHeight)}</dd>
           <dt>Speaker face</dt><dd>{area(stats.cover.baffle, units)}</dd>
           <dt>Open structure</dt><dd>{Math.round((1 - stats.cover.fraction) * 100)}%</dd>
@@ -121,14 +197,11 @@ export function Hud({
           <dd>{L(wall.dimensions.scaffoldFootprint.width)} × {L(wall.dimensions.scaffoldFootprint.depth)}</dd>
           <dt>Overall height</dt><dd>{L(wall.dimensions.totalHeight)}</dd>
           <dt>Deck</dt><dd>{L(wall.dimensions.stageDeckHeight)} up</dd>
-          <dt>Deck overhang</dt><dd>{L(wall.dimensions.deckOverhang.side)} each side</dd>
           <dt>End frames</dt><dd>{L(FT(6.5))} × {L(FT(5))}</dd>
           <dt>Bays</dt><dd>{L(FT(7))}</dd>
           <dt>Cabinet, measured</dt><dd>{short(0.787, units)} × {short(0.61, units)}</dd>
         </dl>
       </section>
-
-      <NavPanel navMode={navMode} setNavMode={setNavMode} stopIndex={stopIndex} goToStop={goToStop} />
 
       <section>
         <h2>Camera — or press 1–{Object.keys(VIEWS).length}</h2>
@@ -150,13 +223,16 @@ export function Hud({
             setOptions({ ...options, colorMode: options.colorMode === 'material' ? 'channel' : 'material' })
           }
         >
-          {options.colorMode === 'material' ? 'Colour by channel' : 'Materials'}
+          {options.colorMode === 'material' ? 'Colour by channel' : 'Materials'} <kbd>C</kbd>
         </button>
         <button onClick={toggle('showScaffold')} aria-pressed={options.showScaffold}>
           Scaffold {options.showScaffold ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showAmps')} aria-pressed={options.showAmps}>
           Amps {options.showAmps ? 'on' : 'off'}
+        </button>
+        <button onClick={toggle('showBand')} aria-pressed={options.showBand}>
+          Band gear {options.showBand ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showStage')} aria-pressed={options.showStage}>
           Stage {options.showStage ? 'on' : 'off'}
@@ -169,10 +245,10 @@ export function Hud({
       <section>
         <h2>Quality</h2>
         <ul className="views">
-          {TIERS.map((t) => (
-            <li key={t}>
-              <button onClick={() => setTier(t)} aria-current={t === tier}>
-                {TIER_LABEL[t]}
+          {TIERS.map((tv) => (
+            <li key={tv}>
+              <button onClick={() => setTier(tv)} aria-current={tv === tier}>
+                {TIER_LABEL[tv]}
               </button>
             </li>
           ))}

@@ -5,7 +5,9 @@ import * as THREE from 'three';
 import { wall } from '../data/wall.config';
 import { tierSettings, type Tier } from '../quality';
 import { Amps } from './Amps';
-import { Arrays, type ColorMode } from './Arrays';
+import { Arrays, type ArrayInteraction, type ColorMode } from './Arrays';
+import { BandGear } from './BandGear';
+import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Lighting } from './Lighting';
 import { Cabling, Scaffold, ScaleFigures, Stage, StageRamp, TieDye } from './Structure';
@@ -23,6 +25,7 @@ export interface SceneOptions {
   showStage: boolean;
   showFigures: boolean;
   showAmps: boolean;
+  showBand: boolean;
 }
 
 /** Applies the tier's renderer-level settings, which are not props on <Canvas>. */
@@ -55,11 +58,19 @@ export function Scene({
   showStage,
   showFigures,
   showAmps,
+  showBand,
   view,
   tier,
   navMode,
   tourStop,
-}: SceneOptions & { view: View; tier: Tier; navMode: NavMode; tourStop: TourStop }) {
+  interaction,
+}: SceneOptions & {
+  view: View;
+  tier: Tier;
+  navMode: NavMode;
+  tourStop: TourStop;
+  interaction: ArrayInteraction;
+}) {
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
   const orbiting = navMode !== 'walk';
@@ -72,7 +83,9 @@ export function Scene({
       <RendererSettings tier={tier} />
       <Lighting tier={tier} />
 
-      <Arrays colorMode={colorMode} shadows={shadows} />
+      <Arrays colorMode={colorMode} shadows={shadows} interaction={interaction} />
+      <BlockOutline blockId={interaction.hovered} />
+      <BlockOutline blockId={interaction.selected} strong />
       {showScaffold && (
         <>
           <Scaffold shadows={shadows} />
@@ -88,6 +101,13 @@ export function Scene({
         </>
       )}
       {showFigures && <ScaleFigures shadows={shadows} />}
+      {showBand && <BandGear shadows={shadows} />}
+
+      {/* Clicking past everything clears the selection. */}
+      <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)}>
+        <planeGeometry args={[400, 400]} />
+        <meshBasicMaterial visible={false} />
+      </mesh>
 
       {orbiting && (
         <OrbitControls
@@ -114,6 +134,7 @@ export const sceneDefaults: SceneOptions = {
   showStage: true,
   showFigures: true,
   showAmps: true,
+  showBand: true,
 };
 
 export const deckHeight = wall.dimensions.stageDeckHeight;

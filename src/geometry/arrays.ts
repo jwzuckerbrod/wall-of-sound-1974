@@ -17,7 +17,9 @@ export interface Cell {
   driver: DriverId;
   channel: ChannelId;
   block: string;
-  /** Column and row within the block, for exploded/stagger effects later. */
+  /** Direction this block flies in the exploded view. */
+  explode: [number, number, number];
+  /** Column and row within the block, for staggered effects. */
   col: number;
   row: number;
 }
@@ -72,6 +74,7 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
         driver,
         channel: b.channel,
         block: b.id,
+        explode: b.explode,
         col,
         row,
       });
@@ -124,6 +127,20 @@ export function faceCoverage(cells = allCells(), openingHeight: number) {
   const env = envelope(cells);
   const opening = env.width * openingHeight;
   return { baffle, opening, fraction: baffle / opening };
+}
+
+/** World-space bounds of one array block, for highlighting and info panels. */
+export function blockBounds(blockId: string, cells = allCells()) {
+  const mine = cells.filter((c) => c.block === blockId);
+  if (!mine.length) return null;
+  const env = envelope(mine);
+  return {
+    centre: [(env.minX + env.maxX) / 2, (env.minY + env.maxY) / 2, (env.minZ + env.maxZ) / 2] as [number, number, number],
+    size: [env.width, env.height, env.depth] as [number, number, number],
+    count: mine.length,
+    driver: mine[0].driver,
+    channel: mine[0].channel,
+  };
 }
 
 export function driverTally(cells = allCells()): Record<DriverId, number> & { total: number } {

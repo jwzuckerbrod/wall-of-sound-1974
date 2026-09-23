@@ -1,8 +1,12 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { wall } from './data/wall.config';
+import { wall, type ChannelId } from './data/wall.config';
 import { detectTier, downgrade, tierSettings, type Tier } from './quality';
+import type { ArrayInteraction } from './scene/Arrays';
+import { About } from './ui/About';
+import { ArrayPanel } from './ui/ArrayPanel';
+import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
 import { TOUR } from './scene/tour';
@@ -37,6 +41,20 @@ export default function App() {
   const [autoTier, setAutoTier] = useState(true);
   const [options, setOptions] = useState<SceneOptions>(sceneDefaults);
   const [fps, setFps] = useState(0);
+
+  // Inspection state: what the cursor is over, what is pinned open, which
+  // channel is isolated, and how far apart the exploded view has pulled things.
+  const [hovered, setHovered] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [isolated, setIsolated] = useState<ChannelId | null>(null);
+  const [explode, setExplode] = useState(0);
+  const [aboutOpen, setAboutOpen] = useState(false);
+  const [units, setUnits] = useState<UnitSystem>('imperial');
+
+  const interaction: ArrayInteraction = useMemo(
+    () => ({ hovered, selected, isolated, explode, onHover: setHovered, onSelect: setSelected }),
+    [hovered, selected, isolated, explode],
+  );
 
   const view = VIEWS[viewId];
   const hud = initial.hud;
@@ -78,6 +96,13 @@ export default function App() {
           return setNavMode('walk');
         case 't':
           return goToStop(stopIndex);
+        case 'x':
+          return setExplode((v) => (v > 0.5 ? 0 : 1));
+        case 'c':
+          return setOptions((o) => ({ ...o, colorMode: o.colorMode === 'channel' ? 'material' : 'channel' }));
+        case '?':
+        case 'i':
+          return setAboutOpen((v) => !v);
         default:
           break;
       }
@@ -99,11 +124,15 @@ export default function App() {
           goToStop(TOUR.length - 1);
         }
       }
-      if (e.key === 'Escape' && navMode !== 'orbit') setNavMode('orbit');
+      if (e.key === 'Escape') {
+        if (aboutOpen) setAboutOpen(false);
+        else if (selected) setSelected(null);
+        else if (navMode !== 'orbit') setNavMode('orbit');
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [navMode, stopIndex, goToStop, selectView]);
+  }, [navMode, stopIndex, goToStop, selectView, aboutOpen, selected]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -146,10 +175,18 @@ export default function App() {
           gl.outputColorSpace = THREE.SRGBColorSpace;
         }}
       >
-        <Scene {...options} view={view} tier={tier} navMode={navMode} tourStop={tourStop} />
+        <Scene
+          {...options}
+          view={view}
+          tier={tier}
+          navMode={navMode}
+          tourStop={tourStop}
+          interaction={interaction}
+        />
         <Post tier={tier} />
         <FpsProbe onSample={setFps} />
       </Canvas>
+
       {hud && (
         <Hud
           options={options}
@@ -166,8 +203,29 @@ export default function App() {
           setNavMode={setNavMode}
           stopIndex={stopIndex}
           goToStop={goToStop}
+          units={units}
+          setUnits={setUnits}
+          selected={selected}
+          setSelected={setSelected}
+          isolated={isolated}
+          setIsolated={setIsolated}
+          explode={explode}
+          setExplode={setExplode}
+          openAbout={() => setAboutOpen(true)}
         />
       )}
+
+      {hud && selected && (
+        <ArrayPanel
+          blockId={selected}
+          units={units}
+          onClose={() => setSelected(null)}
+          onIsolate={setIsolated}
+          isolated={isolated}
+        />
+      )}
+
+      {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
     </>
   );
 }

@@ -186,6 +186,40 @@ check('no stop is above the rig', tour.TOUR.every((s) => s.position[1] < tour.TO
 check('stop ids are unique', new Set(tour.TOUR.map((s) => s.id)).size, tour.TOUR.length);
 console.log(`        stops: ${tour.TOUR.length}`);
 
+console.log('\nInfo panels');
+// Every array must be able to describe itself: a label, a channel with a blurb,
+// a driver, and a provenance entry. A block with no panel is a dead end that
+// only shows up when somebody clicks it.
+const missing = [];
+for (const b of cfg.ARRAYS) {
+  const ch = cfg.CHANNELS[b.channel];
+  const bounds = arrays.blockBounds(b.id);
+  if (!b.label || !ch || !ch.blurb || ch.blurb.length < 60 || !bounds) missing.push(b.id);
+}
+for (const id of missing) console.log(` FAIL  ${id} cannot describe itself`);
+check('every array has label, channel blurb and bounds', missing.length, 0);
+
+const CHANNEL_COLOURS = Object.values(cfg.CHANNELS).map((c) => c.color);
+check('every channel has its own overlay colour', new Set(CHANNEL_COLOURS).size, CHANNEL_COLOURS.length);
+check('every channel is used by at least one array', (() => {
+  const used = new Set(cfg.ARRAYS.map((b) => b.channel));
+  return Object.keys(cfg.CHANNELS).every((c) => used.has(c));
+})(), true);
+check('every array has a non-zero explode direction', cfg.ARRAYS.every((b) => Math.hypot(...b.explode) > 0.1), true);
+check('block bounds are never degenerate', cfg.ARRAYS.every((b) => {
+  const bb = arrays.blockBounds(b.id);
+  return bb && bb.size[0] > 0.01 && bb.size[1] > 0.01 && bb.size[2] > 0.01;
+}), true);
+
+console.log('\nProvenance, for the About page');
+const provValues = Object.values(cfg.PROVENANCE);
+check('every provenance entry cites a source', provValues.every((p) => p.sources.length > 0), true);
+check('every cited source exists', provValues.every((p) => p.sources.every((s) => cfg.SOURCES[s])), true);
+check('every guessed value explains itself', provValues.filter((p) => p.confidence === 'guessed').every((p) => !!p.note), true);
+const counts = { confirmed: 0, estimated: 0, guessed: 0 };
+for (const p of provValues) counts[p.confidence]++;
+console.log(`        confirmed ${counts.confirmed} · estimated ${counts.estimated} · guessed ${counts.guessed}`);
+
 console.log('\nBudget');
 check('cabinet instances', cells.length, 641);
 check('scaffold tube instances', tubes.length < 4000, true);

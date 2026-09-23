@@ -24,6 +24,14 @@ export interface WallMaterials {
   ampMeter: THREE.MeshStandardMaterial;
   tieDye: THREE.MeshStandardMaterial;
   figure: THREE.MeshStandardMaterial;
+  instrumentLight: THREE.MeshStandardMaterial;
+  instrumentDark: THREE.MeshStandardMaterial;
+  instrumentBlack: THREE.MeshStandardMaterial;
+  fretboard: THREE.MeshStandardMaterial;
+  chrome: THREE.MeshStandardMaterial;
+  drumShell: THREE.MeshStandardMaterial;
+  drumHead: THREE.MeshStandardMaterial;
+  cymbal: THREE.MeshStandardMaterial;
   dispose(): void;
 }
 
@@ -150,9 +158,22 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   // the frame, which is where a near-white figure ends up in a dark hall.
   const figure = new THREE.MeshStandardMaterial({ color: '#7d786f', roughness: 0.9 });
 
+  // Band gear. Garcia's Wolf and Lesh's Alembic were both natural hardwood with
+  // a high gloss; Weir's 335 was cherry. The piano and the kit are lacquer.
+  const instrumentLight = new THREE.MeshStandardMaterial({ color: '#b87d3e', roughness: 0.22, metalness: 0.05 });
+  const instrumentDark = new THREE.MeshStandardMaterial({ color: '#6a2a20', roughness: 0.26, metalness: 0.05 });
+  const instrumentBlack = new THREE.MeshStandardMaterial({ color: '#141414', roughness: 0.18, metalness: 0.1 });
+  const fretboard = new THREE.MeshStandardMaterial({ color: '#2b1c12', roughness: 0.55 });
+  const chrome = new THREE.MeshStandardMaterial({ color: '#c8ccd2', roughness: 0.22, metalness: 0.95 });
+  const drumShell = new THREE.MeshStandardMaterial({ color: '#8a6a3a', roughness: 0.3, metalness: 0.08 });
+  const drumHead = new THREE.MeshStandardMaterial({ color: '#ddd6c8', roughness: 0.75 });
+  const cymbal = new THREE.MeshStandardMaterial({ color: '#b39a52', roughness: 0.3, metalness: 0.9 });
+
   cached = {
     shell, baffle, cone, metal, steel, deck, facing, cable,
     ampBody, ampGlass, ampMeter, tieDye, figure,
+    instrumentLight, instrumentDark, instrumentBlack, fretboard, chrome,
+    drumShell, drumHead, cymbal,
     dispose() {
       for (const v of Object.values(this)) if (v instanceof THREE.Material) v.dispose();
       cached = null;
