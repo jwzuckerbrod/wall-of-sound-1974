@@ -297,7 +297,8 @@ The deck was tied into the scaffolding for a reason worth putting in an info pan
 Modelled to give the PA a place to stand, deliberately understated so it never competes with the Wall.
 
 - **Stage deck:** plank-over-steel, 12 m deep, with a dark skirt.
-- **Band gear, 1974-correct:**
+- **The instruments are deliberately not modelled.** A first attempt produced generic primitive shapes that cost the reconstruction more credibility than they added — see `docs/qa-findings.md` §5. What is on the stage is the furniture that is both documented and legible at this scale: the paired vocal microphones, and road cases carrying the 1969 stencil. The instruments that *were* there in 1974 are listed below for the record, not because they are in the model.
+- **Band gear, 1974-correct, for the record:**
   - **Jerry Garcia** — "Wolf", the Doug Irwin custom (in use from late 1973; the wolf was a sticker in 1974, inlaid later).
   - **Bob Weir** — Gibson ES-335, with an Alembic parametric EQ and an Eventide digital delay in his rack.
   - **Phil Lesh** — Alembic quadraphonic bass. Lesh had two in 1974; the second, "Mission Control" (serial 74 00008, built by Rick Turner), from 16 June 1974. The earlier one is the right choice for a March–May scene, the later for the Winterland scene.

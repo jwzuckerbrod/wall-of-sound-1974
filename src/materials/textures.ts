@@ -205,6 +205,86 @@ export const tieDyeMap = () =>
     ctx.putImageData(img, 0, 0);
   });
 
+// ─── equipment stencil ───────────────────────────────────────────────────────
+
+/**
+ * The skull and 13-point lightning bolt, as stencil art on a road case.
+ *
+ * This is the historically correct use of it: Owsley Stanley and Bob Thomas
+ * made the design in 1969 specifically to mark the band's touring equipment, so
+ * it belongs on the flight cases and nowhere else in this scene — not as a
+ * backdrop, and not on the speaker cabinets, for which there is no evidence.
+ * Drawn schematically, at the size a case lid occupies on screen.
+ */
+export const stencilMap = () =>
+  make('stencil', 256, (ctx, s) => {
+    ctx.fillStyle = '#17150f';
+    ctx.fillRect(0, 0, s, s);
+
+    const c = s / 2;
+    const r = s * 0.42;
+
+    // Circle, split on the diagonal: red above, blue below.
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(c, c, r, 0, Math.PI * 2);
+    ctx.clip();
+    ctx.fillStyle = '#b8352c';
+    ctx.fillRect(0, 0, s, s);
+    ctx.fillStyle = '#2b4c8c';
+    ctx.beginPath();
+    ctx.moveTo(0, s);
+    ctx.lineTo(s, 0);
+    ctx.lineTo(s, s);
+    ctx.closePath();
+    ctx.fill();
+
+    // The bolt: a white band across the split.
+    ctx.strokeStyle = '#efe9dd';
+    ctx.lineWidth = s * 0.075;
+    ctx.beginPath();
+    ctx.moveTo(c - r, c + r * 0.92);
+    ctx.lineTo(c - r * 0.18, c + r * 0.1);
+    ctx.lineTo(c + r * 0.12, c + r * 0.3);
+    ctx.lineTo(c + r, c - r * 0.92);
+    ctx.stroke();
+    ctx.restore();
+
+    // Skull, schematic: cranium, jaw, sockets, nasal opening.
+    ctx.fillStyle = '#efe9dd';
+    ctx.beginPath();
+    ctx.ellipse(c, c - r * 0.08, r * 0.46, r * 0.42, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(c - r * 0.26, c + r * 0.22);
+    ctx.lineTo(c + r * 0.26, c + r * 0.22);
+    ctx.lineTo(c + r * 0.18, c + r * 0.5);
+    ctx.lineTo(c - r * 0.18, c + r * 0.5);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.fillStyle = '#17150f';
+    for (const sx of [-1, 1]) {
+      ctx.beginPath();
+      ctx.ellipse(c + sx * r * 0.19, c - r * 0.12, r * 0.13, r * 0.15, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.beginPath();
+    ctx.moveTo(c, c + r * 0.02);
+    ctx.lineTo(c - r * 0.07, c + r * 0.18);
+    ctx.lineTo(c + r * 0.07, c + r * 0.18);
+    ctx.closePath();
+    ctx.fill();
+    ctx.lineWidth = s * 0.012;
+    ctx.strokeStyle = '#17150f';
+    for (const dx of [-0.09, 0, 0.09]) {
+      ctx.beginPath();
+      ctx.moveTo(c + r * dx, c + r * 0.24);
+      ctx.lineTo(c + r * dx, c + r * 0.48);
+      ctx.stroke();
+    }
+  });
+
 // ─── steel ───────────────────────────────────────────────────────────────────
 
 /** Galvanised tube: mottled spangle, rust creeping in at random. */

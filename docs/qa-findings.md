@@ -130,3 +130,8 @@ it. Three honest options:
 
 My recommendation is **1 for now, 2 later if the gear earns its place** — the Wall is the subject, and
 right now the instruments actively cost the piece credibility.
+
+**Decided: option 1.** The instruments are removed. What stays on the stage is the furniture that is both
+documented and legible at this scale — the paired vocal microphones sixty millimetres apart, and the road
+cases carrying the 1969 equipment stencil, which is the correct and only use of that design in the scene.
+`docs/reconstruction-spec.md` §11 now records the absence rather than implying the gear is modelled.
