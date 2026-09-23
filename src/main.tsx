@@ -3,6 +3,14 @@ import { createRoot } from 'react-dom/client';
 import App from './App';
 import './styles.css';
 
+// Keep the last few runtime errors with full stacks on the window, so a
+// headless/automated browser can read them back. Dev only.
+if (import.meta.env.DEV) {
+  const log: string[] = ((window as unknown as Record<string, unknown>).__errors = []) as string[];
+  window.addEventListener('error', (e) => log.push(e.error?.stack ?? String(e.message)));
+  window.addEventListener('unhandledrejection', (e) => log.push(String(e.reason?.stack ?? e.reason)));
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

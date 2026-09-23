@@ -4,6 +4,7 @@ import { allCells, driverTally, envelope, faceCoverage } from '../geometry/array
 import { scaffoldTubes } from '../geometry/scaffold';
 import type { SceneOptions } from '../scene/Scene';
 import { VIEWS, type ViewId } from '../scene/views';
+import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import { area, long, short, UNIT_LABEL, type UnitSystem } from './units';
 
 export function Hud({
@@ -12,12 +13,16 @@ export function Hud({
   fps,
   viewId,
   setViewId,
+  tier,
+  setTier,
 }: {
   options: SceneOptions;
   setOptions: (o: SceneOptions) => void;
   fps: number;
   viewId: ViewId;
   setViewId: (id: ViewId) => void;
+  tier: Tier;
+  setTier: (t: Tier) => void;
 }) {
   // Feet and inches by default: it is what the Wall was drawn and built in.
   const [units, setUnits] = useState<UnitSystem>('imperial');
@@ -129,11 +134,18 @@ export function Hud({
 
       <section className="controls">
         <h2>Show</h2>
-        <button onClick={() => setOptions({ ...options, colorMode: options.colorMode === 'grey' ? 'channel' : 'grey' })}>
-          {options.colorMode === 'grey' ? 'Colour by channel' : 'Grey-box'}
+        <button
+          onClick={() =>
+            setOptions({ ...options, colorMode: options.colorMode === 'material' ? 'channel' : 'material' })
+          }
+        >
+          {options.colorMode === 'material' ? 'Colour by channel' : 'Materials'}
         </button>
         <button onClick={toggle('showScaffold')} aria-pressed={options.showScaffold}>
           Scaffold {options.showScaffold ? 'on' : 'off'}
+        </button>
+        <button onClick={toggle('showAmps')} aria-pressed={options.showAmps}>
+          Amps {options.showAmps ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showStage')} aria-pressed={options.showStage}>
           Stage {options.showStage ? 'on' : 'off'}
@@ -141,6 +153,19 @@ export function Hud({
         <button onClick={toggle('showFigures')} aria-pressed={options.showFigures}>
           Figures {options.showFigures ? 'on' : 'off'}
         </button>
+      </section>
+
+      <section>
+        <h2>Quality</h2>
+        <ul className="views">
+          {TIERS.map((t) => (
+            <li key={t}>
+              <button onClick={() => setTier(t)} aria-current={t === tier}>
+                {TIER_LABEL[t]}
+              </button>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <footer>Drag to orbit · scroll to zoom{fps > 0 ? ` · ${fps} fps` : ''}</footer>

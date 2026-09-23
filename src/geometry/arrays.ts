@@ -5,7 +5,7 @@
  * scripts/verify.mjs checks them without a browser. If this file ever emits a
  * number of cells that isn't 641, something is wrong with the config.
  */
-import { ARRAYS, CABINETS, cabinetSize, type ArrayBlock, type CabinetId, type ChannelId, type DriverId } from '../data/wall.config';
+import { ARRAYS, CABINETS, cabinetSize, wall, type ArrayBlock, type CabinetId, type ChannelId, type DriverId } from '../data/wall.config';
 
 export interface Cell {
   /** Centre of the cabinet box, world space, metres. */
@@ -35,6 +35,8 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
   const driver = CABINETS[b.cabinet].driver;
   const cells: Cell[] = [];
   const halfCol = (b.cols - 1) / 2;
+  // Stacks stand proud of the steel, not inside it. See dimensions.arrayStandoff.
+  const blockZ = b.z + wall.dimensions.arrayStandoff;
 
   for (let col = 0; col < b.cols; col++) {
     const offset = (col - halfCol) * size.w;
@@ -46,11 +48,11 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
       // Arc length along the face maps to angle; +θ swings toward +X.
       const theta = offset / b.curveRadius;
       x = b.x + b.curveRadius * Math.sin(theta);
-      z = b.z + b.curveRadius * (Math.cos(theta) - 1);
+      z = blockZ + b.curveRadius * (Math.cos(theta) - 1);
       rotationY = theta;
     } else {
       x = b.x + offset;
-      z = b.z;
+      z = blockZ;
       rotationY = 0;
     }
 

@@ -759,6 +759,13 @@ export const wall = {
     stagingOutdoor: { width: FT(104), depth: FT(40) },
     venue: 'outdoor' as 'indoor' | 'outdoor',
     bandLineZ: 3.0,
+    /**
+     * How far the speaker faces stand proud of the front plane of the towers.
+     * Not documented — but the photographs plainly show stacks in front of the
+     * steel rather than inside it, and without a standoff the scaffold draws
+     * across the driver faces. Slightly more than one cabinet depth.
+     */
+    arrayStandoff: 0.62,
   },
 
   structure: {
@@ -835,16 +842,32 @@ export const wall = {
   },
 
   materials: {
-    plywood: { baseColor: '#C4A276', roughness: 0.82, metalness: 0.0, wearAmount: 0.55 },
+    plywood: { baseColor: '#D8B183', roughness: 0.82, metalness: 0.0, wearAmount: 0.55 },
     /** Matte black paint over the same 14-ply birch — the finish on the one surviving cabinet. */
-    plywoodBlack: { baseColor: '#1A1917', roughness: 0.90, metalness: 0.0, wearAmount: 0.7 },
-    /** Fraction of cabinets finished black rather than left bare. */
-    blackFinishRatio: 0.55,
+    /**
+     * Has to be far darker than it looks here: the plywood grain map multiplies
+     * this, and stage lighting lifts the result, so anything above about #1a
+     * comes out reading as brown rather than as a black-painted cabinet.
+     */
+    plywoodBlack: { baseColor: '#100F0C', roughness: 0.90, metalness: 0.0, wearAmount: 0.7 },
+    /**
+     * Fraction of cabinets finished black rather than left bare. The one
+     * surviving cabinet is black; the photographs show plenty of bare ply. With
+     * no way to count, this is a judgement call, and it is the single value
+     * that most changes how the wall reads.
+     */
+    blackFinishRatio: 0.42,
     baffle: { baseColor: '#141414', roughness: 0.94, metalness: 0.0 },
-    cone: { baseColor: '#6E7178', roughness: 0.88, metalness: 0.0 },
-    dustCap: { baseColor: '#C9CDD2', roughness: 0.28, metalness: 0.92 },
+    cone: { baseColor: '#8E9198', roughness: 0.86, metalness: 0.0 },
+    /** Brushed aluminium, not chrome: in a dark hall a mirror just reflects the dark. */
+    dustCap: { baseColor: '#D2D6DB', roughness: 0.42, metalness: 0.82 },
     surround: { baseColor: '#1C1C1C', roughness: 0.75, metalness: 0.0 },
-    steel: { baseColor: '#9AA0A6', roughness: 0.46, metalness: 0.95 },
+    /**
+     * Galvanised tube, dulled by road use. Bright steel reads as a white cage
+     * in front of the speakers and takes over the frame, which is the opposite
+     * of what the photographs show.
+     */
+    steel: { baseColor: '#5F656B', roughness: 0.62, metalness: 0.9 },
     cable: { baseColor: '#0E0E0E', roughness: 0.68, metalness: 0.0 },
     ampGlass: { baseColor: '#0A0A0C', roughness: 0.12, metalness: 0.2 },
     /**
@@ -864,7 +887,13 @@ export const wall = {
     },
     targetFps: 60,
     initialDownloadBudgetMb: 5,
-    hdri: { intensity: 0.65, rotation: DEG(15) },
+    /**
+     * How much the generated environment map contributes. Low on purpose: the
+     * bright emitters that make the dust caps and the steel read are all high
+     * overhead, so a strong ambient from them lands mostly on upward-facing
+     * surfaces and turns the stage deck into the brightest thing in the frame.
+     */
+    hdri: { intensity: 0.28, rotation: DEG(15) },
   },
 } as const;
 

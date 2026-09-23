@@ -107,13 +107,15 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
   for (const x of L.xLines)
     for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, top, z], kind: 'standard' });
 
-  // Ledgers along the run, and across the depth, at every lift.
+  // Ledgers along the run, and transoms across the depth, at every lift.
+  // Transoms are skipped on the front line: that plane is the speaker face, and
+  // a tube crossing it would run through the cabinets.
   for (const y of L.yLevels) {
     for (const z of towerZ)
       for (let i = 0; i < L.xLines.length - 1; i++)
         tubes.push({ a: [L.xLines[i], y, z], b: [L.xLines[i + 1], y, z], kind: 'ledger' });
     for (const x of L.xLines)
-      for (let i = 0; i < towerZ.length - 1; i++)
+      for (let i = 1; i < towerZ.length - 1; i++)
         tubes.push({ a: [x, y, towerZ[i]], b: [x, y, towerZ[i + 1]], kind: 'ledger' });
   }
 

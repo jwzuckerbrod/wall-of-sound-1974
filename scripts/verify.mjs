@@ -77,7 +77,9 @@ check('top of tower (m)', L.yLevels.at(-1), FTM(38 + 10 / 12), 1e-6);
 check('deck height (m)', L.deck.y, FTM(10), 1e-9);
 check('deck width (m) = 64 + 9 + 9', L.deck.maxX - L.deck.minX, FTM(82), 1e-6);
 check('deck depth (m) = 40 + 1', L.deck.maxZ - L.deck.minZ, FTM(41), 1e-6);
-check('wall front face on tower front line', L.towerFrontZ, 0, 1e-9);
+check('tower front line at the origin plane', L.towerFrontZ, 0, 1e-9);
+check('speaker faces stand proud of the steel', env.maxZ > L.towerFrontZ, true);
+check('cabinets do not float off the front of the towers', env.maxZ - L.towerFrontZ < 1.5, true);
 
 console.log('\nScaffold floors — stacks must stand on something');
 const platforms = cfg.wall.structure.scaffold.platformsAboveDeck;
