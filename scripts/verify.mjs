@@ -14,7 +14,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'wos-verify-'));
 execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
-   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts'],
+   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/scene/views.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -112,6 +112,18 @@ check('cluster underside clears a standing figure', cfg.ARRAYS.find((a) => a.id 
 check('band line inside the deck', cfg.wall.dimensions.bandLineZ < L.deck.maxZ, true);
 check('band line downstage of the wall', cfg.wall.dimensions.bandLineZ > L.towerFrontZ, true);
 check('deck sits below every cabinet', deckTop > 0, true);
+
+console.log('\nCameras that claim to be a person');
+const views = await load('scene/views.js');
+const EYE = { min: 1.45, max: 1.85 };
+for (const [id, v] of Object.entries(views.VIEWS)) {
+  if (!v.onDeck) continue;
+  const [x, y, z] = v.position;
+  const eye = y - L.deck.y;
+  check(`${id}: eye height above deck (m)`, eye >= EYE.min && eye <= EYE.max, true);
+  check(`${id}: standing inside the deck`, z <= L.deck.maxZ && z >= L.deck.minZ && x >= L.deck.minX && x <= L.deck.maxX, true);
+  check(`${id}: downstage of the wall face`, z > L.towerFrontZ, true);
+}
 
 console.log('\nBudget');
 check('cabinet instances', cells.length, 641);

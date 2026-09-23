@@ -17,6 +17,12 @@ export interface View {
    * ends off a 60-foot wall.
    */
   fit?: boolean;
+  /**
+   * This view claims to be a person standing on the stage. verify.mjs checks
+   * that the eye really is inside the deck footprint and at human eye height,
+   * so a view cannot silently drift off the front of the stage.
+   */
+  onDeck?: boolean;
 }
 
 export const VIEWS = {
@@ -41,10 +47,15 @@ export const VIEWS = {
     fov: 46,
   },
   deck: {
+    // Lesh's spot, eye height above the deck, looking back up at the Wall.
+    // An earlier version put this at z = 6.4, which is past the downstage edge
+    // — it was hovering over the crowd, not standing on the stage.
+    // scripts/verify.mjs now enforces onDeck.
     label: 'On the deck, where the band stood',
-    position: [-1.2, 4.7, 6.4],
-    target: [1.5, 8, -2],
-    fov: 62,
+    position: [-2.4, 4.67, 3.1],
+    target: [0.4, 7.2, -2],
+    fov: 66,
+    onDeck: true,
   },
   aerial: {
     label: 'Above, showing the 64 × 40 footprint',

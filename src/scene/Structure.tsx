@@ -72,19 +72,64 @@ export function Stage() {
   );
 }
 
-/** 1.75 m figures on the deck — the only honest way to read scale in a grey-box. */
+/**
+ * A 1.75 m human proxy, broken into head, torso and legs.
+ *
+ * This started as a single capsule and read as much bigger than it was: a
+ * featureless pill has no internal proportions, so the eye has nothing to
+ * measure it against and defaults to "large blob". Head-over-torso-over-legs
+ * carries its own scale, which is the entire point of putting a figure in a
+ * grey-box.
+ */
+const FIGURE = {
+  total: 1.75,
+  headR: 0.105,
+  shoulderW: 0.42,
+  torsoH: 0.62,
+  torsoD: 0.22,
+  legH: 0.88,
+  legW: 0.13,
+  stance: 0.17,
+};
+
+function Figure({ facing = 0 }: { facing?: number }) {
+  const f = FIGURE;
+  const legTop = f.legH;
+  const torsoTop = legTop + f.torsoH;
+  return (
+    <group rotation={[0, facing, 0]}>
+      <mesh position={[-f.stance / 2, f.legH / 2, 0]} castShadow>
+        <boxGeometry args={[f.legW, f.legH, f.legW * 1.3]} />
+        <meshStandardMaterial color="#8d8a84" roughness={0.9} />
+      </mesh>
+      <mesh position={[f.stance / 2, f.legH / 2, 0]} castShadow>
+        <boxGeometry args={[f.legW, f.legH, f.legW * 1.3]} />
+        <meshStandardMaterial color="#8d8a84" roughness={0.9} />
+      </mesh>
+      <mesh position={[0, legTop + f.torsoH / 2, 0]} castShadow>
+        <boxGeometry args={[f.shoulderW, f.torsoH, f.torsoD]} />
+        <meshStandardMaterial color="#c9c5bd" roughness={0.85} />
+      </mesh>
+      <mesh position={[0, torsoTop + f.headR + 0.02, 0]} castShadow>
+        <sphereGeometry args={[f.headR, 12, 10]} />
+        <meshStandardMaterial color="#d8d4cd" roughness={0.8} />
+      </mesh>
+    </group>
+  );
+}
+
+/** Figures on the deck — the only honest way to read scale in a grey-box. */
 export function ScaleFigures() {
   const L = useMemo(() => scaffoldLayout(), []);
-  const members = wall.band.members;
   return (
     <group position={[0, L.deck.y, 0]}>
-      {members.map((m) => {
+      {wall.band.members.map((m) => {
         const x = wall.band.mirrored ? -m.x : m.x;
         return (
-          <mesh key={m.id} position={[x, 0.875, m.z]} castShadow>
-            <capsuleGeometry args={[0.22, 1.31, 4, 8]} />
-            <meshStandardMaterial color="#d8d4cd" roughness={0.8} />
-          </mesh>
+          <group key={m.id} position={[x, 0, m.z]}>
+            {/* Facing the audience, backs to the Wall — the whole idea of the system. */}
+            <Figure facing={Math.PI} />
+          </group>
         );
       })}
     </group>

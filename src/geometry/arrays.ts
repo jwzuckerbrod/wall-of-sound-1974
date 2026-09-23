@@ -112,6 +112,18 @@ export function envelope(cells = allCells()): Envelope {
   return { minX, maxX, minY, maxY, minZ, maxZ, width: maxX - minX, height: maxY - minY, depth: maxZ - minZ };
 }
 
+/**
+ * How much of the wall's face is actually speaker, and how much is open
+ * structure. 641 drivers of these sizes cannot fill a 60-foot frame — see
+ * docs/reconstruction-spec.md §12. Shown to visitors rather than hidden.
+ */
+export function faceCoverage(cells = allCells(), openingHeight: number) {
+  const baffle = cells.reduce((sum, c) => sum + c.size.w * c.size.h, 0);
+  const env = envelope(cells);
+  const opening = env.width * openingHeight;
+  return { baffle, opening, fraction: baffle / opening };
+}
+
 export function driverTally(cells = allCells()): Record<DriverId, number> & { total: number } {
   const t = { jbl15: 0, jbl12: 0, jbl5: 0, evHorn: 0, total: 0 };
   for (const c of cells) { t[c.driver]++; t.total++; }

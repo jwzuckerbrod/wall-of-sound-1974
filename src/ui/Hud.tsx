@@ -1,17 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { assertInventory, FT, wall } from '../data/wall.config';
-import { allCells, driverTally, envelope } from '../geometry/arrays';
+import { allCells, driverTally, envelope, faceCoverage } from '../geometry/arrays';
 import { scaffoldTubes } from '../geometry/scaffold';
 import type { SceneOptions } from '../scene/Scene';
 import { VIEWS, type ViewId } from '../scene/views';
-
-const m = (v: number) => `${v.toFixed(2)} m`;
-const ft = (v: number) => {
-  const total = v / 0.3048;
-  const whole = Math.floor(total);
-  const inches = Math.round((total - whole) * 12);
-  return inches === 12 ? `${whole + 1}'-0"` : `${whole}'-${inches}"`;
-};
+import { area, long, short, UNIT_LABEL, type UnitSystem } from './units';
 
 export function Hud({
   options,
@@ -26,12 +19,20 @@ export function Hud({
   viewId: ViewId;
   setViewId: (id: ViewId) => void;
 }) {
+  // Feet and inches by default: it is what the Wall was drawn and built in.
+  const [units, setUnits] = useState<UnitSystem>('imperial');
   // On a narrow window the panel would cover the thing it describes.
   const [open, setOpen] = useState(() => window.innerWidth >= 900);
   const [inventoryError, setInventoryError] = useState<string | null>(null);
+
   const stats = useMemo(() => {
     const cells = allCells();
-    return { cells, tally: driverTally(cells), env: envelope(cells), tubes: scaffoldTubes().length };
+    return {
+      tally: driverTally(cells),
+      env: envelope(cells),
+      cover: faceCoverage(cells, wall.dimensions.arrayHeight),
+      tubes: scaffoldTubes().length,
+    };
   }, []);
 
   useEffect(() => {
@@ -45,6 +46,7 @@ export function Hud({
 
   const t = stats.tally;
   const ok = t.total === wall.inventory.total;
+  const L = (m: number) => long(m, units);
   const toggle = (k: keyof SceneOptions) => () => setOptions({ ...options, [k]: !options[k] });
 
   return (
@@ -52,12 +54,25 @@ export function Hud({
       <header>
         <h1>The Wall of Sound</h1>
         <p>Grateful Dead touring PA, 1974 — stage 2: grey-box at true scale</p>
-        <button className="collapse" onClick={() => setOpen(!open)} aria-expanded={open}>
-          {open ? 'Hide panel' : 'Show panel'}
-        </button>
+        <div className="header-actions">
+          <button className="collapse" onClick={() => setOpen(!open)} aria-expanded={open}>
+            {open ? 'Hide panel' : 'Show panel'}
+          </button>
+          <button
+            className="collapse"
+            onClick={() => setUnits(units === 'imperial' ? 'metric' : 'imperial')}
+            title="Switch units"
+          >
+            {UNIT_LABEL[units]}
+          </button>
+        </div>
       </header>
 
-      {!open && <p className="peek">{t.total} drivers · {ft(stats.env.width)} wide · {ft(wall.dimensions.totalHeight)} tall</p>}
+      {!open && (
+        <p className="peek">
+          {t.total} drivers · {L(stats.env.width)} wide · {L(wall.dimensions.totalHeight)} tall
+        </p>
+      )}
 
       <section>
         <h2>Drivers</h2>
@@ -74,11 +89,13 @@ export function Hud({
       </section>
 
       <section>
-        <h2>Measured</h2>
+        <h2>Measured in the model</h2>
         <dl>
-          <dt>Array width</dt><dd>{m(stats.env.width)} · {ft(stats.env.width)}</dd>
-          <dt>Array depth</dt><dd>{m(stats.env.depth)} · {ft(stats.env.depth)}</dd>
-          <dt>Top of speakers</dt><dd>{m(stats.env.maxY + wall.dimensions.stageDeckHeight)} above ground</dd>
+          <dt>Array width</dt><dd>{L(stats.env.width)}</dd>
+          <dt>Array depth</dt><dd>{L(stats.env.depth)}</dd>
+          <dt>Top of speakers</dt><dd>{L(stats.env.maxY + wall.dimensions.stageDeckHeight)}</dd>
+          <dt>Speaker face</dt><dd>{area(stats.cover.baffle, units)}</dd>
+          <dt>Open structure</dt><dd>{Math.round((1 - stats.cover.fraction) * 100)}%</dd>
           <dt>Scaffold tubes</dt><dd>{stats.tubes}</dd>
         </dl>
       </section>
@@ -86,10 +103,14 @@ export function Hud({
       <section>
         <h2>Drawn, 10 Apr 1974</h2>
         <dl>
-          <dt>Tower footprint</dt><dd>{ft(wall.dimensions.scaffoldFootprint.width)} × {ft(wall.dimensions.scaffoldFootprint.depth)}</dd>
-          <dt>Overall height</dt><dd>{ft(wall.dimensions.totalHeight)}</dd>
-          <dt>Deck</dt><dd>{ft(wall.dimensions.stageDeckHeight)} up, overhangs {ft(wall.dimensions.deckOverhang.side)}</dd>
-          <dt>Frames / bays</dt><dd>{ft(FT(6.5))} × {ft(FT(5))} on {ft(FT(7))}</dd>
+          <dt>Tower footprint</dt>
+          <dd>{L(wall.dimensions.scaffoldFootprint.width)} × {L(wall.dimensions.scaffoldFootprint.depth)}</dd>
+          <dt>Overall height</dt><dd>{L(wall.dimensions.totalHeight)}</dd>
+          <dt>Deck</dt><dd>{L(wall.dimensions.stageDeckHeight)} up</dd>
+          <dt>Deck overhang</dt><dd>{L(wall.dimensions.deckOverhang.side)} each side</dd>
+          <dt>End frames</dt><dd>{L(FT(6.5))} × {L(FT(5))}</dd>
+          <dt>Bays</dt><dd>{L(FT(7))}</dd>
+          <dt>Cabinet, measured</dt><dd>{short(0.787, units)} × {short(0.61, units)}</dd>
         </dl>
       </section>
 
@@ -122,9 +143,7 @@ export function Hud({
         </button>
       </section>
 
-      <footer>
-        Drag to orbit · scroll to zoom{fps > 0 ? ` · ${fps} fps` : ''}
-      </footer>
+      <footer>Drag to orbit · scroll to zoom{fps > 0 ? ` · ${fps} fps` : ''}</footer>
     </div>
   );
 }
