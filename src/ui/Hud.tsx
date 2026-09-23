@@ -3,6 +3,7 @@ import { assertInventory, FT, wall } from '../data/wall.config';
 import { allCells, driverTally, envelope } from '../geometry/arrays';
 import { scaffoldTubes } from '../geometry/scaffold';
 import type { SceneOptions } from '../scene/Scene';
+import { VIEWS, type ViewId } from '../scene/views';
 
 const m = (v: number) => `${v.toFixed(2)} m`;
 const ft = (v: number) => {
@@ -16,13 +17,17 @@ export function Hud({
   options,
   setOptions,
   fps,
-  view,
+  viewId,
+  setViewId,
 }: {
   options: SceneOptions;
   setOptions: (o: SceneOptions) => void;
   fps: number;
-  view: string;
+  viewId: ViewId;
+  setViewId: (id: ViewId) => void;
 }) {
+  // On a narrow window the panel would cover the thing it describes.
+  const [open, setOpen] = useState(() => window.innerWidth >= 900);
   const [inventoryError, setInventoryError] = useState<string | null>(null);
   const stats = useMemo(() => {
     const cells = allCells();
@@ -43,11 +48,16 @@ export function Hud({
   const toggle = (k: keyof SceneOptions) => () => setOptions({ ...options, [k]: !options[k] });
 
   return (
-    <div className="hud">
+    <div className={open ? 'hud' : 'hud hud--closed'}>
       <header>
         <h1>The Wall of Sound</h1>
         <p>Grateful Dead touring PA, 1974 — stage 2: grey-box at true scale</p>
+        <button className="collapse" onClick={() => setOpen(!open)} aria-expanded={open}>
+          {open ? 'Hide panel' : 'Show panel'}
+        </button>
       </header>
+
+      {!open && <p className="peek">{t.total} drivers · {ft(stats.env.width)} wide · {ft(wall.dimensions.totalHeight)} tall</p>}
 
       <section>
         <h2>Drivers</h2>
@@ -83,8 +93,21 @@ export function Hud({
         </dl>
       </section>
 
+      <section>
+        <h2>Camera — or press 1–{Object.keys(VIEWS).length}</h2>
+        <ul className="views">
+          {(Object.keys(VIEWS) as ViewId[]).map((id, i) => (
+            <li key={id}>
+              <button onClick={() => setViewId(id)} aria-current={id === viewId}>
+                <kbd>{i + 1}</kbd> {VIEWS[id].label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="controls">
-        <h2>View</h2>
+        <h2>Show</h2>
         <button onClick={() => setOptions({ ...options, colorMode: options.colorMode === 'grey' ? 'channel' : 'grey' })}>
           {options.colorMode === 'grey' ? 'Colour by channel' : 'Grey-box'}
         </button>
@@ -99,7 +122,9 @@ export function Hud({
         </button>
       </section>
 
-      <footer>{view} · {fps} fps · drag to orbit, scroll to zoom</footer>
+      <footer>
+        Drag to orbit · scroll to zoom{fps > 0 ? ` · ${fps} fps` : ''}
+      </footer>
     </div>
   );
 }

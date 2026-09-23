@@ -1,7 +1,7 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Scene, type SceneOptions } from './scene/Scene';
-import { viewFromSearch } from './scene/views';
+import { VIEWS, viewFromSearch, type ViewId } from './scene/views';
 import { Hud } from './ui/Hud';
 
 function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
@@ -21,7 +21,30 @@ function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
 }
 
 export default function App() {
-  const { view, hud } = useMemo(() => viewFromSearch(window.location.search), []);
+  const initial = useMemo(() => viewFromSearch(window.location.search), []);
+  const [viewId, setViewId] = useState<ViewId>(initial.id);
+  const view = VIEWS[viewId];
+  const hud = initial.hud;
+
+  // Number keys jump between views — the seed of the keyboard tour in stage 4.
+  useEffect(() => {
+    const ids = Object.keys(VIEWS) as ViewId[];
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const n = Number(e.key);
+      if (n >= 1 && n <= ids.length) selectView(ids[n - 1]);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const selectView = (id: ViewId) => {
+    setViewId(id);
+    const url = new URL(window.location.href);
+    url.searchParams.set('view', id);
+    window.history.replaceState(null, '', url);
+  };
+
   const [options, setOptions] = useState<SceneOptions>({
     colorMode: 'grey',
     showScaffold: true,
@@ -40,7 +63,15 @@ export default function App() {
         <Scene {...options} view={view} />
         <FpsProbe onSample={setFps} />
       </Canvas>
-      {hud && <Hud options={options} setOptions={setOptions} fps={fps} view={view.label} />}
+      {hud && (
+        <Hud
+          options={options}
+          setOptions={setOptions}
+          fps={fps}
+          viewId={viewId}
+          setViewId={selectView}
+        />
+      )}
     </>
   );
 }

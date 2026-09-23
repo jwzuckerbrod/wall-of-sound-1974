@@ -16,11 +16,22 @@ export function FitCamera({ view, margin = 1.02 }: { view: View; margin?: number
   const controls = useThree((s) => s.controls) as { target: THREE.Vector3; update: () => void } | null;
 
   useEffect(() => {
-    if (!view.fit) return;
+    const target = new THREE.Vector3(...view.target);
+
+    // Views that declare an exact eye position just use it.
+    if (!view.fit) {
+      camera.position.set(...view.position);
+      camera.lookAt(target);
+      camera.updateProjectionMatrix();
+      if (controls) {
+        controls.target.copy(target);
+        controls.update();
+      }
+      return;
+    }
 
     const env = envelope();
     const deck = wall.dimensions.stageDeckHeight;
-    const target = new THREE.Vector3(...view.target);
 
     // Fit a sphere around the rig CENTRED ON THE CONTROLS TARGET, not on the
     // rig's own centre. OrbitControls recomputes the camera from its target and
