@@ -619,46 +619,53 @@ const A = (b: ArrayBlock) => b;
  */
 export const ARRAYS: ArrayBlock[] = [
   // ── Vocals — the curved centre cluster, elevated to clear the band ──────────
-  // ── Vocals — curved centre cluster, raised to clear the band ───────────────
-  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 7.40, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
-  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 20, rows: 6, x:  0.00, baseY: 6.26, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 120 × 5″' }),
-  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 2.60, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
-  // Vocal fill towers flanking the cluster — the role of Anderson's measured cabinet
-  A({ id: 'voc-lmL',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x: -3.04, baseY: 0.00, z: 0, curveRadius: 0,   explode: [-0.9, 0.2, 0.7], label: 'Vocal fill, left — 18 × 12″' }),
-  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x: -3.04, baseY: 3.66, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 42 × 5″' }),
-  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 4.99, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
-  A({ id: 'voc-lmR',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x:  3.04, baseY: 0.00, z: 0, curveRadius: 0,   explode: [ 0.9, 0.2, 0.7], label: 'Vocal fill, right — 18 × 12″' }),
-  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x:  3.04, baseY: 3.66, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 42 × 5″' }),
-  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 4.99, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
-  A({ id: 'voc-loL',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 2,  rows: 8, x: -4.44, baseY: 0.00, z: 0, curveRadius: 0,   explode: [-1.3, 0.0, 0.6], label: 'Vocal lows, left — 16 × 15″' }),
-  A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 2,  rows: 8, x:  4.44, baseY: 0.00, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
+  // Scaffold floors above the deck, in metres — the only heights a stack can
+  // start from. P[0] is the deck itself.
+  //   P0 0.000   P1 0.864   P2 2.845   P3 4.826   P4 6.807
+  // Within a channel the crossover bands stack on each other, so only the
+  // bottom band of each tower snaps to a floor.
+
+  // ── Vocals — curved centre cluster on P2, clearing the band and the kick ──
+  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 7.645, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
+  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 20, rows: 6, x:  0.00, baseY: 6.505, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 120 × 5″' }),
+  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 2.845, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
+  // Vocal fill towers flanking the cluster, on P1 — the role of the one
+  // cabinet anybody has measured.
+  A({ id: 'voc-lmL',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x: -3.04, baseY: 0.864, z: 0, curveRadius: 0,   explode: [-0.9, 0.2, 0.7], label: 'Vocal fill, left — 18 × 12″' }),
+  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x: -3.04, baseY: 4.524, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 42 × 5″' }),
+  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 5.854, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
+  A({ id: 'voc-lmR',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x:  3.04, baseY: 0.864, z: 0, curveRadius: 0,   explode: [ 0.9, 0.2, 0.7], label: 'Vocal fill, right — 18 × 12″' }),
+  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x:  3.04, baseY: 4.524, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 42 × 5″' }),
+  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 5.854, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
+  A({ id: 'voc-loL',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 2,  rows: 8, x: -4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-1.3, 0.0, 0.6], label: 'Vocal lows, left — 16 × 15″' }),
+  A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 2,  rows: 8, x:  4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
 
   // ── Bass drum — deck level, on the centreline, tucked under the cluster ────
-  A({ id: 'kick',     channel: 'kick',   band: 'full',     cabinet: 'cab15',   cols: 4,  rows: 4, x:  0.00, baseY: 0.00, z: -0.9, curveRadius: 0, explode: [0, 0, -1.6], label: 'Bass drum — 16 × 15″' }),
+  A({ id: 'kick',     channel: 'kick',   band: 'full',     cabinet: 'cab15',   cols: 4,  rows: 4, x:  0.00, baseY: 0.000, z: -0.9, curveRadius: 0, explode: [0, 0, -1.6], label: 'Bass drum — 16 × 15″' }),
 
-  // ── Bass, quadraphonic — sixteen a side ───────────────────────────────────
-  A({ id: 'bass1',    channel: 'bass1',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x: -8.54, baseY: 0.00, z: 0, curveRadius: 0, explode: [-2.5, 0, 0.4], label: 'Bass, E string — 8 × 15″' }),
-  A({ id: 'bass2',    channel: 'bass2',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x: -7.93, baseY: 0.00, z: 0, curveRadius: 0, explode: [-2.1, 0, 0.4], label: 'Bass, A string — 8 × 15″' }),
-  A({ id: 'bass3',    channel: 'bass3',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x:  6.94, baseY: 0.00, z: 0, curveRadius: 0, explode: [ 2.1, 0, 0.4], label: 'Bass, D string — 8 × 15″' }),
-  A({ id: 'bass4',    channel: 'bass4',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x:  7.55, baseY: 0.00, z: 0, curveRadius: 0, explode: [ 2.5, 0, 0.4], label: 'Bass, G string — 8 × 15″' }),
+  // ── Bass, quadraphonic — sixteen a side, on P1 ───────────────────────────
+  A({ id: 'bass1',    channel: 'bass1',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x: -8.54, baseY: 0.864, z: 0, curveRadius: 0, explode: [-2.5, 0, 0.4], label: 'Bass, E string — 8 × 15″' }),
+  A({ id: 'bass2',    channel: 'bass2',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x: -7.93, baseY: 0.864, z: 0, curveRadius: 0, explode: [-2.1, 0, 0.4], label: 'Bass, A string — 8 × 15″' }),
+  A({ id: 'bass3',    channel: 'bass3',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x:  6.94, baseY: 0.864, z: 0, curveRadius: 0, explode: [ 2.1, 0, 0.4], label: 'Bass, D string — 8 × 15″' }),
+  A({ id: 'bass4',    channel: 'bass4',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x:  7.55, baseY: 0.864, z: 0, curveRadius: 0, explode: [ 2.5, 0, 0.4], label: 'Bass, G string — 8 × 15″' }),
 
   // ── Guitars ───────────────────────────────────────────────────────────────
-  A({ id: 'weir',     channel: 'rhythmGuitar', band: 'full', cabinet: 'cab12', cols: 2, rows: 10, x: -5.45, baseY: 0.00, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Rhythm guitar — 20 × 12″' }),
-  A({ id: 'garcia',   channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 7,  x:  5.45, baseY: 0.00, z: 0,    curveRadius: 0, explode: [ 1.7, 0, 0.5], label: 'Lead guitar, main — 14 × 12″' }),
-  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  6.24, baseY: 0.00, z: -1.6, curveRadius: 0, explode: [ 1.2, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
+  A({ id: 'weir',     channel: 'rhythmGuitar', band: 'full', cabinet: 'cab12', cols: 2, rows: 10, x: -5.45, baseY: 0.864, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Rhythm guitar — 20 × 12″' }),
+  A({ id: 'garcia',   channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 7,  x:  5.45, baseY: 0.864, z: 0,    curveRadius: 0, explode: [ 1.7, 0, 0.5], label: 'Lead guitar, main — 14 × 12″' }),
+  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  6.24, baseY: 0.000, z: -1.6, curveRadius: 0, explode: [ 1.2, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
 
   // ── Piano — 15″ column in one slot, 12″ and 5″ stacked in the next ─────────
-  A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x: -6.15, baseY: 0.00, z: 0, curveRadius: 0, explode: [-1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
-  A({ id: 'pno-lm',   channel: 'piano', band: 'lowerMid', cabinet: 'cab12',  cols: 3, rows: 4, x: -7.04, baseY: 0.00, z: 0, curveRadius: 0, explode: [-1.8, 0.0, 0.5], label: 'Piano mids — 12 × 12″' }),
-  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x: -7.04, baseY: 2.44, z: 0, curveRadius: 0, explode: [-1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
+  A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x: -6.15, baseY: 0.864, z: 0, curveRadius: 0, explode: [-1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
+  A({ id: 'pno-lm',   channel: 'piano', band: 'lowerMid', cabinet: 'cab12',  cols: 3, rows: 4, x: -7.04, baseY: 0.864, z: 0, curveRadius: 0, explode: [-1.8, 0.0, 0.5], label: 'Piano mids — 12 × 12″' }),
+  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x: -7.04, baseY: 3.304, z: 0, curveRadius: 0, explode: [-1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
 
-  // ── Drums & cymbals — stereo, identical columns left and right ────────────
-  A({ id: 'drm-lmL',  channel: 'drumsL', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x: -9.42, baseY: 0.00, z: 0, curveRadius: 0, explode: [-3.0, 0.0, 0.5], label: 'Drums lower mids, left — 12 × 12″' }),
-  A({ id: 'drm-umL',  channel: 'drumsL', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x: -9.42, baseY: 3.66, z: 0, curveRadius: 0, explode: [-3.0, 0.4, 0.5], label: 'Drums upper mids, left — 40 × 5″' }),
-  A({ id: 'drm-hfL',  channel: 'drumsL', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x: -9.42, baseY: 5.18, z: 0, curveRadius: 0, explode: [-3.0, 0.8, 0.5], label: 'Drums highs, left — 10 horns' }),
-  A({ id: 'drm-lmR',  channel: 'drumsR', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x:  8.42, baseY: 0.00, z: 0, curveRadius: 0, explode: [ 3.0, 0.0, 0.5], label: 'Drums lower mids, right — 12 × 12″' }),
-  A({ id: 'drm-umR',  channel: 'drumsR', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x:  8.42, baseY: 3.66, z: 0, curveRadius: 0, explode: [ 3.0, 0.4, 0.5], label: 'Drums upper mids, right — 40 × 5″' }),
-  A({ id: 'drm-hfR',  channel: 'drumsR', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x:  8.42, baseY: 5.18, z: 0, curveRadius: 0, explode: [ 3.0, 0.8, 0.5], label: 'Drums highs, right — 10 horns' }),
+  // ── Drums & cymbals — stereo, on P2: the tall flanks of the skyline ───────
+  A({ id: 'drm-lmL',  channel: 'drumsL', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x: -9.42, baseY: 2.845, z: 0, curveRadius: 0, explode: [-3.0, 0.0, 0.5], label: 'Drums lower mids, left — 12 × 12″' }),
+  A({ id: 'drm-umL',  channel: 'drumsL', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x: -9.42, baseY: 6.505, z: 0, curveRadius: 0, explode: [-3.0, 0.4, 0.5], label: 'Drums upper mids, left — 40 × 5″' }),
+  A({ id: 'drm-hfL',  channel: 'drumsL', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x: -9.42, baseY: 8.025, z: 0, curveRadius: 0, explode: [-3.0, 0.8, 0.5], label: 'Drums highs, left — 10 horns' }),
+  A({ id: 'drm-lmR',  channel: 'drumsR', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x:  8.42, baseY: 2.845, z: 0, curveRadius: 0, explode: [ 3.0, 0.0, 0.5], label: 'Drums lower mids, right — 12 × 12″' }),
+  A({ id: 'drm-umR',  channel: 'drumsR', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x:  8.42, baseY: 6.505, z: 0, curveRadius: 0, explode: [ 3.0, 0.4, 0.5], label: 'Drums upper mids, right — 40 × 5″' }),
+  A({ id: 'drm-hfR',  channel: 'drumsR', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x:  8.42, baseY: 8.025, z: 0, curveRadius: 0, explode: [ 3.0, 0.8, 0.5], label: 'Drums highs, right — 10 horns' }),
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -778,6 +785,16 @@ export const wall = {
         trusses22ft: 6,
         floorPlanks: { count: 40, section: [IN(2), IN(10)] as const, length: FT(16) },
       },
+      /**
+       * Scaffold floor levels available above the stage deck, in metres.
+       *
+       * Derived from the lift chain (7'-0" + 5'-10" + 6'-6" x4) less the 10 ft
+       * deck: 2'-10", 9'-4", 15'-10", 22'-4". Cabinets sat on these floors —
+       * the winter sheet even annotates which bays got a floor and which did
+       * not — so array baseY values snap to this list rather than floating.
+       * scripts/verify.mjs checks these against the generated scaffold.
+       */
+      platformsAboveDeck: [0, FT(2 + 10 / 12), FT(9 + 4 / 12), FT(15 + 10 / 12), FT(22 + 4 / 12)],
       /** Rear plane of scaffolding behind the arrays; the footprint is 40 ft deep. */
       rearPlaneZ: -2.4,
     },

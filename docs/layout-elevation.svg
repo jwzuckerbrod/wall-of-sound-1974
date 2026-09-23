@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 820" width="1200" height="820" font-family="ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
 <title>Wall of Sound 1974 — front elevation, audience view</title>
-<desc>Front elevation of the reconstruction's array layout, generated from src/data/wall.config.ts. 18.96 metres of speakers, 7.56 metres tall, standing on a 3.05 metre stage deck. Blocks are coloured by channel. Five band figures stand on the deck for scale.</desc>
+<desc>Front elevation of the reconstruction's array layout, generated from src/data/wall.config.ts. 18.96 metres of speakers, 8.35 metres tall, standing on a 3.05 metre stage deck. Blocks are coloured by channel. Five band figures stand on the deck for scale.</desc>
 <rect width="1200" height="820" fill="#0d0f12"/>
 <g stroke="#262b31" stroke-width="1">
 <line x1="24" y1="407.216" x2="1176" y2="407.216" stroke-dasharray="2 7"/>
@@ -32,32 +32,32 @@
 <g stroke="#0d0f12" stroke-width="1">
 <rect x="968.1" y="417.1" width="45.7" height="106.1" fill="#E8543F" opacity="0.55" rx="2"><title>Lead guitar, extension — 6 × 12″</title></rect>
 <rect x="558.3" y="381.8" width="141.4" height="141.4" fill="#6B7A8F" opacity="0.55" rx="2"><title>Bass drum — 16 × 15″</title></rect>
-<rect x="498.5" y="84.7" width="261.0" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal highs, centre — 20 horns</title></rect>
-<rect x="498.5" y="94.0" width="261.0" height="66.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal upper mids, centre — 120 × 5″</title></rect>
-<rect x="503.4" y="160.3" width="251.2" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lower mids, centre — 66 × 12″</title></rect>
-<rect x="418.4" y="311.1" width="68.5" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal fill, left — 18 × 12″</title></rect>
-<rect x="413.5" y="233.8" width="78.3" height="77.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal fill mids, left — 42 × 5″</title></rect>
-<rect x="407.0" y="224.5" width="91.3" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal fill highs, left — 7 horns</title></rect>
-<rect x="771.1" y="311.1" width="68.5" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal fill, right — 18 × 12″</title></rect>
-<rect x="766.2" y="233.8" width="78.3" height="77.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal fill mids, right — 42 × 5″</title></rect>
-<rect x="759.6" y="224.5" width="91.3" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal fill highs, right — 7 horns</title></rect>
+<rect x="498.5" y="70.5" width="261.0" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal highs, centre — 20 horns</title></rect>
+<rect x="498.5" y="79.8" width="261.0" height="66.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal upper mids, centre — 120 × 5″</title></rect>
+<rect x="503.4" y="146.1" width="251.2" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lower mids, centre — 66 × 12″</title></rect>
+<rect x="418.4" y="261.0" width="68.5" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal fill, left — 18 × 12″</title></rect>
+<rect x="413.5" y="183.7" width="78.3" height="77.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal fill mids, left — 42 × 5″</title></rect>
+<rect x="407.0" y="174.4" width="91.3" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal fill highs, left — 7 horns</title></rect>
+<rect x="771.1" y="261.0" width="68.5" height="212.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal fill, right — 18 × 12″</title></rect>
+<rect x="766.2" y="183.7" width="78.3" height="77.1" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal fill mids, right — 42 × 5″</title></rect>
+<rect x="759.6" y="174.4" width="91.3" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal fill highs, right — 7 horns</title></rect>
 <rect x="336.1" y="240.4" width="70.7" height="282.9" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lows, left — 16 × 15″</title></rect>
 <rect x="851.1" y="240.4" width="70.7" height="282.9" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lows, right — 16 × 15″</title></rect>
-<rect x="116.0" y="240.4" width="35.4" height="282.9" fill="#14612C" opacity="1.00" rx="2"><title>Bass, E string — 8 × 15″</title></rect>
-<rect x="151.4" y="240.4" width="35.4" height="282.9" fill="#2FA14C" opacity="1.00" rx="2"><title>Bass, A string — 8 × 15″</title></rect>
-<rect x="1013.8" y="240.4" width="35.4" height="282.9" fill="#63C97C" opacity="1.00" rx="2"><title>Bass, D string — 8 × 15″</title></rect>
-<rect x="1049.2" y="240.4" width="35.4" height="282.9" fill="#9BE0AC" opacity="1.00" rx="2"><title>Bass, G string — 8 × 15″</title></rect>
-<rect x="290.1" y="169.6" width="45.7" height="353.6" fill="#9B5DE5" opacity="1.00" rx="2"><title>Rhythm guitar — 20 × 12″</title></rect>
-<rect x="922.3" y="275.7" width="45.7" height="247.5" fill="#E8543F" opacity="1.00" rx="2"><title>Lead guitar, main — 14 × 12″</title></rect>
-<rect x="254.6" y="205.0" width="35.4" height="318.2" fill="#2EC4B6" opacity="1.00" rx="2"><title>Piano lows — 9 × 15″</title></rect>
-<rect x="186.4" y="381.8" width="68.5" height="141.4" fill="#2EC4B6" opacity="1.00" rx="2"><title>Piano mids — 12 × 12″</title></rect>
-<rect x="194.6" y="282.5" width="52.2" height="99.2" fill="#2EC4B6" opacity="0.75" rx="2"><title>Piano highs — 36 × 5″</title></rect>
-<rect x="59.8" y="311.1" width="45.7" height="212.1" fill="#4D8BE8" opacity="1.00" rx="2"><title>Drums lower mids, left — 12 × 12″</title></rect>
-<rect x="50.0" y="222.8" width="65.3" height="88.2" fill="#4D8BE8" opacity="0.75" rx="2"><title>Drums upper mids, left — 40 × 5″</title></rect>
-<rect x="50.0" y="204.2" width="65.3" height="18.6" fill="#4D8BE8" opacity="0.50" rx="2"><title>Drums highs, left — 10 horns</title></rect>
-<rect x="1094.5" y="311.1" width="45.7" height="212.1" fill="#7FB3F5" opacity="1.00" rx="2"><title>Drums lower mids, right — 12 × 12″</title></rect>
-<rect x="1084.7" y="222.8" width="65.3" height="88.2" fill="#7FB3F5" opacity="0.75" rx="2"><title>Drums upper mids, right — 40 × 5″</title></rect>
-<rect x="1084.7" y="204.2" width="65.3" height="18.6" fill="#7FB3F5" opacity="0.50" rx="2"><title>Drums highs, right — 10 horns</title></rect>
+<rect x="116.0" y="190.2" width="35.4" height="282.9" fill="#14612C" opacity="1.00" rx="2"><title>Bass, E string — 8 × 15″</title></rect>
+<rect x="151.4" y="190.2" width="35.4" height="282.9" fill="#2FA14C" opacity="1.00" rx="2"><title>Bass, A string — 8 × 15″</title></rect>
+<rect x="1013.8" y="190.2" width="35.4" height="282.9" fill="#63C97C" opacity="1.00" rx="2"><title>Bass, D string — 8 × 15″</title></rect>
+<rect x="1049.2" y="190.2" width="35.4" height="282.9" fill="#9BE0AC" opacity="1.00" rx="2"><title>Bass, G string — 8 × 15″</title></rect>
+<rect x="290.1" y="119.5" width="45.7" height="353.6" fill="#9B5DE5" opacity="1.00" rx="2"><title>Rhythm guitar — 20 × 12″</title></rect>
+<rect x="922.3" y="225.6" width="45.7" height="247.5" fill="#E8543F" opacity="1.00" rx="2"><title>Lead guitar, main — 14 × 12″</title></rect>
+<rect x="254.6" y="154.9" width="35.4" height="318.2" fill="#2EC4B6" opacity="1.00" rx="2"><title>Piano lows — 9 × 15″</title></rect>
+<rect x="186.4" y="331.7" width="68.5" height="141.4" fill="#2EC4B6" opacity="1.00" rx="2"><title>Piano mids — 12 × 12″</title></rect>
+<rect x="194.6" y="232.4" width="52.2" height="99.2" fill="#2EC4B6" opacity="0.75" rx="2"><title>Piano highs — 36 × 5″</title></rect>
+<rect x="59.8" y="146.1" width="45.7" height="212.1" fill="#4D8BE8" opacity="1.00" rx="2"><title>Drums lower mids, left — 12 × 12″</title></rect>
+<rect x="50.0" y="57.8" width="65.3" height="88.2" fill="#4D8BE8" opacity="0.75" rx="2"><title>Drums upper mids, left — 40 × 5″</title></rect>
+<rect x="50.0" y="39.2" width="65.3" height="18.6" fill="#4D8BE8" opacity="0.50" rx="2"><title>Drums highs, left — 10 horns</title></rect>
+<rect x="1094.5" y="146.1" width="45.7" height="212.1" fill="#7FB3F5" opacity="1.00" rx="2"><title>Drums lower mids, right — 12 × 12″</title></rect>
+<rect x="1084.7" y="57.8" width="65.3" height="88.2" fill="#7FB3F5" opacity="0.75" rx="2"><title>Drums upper mids, right — 40 × 5″</title></rect>
+<rect x="1084.7" y="39.2" width="65.3" height="18.6" fill="#7FB3F5" opacity="0.50" rx="2"><title>Drums highs, right — 10 horns</title></rect>
 </g>
 <rect x="0" y="523.216" width="1200" height="176.784" fill="#16191d"/>
 <rect x="0" y="523.216" width="1200" height="3" fill="#3c434c"/>
@@ -97,6 +97,6 @@
 </g>
 <g stroke="#5a636e" stroke-width="2"><line x1="50" y1="794" x2="630" y2="794"/><line x1="50" y1="788" x2="50" y2="800"/><line x1="630" y1="788" x2="630" y2="800"/></g>
 <text x="340" y="786" fill="#8b939d" font-size="11" text-anchor="middle">10 metres</text>
-<text x="1150" y="786" fill="#5a636e" font-size="11" text-anchor="end">18.96 m (62 ft) of speakers · 641 drivers · 35 ft above ground</text>
+<text x="1150" y="786" fill="#5a636e" font-size="11" text-anchor="end">18.96 m (62 ft) of speakers · 641 drivers · 37 ft above ground</text>
 <text x="1150" y="802" fill="#454c55" font-size="10" text-anchor="end">Generated from src/data/wall.config.ts. Array order is the reconstruction's own — see spec §7 and §12.5.</text>
 </svg>

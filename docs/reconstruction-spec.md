@@ -167,23 +167,27 @@ The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summe
 
 Heights are above the stage deck, which is itself 10 ft above the ground.
 
-| x (m) | Array | Base → top (m) |
-|---|---|---|
-| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | 0 → 5.50 |
-| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | 0 → 4.88 |
-| −7.04 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | 0 → 4.15 |
-| −6.15 | **Piano** lows (15″ × 9) | 0 → 5.49 |
-| −5.45 | **Weir** rhythm guitar (12″ × 20) | 0 → 6.10 |
-| −4.44 | **Vocal low LEFT** (15″ × 16) | 0 → 4.88 |
-| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | 0 → 5.15 |
-| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | 2.60 → 7.56 |
-| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level beneath the cluster | 0 → 2.44 |
-| +3.04 | **Vocal fill RIGHT** | 0 → 5.15 |
-| +4.44 | **Vocal low RIGHT** (15″ × 16) | 0 → 4.88 |
-| +5.45 | **Garcia** main (12″ × 14) | 0 → 4.27 |
-| +6.24 | **Garcia extension** (12″ × 6), set back 1.6 m | 0 → 1.83 |
-| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | 0 → 4.88 |
-| +8.42 | Drums stereo **RIGHT** | 0 → 5.50 |
+**Stacks stand on scaffold floors, not on thin air.** The lift chain puts floors at **0, 0.86, 2.85, 4.83 and 6.81 m above the deck** (the deck itself, then 2'-10", 9'-4", 15'-10", 22'-4"). Every array's bottom band snaps to one of those; the crossover bands above it stack on the cabinets below. The winter sheet's annotations — *"floor in back only, 2nd level"*, *"omit floor in 5' bay, 3rd level"* — are the crew thinking in exactly these terms. `scripts/verify.mjs` fails the build if any block starts anywhere else.
+
+| x (m) | Array | Floor | Base → top (m) |
+|---|---|---|---|
+| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 2.85 → 8.35 |
+| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 0.86 → 5.74 |
+| −7.04 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 0.86 → 5.01 |
+| −6.15 | **Piano** lows (15″ × 9) | P1 | 0.86 → 6.35 |
+| −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 0.86 → 6.96 |
+| −4.44 | **Vocal low LEFT** (15″ × 16) | deck | 0 → 4.88 |
+| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | P1 | 0.86 → 6.01 |
+| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P2 | 2.85 → 7.81 |
+| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level beneath the cluster | deck | 0 → 2.44 |
+| +3.04 | **Vocal fill RIGHT** | P1 | 0.86 → 6.01 |
+| +4.44 | **Vocal low RIGHT** (15″ × 16) | deck | 0 → 4.88 |
+| +5.45 | **Garcia** main (12″ × 14) | P1 | 0.86 → 5.13 |
+| +6.24 | **Garcia extension** (12″ × 6), set back 1.6 m | deck | 0 → 1.83 |
+| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 0.86 → 5.74 |
+| +8.42 | Drums stereo **RIGHT** | P2 | 2.85 → 8.35 |
+
+The skyline that falls out of this — tall flanks either side of a lower, raised, curved centre cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
 
 Blocks butt together with no gap. **The wall is not symmetric about the centreline** — the piano takes two slots on the left, Garcia's main column and his extension take two on the right, and they are not the same width. The real wall was asymmetric for the same reason: it was assembled from what each channel needed, not drawn on a grid.
 
@@ -318,6 +322,8 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 **Resolved since the second draft, by the 1974 drawings:** the scaffold footprint (64 × 40 ft), the overall height (38'-10"), the frame and bay sizes (6'-6" × 5' frames, 7' X-braces), the deck build-up and its 9 ft overhangs, and the full bill of materials. Plus, from surviving hardware: the tweeter is an Electro-Voice **T350**, and the small-cone panels were **covered in tie-dye**.
 
 **What the drawings still do not tell us:** which channel occupied which bay. That is the one thing a plan view could have settled and doesn't — it dimensions the steel, not the speakers.
+
+**A finding from building it (stage 2).** 641 drivers of these sizes **cannot fill a 60 × 29 ft face.** Add up the baffle area — 89 fifteens at 0.37 m², 178 twelves at 0.24 m², 320 fives at 0.043 m², 54 horns — and you get about 92 m² of speaker in a 157 m² opening. **Roughly 58% coverage, and 42% open scaffolding, is not a modelling failure — it is arithmetic.** The photographs agree: the Wall is a set of dense stacks with structure showing between and above them, not a solid plane of cones. Any reconstruction that shows an unbroken wall of speakers has either invented drivers or shrunk the frame.
 
 ---
 

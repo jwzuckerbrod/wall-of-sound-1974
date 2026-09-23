@@ -5,10 +5,26 @@
   "type": "module",
   "description": "An explorable 3D reconstruction of the Grateful Dead's Wall of Sound, 1974.",
   "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
     "check": "tsc --noEmit",
+    "verify": "node scripts/verify.mjs",
     "elevation": "node scripts/make-elevation.mjs"
   },
   "devDependencies": {
-    "typescript": "^5.6.3"
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.186.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^5.6.3",
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.8.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "three": "^0.186.0"
   }
 }
