@@ -1,0 +1,14 @@
+{
+  "name": "wall-of-sound-1974",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "An explorable 3D reconstruction of the Grateful Dead's Wall of Sound, 1974.",
+  "scripts": {
+    "check": "tsc --noEmit",
+    "elevation": "node scripts/make-elevation.mjs"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3"
+  }
+}
