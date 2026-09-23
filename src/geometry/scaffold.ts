@@ -5,7 +5,7 @@
  * Nothing here is styled — it emits tube segments and slabs. See
  * docs/reconstruction-spec.md §10 for the transcribed requirements.
  */
-import { FT, IN, wall } from '../data/wall.config';
+import { ARRAYS, cabinetSize, FT, IN, wall } from '../data/wall.config';
 
 /** A length of scaffold tube, as a pair of endpoints. */
 export interface Tube {
@@ -36,8 +36,16 @@ export const BAY_CHAIN_FT = [0.75, 5, 7, 7, 7, 3.5, 7, 7, 7, 7, 5, 0.75] as cons
  * the deck only.
  */
 export const DEPTH_CHAIN_FT = [1, 5, 5, 5, 5, 5, 5, 4, 5] as const;
-/** Index into DEPTH_CHAIN_FT where the tower band starts and ends. */
-export const TOWER_BAND = { first: 3, last: 6 } as const;
+/**
+ * Index into DEPTH_CHAIN_FT where the tower band starts and ends.
+ *
+ * The towers sit at the UPSTAGE end. An earlier version put them in the middle
+ * of the forty feet, which left the band eleven feet of stage to stand on — not
+ * enough for a drum kit and a seven-foot grand, and both ended up inside the
+ * speaker stacks. Upstage gives the players twenty-one feet, which is what the
+ * photographs show.
+ */
+export const TOWER_BAND = { first: 5, last: 8 } as const;
 
 /**
  * Lift heights, ground → top, off the stage left view:
@@ -94,29 +102,58 @@ export function scaffoldLayout(): ScaffoldLayout {
   };
 }
 
+/**
+ * How high the steel goes at a given x, in world height.
+ *
+ * Scaffolding is built to the height it needs to be. Carrying every standard to
+ * the full 38'-10" across the whole run produced a big empty cage with the
+ * speakers huddled in the bottom third of it — the opposite of the photographs,
+ * where the towers step up and down with the stacks and only the tallest bays
+ * reach the top. So each bay rises one lift above whatever stands in it.
+ */
+function towerTopAt(x: number, L: ScaffoldLayout): number {
+  let stackTop = 0;
+  for (const b of ARRAYS) {
+    const s = cabinetSize(b.cabinet);
+    const half = (s.w * b.cols) / 2;
+    if (x < b.x - half - 0.8 || x > b.x + half + 0.8) continue;
+    stackTop = Math.max(stackTop, b.baseY + s.h * b.rows);
+  }
+  const wanted = L.deck.y + stackTop;
+  // Round up to the next lift, always at least two lifts above the deck.
+  const floor = L.yLevels.find((y) => y > wanted + 0.4) ?? L.yLevels[L.yLevels.length - 1];
+  const minimum = L.yLevels.find((y) => y > L.deck.y + 1.5) ?? floor;
+  return Math.max(floor, minimum);
+}
+
 /** Every tube in the tower and the stage substructure. */
 export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
   const tubes: Tube[] = [];
-  const top = L.yLevels[L.yLevels.length - 1];
   const deckY = L.deck.y;
 
   // Tower band z-lines only — towers rise from the X-braced bays.
   const towerZ = L.zLines.slice(TOWER_BAND.first, TOWER_BAND.last + 2);
+  const topAt = L.xLines.map((x) => towerTopAt(x, L));
 
-  // Standards: full height at every tower-band intersection.
-  for (const x of L.xLines)
-    for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, top, z], kind: 'standard' });
+  // Standards, each to its own bay's height.
+  L.xLines.forEach((x, i) => {
+    for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, topAt[i], z], kind: 'standard' });
+  });
 
   // Ledgers along the run, and transoms across the depth, at every lift.
   // Transoms are skipped on the front line: that plane is the speaker face, and
   // a tube crossing it would run through the cabinets.
   for (const y of L.yLevels) {
     for (const z of towerZ)
-      for (let i = 0; i < L.xLines.length - 1; i++)
+      for (let i = 0; i < L.xLines.length - 1; i++) {
+        if (y > Math.min(topAt[i], topAt[i + 1]) + 1e-6) continue;
         tubes.push({ a: [L.xLines[i], y, z], b: [L.xLines[i + 1], y, z], kind: 'ledger' });
-    for (const x of L.xLines)
-      for (let i = 1; i < towerZ.length - 1; i++)
-        tubes.push({ a: [x, y, towerZ[i]], b: [x, y, towerZ[i + 1]], kind: 'ledger' });
+      }
+    L.xLines.forEach((x, i) => {
+      if (y > topAt[i] + 1e-6) return;
+      for (let j = 1; j < towerZ.length - 1; j++)
+        tubes.push({ a: [x, y, towerZ[j]], b: [x, y, towerZ[j + 1]], kind: 'ledger' });
+    });
   }
 
   // X-braces on the SECOND z-line and the upstage face — never on the front
@@ -127,6 +164,7 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
       const y0 = L.yLevels[li];
       const y1 = L.yLevels[li + 1];
       for (let i = 0; i < L.xLines.length - 1; i++) {
+        if (y1 > Math.min(topAt[i], topAt[i + 1]) + 1e-6) continue;
         const x0 = L.xLines[i];
         const x1 = L.xLines[i + 1];
         tubes.push({ a: [x0, y0, z], b: [x1, y1, z], kind: 'brace' });
@@ -148,11 +186,53 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
   return tubes;
 }
 
+/**
+ * Plank floors under every raised stack.
+ *
+ * The tower requirements list "40 2x10x16 planks used as floors" — nowhere near
+ * enough to deck out a 64 x 40 ft tower, so the floors were partial and put
+ * where they were needed. The winter sheet says as much: "floor in back only,
+ * 2nd level", "omit floor in 5' bay, 3rd level".
+ *
+ * Without these the raised arrays hang in mid-air, which is exactly how the
+ * first build looked.
+ */
+export function scaffoldFloors(L = scaffoldLayout()): Slab[] {
+  const out: Slab[] = [];
+  const seen = new Set<string>();
+  const thickness = PLANK.thickness;
+
+  const platforms = wall.structure.scaffold.platformsAboveDeck;
+
+  for (const b of ARRAYS) {
+    if (b.baseY <= 0.01) continue;
+    // Only the bottom band of a tower needs a floor. The crossover bands above
+    // it stand on the cabinets below, so giving them their own floor would
+    // slice a plank through the middle of a stack.
+    if (!platforms.some((p) => Math.abs(p - b.baseY) < 0.01)) continue;
+
+    const s = cabinetSize(b.cabinet);
+    const width = s.w * b.cols;
+    const key = `${b.x.toFixed(2)}:${b.baseY.toFixed(2)}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+
+    const depth = FT(10);
+    const z = wall.dimensions.arrayStandoff - depth / 2 + s.d / 2;
+    out.push({
+      centre: [b.x, L.deck.y + b.baseY - thickness / 2, z],
+      size: [width + FT(1), thickness, depth],
+      kind: 'floor',
+    });
+  }
+  return out;
+}
+
 /** Deck slab plus the 5/8" plywood facing across the front and 16 ft back each side. */
 export interface Slab {
   centre: [number, number, number];
   size: [number, number, number];
-  kind: 'deck' | 'facing';
+  kind: 'deck' | 'facing' | 'floor';
 }
 
 export function stageSlabs(L = scaffoldLayout()): Slab[] {

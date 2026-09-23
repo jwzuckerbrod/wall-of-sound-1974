@@ -1,7 +1,14 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { ARRAYS, cabinetSize, FT, wall } from '../data/wall.config';
-import { scaffoldLayout, scaffoldTubes, stageSlabs, TUBE_RADIUS, type Tube } from '../geometry/scaffold';
+import {
+  scaffoldFloors,
+  scaffoldLayout,
+  scaffoldTubes,
+  stageSlabs,
+  TUBE_RADIUS,
+  type Tube,
+} from '../geometry/scaffold';
 import { walkWorld } from '../geometry/walk';
 import { wallMaterials } from '../materials';
 
@@ -114,17 +121,20 @@ export function TieDye() {
   const materials = wallMaterials();
   const L = useMemo(() => scaffoldLayout(), []);
   const panels = useMemo(() => {
+    // Small, low and behind the stacks. The first pass hung four huge bright
+    // mandalas high in an empty cage, which made the tie-dye the loudest thing
+    // in the frame — it is meant to be fabric glimpsed through the structure.
     const back = L.towerBackZ - 0.06;
-    const h = FT(11);
-    const w = FT(11);
-    const y = L.deck.y + FT(15);
+    const h = FT(7);
+    const w = FT(7);
+    const y = L.deck.y + FT(8);
     const mid = (L.towerFrontZ + L.towerBackZ) / 2;
     const out: { pos: [number, number, number]; rot: [number, number, number]; size: [number, number] }[] = [];
     // Three across the back wall, two on the returns. Sparse on purpose: these
     // are fabric panels hung on a structure, not wallpaper.
-    for (const x of [-FT(17), 0, FT(17)]) out.push({ pos: [x, y, back], rot: [0, 0, 0], size: [w, h] });
-    out.push({ pos: [-L.footprint.width / 2 - 0.05, y, mid], rot: [0, Math.PI / 2, 0], size: [FT(14), h] });
-    out.push({ pos: [L.footprint.width / 2 + 0.05, y, mid], rot: [0, -Math.PI / 2, 0], size: [FT(14), h] });
+    for (const x of [-FT(20), FT(20)]) out.push({ pos: [x, y, back], rot: [0, 0, 0], size: [w, h] });
+    out.push({ pos: [-L.footprint.width / 2 - 0.05, y, mid], rot: [0, Math.PI / 2, 0], size: [FT(10), h] });
+    out.push({ pos: [L.footprint.width / 2 + 0.05, y, mid], rot: [0, -Math.PI / 2, 0], size: [FT(10), h] });
     return out;
   }, [L]);
 
@@ -163,6 +173,21 @@ export function StageRamp({ shadows }: { shadows: boolean }) {
   }, [world]);
 
   return <mesh geometry={geometry} material={materials.facing} castShadow={shadows} receiveShadow={shadows} />;
+}
+
+/** The plank floors the raised stacks actually stand on. */
+export function ScaffoldFloors({ shadows }: { shadows: boolean }) {
+  const materials = wallMaterials();
+  const floors = useMemo(() => scaffoldFloors(), []);
+  return (
+    <group name="scaffold-floors">
+      {floors.map((s, i) => (
+        <mesh key={i} position={s.centre} castShadow={shadows} receiveShadow={shadows} material={materials.deck}>
+          <boxGeometry args={s.size} />
+        </mesh>
+      ))}
+    </group>
+  );
 }
 
 export function Stage({ shadows }: { shadows: boolean }) {

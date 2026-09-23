@@ -783,14 +783,14 @@ export const wall = {
     stagingIndoor: { width: FT(76), depth: FT(30) },
     stagingOutdoor: { width: FT(104), depth: FT(40) },
     venue: 'outdoor' as 'indoor' | 'outdoor',
-    bandLineZ: 3.0,
+    bandLineZ: 5.2,
     /**
      * How far the speaker faces stand proud of the front plane of the towers.
-     * Not documented — but the photographs plainly show stacks in front of the
-     * steel rather than inside it, and without a standoff the scaffold draws
-     * across the driver faces. Slightly more than one cabinet depth.
+     * Not documented. A full cabinet depth left the stacks reading as a
+     * separate object parked in front of an empty cage; they need to sit IN
+     * the structure with their faces just clear of the steel.
      */
-    arrayStandoff: 0.62,
+    arrayStandoff: 0.16,
   },
 
   structure: {
@@ -856,11 +856,16 @@ export const wall = {
     /** Flip the whole stage left-for-right. See PROVENANCE['band.positions']. */
     mirrored: false,
     members: [
-      { id: 'weir',    name: 'Bob Weir',        instrument: 'Gibson ES-335',                 x: -5.0, z: 3.0 },
-      { id: 'lesh',    name: 'Phil Lesh',       instrument: 'Alembic quadraphonic bass',     x: -2.4, z: 3.2 },
-      { id: 'kreutz',  name: 'Bill Kreutzmann', instrument: 'drum kit',                      x:  0.0, z: 1.5 },
-      { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  3.4, z: 2.6 },
-      { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x:  5.6, z: 3.0 },
+      // Downstage of the Wall, not tucked into it. The first pass put the kit
+      // and the piano at z = 1.2 to 2.0, and since a drum kit is a metre and a
+      // half deep and a grand is over two metres long, both ended up inside the
+      // speaker stacks. verify.mjs now checks every piece of gear against the
+      // array footprints.
+      { id: 'weir',    name: 'Bob Weir',        instrument: 'Gibson ES-335',                 x: -5.6, z: 5.4 },
+      { id: 'lesh',    name: 'Phil Lesh',       instrument: 'Alembic quadraphonic bass',     x: -2.6, z: 5.8 },
+      { id: 'kreutz',  name: 'Bill Kreutzmann', instrument: 'drum kit',                      x:  0.2, z: 4.3 },
+      { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  4.6, z: 5.2 },
+      { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x:  7.0, z: 5.6 },
     ],
     /** Steal Your Face — 1969 equipment stencil. Cases only. */
     logo: { id: 'stealYourFace', boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },

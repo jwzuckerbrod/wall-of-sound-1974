@@ -63,7 +63,29 @@ export function probe(points: ProbePoint[] = FRONT_PROBES) {
   return out;
 }
 
+/**
+ * Writes the current frame to .shots/<name>.png via the dev server.
+ *
+ * Needs `preserveDrawingBuffer`. Returns the path so a caller can open it.
+ */
+export async function shot(name: string) {
+  const canvas = document.querySelector('canvas');
+  if (!canvas) return { error: 'no canvas' };
+  // Force a frame first: a hidden pane has its animation frames suspended, and
+  // the drawing buffer is then empty however long you wait.
+  (window as unknown as { __renderNow?: () => void }).__renderNow?.();
+  const dataUrl = canvas.toDataURL('image/png');
+  const res = await fetch('/__shot', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ name, dataUrl }),
+  });
+  return res.json();
+}
+
 export function installProbe() {
   if (!import.meta.env.DEV) return;
-  (window as unknown as Record<string, unknown>).__probe = probe;
+  const w = window as unknown as Record<string, unknown>;
+  w.__probe = probe;
+  w.__shot = shot;
 }

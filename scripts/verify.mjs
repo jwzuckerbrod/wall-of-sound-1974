@@ -186,6 +186,63 @@ check('no stop is above the rig', tour.TOUR.every((s) => s.position[1] < tour.TO
 check('stop ids are unique', new Set(tour.TOUR.map((s) => s.id)).size, tour.TOUR.length);
 console.log(`        stops: ${tour.TOUR.length}`);
 
+console.log('\nBand and gear on the stage');
+// Footprints in metres, centred on each player. Generous on purpose: a drum kit
+// is about 1.6 m across and a 6'11" grand is 2.11 m long, and neither may end
+// up inside a speaker stack. This is the check that was missing when the kit
+// and the piano were first placed.
+const GEAR = {
+  weir: { w: 1.1, d: 0.9 },
+  lesh: { w: 1.1, d: 0.9 },
+  kreutz: { w: 1.9, d: 1.9 },
+  keith: { w: 2.4, d: 2.4 },
+  garcia: { w: 1.1, d: 0.9 },
+};
+let clashes = 0;
+for (const m of cfg.wall.band.members) {
+  const g = GEAR[m.id];
+  const x = cfg.wall.band.mirrored ? -m.x : m.x;
+  const foot = { minX: x - g.w / 2, maxX: x + g.w / 2, minZ: m.z - g.d / 2, maxZ: m.z + g.d / 2 };
+
+  const onDeck = foot.minZ > L.deck.minZ && foot.maxZ < L.deck.maxZ && foot.minX > L.deck.minX && foot.maxX < L.deck.maxX;
+  check(`${m.id}: gear is on the deck`, onDeck, true);
+  check(`${m.id}: gear is downstage of the speakers`, foot.minZ > env.maxZ, true);
+
+  for (const b of world.blockers) {
+    if (foot.minX < b.maxX && foot.maxX > b.minX && foot.minZ < b.maxZ && foot.maxZ > b.minZ) {
+      console.log(` FAIL  ${m.id}'s gear intersects ${b.id}`);
+      clashes++;
+    }
+  }
+}
+check('no band gear intersects a speaker stack', clashes, 0);
+check('players have room downstage of the wall', L.deck.maxZ - env.maxZ > 4, true);
+
+console.log('\nStacks must stand on something visible');
+const floors = scaf.scaffoldFloors(L);
+// Only blocks that start ON a platform need a floor; crossover bands stacked on
+// the cabinets below are already covered by the "nothing floats" check above.
+const raised = cfg.ARRAYS.filter(
+  (b) => b.baseY > 0.01 && platforms.some((p) => Math.abs(p - b.baseY) < 0.01),
+);
+let unsupported = 0;
+for (const b of raised) {
+  const s = cfg.cabinetSize(b.cabinet);
+  const w = s.w * b.cols;
+  const ok = floors.some(
+    (f) =>
+      Math.abs(f.centre[1] + f.size[1] / 2 - (L.deck.y + b.baseY)) < 0.02 &&
+      f.centre[0] - f.size[0] / 2 <= b.x - w / 2 + 0.01 &&
+      f.centre[0] + f.size[0] / 2 >= b.x + w / 2 - 0.01,
+  );
+  if (!ok) {
+    console.log(` FAIL  ${b.id} at ${b.baseY.toFixed(2)} m has no floor under it`);
+    unsupported++;
+  }
+}
+check('every raised stack has a plank floor beneath it', unsupported, 0);
+console.log(`        raised stacks: ${raised.length}, floors: ${floors.length}`);
+
 console.log('\nInfo panels');
 // Every array must be able to describe itself: a label, a channel with a blurb,
 // a driver, and a provenance entry. A block with no panel is a dead end that

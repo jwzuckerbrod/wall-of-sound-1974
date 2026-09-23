@@ -10,7 +10,7 @@ import { BandGear } from './BandGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Lighting } from './Lighting';
-import { Cabling, Scaffold, ScaleFigures, Stage, StageRamp, TieDye } from './Structure';
+import { Cabling, Scaffold, ScaffoldFloors, ScaleFigures, Stage, StageRamp, TieDye } from './Structure';
 import { TourCamera } from './TourCamera';
 import { WalkControls } from './WalkControls';
 import type { TourStop } from './tour';
@@ -31,7 +31,23 @@ export interface SceneOptions {
 /** Applies the tier's renderer-level settings, which are not props on <Canvas>. */
 function RendererSettings({ tier }: { tier: Tier }) {
   const gl = useThree((s) => s.gl);
+  const scene = useThree((s) => s.scene);
+  const camera = useThree((s) => s.camera);
   const q = tierSettings(tier);
+
+  /**
+   * Dev only. Lets a capture force a frame synchronously.
+   *
+   * The browser this is developed in suspends animation frames when its pane is
+   * hidden, which leaves the drawing buffer empty and every captured PNG blank.
+   * Rendering on demand sidesteps that entirely.
+   */
+  useEffect(() => {
+    if (!import.meta.env.DEV) return;
+    (window as unknown as Record<string, unknown>).__renderNow = () => {
+      gl.render(scene, camera);
+    };
+  }, [gl, scene, camera]);
 
   useEffect(() => {
     gl.shadowMap.enabled = q.shadowMapSize > 0;
@@ -89,6 +105,7 @@ export function Scene({
       {showScaffold && (
         <>
           <Scaffold shadows={shadows} />
+          <ScaffoldFloors shadows={shadows} />
           <TieDye />
           <Cabling shadows={shadows} />
         </>
