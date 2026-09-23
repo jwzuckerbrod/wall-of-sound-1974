@@ -45,6 +45,8 @@ export type SourceId =
   | 'syf'
   | 'photos'
   | 'anderson'
+  | 'blueprints'
+  | 'juliens'
   | 'derived';
 
 export interface SourceRef {
@@ -117,6 +119,18 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   anderson: {
     title:
       'Brian Anderson, Loud and Clear (2025) — chapter 1, "The Artifact". Supplied by the project owner. Highest-quality dimensional source found: it separates the speaker array from the staging, gives the stage deck height, and describes a surviving cabinet measured in hand.',
+    kind: 'primary',
+  },
+  blueprints: {
+    title:
+      'Original Grateful Dead scaffolding and stage drawings, from the collection of "Big Steve" Parish — sold at Julien\'s Auctions, "Treasures From The Golden Road", 22 April 2026, lots 53/57/60 (P.A. tower, 1973-74 Winter Season, scale 3/8"=1\') and lot 71 (1974 Summer Tour, dated 10 April 1974, scale 1/4"=1\'-0", top view + stage left view + written tower and stage requirements). PRIMARY ENGINEERING DOCUMENTS. Where these disagree with anything else, they win.',
+    url: 'https://www.juliensauctions.com/en/items/2208457/grateful-dead-1974-summer-tour-wall-of-sound-scaffolding-blueprints',
+    kind: 'primary',
+  },
+  juliens: {
+    title:
+      'Julien\'s Auctions, "Treasures From The Golden Road: Featuring Property From Big Steve, Ram Rod & Trixie Garcia", 22 April 2026 — lot catalogue. Surviving hardware from the Dead\'s own crew: lot 72 (Wall of Sound 1974 Electro-Voice T350 tweeter), lots 276/277 (Hard Truckers small plywood enclosures, 4.5-inch speaker, tie-dye grille cloth), lots 58/62/69/70 (McIntosh MC2300s and their named road cases).',
+    url: 'https://www.juliensauctions.com/en/auctions/treasures-from-the-golden-road',
     kind: 'primary',
   },
   photos: {
@@ -200,18 +214,33 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['anderson'],
     note: 'RESOLVES the width problem. Anderson separates two things the other sources conflate: the speaker array proper was SIXTY FEET end to end, while the full staging and scaffolding measured 76 × 30 ft indoors and over 100 × 40 ft outdoors. Every "roughly 98 feet across" / "nearly 100 feet wide" figure elsewhere is the outdoor STAGING, not the wall of speakers. The layout was rebuilt to 18.2 m.',
   },
+  'dimensions.totalHeight': {
+    confidence: 'confirmed',
+    sources: ['blueprints'],
+    note: 'The 10 April 1974 stage-left elevation dimensions the tower at 38\'-10" overall, as a chain of 7\'-0" + 5\'-10" + four lifts of 6\'-6". That is the real number behind "36 feet high" and "over three stories tall".',
+  },
   'dimensions.arrayHeight': {
     confidence: 'estimated',
-    sources: ['anderson', 'relix', 'derived'],
-    note: '"Over three stories tall" / "36 feet high" is read as the total above ground. With a confirmed 10-foot deck under it, the speaker envelope is ~26 ft (8.0 m) above the deck.',
+    sources: ['blueprints', 'derived'],
+    note: '38\'-10" overall less the 10 ft deck = 28\'-10" (8.79 m) of tower above the stage. The model\'s tallest array tops out at 7.56 m, leaving about 1.2 m of bare scaffolding above — which is what the photographs show.',
   },
   'dimensions.stageDeckHeight': {
     confidence: 'confirmed',
-    sources: ['anderson'],
-    note: 'One-inch plywood floor set TEN FEET above ground, bolted and tied into the scaffolding — because sound pressure could bounce the whole system by as much as a foot when the band pushed it. Previously guessed at 5 ft; corrected.',
+    sources: ['anderson', 'blueprints'],
+    note: 'Ten feet above ground, bolted and tied into the scaffolding — because sound pressure could bounce the whole system by as much as a foot. Anderson says one-inch plywood; the 1974 drawing specifies 1-1/8" tongue-and-groove over 2x10 planks on 4x6 beams, so the drawing\'s figure is used. Previously guessed at 5 ft.',
   },
-  'dimensions.stagingIndoor': { confidence: 'confirmed', sources: ['anderson'], note: '76 ft wide × 30 ft deep.' },
-  'dimensions.stagingOutdoor': { confidence: 'confirmed', sources: ['anderson'], note: 'Over 100 ft wide × 40 ft deep.' },
+  'dimensions.scaffoldFootprint': {
+    confidence: 'confirmed',
+    sources: ['blueprints'],
+    note: 'Top view, 10 April 1974: 64\'-0" wide × 40\'-0" deep. The width chain reads 9" + 5\'-0" + 7\'-0" bays + a 3\'-6" closer at the centreline, mirrored. The model\'s speaker array packs to 62.2 ft and drops inside this footprint with room for the end frames — an independent check that landed.',
+  },
+  'dimensions.deckOverhang': {
+    confidence: 'confirmed',
+    sources: ['blueprints'],
+    note: 'Stage requirements, note 3: the deck overhangs the scaffolding by 9\'-0" stage left and stage right and by 1\'-0" downstage. So the deck is 82 ft wide × 41 ft deep around a 64 × 40 tower footprint.',
+  },
+  'dimensions.stagingIndoor': { confidence: 'confirmed', sources: ['anderson'], note: '76 ft wide × 30 ft deep — a different venue configuration from the drawing.' },
+  'dimensions.stagingOutdoor': { confidence: 'confirmed', sources: ['anderson'], note: 'Over 100 ft wide × 40 ft deep. The 40 ft depth matches the drawing exactly.' },
   'dimensions.bandLineZ': {
     confidence: 'estimated',
     sources: ['photos', 'derived'],
@@ -236,8 +265,14 @@ export const PROVENANCE: Record<string, Provenance> = {
 
   'drivers.models': {
     confidence: 'estimated',
-    sources: ['derived'],
-    note: 'No source names JBL model numbers. These are the period-correct candidates and affect only cone and dust-cap proportions.',
+    sources: ['juliens', 'derived'],
+    note: 'No source names the JBL model numbers; those remain period-correct candidates and affect only cone and dust-cap proportions. The tweeter is NOT a guess: a surviving "Wall of Sound 1974" unit from the crew\'s own stock is an Electro-Voice T350.',
+  },
+  'drivers.tweeterModel': { confidence: 'confirmed', sources: ['juliens'], note: 'Electro-Voice T350. This config previously guessed T-35.' },
+  'drivers.smallCone': {
+    confidence: 'estimated',
+    sources: ['juliens', 'deadsources74'],
+    note: 'The 1974 spec sheet calls these 5-inch; surviving Hard Truckers enclosures are catalogued with a 4.5-inch speaker. Both fit a nominal 5" driver with a ~4.5" frame, which is what is modelled.',
   },
 
   'channels.count': { confidence: 'confirmed', sources: ['wiki', 'mcintosh', 'mayberry'], note: 'Six independent systems on eleven channels.' },
@@ -276,7 +311,16 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: 'The lower half of each array fed the musicians onstage; the upper half threw to the crowd. The PA was the monitoring — there were no wedges. Drives the "how it worked" overlay.',
   },
 
-  'structure.scaffold': { confidence: 'estimated', sources: ['photos', 'derived'], note: 'Standard period tube-and-clamp frames.' },
+  'structure.scaffold': {
+    confidence: 'confirmed',
+    sources: ['blueprints'],
+    note: 'Tower requirements, 10 April 1974: built with 6\'-6" × 5\' end frames and 7\' X-braces; 50 ten-foot and 50 thirteen-foot tubelocks; 275 couplers in five sizes; six 22\' trusses; end frames sprocketed and pinned; forty 2"x10"x16" planks used as floors. The earlier 1973-74 Winter Season tower sheet is a smaller rig — 30 ft tall, standard 6\' frames, 5\' X-braces, 5\' bays, three levels, "floor in back only, 2nd level" and "omit floor in 5\' bay, 3rd level". The 6\'-6" lift and 7\' bay previously guessed in this config turn out to be right.',
+  },
+  'structure.stageDeck': {
+    confidence: 'confirmed',
+    sources: ['blueprints'],
+    note: 'Stage requirements: 5\'x5\' end frames, 5\' and 7\' X-braces, screwjacks and base plates; deck of 4x6 beams and 2x10 planks under 1-1/8" T&G plywood; 5/8" plywood facing across the entire front and 16 ft back on both stage left and stage right. "X" areas on the plan mark towers that continue up after the deck is down.',
+  },
   'structure.cabling': {
     confidence: 'confirmed',
     sources: ['anderson'],
@@ -285,8 +329,8 @@ export const PROVENANCE: Record<string, Provenance> = {
 
   'materials.exposedDrivers': {
     confidence: 'confirmed',
-    sources: ['photos'],
-    note: 'The drivers were NOT behind grille cloth. Cones, surrounds, aluminium dust caps and mounting screws are all visible in every photograph.',
+    sources: ['photos', 'juliens'],
+    note: 'The big drivers were NOT behind grille cloth — cones, surrounds, aluminium dust caps and mounting screws are visible in every photograph. PARTIAL CORRECTION: surviving Hard Truckers small plywood enclosures are catalogued with tie-dye grille cloth over the 4.5-inch driver. So the small-cone boxes were covered and the 12s and 15s were not, which also explains where Courtenay Pollock\'s tie-dye went. Modelled accordingly.',
   },
   'materials.plywood': {
     confidence: 'confirmed',
@@ -451,7 +495,7 @@ export const DRIVERS: Record<DriverId, Driver> = {
     dustCapDia: IN(1.3), dustCapRise: IN(0.3), surroundWidth: IN(0.35), boltCount: 4,
   },
   evHorn: {
-    id: 'evHorn', label: 'Electro-Voice horn tweeter', modelGuess: 'Electro-Voice T-35',
+    id: 'evHorn', label: 'Electro-Voice horn tweeter', modelGuess: 'Electro-Voice T350 (confirmed — surviving unit)',
     nominalIn: 0, frameDia: IN(4.5), coneDia: IN(3.4), coneDepth: IN(-1.6), // negative = horn flare projects forward
     dustCapDia: 0, dustCapRise: 0, surroundWidth: 0, boltCount: 4,
   },
@@ -682,30 +726,63 @@ export const wall = {
     /** The speakers themselves: sixty feet end to end. The model packs to 18.96 m. */
     arrayWidth: FT(60),
     arrayWidthPacked: 18.96,
-    /** Speaker envelope above the deck. Model tops out at 7.56 m. */
-    arrayHeight: 8.0,
-    /** One-inch plywood, ten feet up, bolted and tied into the scaffolding. */
+    /** Tower above the deck: 38'-10" overall less the 10 ft deck. Model tops out at 7.56 m. */
+    arrayHeight: FT(28 + 10 / 12),
+    /** Overall, ground to top of tower. Dimensioned on the 10 April 1974 elevation. */
+    totalHeight: FT(38 + 10 / 12),
+    /** Ten feet up, bolted and tied into the scaffolding. */
     stageDeckHeight: FT(10),
-    stageDeckThickness: IN(1),
-    /** Full staging footprint, which is what the "nearly 100 feet wide" figures describe. */
+    /** 1-1/8" T&G plywood over 2x10 planks on 4x6 beams. */
+    stageDeckThickness: IN(1.125),
+    /** Scaffold tower footprint, straight off the top view. */
+    scaffoldFootprint: { width: FT(64), depth: FT(40) },
+    /** Deck overhangs the towers 9'-0" each side and 1'-0" downstage. */
+    deckOverhang: { side: FT(9), downstage: FT(1) },
+    get deck() {
+      return {
+        width: FT(64) + FT(9) * 2,
+        depth: FT(40) + FT(1),
+        facingThickness: IN(0.625),
+        /** 5/8" ply across the whole front, returning 16 ft down each side. */
+        facingReturn: FT(16),
+      };
+    },
+    /** Venue configurations Anderson reports, for the About page. Neither is the drawing. */
     stagingIndoor: { width: FT(76), depth: FT(30) },
     stagingOutdoor: { width: FT(104), depth: FT(40) },
-    /** Which footprint the scene builds. */
     venue: 'outdoor' as 'indoor' | 'outdoor',
     bandLineZ: 3.0,
-    /** Total height above ground: deck + speakers ≈ 36 ft, "over three stories". */
-    get totalHeight() { return FT(10) + 8.0 },
   },
 
   structure: {
+    /**
+     * Straight off the 10 April 1974 tower requirements. Every figure here is
+     * from the drawing, not inferred.
+     */
     scaffold: {
-      bayWidth: FT(7),
+      /** 6'-6" x 5' end frames: 5 ft across the depth, 6'-6" per lift. */
+      frameWidth: FT(5),
       liftHeight: FT(6.5),
+      /** 7' X-braces set the bay spacing along the run. */
+      bayWidth: FT(7),
+      /** The plan closes on a 3'-6" half bay at the centreline, with 9" at each end. */
+      closerBay: FT(3.5),
+      endMargin: IN(9),
       tubeDiameter: 0.0483,
       guyWireDiameter: 0.006,
-      /** Rear plane of scaffolding behind the arrays. */
+      /** Bill of materials, as written on the sheet. */
+      bom: {
+        tubelocks10ft: 50,
+        tubelocks13ft: 50,
+        couplers: { std1625x2: 100, adj1625x2: 100, std2x2: 50, adj2x2: 50, adj1625x1625: 25 },
+        trusses22ft: 6,
+        floorPlanks: { count: 40, section: [IN(2), IN(10)] as const, length: FT(16) },
+      },
+      /** Rear plane of scaffolding behind the arrays; the footprint is 40 ft deep. */
       rearPlaneZ: -2.4,
     },
+    /** The 1973-74 Winter Season tower, drawn at 3/8" = 1'. A smaller, earlier rig. */
+    winterTower1973: { height: FT(30), liftHeight: FT(6), bayWidth: FT(5), braceSpan: FT(5), levels: 3 },
     /** Military-surplus shore-power cable. Arm-thick, and a visual feature. */
     cabling: { runDiameter: 0.050, bundleDiameter: 0.14, color: '#0E0E0E' },
     amps: {
@@ -713,6 +790,12 @@ export const wall = {
       size: { w: IN(19), h: IN(9.5), d: IN(16) },
       perRack: 4,
       rackCount: 12,
+      /**
+       * The amps were individually named and numbered, and the names were on
+       * the road cases. Surviving examples: "M-14" (Garcia's), "Budman",
+       * "Ketchup", "Mustard". Stencilled onto the cases in the model.
+       */
+      caseNames: ['Budman', 'Ketchup', 'Mustard', 'M-14'],
       /** Amps sit at deck level behind the arrays. Exact distribution undocumented. */
       z: -2.0,
       meterColor: '#3FA9F5',
@@ -747,8 +830,12 @@ export const wall = {
     steel: { baseColor: '#9AA0A6', roughness: 0.46, metalness: 0.95 },
     cable: { baseColor: '#0E0E0E', roughness: 0.68, metalness: 0.0 },
     ampGlass: { baseColor: '#0A0A0C', roughness: 0.12, metalness: 0.2 },
-    /** Drivers are exposed — there is no grille cloth material by design. */
+    /**
+     * The 12s and 15s ran bare — no cloth over the cones. Only the small-cone
+     * enclosures were covered, in Courtenay Pollock's tie-dye.
+     */
     grilleCloth: null,
+    tieDyeGrille: { appliesTo: ['panel5'] as CabinetId[], roughness: 0.95, metalness: 0.0, sheen: 0.3 },
   },
 
   /** Quality tiers. Chosen at load from device capability, overridable by the visitor. */

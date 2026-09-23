@@ -17,6 +17,15 @@ Every factual claim carries a confidence level:
 | **estimated** | Derived by reasoning from confirmed facts, photographs, or standard period hardware. Plausible, not documented. |
 | **guessed** | No evidence either way. Chosen because the model needs *a* number. Treat as placeholder. |
 
+**Source hierarchy.** When sources conflict, this is the order of precedence:
+
+1. **The 1974 engineering drawings** — dimensioned, dated, from the crew's own files.
+2. **Surviving hardware** — measured or catalogued objects.
+3. **Anderson**, *Loud and Clear* — the only book to separate the array from the staging.
+4. **The 1974 press spec sheet** — contemporary, but written for journalists.
+5. **Trade press** (Mix, Relix) and **encyclopedias**.
+6. **Photographs** — used for massing, materials and structure; never for numbers.
+
 Where sources disagree, the disagreement is printed rather than smoothed over. Where the record is genuinely silent, the spec picks the most plausible option, marks it, and moves on.
 
 **Every number in this document also lives in `src/data/wall.config.ts`,** together with its confidence and source ids. Geometry code reads only that file. Correcting history should never mean editing geometry.
@@ -63,7 +72,11 @@ These differ by exactly one 15″ driver. No source resolves it.
 | Electro-Voice tweeters | 54 | confirmed |
 | **Total** | **641** | — |
 
-Specific JBL model numbers (K140/D140 for 15″, K120/D120 for 12″, LE5 for 5″; Electro-Voice T-35 horns) are **not** documented in any source found. They are the period-correct candidates and are recorded in the config as `estimated`, used only to drive cone/dust-cap proportions — nothing in the visual reconstruction depends on the model number being right.
+JBL model numbers (K140/D140 for 15″, K120/D120 for 12″, LE5 for 5″) are **not** documented in any source found. They are the period-correct candidates, recorded as `estimated`, and used only to drive cone and dust-cap proportions.
+
+The tweeter is no longer a guess. A surviving unit from the crew's own stock, catalogued as *Wall of Sound 1974 Electro-Voice T350*, settles it — this spec previously said T-35. **Electro-Voice T350, confirmed.**
+
+The small cones are catalogued as **4.5-inch** on surviving enclosures, against the 1974 spec sheet's **5-inch**. Both are consistent with a nominal 5″ driver on a ~4.5″ frame, which is what is modelled.
 
 ---
 
@@ -128,14 +141,22 @@ Vocals alone account for 372 of 641 drivers — 58% of the system. That matches 
 
 Every "nearly 100 feet" figure in circulation is the outdoor *staging footprint*, not the wall of speakers. The array layout was rebuilt to fit 60 ft, which made the columns taller and much more densely packed — which is, of course, exactly what a line-array designer would do, and what the photographs show.
 
+### The drawings
+
+Four lots of **original scaffolding and stage drawings from Steve Parish's collection** came up at Julien's Auctions in April 2026. Three are duplicate prints of the same sheet — *"Detail: Grateful Dead P.A. Tower, 1973-74 Winter Season, scale 3/8" = 1'"* — an isometric of a three-level tower with the annotations *"floor in back only, 2nd level"* and *"omit floor in 5' bay, 3rd level"*, dimensioned **30'** tall on standard **6' frames, 5' X-braces, 5' bays**.
+
+The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summer Tour, dated 10 April 1974**, at **¼" = 1'-0"** — a **top view**, a **stage left view**, and written **tower** and **stage requirements**. This is the mature Wall, drawn three weeks after it debuted. It is now the top of the source hierarchy for anything structural.
+
 | Quantity | Value | Confidence | Note |
 |---|---|---|---|
-| Speaker array width | 18.29 m (60 ft) documented; **18.96 m (62.2 ft)** as packed | confirmed / packed within 4% | The model's blocks butt together and come to 62.2 ft. |
-| Speaker envelope height | 8.0 m (26 ft) above the deck; model tops out at 7.56 m | estimated | |
-| **Stage deck height** | **3.05 m (10 ft)** | **confirmed** | One-inch plywood floor, ten feet up, bolted and tied into the scaffolding — because sound pressure could bounce the whole rig by as much as a foot. Previously guessed at 5 ft. |
-| Total height above ground | 10.61 m (34.8 ft) | derived | Against "36 feet high" and "over three stories tall". ✔ |
-| Staging footprint, indoor | 23.2 × 9.1 m (76 × 30 ft) | confirmed | |
-| Staging footprint, outdoor | 31.7 × 12.2 m (104 × 40 ft) | confirmed | The scene builds the outdoor footprint by default. |
+| **Scaffold footprint** | **19.51 × 12.19 m (64'-0" × 40'-0")** | **confirmed — drawing** | Dimensioned on the top view. Width chain: 9" + 5'-0" + 7'-0" bays + a 3'-6" closer at the centreline, mirrored. Depth chain: 5, 4, 5, 5, 5, 5, 5, 5, 1 = 40'-0". |
+| **Total height** | **11.84 m (38'-10")** | **confirmed — drawing** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". This is the real number behind "36 feet" and "over three stories". |
+| Speaker array width | 18.29 m (60 ft) documented; **18.96 m (62.2 ft)** as packed | confirmed / packed within 4% | **The check that landed:** the layout was built to Anderson's 60 ft before these drawings surfaced, and 62.2 ft drops inside a 64 ft tower footprint with room for the end frames. Two independent sources, derived separately, agree. |
+| Tower above the deck | 8.79 m (28'-10") | derived from the drawing | Model's tallest array tops out at 7.56 m, leaving ~1.2 m of bare scaffolding above — which is what the photographs show. |
+| **Stage deck height** | **3.05 m (10 ft)** | **confirmed** | Bolted and tied into the scaffolding, because sound pressure could bounce the rig a foot. Anderson says one-inch plywood; the drawing specifies **1⅛" T&G over 2×10 planks on 4×6 beams**, so the drawing wins. Previously guessed at 5 ft. |
+| **Deck size** | **25.0 × 12.5 m (82 × 41 ft)** | **confirmed — drawing** | Stage requirements note 3: the deck overhangs the towers by **9'-0" stage left and right** and **1'-0" downstage**. |
+| Staging footprint, indoor | 23.2 × 9.1 m (76 × 30 ft) | confirmed | Anderson. A different venue configuration from the drawing. |
+| Staging footprint, outdoor | 31.7 × 12.2 m (104 × 40 ft) | confirmed | Anderson. **The 40 ft depth matches the drawing exactly.** |
 | Band standing line | 3.0 m in front of the wall face | estimated | Consistent with the 60 mm differential mic pair working at that distance, and with photographs. |
 | Total weight | 75 tons complete / ~28 tons sound system | confirmed | Displayed as text only. |
 | Onstage SPL | 120 dB | confirmed | **Contradicts Mix**, which reports onstage levels *lower* than in the hall and normal conversation being possible. Anderson reports meters regularly at 120 dB and lasting hearing damage across the band and crew. Both are shown; they may describe different moments in a show. |
@@ -215,29 +236,49 @@ The 5″ and tweeter sections are modelled as **shared baffle panels with drille
 
 This matters, because one common assumption is wrong.
 
-- **No grille cloth on the speaker faces.** The drivers are **exposed**: visible cones, visible surrounds, bright aluminium dust caps, visible mounting screws. Any reconstruction with black grille cloth over the drivers is wrong. (Tie-dyed fabric by Courtenay Pollock hung on parts of the *structure* — behind and beside the arrays, and across the back — not over the drivers.)
+- **No grille cloth over the 12s and 15s.** Those drivers are **exposed**: visible cones, visible surrounds, bright aluminium dust caps, visible mounting screws. Any reconstruction with black grille cloth over them is wrong.
+- **But the small-cone boxes were covered, in tie-dye.** Surviving Hard Truckers enclosures from the crew's own stock are catalogued as *small plywood enclosure with 4.5-inch speaker and tie-dye grille cloth*. So Courtenay Pollock's tie-dye was not only hung on the structure — it was **stretched over the small-driver panels themselves**. This is a correction to the previous draft, which said no cloth anywhere on the speaker faces, and it is a significant visual change: the densest, most numerous part of the wall reads as fabric, not cones.
 - **Cabinet carcasses: 14-ply laminated Finnish birch.** The finish varied. The one surviving cabinet is **painted matte black all over**; photographs elsewhere on the wall clearly show **bare plywood frames** around black baffles. Both are modelled and mixed across the arrays (`materials.blackFinishRatio`, default 0.55). All of them are road-worn — scuffed edges, adhesive residue, darkened corners and handles, visible plies where the paint has gone.
 - **Baffle boards: matte black**, flat. Where the carcass is left bare, the black-face / pale-body contrast is the Wall's signature read at distance.
 - **Cones:** paper, mid-grey to grey-blue in colour film, with a **specular aluminium dust cap** that catches stage light — the reason the Wall reads as hundreds of points of light in photographs. This is the single most important material to get right.
 - **Scaffolding: galvanised steel tube-and-clamp**, standard period frames, plus a dense web of **diagonal guy wires** crossing in front of and between the arrays. The wires are structurally and visually essential; photographs are full of them.
 - **Cabling: arm-thick.** Not a detail — a visual feature. The crew found that nothing lighter would carry the current, and wired the Wall with **military-surplus cable originally made for connecting docked ships to shore power.** Modelled at 50 mm per run, gathered into 140 mm bundles at deck level.
-- **McIntosh MC-2300s:** black glass front panels, **glowing blue illuminated power meters**, gold-anodised lettering, chrome-and-black chassis, racked at stage level behind and beneath the arrays. 128 lb each.
+- **McIntosh MC-2300s:** black glass front panels, **glowing blue illuminated power meters**, gold-anodised lettering, chrome-and-black chassis, racked at stage level behind and beneath the arrays. 128 lb each. **The amps were named**, and the names were painted on the road cases — surviving examples include *Budman* (Garcia's), *M-14*, *Ketchup* and *Mustard*. Stencilled onto the cases in the model; it is the kind of detail that tells a visitor this was a working rig, not a product.
 
 ---
 
 ## 10. Structure
 
+Everything in this section except the last two rows is now transcribed from the 10 April 1974 sheet rather than inferred.
+
+**Tower requirements, as written:**
+
+1. Built with **6'-6" × 5' end frames and 7' X-braces**
+2. **50** 10' tubelocks · **50** 13' tubelocks
+3. **275 couplers**: 100 1⅝×2" std · 100 1⅝×2" adj · 50 2×2" std · 50 2×2" adj · 25 1⅝×1⅝" adj
+4. **6** 22' trusses
+5. End frames must be **sprocketed and pinned**
+6. **40** 2"×10"×16' planks used as floors
+
+**Stage requirements, as written:**
+
+1. Built with **5'×5' end frames, 5' X-braces, 7' X-braces, screwjacks, base plates**
+2. Deck built with **4×6 beams, 2×10 planks, 1⅛" T&G plywood**
+3. Deck overhangs scaffolding **stage left and right by 9'** and **downstage by 1'-0"**
+4. **"X" areas in the drawing show the location of towers which continue up after the deck is down** — i.e. the plan's X-braced bays are where the speaker towers rise
+5. **⅝" plywood facing** across the entire front and **16' back on both stage left and stage right**
+
 | Item | Value | Confidence |
 |---|---|---|
-| Stage deck | 1 in plywood, 10 ft above ground, bolted and tied into the scaffolding | **confirmed** |
-| Staging footprint, indoor | 76 × 30 ft | **confirmed** |
-| Staging footprint, outdoor | over 100 × 40 ft | **confirmed** |
-| Scaffolding sets | 2, leapfrogging ahead of a single sound system | **confirmed** |
-| Scaffold bay width | 2.13 m (7 ft) | estimated (standard period frame) |
-| Scaffold lift height | 1.98 m (6 ft 6 in) | estimated |
+| Scaffold end frames | 6'-6" high × 5'-0" wide | **confirmed — drawing** |
+| Scaffold bay (X-brace span) | 7'-0", closing on a 3'-6" half bay at the centreline | **confirmed — drawing** |
+| Deck construction | 4×6 beams, 2×10 planks, 1⅛" T&G ply, ⅝" ply facing | **confirmed — drawing** |
+| Deck overhang | 9'-0" each side, 1'-0" downstage | **confirmed — drawing** |
+| Scaffolding sets | 2, leapfrogging ahead of a single sound system | confirmed (Anderson) |
 | Scaffold tube diameter | 48.3 mm | estimated (standard) |
 | Guy-wire diameter | 6 mm | guessed |
-| Towers | between array blocks, plus a rear plane | estimated |
+
+**Two guesses that turned out right:** this config had already set the bay at 7 ft and the lift at 6 ft 6 in from standard period scaffolding practice. The drawing says 6'-6" × 5' frames and 7' X-braces. They stay, now marked confirmed.
 
 The deck was tied into the scaffolding for a reason worth putting in an info panel: at full tilt the sound pressure could **bounce the entire rig by as much as a foot.**
 
@@ -266,13 +307,17 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 2. **26,400 W vs 28,800 W.** Both quoted; the model shows both and explains the arithmetic.
 3. **Per-string bass channels.** Popular account vs the 1974 spec sheet's selectable quad matrix. Both quoted.
 4. **Which side Garcia stood on.** Not settled here; `band.mirrored` flips it.
-5. **Array left-to-right order.** No plan drawing found. The order above is a reconstruction consistent with photographs, not a documented arrangement. **This is the largest single piece of invention in the model** and the About page will say so plainly. The 60 ft envelope it packs into *is* documented.
+5. **Array left-to-right order.** The 1974 top view dimensions the tower grid but does not label which channel stood where. The order above is a reconstruction consistent with photographs, not a documented arrangement. **This remains the largest single piece of invention in the model** and the About page will say so plainly. The 64 ft grid it packs into *is* documented, bay by bay.
 6. **Allocation of drivers to arrays.** The four class totals are historical and asserted at startup. Which array got which share is mostly the reconstruction's own. Confirmed: 16 × 15″ for the bass drum, 20 × 12″ per guitar, 16 bass cabinets a side.
 7. **Cabinet dimensions other than the measured one.** `cab12x2` is measured. `cab12` and `cab15` are proportioned from it.
 8. **Onstage SPL.** 120 dB (Anderson) against "quieter than the hall, you could hold a conversation" (Mix). Both are stated; no attempt is made to reconcile them.
 9. **Amplifier rack placement.** Photographs show amps at deck level; the exact distribution across the 48 is not documented.
 
-**Resolved since the first draft, by Anderson:** the wall's width (60 ft of speakers, not 100 — that was the staging); the stage deck height (10 ft, confirmed, previously guessed at 5); and the leapfrogging question (one system, two scaffolding sets).
+**Resolved since the first draft, by Anderson:** the wall's width (60 ft of speakers, not 100 — that was the staging); the stage deck height (10 ft, previously guessed at 5); and the leapfrogging question (one system, two scaffolding sets).
+
+**Resolved since the second draft, by the 1974 drawings:** the scaffold footprint (64 × 40 ft), the overall height (38'-10"), the frame and bay sizes (6'-6" × 5' frames, 7' X-braces), the deck build-up and its 9 ft overhangs, and the full bill of materials. Plus, from surviving hardware: the tweeter is an Electro-Voice **T350**, and the small-cone panels were **covered in tie-dye**.
+
+**What the drawings still do not tell us:** which channel occupied which bay. That is the one thing a plan view could have settled and doesn't — it dimensions the steel, not the speakers.
 
 ---
 
@@ -280,6 +325,8 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 
 | id | Source |
 |---|---|
+| `blueprints` | **Original Grateful Dead scaffolding and stage drawings**, from the collection of "Big Steve" Parish — Julien's Auctions, *Treasures From The Golden Road*, 22 April 2026. Lots 53 / 57 / 60: *Detail: Grateful Dead P.A. Tower, 1973-74 Winter Season*, 3/8"=1'. Lot 71: **1974 Summer Tour, dated 10 April 1974**, ¼"=1'-0" — top view, stage left view, and written tower and stage requirements. **Primary engineering documents. Top of the hierarchy for anything structural.** https://www.juliensauctions.com/en/items/2208457/grateful-dead-1974-summer-tour-wall-of-sound-scaffolding-blueprints |
+| `juliens` | **Surviving hardware** from the same sale: lot 72, *Wall of Sound 1974 Electro-Voice T350 tweeter*; lots 276/277, Hard Truckers small plywood enclosures with 4.5-inch speaker and tie-dye grille cloth; lots 58/62/69/70, McIntosh MC2300s and their named road cases. |
 | `anderson` | **Brian Anderson, *Loud and Clear* (2025), ch. 1 "The Artifact"** — supplied by the project owner. The highest-quality dimensional source found: it is the only one that separates the speaker array from the staging, the only one that gives the stage deck height, and the only one describing a surviving cabinet measured in hand. Where it disagrees with a trade-press figure, it wins. |
 | `wiki` | Wikipedia, *Wall of Sound (Grateful Dead)* — https://en.wikipedia.org/wiki/Wall_of_Sound_(Grateful_Dead) |
 | `mcintosh` | McIntosh Laboratory, *McIntosh and the Grateful Dead's Wall of Sound* — https://www.mcintoshlabs.com/about/news/mcintosh-and-the-grateful-deads-wall-of-sound |
@@ -303,7 +350,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 
 | Stage | Deliverable | Gate |
 |---|---|---|
-| 2 | Grey-box geometry at true scale from the config — every array, cabinet, scaffold bay and the stage deck, untextured. Orbit camera, a 1.75 m human figure for scale, and an on-screen driver-count readout that must equal 641. | Screenshots |
+| 2 | Grey-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
 | 3 | Materials and lighting — PBR, HDRI, worn birch, black baffles, specular dust caps, steel, glowing McIntosh meters. Soft shadows, AO, subtle bloom, all tier-switchable. | Screenshots |
 | 4 | Navigation — orbit / first-person walk / guided tour, mouse, touch and full keyboard. | Live build |
 | 5 | Interaction — hover and tap highlighting, info panels with counts and sources, exploded view, channel colour overlay, About page. | Live build |
