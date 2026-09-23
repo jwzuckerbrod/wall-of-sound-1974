@@ -849,7 +849,7 @@ export const wall = {
      * this, and stage lighting lifts the result, so anything above about #1a
      * comes out reading as brown rather than as a black-painted cabinet.
      */
-    plywoodBlack: { baseColor: '#100F0C', roughness: 0.90, metalness: 0.0, wearAmount: 0.7 },
+    plywoodBlack: { baseColor: '#1B1A16', roughness: 0.90, metalness: 0.0, wearAmount: 0.7 },
     /**
      * Fraction of cabinets finished black rather than left bare. The one
      * surviving cabinet is black; the photographs show plenty of bare ply. With
@@ -893,7 +893,7 @@ export const wall = {
      * overhead, so a strong ambient from them lands mostly on upward-facing
      * surfaces and turns the stage deck into the brightest thing in the frame.
      */
-    hdri: { intensity: 0.28, rotation: DEG(15) },
+    hdri: { intensity: 0.55, rotation: DEG(15) },
   },
 } as const;
 

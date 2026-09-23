@@ -320,6 +320,8 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 7. **Cabinet dimensions other than the measured one.** `cab12x2` is measured. `cab12` and `cab15` are proportioned from it.
 8. **Onstage SPL.** 120 dB (Anderson) against "quieter than the hall, you could hold a conversation" (Mix). Both are stated; no attempt is made to reconcile them.
 9. **Amplifier rack placement.** Photographs show amps at deck level; the exact distribution across the 48 is not documented.
+10. **The ramp onto the stage.** Pure scene-making, on no drawing. The deck is ten feet up, so first-person mode needs somewhere to climb or the stage is unreachable. A wedge at stage left, flagged here and in the About page.
+11. **How far the stacks stand proud of the steel.** Not documented. Set to a little over one cabinet depth, because the photographs plainly show stacks in front of the structure rather than inside it.
 
 **Resolved since the first draft, by Anderson:** the wall's width (60 ft of speakers, not 100 — that was the staging); the stage deck height (10 ft, previously guessed at 5); and the leapfrogging question (one system, two scaffolding sets).
 
@@ -362,7 +364,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 |---|---|---|
 | 2 | Grey-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
 | 3 | Materials and lighting — PBR, HDRI, worn birch, black baffles, specular dust caps, steel, glowing McIntosh meters. Soft shadows, AO, subtle bloom, all tier-switchable. | Screenshots |
-| 4 | Navigation — orbit / first-person walk / guided tour, mouse, touch and full keyboard. | Live build |
+| 4 ✔ | Navigation — orbit, first-person walk with collision and a ramp onto the deck, and an eight-stop guided tour. Mouse, touch and full keyboard; `prefers-reduced-motion` respected; tour text in a live region and complete without the picture. | Live build |
 | 5 | Interaction — hover and tap highlighting, info panels with counts and sources, exploded view, channel colour overlay, About page. | Live build |
 | 6 | Performance — instancing audit, LOD, mobile tier, loading screen with progress, budget check (60 fps target, < 5 MB initial). | Numbers |
 | 7 | Deploy. | Link |

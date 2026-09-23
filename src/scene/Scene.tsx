@@ -8,8 +8,14 @@ import { Amps } from './Amps';
 import { Arrays, type ColorMode } from './Arrays';
 import { FitCamera } from './FitCamera';
 import { Lighting } from './Lighting';
-import { Cabling, Scaffold, ScaleFigures, Stage, TieDye } from './Structure';
+import { Cabling, Scaffold, ScaleFigures, Stage, StageRamp, TieDye } from './Structure';
+import { TourCamera } from './TourCamera';
+import { WalkControls } from './WalkControls';
+import type { TourStop } from './tour';
 import type { View } from './views';
+
+/** Orbit around it, walk through it, or be taken round it. */
+export type NavMode = 'orbit' | 'walk' | 'tour';
 
 export interface SceneOptions {
   colorMode: ColorMode;
@@ -40,6 +46,9 @@ function RendererSettings({ tier }: { tier: Tier }) {
   return null;
 }
 
+/** Where a visitor is put down when they enter walk mode: out in the crowd. */
+export const WALK_START = { x: 3.5, z: 26, yaw: 0 };
+
 export function Scene({
   colorMode,
   showScaffold,
@@ -48,9 +57,12 @@ export function Scene({
   showAmps,
   view,
   tier,
-}: SceneOptions & { view: View; tier: Tier }) {
+  navMode,
+  tourStop,
+}: SceneOptions & { view: View; tier: Tier; navMode: NavMode; tourStop: TourStop }) {
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
+  const orbiting = navMode !== 'walk';
 
   return (
     <>
@@ -69,20 +81,29 @@ export function Scene({
         </>
       )}
       {showAmps && <Amps shadows={shadows} />}
-      {showStage && <Stage shadows={shadows} />}
+      {showStage && (
+        <>
+          <Stage shadows={shadows} />
+          <StageRamp shadows={shadows} />
+        </>
+      )}
       {showFigures && <ScaleFigures shadows={shadows} />}
 
-      <OrbitControls
-        makeDefault
-        target={view.target}
-        maxPolarAngle={Math.PI / 2 - 0.02}
-        minDistance={2.5}
-        maxDistance={200}
-        enableDamping
-        dampingFactor={0.06}
-      />
-      {/* After OrbitControls, so `controls` is in the store when this runs. */}
-      <FitCamera view={view} />
+      {orbiting && (
+        <OrbitControls
+          makeDefault
+          target={view.target}
+          maxPolarAngle={Math.PI / 2 - 0.02}
+          minDistance={2.5}
+          maxDistance={200}
+          enableDamping
+          dampingFactor={0.06}
+        />
+      )}
+      {/* After OrbitControls, so `controls` is in the store when these run. */}
+      {navMode === 'orbit' && <FitCamera view={view} />}
+      {navMode === 'tour' && <TourCamera stop={tourStop} active />}
+      <WalkControls enabled={navMode === 'walk'} start={WALK_START} />
     </>
   );
 }

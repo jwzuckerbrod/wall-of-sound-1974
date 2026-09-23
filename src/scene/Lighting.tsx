@@ -52,9 +52,10 @@ export function Lighting({ tier }: { tier: Tier }) {
         <Lightformer form="rect" intensity={0.8} color="#d9b98a" scale={[26, 12, 1]} position={[0, L.deck.y + 0.2, -2]} rotation={[-Math.PI / 2, 0, 0]} />
       </Environment>
 
-      {/* Low: a hemisphere light lands its full sky colour on every upward-facing
-          normal, so it hits the deck hardest of anything in the scene. */}
-      <hemisphereLight args={['#8ea4bd', '#15120f', 0.22]} />
+      {/* A hemisphere light lands its full sky colour on every upward-facing
+          normal, so it hits the deck harder than anything else in the scene.
+          Kept low, with the environment doing most of the ambient work. */}
+      <hemisphereLight args={['#8ea4bd', '#15120f', 0.35]} />
 
       {/* Key: warm, high, downstage — a follow-spot position, not the sun. */}
       <directionalLight

@@ -1,11 +1,12 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { wall } from './data/wall.config';
-import { Post } from './scene/Post';
-import { Scene, sceneDefaults, type SceneOptions } from './scene/Scene';
-import { VIEWS, viewFromSearch, type ViewId } from './scene/views';
 import { detectTier, downgrade, tierSettings, type Tier } from './quality';
+import { Post } from './scene/Post';
+import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
+import { TOUR } from './scene/tour';
+import { VIEWS, viewFromSearch, type ViewId } from './scene/views';
 import { Hud } from './ui/Hud';
 
 function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
@@ -27,6 +28,8 @@ function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
 export default function App() {
   const initial = useMemo(() => viewFromSearch(window.location.search), []);
   const [viewId, setViewId] = useState<ViewId>(initial.id);
+  const [navMode, setNavMode] = useState<NavMode>('orbit');
+  const [stopIndex, setStopIndex] = useState(0);
   const [tier, setTier] = useState<Tier>(() => {
     const forced = new URLSearchParams(window.location.search).get('tier');
     return forced && forced in wall.render.tiers ? (forced as Tier) : detectTier();
@@ -38,25 +41,69 @@ export default function App() {
   const view = VIEWS[viewId];
   const hud = initial.hud;
   const q = tierSettings(tier);
+  const tourStop = TOUR[stopIndex];
 
-  const selectView = (id: ViewId) => {
+  const selectView = useCallback((id: ViewId) => {
     setViewId(id);
+    setNavMode('orbit');
     const url = new URL(window.location.href);
     url.searchParams.set('view', id);
     window.history.replaceState(null, '', url);
-  };
+  }, []);
 
-  // Number keys jump between views — the seed of the keyboard tour in stage 4.
+  const goToStop = useCallback((i: number) => {
+    setStopIndex(((i % TOUR.length) + TOUR.length) % TOUR.length);
+    setNavMode('tour');
+  }, []);
+
+  /**
+   * Global shortcuts. Deliberately skipped while focus is in a control, so
+   * that tabbing to a button and pressing an arrow key does what the button
+   * expects rather than flying the camera somewhere.
+   */
   useEffect(() => {
-    const ids = Object.keys(VIEWS) as ViewId[];
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      const el = document.activeElement;
+      if (el instanceof HTMLElement && ['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
+
+      const ids = Object.keys(VIEWS) as ViewId[];
       const n = Number(e.key);
-      if (n >= 1 && n <= ids.length) selectView(ids[n - 1]);
+      if (n >= 1 && n <= ids.length) return selectView(ids[n - 1]);
+
+      switch (e.key.toLowerCase()) {
+        case 'o':
+          return setNavMode('orbit');
+        case 'f':
+          return setNavMode('walk');
+        case 't':
+          return goToStop(stopIndex);
+        default:
+          break;
+      }
+
+      // Arrows page the tour, but only when the tour is what is running —
+      // in walk mode they are the movement keys.
+      if (navMode === 'tour') {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+          e.preventDefault();
+          goToStop(stopIndex + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          goToStop(stopIndex - 1);
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          goToStop(0);
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          goToStop(TOUR.length - 1);
+        }
+      }
+      if (e.key === 'Escape' && navMode !== 'orbit') setNavMode('orbit');
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, []);
+  }, [navMode, stopIndex, goToStop, selectView]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -87,13 +134,19 @@ export default function App() {
       <Canvas
         shadows={q.shadowMapSize > 0}
         dpr={[1, q.pixelRatioCap]}
-        gl={{ antialias: tier === 'low', powerPreference: 'high-performance' }}
+        gl={{
+          antialias: tier === 'low',
+          powerPreference: 'high-performance',
+          // Dev only: lets the rendered frame be sampled pixel-by-pixel, so
+          // "why is that surface bright?" is a measurement rather than a guess.
+          preserveDrawingBuffer: import.meta.env.DEV,
+        }}
         camera={{ position: view.position, fov: view.fov ?? 42, near: 0.1, far: 600 }}
         onCreated={({ gl }) => {
           gl.outputColorSpace = THREE.SRGBColorSpace;
         }}
       >
-        <Scene {...options} view={view} tier={tier} />
+        <Scene {...options} view={view} tier={tier} navMode={navMode} tourStop={tourStop} />
         <Post tier={tier} />
         <FpsProbe onSample={setFps} />
       </Canvas>
@@ -109,6 +162,10 @@ export default function App() {
             setAutoTier(false);
             setTier(t);
           }}
+          navMode={navMode}
+          setNavMode={setNavMode}
+          stopIndex={stopIndex}
+          goToStop={goToStop}
         />
       )}
     </>

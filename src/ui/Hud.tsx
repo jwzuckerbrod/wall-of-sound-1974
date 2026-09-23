@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { assertInventory, FT, wall } from '../data/wall.config';
 import { allCells, driverTally, envelope, faceCoverage } from '../geometry/arrays';
 import { scaffoldTubes } from '../geometry/scaffold';
-import type { SceneOptions } from '../scene/Scene';
+import type { NavMode, SceneOptions } from '../scene/Scene';
 import { VIEWS, type ViewId } from '../scene/views';
 import { TIER_LABEL, TIERS, type Tier } from '../quality';
+import { NavPanel } from './NavPanel';
 import { area, long, short, UNIT_LABEL, type UnitSystem } from './units';
 
 export function Hud({
@@ -15,6 +16,10 @@ export function Hud({
   setViewId,
   tier,
   setTier,
+  navMode,
+  setNavMode,
+  stopIndex,
+  goToStop,
 }: {
   options: SceneOptions;
   setOptions: (o: SceneOptions) => void;
@@ -23,6 +28,10 @@ export function Hud({
   setViewId: (id: ViewId) => void;
   tier: Tier;
   setTier: (t: Tier) => void;
+  navMode: NavMode;
+  setNavMode: (m: NavMode) => void;
+  stopIndex: number;
+  goToStop: (i: number) => void;
 }) {
   // Feet and inches by default: it is what the Wall was drawn and built in.
   const [units, setUnits] = useState<UnitSystem>('imperial');
@@ -119,12 +128,14 @@ export function Hud({
         </dl>
       </section>
 
+      <NavPanel navMode={navMode} setNavMode={setNavMode} stopIndex={stopIndex} goToStop={goToStop} />
+
       <section>
         <h2>Camera — or press 1–{Object.keys(VIEWS).length}</h2>
         <ul className="views">
           {(Object.keys(VIEWS) as ViewId[]).map((id, i) => (
             <li key={id}>
-              <button onClick={() => setViewId(id)} aria-current={id === viewId}>
+              <button onClick={() => setViewId(id)} aria-current={id === viewId && navMode === 'orbit'}>
                 <kbd>{i + 1}</kbd> {VIEWS[id].label}
               </button>
             </li>

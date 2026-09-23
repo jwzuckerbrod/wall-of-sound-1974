@@ -1,7 +1,10 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { installProbe } from './ui/probe';
 import './styles.css';
+
+installProbe();
 
 // Keep the last few runtime errors with full stacks on the window, so a
 // headless/automated browser can read them back. Dev only.

@@ -89,17 +89,23 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
     metalness: m.steel.metalness,
   });
 
-  // Road-worn plywood under stage lighting, not fresh timber. The deck is the
-  // largest single surface in the scene, so if it is even slightly too bright
-  // it takes over the frame.
+  /**
+   * Road-worn plywood under stage lighting. The deck is the largest single
+   * surface in the scene and faces straight up into everything overhead, so it
+   * kept coming out as the brightest thing in the frame.
+   *
+   * The fix was not more albedo tuning — it is `envMapIntensity`. Almost all of
+   * what was landing on it came from the generated environment's upper
+   * hemisphere, and that is controllable per material. Turning it down here
+   * leaves the cabinets and the dust caps, which need the environment, exactly
+   * as they were.
+   */
   const deck = new THREE.MeshStandardMaterial({
     map: tune(deckMap().clone(), 10),
-    // Horizontal and enormous, so it catches the overhead wash square-on and
-    // needs a much lower albedo than it would on a swatch to sit behind the
-    // Wall rather than in front of it.
-    color: 0x2b2620,
-    roughness: 0.96,
+    color: 0xa89578,
+    roughness: 0.97,
     metalness: 0,
+    envMapIntensity: 1.0,
   });
 
   /**
@@ -110,9 +116,10 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
    */
   const facing = new THREE.MeshStandardMaterial({
     map: tune(deckMap().clone(), 14),
-    color: 0x141210,
+    color: 0x413a30,
     roughness: 0.98,
     metalness: 0,
+    envMapIntensity: 0.7,
   });
   const cable = new THREE.MeshStandardMaterial({ color: m.cable.baseColor, roughness: m.cable.roughness });
 
@@ -133,7 +140,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 
   const tieDye = new THREE.MeshStandardMaterial({
     map: tune(tieDyeMap().clone(), 1),
-    color: 0x67625b,
+    color: 0x9a938a,
     roughness: 0.98,
     metalness: 0,
     side: THREE.DoubleSide,
@@ -141,7 +148,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 
   // Scale reference, not a character: legible but not the brightest thing in
   // the frame, which is where a near-white figure ends up in a dark hall.
-  const figure = new THREE.MeshStandardMaterial({ color: '#4a4741', roughness: 0.9 });
+  const figure = new THREE.MeshStandardMaterial({ color: '#7d786f', roughness: 0.9 });
 
   cached = {
     shell, baffle, cone, metal, steel, deck, facing, cable,
