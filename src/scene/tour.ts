@@ -24,9 +24,9 @@ export const TOUR: TourStop[] = [
     id: 'whole',
     title: 'Sixty feet of speakers',
     body:
-      'The Wall of Sound, as it stood in the summer of 1974. Six hundred and forty-one drivers across sixty feet, on a scaffold tower sixty-four feet wide and forty deep, thirty-eight feet ten inches to the top. The stage deck is ten feet off the ground, and the five figures on it are 1.75 metres tall.',
-    position: [0, DECK + 10, 46],
-    target: [0, DECK + 5, -1],
+      'The Wall of Sound, as it stood in the summer of 1974. Six hundred and forty-one drivers across sixty feet, on a scaffold tower sixty-four feet wide and forty deep that rises thirty-eight feet ten inches above the stage. The stage deck is itself ten feet off the ground, and the five figures on it are 1.75 metres tall.',
+    position: [0, DECK + 12, 52],
+    target: [0, DECK + 6.5, -1],
     fov: 42,
   },
   {
@@ -43,8 +43,8 @@ export const TOUR: TourStop[] = [
     title: 'The vocal cluster',
     body:
       'Three hundred and seventy-two of the 641 drivers carried vocals alone — more than half the system. The centre cluster curves toward the audience to spread the sound across roughly 140 to 180 degrees. Singers stood directly in front of twenty-six kilowatts without feedback, because each vocal microphone was a matched pair sixty millimetres apart wired in reverse polarity: the voice reached the near capsule first and survived, and everything arriving equally at both cancelled.',
-    position: [1.8, DECK + 5.2, 9.5],
-    target: [0, DECK + 5.4, 0],
+    position: [1.8, DECK + 4.4, 9.5],
+    target: [0, DECK + 4.6, 0],
     fov: 50,
   },
   {
@@ -52,8 +52,8 @@ export const TOUR: TourStop[] = [
     title: 'One bass, four channels',
     body:
       "Phil Lesh's bass ran quadraphonic — four independent channels, eight fifteen-inch speakers each, sixteen cabinets a side. Popular accounts say each of the four strings had its own channel and its own speakers. The 1974 spec sheet describes something subtler: three pickups into a quadraphonic encoder with sixteen selectable spatial arrangements. Four separate bass channels are certain; per-string routing is one plausible reading of them.",
-    position: [12.5, DECK + 3.4, 7.5],
-    target: [7.2, DECK + 2.6, -0.5],
+    position: [12.5, DECK + 4.8, 8.5],
+    target: [7.2, DECK + 4.4, -0.5],
     fov: 52,
   },
   {

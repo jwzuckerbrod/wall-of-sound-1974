@@ -65,7 +65,6 @@ check('total drivers', tally.total, cfg.wall.inventory.total);
 console.log('\nArray envelope - Anderson, 60 ft end to end');
 check('array width (m)', env.width, FTM(60), FTM(4));
 check('array width inside tower footprint', env.width < L.footprint.width, true);
-check('top of speakers above deck (m)', env.maxY, cfg.wall.dimensions.arrayHeight, 1.5);
 check('nothing below deck level', env.minY >= -1e-6, true);
 
 console.log('\nScaffold - the 10 April 1974 drawing');
@@ -74,13 +73,30 @@ check('depth chain sums to 40 ft', scaf.DEPTH_CHAIN_FT.reduce((a, b) => a + b, 0
 check('lift chain sums to 38\'-10"', scaf.LIFT_CHAIN_FT.reduce((a, b) => a + b, 0), 38 + 10 / 12, 1e-9);
 check('tower footprint width (m)', L.xLines.at(-1) - L.xLines[0], FTM(64), 1e-6);
 check('tower footprint depth (m)', L.zLines[0] - L.zLines.at(-1), FTM(40), 1e-6);
-check('top of tower (m)', L.yLevels.at(-1), FTM(38 + 10 / 12), 1e-6);
+check('top of tower above the deck (m)', L.yLevels.at(-1) - L.deck.y, FTM(38 + 10 / 12), 1e-6);
 check('deck height (m)', L.deck.y, FTM(10), 1e-9);
 check('deck width (m) = 64 + 9 + 9', L.deck.maxX - L.deck.minX, FTM(82), 1e-6);
 check('deck depth (m) = 40 + 1', L.deck.maxZ - L.deck.minZ, FTM(41), 1e-6);
 check('tower front line at the origin plane', L.towerFrontZ, 0, 1e-9);
 check('speaker faces stand proud of the steel', env.maxZ > L.towerFrontZ, true);
 check('cabinets do not float off the front of the towers', env.maxZ - L.towerFrontZ < 1.5, true);
+
+// Richard Pechner, P.N.E. Coliseum, Vancouver, 17 May 1974: a straight-on
+// full-stage view, scaled at 9.52 px/ft on the tower face from the 64 ft
+// footprint and cross-checked against a crew member on the top rail and the 24"
+// rows of the 15" cabinets. Heights are feet above the deck. The photo is not
+// in the repo; docs/qa-findings.md section 6 has the measurements.
+console.log('\nAgainst Pechner, 17 May 1974');
+const PHOTO = { scaffoldTop: 38.8, tallestStack: 35.2, clusterLow: 11.6, clusterHigh: 20.8 };
+const ftAbove = (m) => m / 0.3048;
+check('scaffold top above deck within 1 ft (ft)', ftAbove(L.yLevels.at(-1) - L.deck.y), PHOTO.scaffoldTop, 1);
+check('tallest stack within 4 ft (ft)', ftAbove(env.maxY), PHOTO.tallestStack, 4);
+{
+  const cl = cfg.ARRAYS.filter((b) => b.channel === 'vocals' && b.curveRadius > 0);
+  const lo = Math.min(...cl.map((b) => b.baseY));
+  const hi = Math.max(...cl.map((b) => b.baseY + cfg.cabinetSize(b.cabinet).h * b.rows));
+  check('cluster mid-height within 3 ft (ft)', ftAbove((lo + hi) / 2), (PHOTO.clusterLow + PHOTO.clusterHigh) / 2, 3);
+}
 
 console.log('\nScaffold floors - stacks must stand on something');
 const platforms = cfg.wall.structure.scaffold.platformsAboveDeck;

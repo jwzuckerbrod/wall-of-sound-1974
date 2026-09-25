@@ -48,9 +48,15 @@ export const DEPTH_CHAIN_FT = [1, 5, 5, 5, 5, 5, 5, 4, 5] as const;
 export const TOWER_BAND = { first: 5, last: 8 } as const;
 
 /**
- * Lift heights, ground → top, off the stage left view:
+ * Lift heights, deck → top, off the stage left view:
  *   7'-0" + 5'-10" + 6'-6" ×4 = 38'-10"
- * The bottom two are made up on screwjacks; the rest are standard frames.
+ *
+ * Measured up from the stage deck, not the ground. The drawing gives the chain
+ * but not where it starts; the first reading hung it from the ground, which
+ * buried the bottom ten feet in the stage and left 28'-10" of tower above the
+ * deck. Pechner's 17 May 1974 photograph, scaled off the 64 ft footprint, shows
+ * 38.8 ft of scaffold above the deck — the whole chain. See
+ * docs/qa-findings.md §6.
  */
 export const LIFT_CHAIN_FT = [7, 5 + 10 / 12, 6.5, 6.5, 6.5, 6.5] as const;
 
@@ -81,7 +87,7 @@ export function scaffoldLayout(): ScaffoldLayout {
   const towerFrontFt = zCum[TOWER_BAND.first];
   const zLines = zCum.map((v) => FT(towerFrontFt - v)); // downstage positive
 
-  const yLevels = cumulative(LIFT_CHAIN_FT).map(FT);
+  const yLevels = cumulative(LIFT_CHAIN_FT).map((v) => d.stageDeckHeight + FT(v));
 
   const deckHalfW = d.scaffoldFootprint.width / 2 + d.deckOverhang.side;
   return {
@@ -102,30 +108,6 @@ export function scaffoldLayout(): ScaffoldLayout {
   };
 }
 
-/**
- * How high the steel goes at a given x, in world height.
- *
- * Scaffolding is built to the height it needs to be. Carrying every standard to
- * the full 38'-10" across the whole run produced a big empty cage with the
- * speakers huddled in the bottom third of it — the opposite of the photographs,
- * where the towers step up and down with the stacks and only the tallest bays
- * reach the top. So each bay rises one lift above whatever stands in it.
- */
-function towerTopAt(x: number, L: ScaffoldLayout): number {
-  let stackTop = 0;
-  for (const b of ARRAYS) {
-    const s = cabinetSize(b.cabinet);
-    const half = (s.w * b.cols) / 2;
-    if (x < b.x - half - 0.8 || x > b.x + half + 0.8) continue;
-    stackTop = Math.max(stackTop, b.baseY + s.h * b.rows);
-  }
-  const wanted = L.deck.y + stackTop;
-  // Round up to the next lift, always at least two lifts above the deck.
-  const floor = L.yLevels.find((y) => y > wanted + 0.4) ?? L.yLevels[L.yLevels.length - 1];
-  const minimum = L.yLevels.find((y) => y > L.deck.y + 1.5) ?? floor;
-  return Math.max(floor, minimum);
-}
-
 /** Every tube in the tower and the stage substructure. */
 export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
   const tubes: Tube[] = [];
@@ -133,11 +115,14 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
 
   // Tower band z-lines only — towers rise from the X-braced bays.
   const towerZ = L.zLines.slice(TOWER_BAND.first, TOWER_BAND.last + 2);
-  const topAt = L.xLines.map((x) => towerTopAt(x, L));
+  // Every bay runs to the full height. An earlier pass stepped each bay down to
+  // one lift above its stack; Pechner's photograph shows a continuous top rail
+  // across the whole width with crew working along it.
+  const top = L.yLevels[L.yLevels.length - 1];
 
-  // Standards, each to its own bay's height.
-  L.xLines.forEach((x, i) => {
-    for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, topAt[i], z], kind: 'standard' });
+  // Standards, ground to top.
+  L.xLines.forEach((x) => {
+    for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, top, z], kind: 'standard' });
   });
 
   // Ledgers along the run, and transoms across the depth, at every lift.
@@ -146,11 +131,9 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
   for (const y of L.yLevels) {
     for (const z of towerZ)
       for (let i = 0; i < L.xLines.length - 1; i++) {
-        if (y > Math.min(topAt[i], topAt[i + 1]) + 1e-6) continue;
         tubes.push({ a: [L.xLines[i], y, z], b: [L.xLines[i + 1], y, z], kind: 'ledger' });
       }
-    L.xLines.forEach((x, i) => {
-      if (y > topAt[i] + 1e-6) return;
+    L.xLines.forEach((x) => {
       for (let j = 1; j < towerZ.length - 1; j++)
         tubes.push({ a: [x, y, towerZ[j]], b: [x, y, towerZ[j + 1]], kind: 'ledger' });
     });
@@ -164,7 +147,6 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
       const y0 = L.yLevels[li];
       const y1 = L.yLevels[li + 1];
       for (let i = 0; i < L.xLines.length - 1; i++) {
-        if (y1 > Math.min(topAt[i], topAt[i + 1]) + 1e-6) continue;
         const x0 = L.xLines[i];
         const x1 = L.xLines[i + 1];
         tubes.push({ a: [x0, y0, z], b: [x1, y1, z], kind: 'brace' });

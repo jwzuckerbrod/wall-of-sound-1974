@@ -150,9 +150,9 @@ The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summe
 | Quantity | Value | Confidence | Note |
 |---|---|---|---|
 | **Scaffold footprint** | **19.51 × 12.19 m (64'-0" × 40'-0")** | **confirmed — drawing** | Dimensioned on the top view. Width chain: 9" + 5'-0" + 7'-0" bays + a 3'-6" closer at the centreline, mirrored. Depth chain: 5, 4, 5, 5, 5, 5, 5, 5, 1 = 40'-0". |
-| **Total height** | **11.84 m (38'-10")** | **confirmed — drawing** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". This is the real number behind "36 feet" and "over three stories". |
+| **Tower height above the deck** | **11.84 m (38'-10")** | **confirmed — drawing and photo** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". The drawing does not say where the chain starts; Pechner's 17 May 1974 photograph measures 38.8 ft of scaffold **above the deck** (`docs/qa-findings.md` §6). Ground to top is therefore 14.88 m (48'-10"). |
 | Speaker array width | 18.29 m (60 ft) documented; **18.96 m (62.2 ft)** as packed | confirmed / packed within 4% | **The check that landed:** the layout was built to Anderson's 60 ft before these drawings surfaced, and 62.2 ft drops inside a 64 ft tower footprint with room for the end frames. Two independent sources, derived separately, agree. |
-| Tower above the deck | 8.79 m (28'-10") | derived from the drawing | Model's tallest array tops out at 7.56 m, leaving ~1.2 m of bare scaffolding above — which is what the photographs show. |
+| Tallest stacks above the deck | 9.75 m (32 ft) as modelled | photo: ~35 ft | Sixteen 24" cabinets. The earlier figure, 28'-10" of tower, came from reading the lift chain from the ground. |
 | **Stage deck height** | **3.05 m (10 ft)** | **confirmed** | Bolted and tied into the scaffolding, because sound pressure could bounce the rig a foot. Anderson says one-inch plywood; the drawing specifies **1⅛" T&G over 2×10 planks on 4×6 beams**, so the drawing wins. Previously guessed at 5 ft. |
 | **Deck size** | **25.0 × 12.5 m (82 × 41 ft)** | **confirmed — drawing** | Stage requirements note 3: the deck overhangs the towers by **9'-0" stage left and right** and **1'-0" downstage**. |
 | Staging footprint, indoor | 23.2 × 9.1 m (76 × 30 ft) | confirmed | Anderson. A different venue configuration from the drawing. |
@@ -167,25 +167,27 @@ The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summe
 
 Heights are above the stage deck, which is itself 10 ft above the ground.
 
-**Stacks stand on scaffold floors, not on thin air.** The lift chain puts floors at **0, 0.86, 2.85, 4.83 and 6.81 m above the deck** (the deck itself, then 2'-10", 9'-4", 15'-10", 22'-4"). Every array's bottom band snaps to one of those; the crossover bands above it stack on the cabinets below. The winter sheet's annotations — *"floor in back only, 2nd level"*, *"omit floor in 5' bay, 3rd level"* — are the crew thinking in exactly these terms. `scripts/verify.mjs` fails the build if any block starts anywhere else.
+**Stacks stand on scaffold floors, not on thin air.** The lift chain, measured up from the deck, puts floors at **0, 2.13, 3.91, 5.89, 7.87 and 9.86 m above the deck** (the deck itself, then 7'-0", 12'-10", 19'-4", 25'-10", 32'-4"). Every array's bottom band snaps to one of those; the crossover bands above it stack on the cabinets below. The winter sheet's annotations — *"floor in back only, 2nd level"*, *"omit floor in 5' bay, 3rd level"* — are the crew thinking in exactly these terms. `scripts/verify.mjs` fails the build if any block starts anywhere else.
 
 | x (m) | Array | Floor | Base → top (m) |
 |---|---|---|---|
-| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 2.85 → 8.35 |
-| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 0.86 → 5.74 |
-| −7.04 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 0.86 → 5.01 |
-| −6.15 | **Piano** lows (15″ × 9) | P1 | 0.86 → 6.35 |
-| −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 0.86 → 6.96 |
-| −4.44 | **Vocal low LEFT** (15″ × 16) | deck | 0 → 4.88 |
-| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | P1 | 0.86 → 6.01 |
-| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P2 | 2.85 → 7.81 |
-| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level beneath the cluster | deck | 0 → 2.44 |
-| +3.04 | **Vocal fill RIGHT** | P1 | 0.86 → 6.01 |
-| +4.44 | **Vocal low RIGHT** (15″ × 16) | deck | 0 → 4.88 |
-| +5.45 | **Garcia** main (12″ × 14) | P1 | 0.86 → 5.13 |
+| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 3.91 → 9.41 |
+| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 2.13 → 7.01 |
+| −7.04 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 2.13 → 6.28 |
+| −6.15 | **Piano** lows (15″ × 9) | P1 | 2.13 → 7.62 |
+| −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 8.23 |
+| −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 9.75 |
+| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | deck | 0 → 5.15 |
+| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P1 | 2.13 → 7.09 |
+| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level behind the cluster | deck | 0 → 2.44 |
+| +3.04 | **Vocal fill RIGHT** | deck | 0 → 5.15 |
+| +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 9.75 |
+| +5.45 | **Garcia** main (12″ × 14) | P1 | 2.13 → 6.40 |
 | +6.24 | **Garcia extension** (12″ × 6), set back 1.6 m | deck | 0 → 1.83 |
-| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 0.86 → 5.74 |
-| +8.42 | Drums stereo **RIGHT** | P2 | 2.85 → 8.35 |
+| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 2.13 → 7.01 |
+| +8.42 | Drums stereo **RIGHT** | P2 | 3.91 → 9.41 |
+
+Heights were checked against Pechner's 17 May 1974 photograph (`docs/qa-findings.md` §6); channel positions were not.
 
 The skyline that falls out of this — tall flanks either side of a lower, raised, curved centre cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
 
@@ -193,7 +195,7 @@ Blocks butt together with no gap. **The wall is not symmetric about the centreli
 
 All array x-positions are **estimated**; the 60 ft envelope they pack into is **confirmed**. No plan drawing of the Wall has been found, and the arrangement varied between venues.
 
-**Vocal centre cluster geometry:** convex arc, radius 5.5 m, opening toward the audience, spanning 4.50 m of arc (≈47°). This is the documented "curved... for cylindrical dispersion, 140–180° horizontal" element and the single most recognisable feature of the Wall. Its underside sits at 2.60 m, clearing the band and the bass-drum column tucked beneath it.
+**Vocal centre cluster geometry:** convex arc, radius 5.5 m, opening toward the audience, spanning 4.50 m of arc (≈47°). This is the documented "curved... for cylindrical dispersion, 140–180° horizontal" element and the single most recognisable feature of the Wall. Its underside sits at 2.13 m, on the 7 ft floor, clearing the band; the bass-drum block stands behind it.
 
 **The vertical split.** Anderson records something none of the other sources state plainly: **the lower half of the Wall fed the musicians onstage and the upper half threw to the crowd.** The PA *was* the monitoring — there were no wedges at all. This drives the "how it worked" overlay in stage 5, which shades each array by height rather than by channel.
 
@@ -326,11 +328,11 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 
 **Resolved since the first draft, by Anderson:** the wall's width (60 ft of speakers, not 100 — that was the staging); the stage deck height (10 ft, previously guessed at 5); and the leapfrogging question (one system, two scaffolding sets).
 
-**Resolved since the second draft, by the 1974 drawings:** the scaffold footprint (64 × 40 ft), the overall height (38'-10"), the frame and bay sizes (6'-6" × 5' frames, 7' X-braces), the deck build-up and its 9 ft overhangs, and the full bill of materials. Plus, from surviving hardware: the tweeter is an Electro-Voice **T350**, and the small-cone panels were **covered in tie-dye**.
+**Resolved since the second draft, by the 1974 drawings:** the scaffold footprint (64 × 40 ft), the tower height (38'-10", above the deck — settled by a photograph), the frame and bay sizes (6'-6" × 5' frames, 7' X-braces), the deck build-up and its 9 ft overhangs, and the full bill of materials. Plus, from surviving hardware: the tweeter is an Electro-Voice **T350**, and the small-cone panels were **covered in tie-dye**.
 
 **What the drawings still do not tell us:** which channel occupied which bay. That is the one thing a plan view could have settled and doesn't — it dimensions the steel, not the speakers.
 
-**A finding from building it (stage 2).** 641 drivers of these sizes **cannot fill a 60 × 29 ft face.** Add up the baffle area — 89 fifteens at 0.37 m², 178 twelves at 0.24 m², 320 fives at 0.043 m², 54 horns — and you get about 92 m² of speaker in a 157 m² opening. **Roughly 58% coverage, and 42% open scaffolding, is not a modelling failure — it is arithmetic.** The photographs agree: the Wall is a set of dense stacks with structure showing between and above them, not a solid plane of cones. Any reconstruction that shows an unbroken wall of speakers has either invented drivers or shrunk the frame.
+**A finding from building it (stage 2).** 641 drivers of these sizes **cannot fill a 60 × 29 ft face** — and the face is in fact 60 × 39 ft (`docs/qa-findings.md` §6), so the true figure is nearer 42% coverage. Add up the baffle area — 89 fifteens at 0.37 m², 178 twelves at 0.24 m², 320 fives at 0.043 m², 54 horns — and you get about 92 m² of speaker in a 157 m² opening. **Roughly 58% coverage, and 42% open scaffolding, is not a modelling failure — it is arithmetic.** The photographs agree: the Wall is a set of dense stacks with structure showing between and above them, not a solid plane of cones. Any reconstruction that shows an unbroken wall of speakers has either invented drivers or shrunk the frame.
 
 ---
 

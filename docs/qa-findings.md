@@ -72,6 +72,9 @@ opposite: towers stepping up and down with the stacks, only the tallest bays rea
 **Fixed:** each bay now rises one lift above whatever stands in it. Tube count fell from 1,066 to 991 and
 the silhouette now follows the wall.
 
+**Superseded by §6.** Pechner's 17 May 1974 photograph shows the opposite: a continuous top rail across the whole
+width, with crew working along it. Every bay now runs to the full height again.
+
 ---
 
 ## 2. Further defects found in the same pass
@@ -80,7 +83,7 @@ the silhouette now follows the wall.
 |---|---|---|
 | 2.1 | Tie-dye panels were four large, bright mandalas hung high in the cage — the loudest thing in frame. They are meant to be fabric glimpsed through structure. | Fixed: smaller, fewer, lower, dimmer |
 | 2.2 | The stage deck reads as a vast empty brown plain. It is the right size — 82 × 41 ft is on the drawing — but it is bare, so it looks like a car park. | Open |
-| 2.3 | The arrays still occupy well under half the tower height. 641 drivers cannot fill a 60 ft frame (the 58% finding stands), but the current allocation makes short wide blocks where the photographs show tall narrow ones. | Open |
+| 2.3 | The arrays still occupy well under half the tower height. 641 drivers cannot fill a 60 ft frame (the 58% finding stands), but the current allocation makes short wide blocks where the photographs show tall narrow ones. | Partly fixed in §6: tallest stacks now 32 ft, vocal lows as single columns. Other channels' shapes are still the reconstruction's own |
 | 2.4 | The whole composition reads as a small object in a large black void. No sense of scale or occasion. | Open |
 | 2.5 | Bare-plywood cabinets are too orange and too uniform; they read as pine crates rather than road-worn birch. | Open |
 | 2.6 | The 5-inch panels render as dark circles with no visible cone — the small drivers catch no light at all. | Open |
@@ -135,3 +138,63 @@ right now the instruments actively cost the piece credibility.
 documented and legible at this scale — the paired vocal microphones sixty millimetres apart, and the road
 cases carrying the 1969 equipment stencil, which is the correct and only use of that design in the scene.
 `docs/reconstruction-spec.md` §11 now records the absence rather than implying the gear is modelled.
+
+---
+
+## 6. Checked against a 1974 photograph
+
+**Photo:** Richard Pechner, sound check, P.N.E. Coliseum, Vancouver, **17 May 1974** — a straight-on
+full-stage view (source `pechner`). Not in the repo; the measurements below are what the verifier uses.
+
+**Method.** The camera was solved from the photo rather than guessed, which is what fSpy would do, but using
+dimensions the project already has instead of vanishing lines. Three independent scales agree at
+**9.52 px/ft on the tower face**:
+
+- the outer scaffold standards are 609 px apart, and the drawing makes the footprint 64 ft;
+- a crew member standing on the top rail measures about 5'-10";
+- the 15" cabinets stack at 19.4 px a row, which is the 24" measured cabinet.
+
+The stacks' feet and the musicians' feet share one line in the image, so the lens is level with the deck.
+The model was rendered through that camera at the photo's size and laid over it. Its scaffold edges land on the
+photo's to within about 10 px, so the camera is right; everything that disagreed was the model.
+
+**Findings**
+
+| | Photo | Model before | Confidence | Now |
+|---|---|---|---|---|
+| Scaffold top above the deck | **38.8 ft** | 28.9 ft | High | **38'-10"** |
+| Tallest stacks above the deck | **~35 ft** | 24.8 ft | High | 32 ft |
+| Scaffold profile | Full height across the whole width | Stepped down with the stacks (§1.3c) | High | Full height |
+| Centre cluster | 12"s at ~11.6–17.9 ft, a band of 5"s above to ~20.8 ft | 12"s 9.3–21.3 ft, 5"s to 25.1 ft | Medium | 12"s 7–19 ft, 5"s to 22.7 ft |
+| Under the cluster | Mostly open: the kit and one small box | A 4 × 4 block of 15"s, 8 ft tall | Medium | Unchanged — see below |
+
+**The cause.** The 10 April 1974 drawing gives the tower as a lift chain — 7'-0" + 5'-10" + four lifts of
+6'-6" = 38'-10" — but not where the chain starts. It was read from the ground, with the 10 ft deck inside it,
+which left 28'-10" of tower above the stage. The photograph shows the whole 38'-10" standing above the deck.
+Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" above the deck.
+
+**What changed**
+
+- The lift chain is measured up from the deck. Ground to top is now 48'-10".
+- Every bay runs to the full height again, reversing §1.3c.
+- The scaffold floors moved to the new lift levels, and every array's base snapped to them.
+- The vocal lows are single columns of sixteen 15"s (32 ft) beside the cluster, where the photo's tallest
+  columns stand, instead of 2 × 8 blocks.
+- The curved cluster hangs from the 7 ft floor rather than 9'-4", which brings its middle to within
+  a foot of the photo's.
+- Everything else keeps its shape and moves up to the new floors. No driver count changed: still 641.
+- `npm run verify` now checks the scaffold top, the tallest stack and the cluster height against the
+  photo's measurements.
+
+**Still open**
+
+- The tallest stacks are 32 ft against the photo's ~35 ft. Sixteen 24" cabinets make 32 ft, and no
+  channel has the drivers to go higher without inventing some.
+- The photo's cluster is shallower than the model's: its 12" rows pitch at about 15", against the
+  24" cabinet rows used here. At this resolution a 12" cone is about 12 px across, so this wants a
+  better photo before the cabinet is changed.
+- The photo shows little under the cluster besides the kit. The 4 × 4 bass-drum block is still in the model,
+  behind the cluster, because the 16 × 15" count is confirmed and nothing yet says where else they went.
+- Channel-by-channel placement is still the reconstruction's own. Only the heights are photo-checked.
+- The Cow Palace debut (23 March 1974) had a flat centre cluster, not the cylinder. The model shows the
+  Wall as it stood from May, and is checked against May.
