@@ -92,8 +92,6 @@ export default function App() {
       switch (e.key.toLowerCase()) {
         case 'o':
           return setNavMode('orbit');
-        case 'f':
-          return setNavMode('walk');
         case 't':
           return goToStop(stopIndex);
         case 'x':
@@ -107,8 +105,7 @@ export default function App() {
           break;
       }
 
-      // Arrows page the tour, but only when the tour is what is running —
-      // in walk mode they are the movement keys.
+      // Arrows page the tour, but only when the tour is what is running.
       if (navMode === 'tour') {
         if (e.key === 'ArrowRight' || e.key === 'PageDown') {
           e.preventDefault();

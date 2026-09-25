@@ -43,13 +43,13 @@ editing geometry.
 
 `npm run verify` compiles the geometry modules and checks them without a
 browser: the driver counts against the 1974 inventory, every scaffold dimension
-against the drawing dated 10 April 1974, the walkable world, clearances, and
+against the drawing dated 10 April 1974, stage footprints, clearances, and
 provenance integrity. Run it before committing. It has caught more real defects
 than looking at the screen has.
 
 ```
 src/data/       the config, and the provenance behind it
-src/geometry/   pure functions: arrays, cabinets, scaffold, walkable world
+src/geometry/   pure functions: arrays, cabinets, scaffold, stage footprints
 src/materials/  procedural textures and PBR materials
 src/scene/      the React Three Fiber scene
 src/ui/         panels, tour, About page

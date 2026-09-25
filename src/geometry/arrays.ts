@@ -8,7 +8,11 @@
 import { ARRAYS, CABINETS, cabinetSize, wall, type ArrayBlock, type CabinetId, type ChannelId, type DriverId } from '../data/wall.config';
 
 export interface Cell {
-  /** Centre of the cabinet box, world space, metres. */
+  /**
+   * Centre of the cabinet box, metres, with y measured from the stage deck
+   * surface, not the ground. Anything that draws a cell must lift it by
+   * wall.dimensions.stageDeckHeight.
+   */
   position: [number, number, number];
   /** Yaw only — cabinets sit level; curved blocks fan about Y. */
   rotationY: number;
@@ -129,7 +133,7 @@ export function faceCoverage(cells = allCells(), openingHeight: number) {
   return { baffle, opening, fraction: baffle / opening };
 }
 
-/** World-space bounds of one array block, for highlighting and info panels. */
+/** Bounds of one array block, deck-relative like Cell, for highlighting and info panels. */
 export function blockBounds(blockId: string, cells = allCells()) {
   const mine = cells.filter((c) => c.block === blockId);
   if (!mine.length) return null;

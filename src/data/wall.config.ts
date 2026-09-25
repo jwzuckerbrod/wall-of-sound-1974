@@ -43,6 +43,7 @@ export type SourceId =
   | 'upa'
   | 'mc2300'
   | 'syf'
+  | 'bear'
   | 'photos'
   | 'anderson'
   | 'blueprints'
@@ -115,6 +116,11 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     title: 'Wikipedia — Steal Your Face',
     url: 'https://en.wikipedia.org/wiki/Steal_Your_Face',
     kind: 'encyclopedia',
+  },
+  bear: {
+    title: 'Owsley Stanley, "This is the logo that Bob Thomas and I designed for Grateful Dead in 1969" — with a photograph of his stencilled toolbox',
+    url: 'http://www.thebear.org/GDLogo.html',
+    kind: 'primary',
   },
   anderson: {
     title:
@@ -316,11 +322,6 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos', 'derived'],
     note: 'How far the stacks stand proud of the front plane of the towers. Not documented. Set to a little over one cabinet depth, because the photographs plainly show stacks in front of the steel rather than inside it.',
   },
-  'structure.ramp': {
-    confidence: 'guessed',
-    sources: ['derived'],
-    note: 'INVENTED. The ramp at stage left is on no drawing and in no photograph. The deck is ten feet up, so first-person mode needs a way to climb onto the stage or it is unreachable. Pure scene-making.',
-  },
   'structure.guyWires': {
     confidence: 'guessed',
     sources: ['photos'],
@@ -373,8 +374,8 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
     confidence: 'confirmed',
-    sources: ['syf'],
-    note: 'The Steal Your Face skull and 13-point bolt was created by Owsley Stanley and Bob Thomas in 1969 as stencil art to mark the band\'s touring equipment. Used here only as case stencilling — its original and correct application.',
+    sources: ['bear', 'syf'],
+    note: 'The mark on the gear was the lightning bolt alone: a 5 1/2" white circle, a red half and a blue half, split by a jagged white bolt. Owsley Stanley\'s own account says it was cut as one half-circle stencil, sprayed red, turned over and sprayed blue, and "we put it on to all our gear" in 1969. The skull with the bolt is a later design by Bob Thomas; no source found puts it on the equipment, so it is not used. Red above, blue below, as Stanley describes it; the bolt outline is traced from Bob Thomas\'s drawing. Evidence is from 1969; nothing found says the mark changed by 1974.',
   },
 };
 
@@ -867,8 +868,8 @@ export const wall = {
       { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  4.6, z: 5.2 },
       { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x:  7.0, z: 5.6 },
     ],
-    /** Steal Your Face — 1969 equipment stencil. Cases only. */
-    logo: { id: 'stealYourFace', boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },
+    /** The 1969 lightning-bolt equipment mark — no skull. Cases only. */
+    logo: { id: 'lightningBolt', diameter: IN(5.5), boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },
   },
 
   materials: {

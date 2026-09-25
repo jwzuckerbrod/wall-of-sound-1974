@@ -208,81 +208,68 @@ export const tieDyeMap = () =>
 // ─── equipment stencil ───────────────────────────────────────────────────────
 
 /**
- * The skull and 13-point lightning bolt, as stencil art on a road case.
+ * The bolt's outline, traced from Bob Thomas's own drawing of it (the circle
+ * inside the Steal Your Face artwork, where it runs rim to rim) and expressed
+ * in units of the coloured field's radius, y down. Top tip first, down the blue
+ * side, back up the red side. Traced rather than drawn freehand: a hand-built
+ * sawtooth came out as a staircase and read as an imitation. Where the
+ * low-resolution source rounded a tooth into two or three vertices, the one
+ * farthest from the bolt's centre line is kept, which restores the point.
+ */
+const BOLT: readonly [number, number][] = [
+  [0.468, -0.858], [0.496, -0.816], [0.383, -0.603], [0.553, -0.603], [0.255, -0.362],
+  [0.553, -0.305], [0.142, -0.021], [0.482, -0.007], [0.27, 0.149], [0.043, 0.262],
+  [0.34, 0.305], [-0.071, 0.532], [0.028, 0.574], [-0.241, 0.688], [-0.199, 0.759],
+  [-0.468, 0.858], [-0.482, 0.801], [-0.27, 0.418], [-0.468, 0.404], [-0.17, 0.163],
+  [-0.44, 0.135], [0.014, -0.177], [-0.27, -0.206], [-0.014, -0.362], [0.184, -0.475],
+  [0.028, -0.489], [-0.043, -0.532], [0.355, -0.702], [0.255, -0.759],
+];
+/** Index of the bottom tip: BOLT[0..BOTTOM] is the blue edge, the rest the red. */
+const BOLT_BOTTOM = 15;
+
+/**
+ * The 1969 equipment mark: a white circle, red above and blue below, split by
+ * a jagged white lightning bolt. No skull.
  *
- * This is the historically correct use of it: Owsley Stanley and Bob Thomas
- * made the design in 1969 specifically to mark the band's touring equipment, so
- * it belongs on the flight cases and nowhere else in this scene — not as a
- * backdrop, and not on the speaker cabinets, for which there is no evidence.
- * Drawn schematically, at the size a case lid occupies on screen.
+ * Owsley Stanley's account (thebear.org/GDLogo.html) gives the build: a 5 1/2"
+ * circle of white, then a 5" field sprayed red on top and blue below through a
+ * half-circle stencil with a jagged edge, the white showing through as the bolt
+ * and as a 1/4" rim. The skull was a separate design Bob Thomas drew a few days
+ * later; nothing found puts it on the gear.
+ *
+ * The canvas is the 5 1/2" circle, on a transparent ground.
  */
 export const stencilMap = () =>
-  make('stencil', 256, (ctx, s) => {
-    ctx.fillStyle = '#17150f';
-    ctx.fillRect(0, 0, s, s);
-
+  make('stencil', 512, (ctx, s) => {
+    ctx.clearRect(0, 0, s, s);
     const c = s / 2;
-    const r = s * 0.42;
+    const R = (s / 5.5) * 2.5; // the 5" field
+    const P = (i: number): [number, number] => [c + BOLT[i][0] * R, c + BOLT[i][1] * R];
+    const angle = (i: number) => Math.atan2(BOLT[i][1], BOLT[i][0]);
 
-    // Circle, split on the diagonal: red above, blue below.
-    ctx.save();
+    // White ground, 5 1/2".
+    ctx.fillStyle = '#ece6d8';
     ctx.beginPath();
-    ctx.arc(c, c, r, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.fillStyle = '#b8352c';
-    ctx.fillRect(0, 0, s, s);
-    ctx.fillStyle = '#2b4c8c';
+    ctx.arc(c, c, s / 2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Blue: the bolt's blue edge, then the rim back round the right-hand side.
+    ctx.fillStyle = '#2a4a86';
     ctx.beginPath();
-    ctx.moveTo(0, s);
-    ctx.lineTo(s, 0);
-    ctx.lineTo(s, s);
+    for (let i = 0; i <= BOLT_BOTTOM; i++) ctx.lineTo(...P(i));
+    ctx.arc(c, c, R, angle(BOLT_BOTTOM), angle(0), true);
     ctx.closePath();
     ctx.fill();
 
-    // The bolt: a white band across the split.
-    ctx.strokeStyle = '#efe9dd';
-    ctx.lineWidth = s * 0.075;
+    // Red: up the bolt's red edge, then the rim back round the left-hand side.
+    ctx.fillStyle = '#b3342b';
     ctx.beginPath();
-    ctx.moveTo(c - r, c + r * 0.92);
-    ctx.lineTo(c - r * 0.18, c + r * 0.1);
-    ctx.lineTo(c + r * 0.12, c + r * 0.3);
-    ctx.lineTo(c + r, c - r * 0.92);
-    ctx.stroke();
-    ctx.restore();
-
-    // Skull, schematic: cranium, jaw, sockets, nasal opening.
-    ctx.fillStyle = '#efe9dd';
-    ctx.beginPath();
-    ctx.ellipse(c, c - r * 0.08, r * 0.46, r * 0.42, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(c - r * 0.26, c + r * 0.22);
-    ctx.lineTo(c + r * 0.26, c + r * 0.22);
-    ctx.lineTo(c + r * 0.18, c + r * 0.5);
-    ctx.lineTo(c - r * 0.18, c + r * 0.5);
+    ctx.moveTo(...P(BOLT_BOTTOM));
+    for (let i = BOLT_BOTTOM + 1; i < BOLT.length; i++) ctx.lineTo(...P(i));
+    ctx.lineTo(...P(0));
+    ctx.arc(c, c, R, angle(0), angle(BOLT_BOTTOM), true);
     ctx.closePath();
     ctx.fill();
-
-    ctx.fillStyle = '#17150f';
-    for (const sx of [-1, 1]) {
-      ctx.beginPath();
-      ctx.ellipse(c + sx * r * 0.19, c - r * 0.12, r * 0.13, r * 0.15, 0, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.moveTo(c, c + r * 0.02);
-    ctx.lineTo(c - r * 0.07, c + r * 0.18);
-    ctx.lineTo(c + r * 0.07, c + r * 0.18);
-    ctx.closePath();
-    ctx.fill();
-    ctx.lineWidth = s * 0.012;
-    ctx.strokeStyle = '#17150f';
-    for (const dx of [-0.09, 0, 0.09]) {
-      ctx.beginPath();
-      ctx.moveTo(c + r * dx, c + r * 0.24);
-      ctx.lineTo(c + r * dx, c + r * 0.48);
-      ctx.stroke();
-    }
   });
 
 // ─── steel ───────────────────────────────────────────────────────────────────

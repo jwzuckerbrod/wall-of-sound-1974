@@ -9,7 +9,6 @@ import {
   TUBE_RADIUS,
   type Tube,
 } from '../geometry/scaffold';
-import { walkWorld } from '../geometry/walk';
 import { wallMaterials } from '../materials';
 
 interface Scratch {
@@ -147,32 +146,6 @@ export function TieDye() {
       ))}
     </group>
   );
-}
-
-/**
- * The way on and off the stage, for first-person mode.
- *
- * The deck is ten feet up, which is far too high to step onto, so walk mode
- * needs somewhere to climb or the stage is unreachable. Not documented on any
- * drawing — a piece of scene-making, flagged as such in the About page.
- */
-export function StageRamp({ shadows }: { shadows: boolean }) {
-  const materials = wallMaterials();
-  const world = useMemo(() => walkWorld(), []);
-  const geometry = useMemo(() => {
-    const { minX, maxX, minZ, maxZ, y } = world.ramp;
-    const shape = new THREE.Shape();
-    shape.moveTo(minX, 0);
-    shape.lineTo(maxX, 0);
-    shape.lineTo(minX, y);
-    shape.closePath();
-    const g = new THREE.ExtrudeGeometry(shape, { depth: maxZ - minZ, bevelEnabled: false });
-    g.rotateX(Math.PI / 2);
-    g.translate(0, 0, maxZ);
-    return g;
-  }, [world]);
-
-  return <mesh geometry={geometry} material={materials.facing} castShadow={shadows} receiveShadow={shadows} />;
 }
 
 /** The plank floors the raised stacks actually stand on. */

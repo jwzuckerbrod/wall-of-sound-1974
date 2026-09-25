@@ -164,9 +164,10 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 
   const chrome = new THREE.MeshStandardMaterial({ color: '#c8ccd2', roughness: 0.22, metalness: 0.95 });
   const caseBody = new THREE.MeshStandardMaterial({ color: '#1e1c18', roughness: 0.72, metalness: 0.08 });
-  // The 1969 equipment stencil, on the cases it was made for.
+  // The 1969 lightning-bolt equipment mark, sprayed on the cases.
   const caseStencil = new THREE.MeshStandardMaterial({
     map: tune(stencilMap().clone(), 1),
+    alphaTest: 0.5,
     roughness: 0.78,
     metalness: 0.05,
   });

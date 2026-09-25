@@ -3,7 +3,6 @@ import { TOUR } from '../scene/tour';
 
 const MODES: { id: NavMode; label: string; key: string; hint: string }[] = [
   { id: 'orbit', label: 'Orbit', key: 'O', hint: 'Drag to turn it, scroll to zoom.' },
-  { id: 'walk', label: 'Walk', key: 'F', hint: 'W A S D or arrows to move, drag to look, Shift to run. Use the ramp at stage left to get up onto the deck.' },
   { id: 'tour', label: 'Tour', key: 'T', hint: 'Arrow keys or the buttons below move between stops.' },
 ];
 

@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/walk.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
+   'src/geometry/footprints.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -128,55 +128,7 @@ for (const [id, v] of Object.entries(views.VIEWS)) {
   check(`${id}: downstage of the wall face`, z > L.towerFrontZ, true);
 }
 
-console.log('\nWalking');
-const walkMod = await load('geometry/walk.js');
-const world = walkMod.walkWorld();
-
-// Nobody may walk through a speaker stack. Sweep the deck on a fine grid and
-// confirm that every point inside an array footprint is refused.
-let leaks = 0;
-let solidSamples = 0;
-for (const b of world.blockers) {
-  const cx = (b.minX + b.maxX) / 2;
-  const cz = (b.minZ + b.maxZ) / 2;
-  solidSamples++;
-  if (!walkMod.blocked(world, cx, cz, world.deck.y)) {
-    console.log(` FAIL  can walk into ${b.id}`);
-    leaks++;
-  }
-}
-check('every array and amp rack is solid', leaks, 0);
-console.log(`        blockers: ${solidSamples}`);
-
-// Sliding along a stack must not punch through it.
-const stack = world.blockers[0];
-const outside = { x: stack.minX - 1.2, z: (stack.minZ + stack.maxZ) / 2, y: world.deck.y };
-const through = walkMod.resolveMove(world, outside, stack.maxX + 1.2, outside.z);
-check('a long stride cannot tunnel through a stack', through.x < stack.minX, true);
-
-// The stage has to be reachable, and only by the ramp.
-check('deck is 10 ft up', world.deck.y, FTM(10), 1e-9);
-check('ramp bottom is at ground level', walkMod.floorAt(world, world.ramp.maxX - 0.01, (world.ramp.minZ + world.ramp.maxZ) / 2) < 0.2, true);
-check('ramp top meets the deck', walkMod.floorAt(world, world.ramp.minX + 0.01, (world.ramp.minZ + world.ramp.maxZ) / 2) > world.deck.y - 0.25, true);
-check('ramp rises gently enough to climb', (() => {
-  const zMid = (world.ramp.minZ + world.ramp.maxZ) / 2;
-  let p = { x: world.ramp.maxX - 0.05, z: zMid, y: 0 };
-  for (let i = 0; i < 400; i++) {
-    const next = walkMod.resolveMove(world, p, p.x - 0.05, p.z);
-    if (next.x === p.x && next.z === p.z) break;
-    p = next;
-  }
-  return p.y > world.deck.y - 0.3;
-})(), true);
-check('cannot step straight up onto the deck from the front', (() => {
-  const front = { x: 0, z: world.deck.maxZ + 1, y: 0 };
-  const hop = walkMod.resolveMove(world, front, 0, world.deck.maxZ - 1);
-  return hop.y < 0.5;
-})(), true);
-check('walker cannot leave the world', (() => {
-  const far = walkMod.resolveMove(world, { x: 100, z: 0, y: 0 }, 400, 0);
-  return Math.hypot(far.x, far.z) <= walkMod.WORLD_RADIUS + 1e-6;
-})(), true);
+const blockers = (await load('geometry/footprints.js')).stageBlockers();
 
 console.log('\nTour');
 const tour = await load('scene/tour.js');
@@ -208,7 +160,7 @@ for (const m of cfg.wall.band.members) {
   check(`${m.id}: gear is on the deck`, onDeck, true);
   check(`${m.id}: gear is downstage of the speakers`, foot.minZ > env.maxZ, true);
 
-  for (const b of world.blockers) {
+  for (const b of blockers) {
     if (foot.minX < b.maxX && foot.maxX > b.minX && foot.minZ < b.maxZ && foot.maxZ > b.minZ) {
       console.log(` FAIL  ${m.id}'s gear intersects ${b.id}`);
       clashes++;

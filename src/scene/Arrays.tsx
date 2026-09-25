@@ -2,7 +2,7 @@ import type { ThreeEvent } from '@react-three/fiber';
 import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { CHANNELS, type CabinetId, type ChannelId } from '../data/wall.config';
+import { CHANNELS, wall, type CabinetId, type ChannelId } from '../data/wall.config';
 import { allCells, cellsByCabinet, type Cell } from '../geometry/arrays';
 import { cabinetGeometry, type Role } from '../geometry/cabinet';
 import { shellColor, wallMaterials } from '../materials';
@@ -172,7 +172,9 @@ export function Arrays({
 }) {
   const groups = useMemo(() => [...cellsByCabinet(allCells()).entries()], []);
   return (
-    <group name="arrays">
+    // Cells are deck-relative. Without this lift every stack started at the
+    // ground and its bottom ten feet were buried inside the stage.
+    <group name="arrays" position={[0, wall.dimensions.stageDeckHeight, 0]}>
       {groups.map(([cabinet, cells]) =>
         ROLES.map((role) => (
           <RoleMesh

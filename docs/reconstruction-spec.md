@@ -305,7 +305,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
   - **Keith Godchaux** — grand piano with five Countryman pickups, one per frame division.
   - **Bill Kreutzmann** — drum kit, centre, upstage.
 - **Band positions**, audience view left → right: **Weir · Lesh · Kreutzmann (upstage centre) · Godchaux · Garcia.** Marked **estimated** and exposed in the config as a single `mirrored` boolean, because the record found does not settle which side Garcia stood on in 1974 and it varied. Flipping it is a one-line change.
-- **Logos.** The **"Steal Your Face" skull and 13-point lightning bolt** was created by Owsley Stanley and Bob Thomas in **1969 specifically as stencil art to mark the band's equipment on tour.** Using it as a stencil on road cases and flight cases is therefore not decoration — it is the historically correct application, and the only one used. It is **not** placed as a backdrop banner or on the speaker cabinets, for which no evidence was found.
+- **Logos.** The mark sprayed on the band's gear was the **lightning bolt alone** — a 5½" white circle, red half and blue half, split by a jagged white bolt. **No skull.** Owsley Stanley's own account (`bear`) says Ernie Fischbach cut it as a single half-circle stencil with a jagged edge, sprayed red, turned over and sprayed blue, and that "we put it on to all our gear" in 1969; his page shows a toolbox still carrying it. The bolt outline in the model is traced from Bob Thomas's drawing of it, red above and blue below as Stanley describes. The skull-and-bolt was a later design by Bob Thomas, and no source found puts it on the equipment, so it is not used. Applied only to the road cases, at its true 5½" size. It is **not** placed as a backdrop banner or on the speaker cabinets, for which no evidence was found. The evidence is from 1969; nothing found says the mark had changed by 1974.
 - **Arena:** suggested only — a dark bowl of raked seating and a hint of roof structure, unlit, low detail, fading into black. Enough to give scale, not enough to draw the eye.
 
 ---
@@ -321,7 +321,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 7. **Cabinet dimensions other than the measured one.** `cab12x2` is measured. `cab12` and `cab15` are proportioned from it.
 8. **Onstage SPL.** 120 dB (Anderson) against "quieter than the hall, you could hold a conversation" (Mix). Both are stated; no attempt is made to reconcile them.
 9. **Amplifier rack placement.** Photographs show amps at deck level; the exact distribution across the 48 is not documented.
-10. **The ramp onto the stage.** Pure scene-making, on no drawing. The deck is ten feet up, so first-person mode needs somewhere to climb or the stage is unreachable. A wedge at stage left, flagged here and in the About page.
+10. **The ramp onto the stage.** Removed along with first-person walk mode. It was on no drawing and existed only so a walker could climb onto the deck.
 11. **How far the stacks stand proud of the steel.** Not documented. Set to a little over one cabinet depth, because the photographs plainly show stacks in front of the structure rather than inside it.
 
 **Resolved since the first draft, by Anderson:** the wall's width (60 ft of speakers, not 100 — that was the staging); the stage deck height (10 ft, previously guessed at 5); and the leapfrogging question (one system, two scaffolding sets).
@@ -353,6 +353,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 | `upa` | Underground PA, *The Wall of Sound* — https://undergroundpa.substack.com/p/the-wall-of-sound-1970s-sound-system |
 | `mc2300` | Wikipedia, *McIntosh MC-2300* — https://en.wikipedia.org/wiki/McIntosh_MC-2300 |
 | `syf` | Wikipedia, *Steal Your Face* — https://en.wikipedia.org/wiki/Steal_Your_Face |
+| `bear` | Owsley Stanley, *GD Logo* — how the 1969 equipment stencil was designed, cut and sprayed, with a photograph of a stencilled toolbox. http://www.thebear.org/GDLogo.html (archived: https://web.archive.org/web/2012/http://www.thebear.org/GDLogo.html) |
 | `photos` | Photographic record: Richard Pechner (rpechner.com); Ken West; the 1974 galleries at vintag.es and designyoutrust.com; dead.net 1974 archive. Used for massing, materials, driver exposure and structure — not for numbers. |
 
 **Explicitly not used as a source for any number:** Grokipedia's entry, which asserts "four towering stacks at 45°" and a "15 ms delay" that no other source supports. Noted here only so the omission is deliberate and on the record.
@@ -365,7 +366,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 |---|---|---|
 | 2 | Grey-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
 | 3 | Materials and lighting — PBR, HDRI, worn birch, black baffles, specular dust caps, steel, glowing McIntosh meters. Soft shadows, AO, subtle bloom, all tier-switchable. | Screenshots |
-| 4 ✔ | Navigation — orbit, first-person walk with collision and a ramp onto the deck, and an eight-stop guided tour. Mouse, touch and full keyboard; `prefers-reduced-motion` respected; tour text in a live region and complete without the picture. | Live build |
+| 4 ✔ | Navigation — orbit and an eight-stop guided tour (first-person walk was built, then removed). Mouse, touch and full keyboard; `prefers-reduced-motion` respected; tour text in a live region and complete without the picture. | Live build |
 | 5 ✔ | Hover or pick any array for a panel giving what it carried, its speaker count, its confidence and its sources; a keyboard-reachable list of all 28 arrays; exploded view; channel overlay with isolation; the band's gear at true size; an About page generated from `PROVENANCE` so it cannot drift from the model. | Live build |
 | 6 | Performance — instancing audit, LOD, mobile tier, loading screen with progress, budget check (60 fps target, < 5 MB initial). | Numbers |
 | 7 | Deploy. | Link |

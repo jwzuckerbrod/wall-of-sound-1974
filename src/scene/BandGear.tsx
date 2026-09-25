@@ -14,7 +14,7 @@ import { wallMaterials } from '../materials';
  *
  * What stays is the stage furniture that is both documented and legible at
  * this scale: the paired vocal microphones, and the road cases carrying the
- * 1969 equipment stencil.
+ * 1969 lightning-bolt equipment mark.
  */
 
 /**
@@ -43,10 +43,11 @@ function VocalMic() {
 }
 
 /**
- * A flight case with the skull and 13-point bolt stencilled on the lid.
+ * A flight case with the lightning-bolt mark sprayed on its face.
  *
- * Owsley Stanley and Bob Thomas made that design in 1969 precisely to mark the
- * band's touring equipment, so this is its correct and only use in the scene.
+ * Owsley Stanley came up with the mark in 1969 so the crew could pick their
+ * gear out of the heap at the back of a festival stage, and it went on all of
+ * it. At its real size — a 5 1/2" circle — it is small on a case, as it was.
  */
 function RoadCase({ w, h, d }: { w: number; h: number; d: number }) {
   const m = wallMaterials();
@@ -55,9 +56,9 @@ function RoadCase({ w, h, d }: { w: number; h: number; d: number }) {
       <mesh position={[0, h / 2, 0]} material={m.caseBody} castShadow receiveShadow>
         <boxGeometry args={[w, h, d]} />
       </mesh>
-      {/* Stencil on the long face, a little proud so it never z-fights. */}
-      <mesh position={[0, h * 0.52, d / 2 + 0.004]} material={m.caseStencil}>
-        <planeGeometry args={[Math.min(w, h) * 0.72, Math.min(w, h) * 0.72]} />
+      {/* Mark on the long face, a little proud so it never z-fights. */}
+      <mesh position={[0, h * 0.62, d / 2 + 0.004]} material={m.caseStencil}>
+        <planeGeometry args={[wall.band.logo.diameter, wall.band.logo.diameter]} />
       </mesh>
       {/* Corner caps and a pair of latches. */}
       {[-1, 1].map((sx) =>

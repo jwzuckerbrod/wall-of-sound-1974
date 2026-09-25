@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import * as THREE from 'three';
+import { wall } from '../data/wall.config';
 import { allCells, blockBounds } from '../geometry/arrays';
 
 /**
@@ -21,7 +22,7 @@ export function BlockOutline({ blockId, strong }: { blockId: string | null; stro
   if (!bounds || !geometry) return null;
 
   return (
-    <group position={bounds.centre}>
+    <group position={[bounds.centre[0], bounds.centre[1] + wall.dimensions.stageDeckHeight, bounds.centre[2]]}>
       <lineSegments>
         <edgesGeometry args={[geometry]} />
         <lineBasicMaterial
