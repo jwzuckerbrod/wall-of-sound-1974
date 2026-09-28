@@ -6,6 +6,7 @@ target date (see `../README.md`).
 
 ```
 Blender -b -P blender/instruments/mission_control/trace.py              # photo -> outline.json
+Blender -b -P blender/instruments/mission_control/headstock_texture.py  # close-up -> headstock face
 Blender -b -P blender/instruments/mission_control/build.py -- --shot hero   # or detail, match; --save
 Blender -b -P blender/compare.py -- --color \
     --render .shots/instruments/mission-control-match.png --photo .shots/reference/mission-control-front.jpg
@@ -19,7 +20,22 @@ Blender -b -P blender/compare.py -- --color \
 |---|---|---|
 | `mission-control-front-back.jpg` | gdsets.com/philbasses.htm | Straight-on front: body and headstock outlines, board width, every hardware position. ~16 px/in |
 | `mc-johnson-front.jpg`, `mc-johnson-body.jpg`, `mc-johnson-back.jpg` | Lisa S. Johnson, via Guitar World | Materials, colours, hardware shapes, and the neck laminate order (from the back) |
-| `mc-scheuner-headstock.jpg` | Jason Scheuner (owner), via Guitar World | Headstock face |
+| `mc-scheuner-headstock.jpg` | Jason Scheuner (owner), via Guitar World | Headstock, second angle |
+| `mc-user-headstock.jpg` | Supplied by the project owner (1200 × 801) | **The headstock face itself**: straightened into a texture; also the sharper headstock outline, the string routing, the brass nut and the paddle tuners |
+| `mc-user-body-front.jpg` | Supplied by the project owner (400 × 400) | Straight-on body, a cross-check for the layout |
+
+### The headstock face
+
+`headstock_texture.py` straightens the angled close-up onto the face plane
+with a homography fixed by the four tuner-post bushings (measured in the
+close-up; known on the model from the front view). The medallion centre,
+which the fit never used, lands within 0.1" of where the front view puts it.
+Strings are erased along the straight line that best matches each one (a
+string stays straight through the homography even though it floats above
+the face); silks by colour; the post discs are refilled by continuing the
+grain from above and below. The texture is written to
+`.shots/textures/` and never committed: it is a crop of someone's photograph.
+Without it, `build.py` falls back to a plain rosewood face and abalone disc.
 
 ## Sources for the facts
 
@@ -38,7 +54,9 @@ Blender -b -P blender/compare.py -- --color \
 
 | | Source |
 |---|---|
-| Body and headstock outlines, button positions | Traced (headstock mirrored; its tuner shafts bit the edge) |
+| Body outline, button positions | Traced from the front view |
+| Headstock outline and face (medallion with the skull and lightning bolt, the pearl cloud, the rosewood) | The owner's close-up, straightened; outline kept symmetric |
+| String routing (E near and A far on the bass side, G near and D far), brass nut, paddle tuners | Read off the owner's close-up |
 | Knobs, stars, coils, quad pickup, bridge, tailpiece, output plate, board width | Read off the front photograph on a grid |
 | Woods, laminates, hardware types | Guitar World; laminate order read off the back |
 | **Scale length 32"** | **Estimate**: a forum figure; nothing published. Every size follows from it; a one-line change |
@@ -52,8 +70,11 @@ Blender -b -P blender/compare.py -- --color \
 2. **The eleven fingerboard inlays** (mother-of-pearl bolts striking lapis, an
    abalone serpent, moon, stars...) and the **LED markers**: the straight-on
    photo is too small to trace them and the close-ups are at an angle.
-3. **Headstock**: the mother-of-pearl dove and the medallion's own inlay; the
-   face is a plain rosewood stand-in. The edge is wobbly (16 px/in trace).
+3. **Headstock**: done from the owner's close-up. A faint blue-grey smudge
+   remains beside the near bass post (a silk wrap shifted by parallax), and
+   the paddle tuners are generic fans rather than traced shapes. Whether the
+   medallion and cloud were on the headstock in 1974 is assumed, not shown:
+   the photographs are of the restored bass.
 4. **Knob and star detail**: the stars are generic five-point shapes where the
    real ones are long, thin sunbursts; knob caps are plain.
 5. The decorative purfling around the top in the photographs is left off:

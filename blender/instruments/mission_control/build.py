@@ -68,7 +68,7 @@ BRIDGE_SPACING = 3 * 10.7 / 16.275                      # E to G, measured at th
 def args():
     argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
     p = argparse.ArgumentParser()
-    p.add_argument('--shot', default='hero', choices=['hero', 'detail', 'match'])
+    p.add_argument('--shot', default='hero', choices=['hero', 'detail', 'head', 'match'])
     p.add_argument('--samples', type=int, default=256)
     p.add_argument('--out', default=os.path.join(ROOT, '.shots', 'instruments'))
     p.add_argument('--save', action='store_true')
@@ -136,6 +136,32 @@ def koa():
     return m
 
 
+def photo_face(path):
+    """
+    The headstock face as photographed: rosewood, the brass-ringed abalone
+    medallion with the skull and lightning bolt, and the mother-of-pearl
+    cloud, straightened by headstock_texture.py. Under a glass-clear lacquer
+    so the pearl and abalone keep their depth.
+    """
+    m, nt, L, b = new_mat('Headstock face, photographed')
+    tex = nt.new('ShaderNodeTexImage')
+    tex.image = bpy.data.images.load(path)
+    tex.interpolation = 'Cubic'
+    L.new(tex.outputs['Color'], b.inputs['Base Color'])
+    # Inlays shine more than wood: brighter texels get a smoother surface.
+    lum = nt.new('ShaderNodeRGBToBW')
+    L.new(tex.outputs['Color'], lum.inputs['Color'])
+    rough = nt.new('ShaderNodeMapRange')
+    rough.inputs['From Min'].default_value = 0.25
+    rough.inputs['From Max'].default_value = 0.7
+    rough.inputs['To Min'].default_value = 0.4
+    rough.inputs['To Max'].default_value = 0.12
+    L.new(lum.outputs['Val'], rough.inputs['Value'])
+    L.new(rough.outputs['Result'], b.inputs['Roughness'])
+    lacquer(b)
+    return m
+
+
 def materials():
     M = {}
     M['koa'] = koa()
@@ -153,6 +179,8 @@ def materials():
         (-0.9, 0.9))
     M['ebony'] = plain('Ebony board', '#0d0b0a', 0.4)
     M['rosewood'] = rosewood('Headstock face, rosewood')
+    if HEAD_FACE:
+        M['headface'] = photo_face(os.path.join(ROOT, HEAD_FACE['texture']['file']))
     M['abalone'] = plain('Abalone', '#6f9a8e', 0.15, 0.3, coat=True)
     M['pearl'] = plain('Mother-of-pearl', '#e8e6df', 0.18, coat=True)
     M['fret'] = plain('Nickel-silver fret', '#c9c6bd', 0.18, 1.0)
@@ -214,13 +242,16 @@ def neck(M, root):
     bm = bmesh.new()
     nw = board_half(SCALE)
     prism(bm, rounded_rect(-nw, nw, SCALE, SCALE + 0.22, 0.03), T + BOARD_T, T + BOARD_T + 0.16)
-    obj('MC nut', bm, [M['bone']], root)
+    obj('MC nut', bm, [M['brass']], root)      # brass, per the owner's close-up
 
 
 def headstock(M, root):
     pivot_y, pivot_z = SCALE + 0.22, T + BOARD_T
-    # Clip the traced outline at the nut: the neck below is modelled separately.
-    pts = smooth_outline([(x, max(y, pivot_y)) for x, y in DATA['headstock']], step=0.06, passes=24)
+    # Prefer the outline from the straightened close-up (headstock_texture.py):
+    # ~160 px/in against the front view's 16. Clip at the nut either way.
+    face = HEAD_FACE
+    src = face['outline'] if face else DATA['headstock']
+    pts = smooth_outline([(x, max(y, pivot_y)) for x, y in src], step=0.05, passes=6 if face else 24)
     bm = bmesh.new()
     top = prism(bm, pts, pivot_z - HEAD_T, pivot_z, mat=0, side_mat=0)
     rim = set(bmesh.ops.inset_region(bm, faces=[top], thickness=0.08, depth=0)['faces'])
@@ -228,32 +259,45 @@ def headstock(M, root):
         on_top = all(abs(v.co.z - pivot_z) < 1e-4 for v in f.verts)
         f.material_index = 1 if (on_top and f not in rim) else 0
     bmesh.ops.recalc_face_normals(bm, faces=bm.faces[:])
+    if face:
+        # UVs straight from the face's x, y: the texture was made in this frame.
+        t = face['texture']
+        uv = bm.loops.layers.uv.new()
+        for f in bm.faces:
+            for loop in f.loops:
+                x, y = loop.vert.co.x, loop.vert.co.y
+                loop[uv].uv = ((x - t['x0']) / (t['x1'] - t['x0']), (y - t['y0']) / (t['y1'] - t['y0']))
     rot = (Matrix.Translation((0, pivot_y, pivot_z)) @ Matrix.Rotation(math.radians(-HEAD_PITCH), 4, 'X')
            @ Matrix.Translation((0, -pivot_y, -pivot_z)))
     bmesh.ops.transform(bm, matrix=rot, verts=bm.verts[:])
-    o = obj('MC headstock', bm, [M['neck'], M['rosewood']], root)
+    o = obj('MC headstock', bm, [M['neck'], M['headface'] if face else M['rosewood']], root)
     modifier_bevel(o, 0.03, segs=3)
 
-    # Abalone medallion, read off the photo: centred 2.75" above the nut, 1.2" across.
-    cy = SCALE + 2.75
-    bm = bmesh.new()
-    cyl(bm, 0, cy, pivot_z, 0.012, 0.6, seg=48)
-    bmesh.ops.transform(bm, matrix=rot, verts=bm.verts[:])
-    obj('MC medallion', bm, [M['abalone']], root)
+    if not face:
+        # Stand-in when the close-up isn't available: a plain abalone disc.
+        bm = bmesh.new()
+        cyl(bm, 0, SCALE + 2.75, pivot_z, 0.012, 0.6, seg=48)
+        bmesh.ops.transform(bm, matrix=rot, verts=bm.verts[:])
+        obj('MC medallion', bm, [M['abalone']], root)
 
     # Four brass tuners, two a side, buttons out to the sides.
     bm = bmesh.new()
     # Posts read off the photo: 1.52" and 3.67" above the nut, 0.8" either side.
     posts = [(-0.8, SCALE + 1.52), (-0.8, SCALE + 3.67), (0.8, SCALE + 1.52), (0.8, SCALE + 3.67)]
     for px, py in posts:
-        cyl(bm, px, py, pivot_z, 0.1, 0.24)
+        cyl(bm, px, py, pivot_z, 0.1, 0.33, seg=6)     # hex bushing, 0.66" across (photo)
         cyl(bm, px, py, pivot_z, 0.55, 0.16)
         cyl(bm, px, py, pivot_z - HEAD_T - 0.45, 0.45, 0.32)
         side = 1 if px > 0 else -1
-        vs = bmesh.ops.create_cone(bm, cap_ends=True, segments=3, radius1=0.5, radius2=0.08, depth=0.8)['verts']
-        bmesh.ops.rotate(bm, verts=vs, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(-90 * side), 3, 'Y'))
-        bmesh.ops.scale(bm, verts=vs, vec=(1, 1, 0.25))
-        bmesh.ops.translate(bm, verts=vs, vec=(px + side * 1.0, py, pivot_z - HEAD_T - 0.25))
+        # Brass shaft out to the side, then the paddle: a broad, thin fan
+        # standing up from the shaft, edge-on to the neck (owner's close-up).
+        cyl(bm, px + side * 0.62, py, pivot_z - HEAD_T - 0.3, 0.001, 0.07)
+        vs = bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=0.07, radius2=0.07, depth=0.7)['verts']
+        bmesh.ops.rotate(bm, verts=vs, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(90), 3, 'Y'))
+        bmesh.ops.translate(bm, verts=vs, vec=(px + side * 0.55, py, pivot_z - HEAD_T - 0.3))
+        vs = bmesh.ops.create_uvsphere(bm, u_segments=24, v_segments=12, radius=0.5)['verts']
+        bmesh.ops.scale(bm, verts=vs, vec=(0.9, 0.16, 0.8))
+        bmesh.ops.translate(bm, verts=vs, vec=(px + side * 1.25, py, pivot_z - HEAD_T - 0.1))
     bmesh.ops.transform(bm, matrix=rot, verts=bm.verts[:])
     obj('MC tuners', bm, [M['tuner']], root).data.shade_smooth()
     return rot, posts, pivot_y, pivot_z
@@ -337,7 +381,9 @@ def hardware(M, root, head):
     for k, g in enumerate(STRING_GAUGES):
         bx = (k - 1.5) * BRIDGE_SPACING / 3
         nx = (k - 1.5) * (board_half(SCALE) * 2 - 0.3) / 3
-        px, py = posts[[1, 0, 2, 3][k]]    # E, A on the bass side (E farther out); D, G treble
+        # Read off the owner's close-up: E to the near bass post, A to the far
+        # one; D to the far treble post, G to the near one.
+        px, py = posts[[0, 1, 3, 2][k]]
         p_local = Vector((px, py, pivot_z + 0.35))
         pz = (rot @ p_local.to_4d()).xyz
         path = [Vector((bx * 1.05, (t0 + t1) / 2, top + 0.3)), Vector((bx, 0.0, top + 0.66)),
@@ -368,13 +414,18 @@ def camera(shot):
         o.location = (cx * IN, cy * IN, 1.0)
         s.render.resolution_x, s.render.resolution_y = f['widthPx'], f['heightPx']
         return Vector((cx * IN, cy * IN, 0))
-    cam.lens = 60 if shot == 'hero' else 100
+    cam.lens = {'hero': 60, 'detail': 100, 'head': 100}[shot]
     cam.dof.use_dof = True
     cam.dof.aperture_fstop = 5.6
     if shot == 'hero':
         o.location = (0.55, -2.3, 0.72)
         target = Vector((0.0, 0.0, 0.6))
         s.render.resolution_x, s.render.resolution_y = 1080, 1620
+    elif shot == 'head':
+        # Square on to the headstock face: the medallion and the cloud.
+        o.location = (0.1, -0.6, 1.16)
+        target = Vector((0.0, 0.0, 1.07))
+        s.render.resolution_x, s.render.resolution_y = 1200, 1500
     else:
         o.location = (0.3, -0.7, 0.42)
         target = Vector((0.03, 0.0, 0.3))
@@ -386,9 +437,17 @@ def camera(shot):
 
 def main():
     a = args()
-    global DATA, SCALE
+    global DATA, SCALE, HEAD_FACE
     with open(os.path.join(HERE, 'outline.json')) as f:
         DATA = json.load(f)
+    # The straightened headstock face, if its texture has been made locally.
+    HEAD_FACE = None
+    hj = os.path.join(HERE, 'headstock.json')
+    if os.path.exists(hj):
+        with open(hj) as f:
+            HEAD_FACE = json.load(f)
+        if not os.path.exists(os.path.join(ROOT, HEAD_FACE['texture']['file'])):
+            HEAD_FACE = None
     SCALE = DATA['scale']['scaleLengthIn']
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o)
