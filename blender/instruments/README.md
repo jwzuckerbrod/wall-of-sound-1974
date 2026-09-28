@@ -12,7 +12,7 @@ was then.
 |---|---|---|
 | [Mission Control](mission_control/) (Alembic 74 00008) | Phil Lesh | Parked; [outstanding items](mission_control/README.md#outstanding) |
 | [Gibson ES-335](es335/) | Bob Weir | Ready for review; [outstanding items](es335/README.md#outstanding) |
-| Grand piano (rented Steinway or Yamaha) and Fender Rhodes | Keith Godchaux | To do: pin the piano to a show |
+| [Grand piano](piano/) (rented; modelled as a Steinway D) and [Fender Rhodes](rhodes/) (the band's Seventy-Three) | Keith Godchaux | Ready for review; outstanding: [piano](piano/README.md#outstanding), [Rhodes](rhodes/README.md#outstanding) |
 | Drum kit | Bill Kreutzmann | To do: a concert-tom kit from summer 1974, needs dated photos |
 
 `kit.py` holds the shared mesh helpers, materials, studio and rendering.
