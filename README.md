@@ -76,3 +76,10 @@ pass - frame rate has not yet been measured on real hardware - and stage 7 is
 deployment.
 
 Known open items are listed in `docs/qa-findings.md`.
+
+## Garcia's guitars
+
+The photo-real guitar work that started here (Wolf, traced and scaled off its
+frets) now lives in its own project,
+[garcia-guitars](https://github.com/jwzuckerbrod/garcia-guitars). It moved at
+`fae5c67`; this repo will pull finished models in for the stage.
