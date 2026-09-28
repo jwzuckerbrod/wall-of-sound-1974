@@ -65,6 +65,9 @@ Without it, `build.py` falls back to a plain rosewood face and abalone disc.
 
 ## Outstanding
 
+Parked 2026-09-28 in a good state, to come back to.
+
+
 1. **Scale length.** Needs a measurement (the owner, Jason Scheuner, or Scarlet
    Fire Guitars, whose replica was laser-scanned).
 2. **The eleven fingerboard inlays** (mother-of-pearl bolts striking lapis, an
@@ -79,3 +82,7 @@ Without it, `build.py` falls back to a plain rosewood face and abalone disc.
    real ones are long, thin sunbursts; knob caps are plain.
 5. The decorative purfling around the top in the photographs is left off:
    gdsets dates the wood trim after version 1.
+6. **Pearl stars under the knob clusters**: generic five-point shapes; the real
+   ones are long, thin sunbursts (clear in `mc-johnson-front.jpg`, but angled;
+   the headstock straightening method would work here too).
+7. **Paddle tuner buttons**: generic fans; trace their shape from the close-up.
