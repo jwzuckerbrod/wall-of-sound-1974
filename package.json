@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "check": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
-    "elevation": "node scripts/make-elevation.mjs"
+    "elevation": "node scripts/make-elevation.mjs",
+    "export:scene": "node scripts/export-scene.mjs"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",

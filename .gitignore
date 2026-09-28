@@ -15,3 +15,8 @@ coverage/
 .idea/
 
 .shots/
+
+# Generated for Blender by npm run export:scene
+blender/scene.json
+blender/wall.blend
+blender/wall.blend1
