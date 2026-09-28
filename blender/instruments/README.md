@@ -11,7 +11,7 @@ was then.
 | Instrument | Player | Status |
 |---|---|---|
 | [Mission Control](mission_control/) (Alembic 74 00008) | Phil Lesh | Parked; [outstanding items](mission_control/README.md#outstanding) |
-| Gibson ES-335 | Bob Weir | In progress |
+| [Gibson ES-335](es335/) | Bob Weir | Ready for review; [outstanding items](es335/README.md#outstanding) |
 | Grand piano (rented Steinway or Yamaha) and Fender Rhodes | Keith Godchaux | To do: pin the piano to a show |
 | Drum kit | Bill Kreutzmann | To do: a concert-tom kit from summer 1974, needs dated photos |
 

@@ -1,0 +1,35 @@
+{
+ "body": {
+  "file": ".shots/reference/es335-gibson-body.png",
+  "size": [
+   2000,
+   2000
+  ],
+  "fit": {
+   "silhouetteRmsPx": 1.4,
+   "anchorsUnderIt": "knobs x4, toggle, jack (tall parts; parallax)",
+   "anchorsRmsPx": 10.29,
+   "firstGuess": {
+    "pxPerIn": 89.4751,
+    "rmsPx": 7.14
+   }
+  },
+  "affine": [
+   [
+    87.49518,
+    -0.29231,
+    908.70832
+   ],
+   [
+    -0.22987,
+    -91.59457,
+    970.3618
+   ]
+  ],
+  "clean": {
+   "file": ".shots/textures/es335-top.png",
+   "erasedFraction": 0.31,
+   "glareFraction": 0.061
+  }
+ }
+}
