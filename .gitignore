@@ -20,3 +20,5 @@ coverage/
 blender/scene.json
 blender/wall.blend
 blender/wall.blend1
+blender/instruments/*.blend
+blender/instruments/*.blend1

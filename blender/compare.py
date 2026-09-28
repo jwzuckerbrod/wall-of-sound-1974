@@ -26,6 +26,7 @@ def args():
     p.add_argument('--render', required=True)
     p.add_argument('--photo', required=True)
     p.add_argument('--grain', type=float, default=0.035)
+    p.add_argument('--color', action='store_true', help='compare in colour, without the film treatment')
     return p.parse_args(argv)
 
 
@@ -81,9 +82,12 @@ def main():
     render, size, _ = load(a.render)
     photo, _, _ = load(a.photo, size)
     rng = np.random.default_rng(1974)
-    f = film(render[..., :3], a.grain, rng)
     base = os.path.splitext(a.render)[0]
-    save(f, base + '-film.png')
+    if a.color:
+        f = render.copy()
+    else:
+        f = film(render[..., :3], a.grain, rng)
+        save(f, base + '-film.png')
 
     overlay = photo.copy()
     overlay[..., :3] = photo[..., :3] * 0.5 + f[..., :3] * 0.5
