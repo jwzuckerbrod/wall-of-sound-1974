@@ -34,7 +34,6 @@ FONTS = '/System/Library/Fonts/Supplemental/'
 SERIF = FONTS + 'Georgia Bold.ttf'
 STENCIL = FONTS + 'DIN Condensed Bold.ttf'
 SANS = FONTS + 'Arial Bold.ttf'
-BLACK_SANS = FONTS + 'Arial Black.ttf'
 
 MARKS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'marks')
 
@@ -769,16 +768,21 @@ def word_sticker(G, P, centre, width, y):
     P.text('v_white', 'DEAD', SERIF, h * 0.42, (cx + width * 0.12, cz - h * 0.24), y - 0.0004, width=width * 0.4)
 
 
+_WORD = None
+
+
 def stencil_wordmark(P, centre, width, y, paint='stamp'):
     """
-    "GRATEFUL" over "DEAD", sprayed through a stencil in heavy sans capitals,
-    as on Budman's case (lot 36). An artistic choice. Arial Black stands in for
-    the stencil's lettering; its proportions follow the photograph.
+    "GRATEFUL" over "DEAD", sprayed through a stencil, as on Budman's case
+    (lot 36): traced from the photograph by blender/trace_mark.py --stencil.
+    An artistic choice.
     """
+    global _WORD
+    if _WORD is None:
+        with open(os.path.join(MARKS, 'grateful_dead_stencil.json')) as f:
+            _WORD = json.load(f)['layers']['paint']
     cx, cz = centre
-    cap = width * 0.14
-    P.text(paint, 'GRATEFUL', BLACK_SANS, cap * 1.4, (cx, cz + cap * 0.75), y, width=width)
-    P.text(paint, 'DEAD', BLACK_SANS, cap * 1.4, (cx, cz - cap * 0.95), y, width=width * 0.52)
+    P.loops(paint, [[(cx + x * width, cz + z * width) for x, z in lp] for lp in _WORD], y)
 
 
 def tape_strip(P, rng, centre, y, gaffer=False):

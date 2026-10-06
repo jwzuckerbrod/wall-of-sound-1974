@@ -1,9 +1,22 @@
 """
-Traces the skull-and-bolt from a flat image into polygons, one set per colour,
-and writes them to blender/marks/steal_your_face.json for roadgear.py.
+Traces a mark from an image into polygons for roadgear.py.
+
+The skull-and-bolt, from a flat image, one set of polygons per colour, to
+blender/marks/steal_your_face.json:
 
     /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/trace_mark.py -- \\
         .shots/reference/steal-your-face-hires.webp
+
+The "GRATEFUL DEAD" stencil, from a photograph of pale paint on a black case
+(--stencil), to blender/marks/grateful_dead_stencil.json:
+
+    /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/trace_mark.py -- \\
+        .shots/reference/sothebys-lot36-budman-wordmark.png --stencil --crop 215,425,600,570
+
+In stencil mode the crop is enlarged four times with smooth interpolation, the
+paint is split from the case by brightness, and the worn patches are closed up
+so each letter comes out whole. The paint on the case is flaked; the letters
+were not. Output is in units of the lettering's width, centred, y up.
 
 Every pixel is sorted into black, white, red or blue (or nothing, where the
 image is transparent). Each colour's boundary is followed along pixel edges,
@@ -23,7 +36,7 @@ import bpy
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-OUT = os.path.join(ROOT, 'blender', 'marks', 'steal_your_face.json')
+MARKS = os.path.join(ROOT, 'blender', 'marks')
 
 PALETTE = {
     'black': (0.10, 0.10, 0.10),
@@ -138,8 +151,65 @@ def simplify_loop(lp, eps):
     return a[:-1] + b[:-1]
 
 
+def upsample(a, k):
+    """Linear interpolation by k along both axes."""
+    h, w = a.shape
+    ys, xs = np.linspace(0, h - 1, h * k), np.linspace(0, w - 1, w * k)
+    rows = np.array([np.interp(xs, np.arange(w), a[i]) for i in range(h)])
+    return np.array([np.interp(ys, np.arange(h), rows[:, j]) for j in range(w * k)]).T
+
+
+def morph(mask, r, grow):
+    """Dilate (grow) or erode a mask by a disc of radius r."""
+    out = mask.copy()
+    pad = np.pad(mask, r, constant_values=not grow)
+    h, w = mask.shape
+    for dy in range(-r, r + 1):
+        for dx in range(-r, r + 1):
+            if dx * dx + dy * dy > r * r:
+                continue
+            win = pad[r + dy:r + dy + h, r + dx:r + dx + w]
+            out = (out | win) if grow else (out & win)
+    return out
+
+
+def stencil(path, crop, k=4, close=9):
+    rgb, alpha = load(path)
+    x0, y0, x1, y1 = crop
+    lum = rgb[y0:y1, x0:x1] @ np.array([0.299, 0.587, 0.114], dtype=np.float32)
+    big = upsample(lum, k)
+    paint = big > 0.36
+    # Close the flaking: grow, then shrink back. Then drop specks.
+    paint = morph(morph(paint, close, True), close, False)
+    loops = []
+    for lp in boundary_loops(paint):
+        if abs(area(lp)) < 60 * k * k:
+            continue
+        loops.append(simplify_loop(lp, 0.8 * k / 2))
+    xs = [x for lp in loops for x, _ in lp]
+    ys = [y for lp in loops for _, y in lp]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    W = max(xs) - min(xs)
+    out = [[[round((x - cx) / W, 5), round((cy - y) / W, 5)] for x, y in lp] for lp in loops]
+    print('paint', len(out), 'loops', sum(len(l) for l in out), 'points; height/width', round((max(ys) - min(ys)) / W, 3))
+    return out
+
+
 def main():
-    path = sys.argv[sys.argv.index('--') + 1]
+    argv = sys.argv[sys.argv.index('--') + 1:]
+    path = argv[0]
+    if '--stencil' in argv:
+        crop = [int(v) for v in argv[argv.index('--crop') + 1].split(',')]
+        loops = stencil(path, crop)
+        out = os.path.join(MARKS, 'grateful_dead_stencil.json')
+        os.makedirs(MARKS, exist_ok=True)
+        with open(out, 'w') as f:
+            json.dump({'source': os.path.basename(path), 'crop': crop,
+                       'note': 'Traced by blender/trace_mark.py --stencil. Units of the lettering width, y up. Even-odd fill.',
+                       'layers': {'paint': loops}}, f)
+        print('WROTE', out)
+        return
+    OUT = os.path.join(MARKS, 'steal_your_face.json')
     rgb, alpha = load(path)
     opaque = np.nonzero(alpha >= 0.5)
     cy = (opaque[0].min() + opaque[0].max() + 1) / 2
