@@ -27,6 +27,7 @@ from mathutils import Matrix, Vector
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'blender'))
 import roadgear  # noqa: E402  (the amps, cases and stickers)
+import venue  # noqa: E402  (outdoors: sky, ground, tarps)
 
 
 def args():
@@ -37,6 +38,8 @@ def args():
     p.add_argument('--scale', type=float, default=2.0)
     p.add_argument('--out', default=os.path.join(ROOT, '.shots', 'blender'))
     p.add_argument('--save', action='store_true')
+    p.add_argument('--venue', default='arena', choices=['arena', 'outdoor'],
+                   help='arena: the hall of Pechner\'s photograph; outdoor: sky, ground and tarps')
     return p.parse_args(argv)
 
 
@@ -288,7 +291,7 @@ def place_segment(o, a, b):
     o.scale = (1, 1, d.length)
 
 
-def build(S, M):
+def build(S, M, place='arena'):
     scene = bpy.context.scene
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o)
@@ -359,6 +362,9 @@ def build(S, M):
 
     roadgear.build_gear(S, colls['Gear'], B)
 
+    if place == 'outdoor':
+        venue.build_outdoor(S, colls['Venue'], B)
+        return
     # The hall: a floor, and a dark box of an arena around it.
     floor = unit_box('arena floor', M['floor'])
     o = new_obj('arena floor', floor, colls['Venue'])
@@ -378,8 +384,11 @@ def build(S, M):
 
 # ─── light and camera ─────────────────────────────────────────────────────────
 
-def lights():
+def lights(place='arena'):
     """A sound check under house and work lights: broad, soft, from the front and above."""
+    if place == 'outdoor':
+        venue.outdoor_lights()
+        return
     def area(name, loc, rot, size, power, colour='#fff3e2'):
         L = bpy.data.lights.new(name, 'AREA')
         L.shape = 'RECTANGLE'
@@ -463,8 +472,8 @@ def main():
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
     M = build_materials()
-    build(S, M)
-    lights()
+    build(S, M, a.venue)
+    lights(a.venue)
     camera(SHOTS[a.shot], a.scale)
     render_settings(a.samples)
     os.makedirs(a.out, exist_ok=True)

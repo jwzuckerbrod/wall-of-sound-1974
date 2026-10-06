@@ -84,7 +84,7 @@ width, with crew working along it. Every bay now runs to the full height again.
 | 2.1 | Tie-dye panels were four large, bright mandalas hung high in the cage — the loudest thing in frame. They are meant to be fabric glimpsed through structure. | Fixed: smaller, fewer, lower, dimmer |
 | 2.2 | The stage deck reads as a vast empty brown plain. It is the right size — 82 × 41 ft is on the drawing — but it is bare, so it looks like a car park. | Open |
 | 2.3 | The arrays still occupy well under half the tower height. 641 drivers cannot fill a 60 ft frame (the 58% finding stands), but the current allocation makes short wide blocks where the photographs show tall narrow ones. | Partly fixed in §6: tallest stacks now 32 ft, vocal lows as single columns. Other channels' shapes are still the reconstruction's own |
-| 2.4 | The whole composition reads as a small object in a large black void. No sense of scale or occasion. | Open |
+| 2.4 | The whole composition reads as a small object in a large black void. No sense of scale or occasion. | Fixed in Blender (§12); the browser is unchanged |
 | 2.5 | Bare-plywood cabinets are too orange and too uniform; they read as pine crates rather than road-worn birch. | Open |
 | 2.6 | The 5-inch panels render as dark circles with no visible cone — the small drivers catch no light at all. | Open |
 | 2.7 | The curve of the vocal centre cluster barely reads from the front. | Open |
@@ -403,3 +403,32 @@ cluster and fills was always the reconstruction's own.
   the cluster as it was by late July.
 - The band now tops out lower; the cluster's mid-height is 17.3 ft against the
   photo's 16.2, within the 3 ft check.
+
+---
+
+## 12. Outdoors: sky, ground and tarps
+
+Most of the summer 1974 photographs are outdoor shows, so the Blender scene has
+an outdoor venue (`blender/venue.py`): `--venue outdoor` in `build_scene.py`,
+and `stage_review.py`'s default. Pechner's hall stays `build_scene.py`'s
+default, since its shot is matched to an indoor photograph.
+
+- **Sky:** Blender's physically based sky, mid-afternoon (sun 38° up, from the
+  audience's left), with a sun lamp matched to it. The sky draws no sun disc of
+  its own, so the scene isn't lit twice.
+- **Ground:** a dry summer field.
+- **Tarps:** blue polythene, as at UC Santa Barbara (25 May), Oakland (8 June)
+  and Des Moines (16 June). One sheet a scaffold bay over the back of the towers,
+  one over each end, tied at every lift and bellying between ties, slightly
+  translucent with the sun behind. A strip one lift deep runs along the top of
+  the front, as at Oakland. Sizes and places come from the exported scaffold.
+
+- **Tie-dyes:** four panels hang from the top front of the scaffold under the
+  tarp strip, two over each side, as at Oakland (8 June) and the Hollywood Bowl
+  (21 July). The config confirms Courtenay Pollock's tie-dyes on the structure
+  (`materials.tieDye`). About 1.3 × 2.5 m, scaled off the Oakland photograph,
+  and placed so each hangs above the stacks below it. The patterns are generic
+  spiral and ring dyeing made in the shader, with bled edges and pale crazing,
+  not copies of Pollock's designs.
+
+**Not done:** a crowd; the browser app, which keeps its dark arena.

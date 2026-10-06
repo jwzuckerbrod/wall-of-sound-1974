@@ -8,6 +8,7 @@ build script saves, stood where the app's config puts its player
     (each instrument's build.py with --save, and the Wolf's with --era 1974)
     /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/stage_review.py -- \\
         --shot overview --samples 128          # or band, keys; --save for blender/stage.blend
+                                               # --venue arena for the hall instead of outdoors
 
 This is for reviewing the instruments in place, not a historical record of
 their placing:
@@ -180,6 +181,7 @@ def main():
     p.add_argument('--samples', type=int, default=128)
     p.add_argument('--out', default=os.path.join(ROOT, '.shots', 'blender'))
     p.add_argument('--save', action='store_true')
+    p.add_argument('--venue', default='outdoor', choices=['outdoor', 'arena'])
     a = p.parse_args(argv)
 
     W = load_wall()
@@ -187,8 +189,8 @@ def main():
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
     M = W['build_materials']()
-    W['build'](S, M)
-    W['lights']()
+    W['build'](S, M, a.venue)
+    W['lights'](a.venue)
     deck = S['deck']['y']
     place(deck)
     camera(a.shot)
