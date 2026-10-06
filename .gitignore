@@ -25,3 +25,7 @@ blender/instruments/*.blend1
 blender/instruments/**/*.blend
 blender/instruments/**/*.blend1
 __pycache__/
+
+# The stage with the instruments on it, written by blender/stage_review.py --save
+blender/stage.blend
+blender/stage.blend1
