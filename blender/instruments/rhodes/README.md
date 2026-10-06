@@ -50,4 +50,4 @@ Blender -b -P blender/instruments/rhodes/build.py -- --shot hero    # or front; 
 2. **The legs and sustain pedal** aren't pictured. The standard Rhodes legs and pedal are generic.
 3. **The side profile** is fitted, not traced.
 4. **The Roland SH-1000** Keith used in 1974–75 is left out until a dated photograph puts it on stage.
-5. **Its place on stage**, beside the grand, is to be set in the Wall of Sound scene.
+5. **Its place on stage**, beside the grand, is to be set in the Wall of Sound scene. At Oakland on 8 June 1974 (`esrigging-oakland-1974-06-08-wide.webp`, far right), a smaller keyboard, probably this one, stands beyond the covered grand, on the audience's right. `blender/stage_review.py` currently puts it on the audience's left of the grand.

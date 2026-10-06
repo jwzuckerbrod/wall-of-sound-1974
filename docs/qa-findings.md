@@ -198,3 +198,66 @@ Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" abo
 - Channel-by-channel placement is still the reconstruction's own. Only the heights are photo-checked.
 - The Cow Palace debut (23 March 1974) had a flat centre cluster, not the cylinder. The model shows the
   Wall as it stood from May, and is checked against May.
+
+---
+
+## 7. The band on stage: photographs from May to July 1974
+
+Seven more photographs of the band in front of the Wall, read against the ones already in
+`.shots/reference/`. Nothing in the model has changed yet; this records what they show. "Left" and
+"right" are as seen from the audience.
+
+**The photographs**
+
+| File in `.shots/reference/` | Date and place | Source | Shows |
+|---|---|---|---|
+| `schneider-ucsb-1974-05-25-band.webp` | 25 May 1974, Campus Stadium, UC Santa Barbara | Steve Schneider, via [Paul Dorpat, "Seattle Now & Then"](https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/) | Garcia, the kit, Weir, Lesh, close |
+| `schneider-ucsb-1974-05-25-wide.webp` | The same show | The same | The whole stage. Only 768 px wide |
+| `esrigging-oakland-1974-06-08-wide.webp` | 8 June 1974, Oakland Coliseum Stadium ("Day on the Green") | Posted to the Everything Stage Rigging Facebook group, whose post is titled "Grateful Dead - 'Day On The Green'"; photographer unknown | The whole Wall from the crowd, with the tie-dyes and tarps. The band is small |
+| `unsourced-band-1974-06-16-desmoines-probable.webp` | **Probably** 16 June 1974, Iowa State Fairgrounds, Des Moines | Google Images; photographer unknown | Garcia, Weir, the kit, Lesh |
+| `kirkwest-1974-06-16-desmoines-probable-wide.webp` | **Probably** the same show as the one above, from farther back | Kirk West (credit on the image), via a [Reddit post](https://www.reddit.com/r/interestingasfuck/comments/wwr9zf/the_grateful_dead_and_their_wall_of_sound_in_1974/) that gives no show | The whole band and the Wall, straight on |
+| `unsourced-rigging-1974-undated.webp` | Undated; outdoors, before the show, golden hills behind | Google Images, a photograph of a printed page | Crew climbing the stacks; the space under the cluster |
+| Not saved yet | Undated summer 1974, outdoors | Posted to a Facebook group beside a 28 June 1974 Boston Garden memory. The post says the photo is from "another summer 1974" show. Boston Garden is indoors and this photo is in daylight | Garcia, Lesh, Weir, the kit |
+
+**Dating the Des Moines photos.** In both, Garcia wears a red "MARIN ACADEMY" sweatshirt and plays the Wolf,
+Weir wears a plaid shirt, and Lesh a pale green shirt. Garcia's and Weir's clothes match
+`garcia-1974-06-16-desmoines.jpg` and `weir-1974-06-16-desmoines.jpg`, which are already dated 16 June, and
+the Iowa State Fairgrounds show was outdoors. A match of clothes, not a credit.
+
+**Reading positions across the stage.** Weir stands downstage of the kit, so whether he appears left or right
+of it depends on where the photographer stood. The close photo from 16 June puts him left of the kit, and
+Kirk West's straight-on view of the same show puts him a little right of its centre. So only the straight-on
+views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for order across the stage.
+
+**Findings**
+
+| | What the photographs show | The model now | Confidence |
+|---|---|---|---|
+| Garcia's side | **Far left** in every photograph that shows him: 17 May (`pechner`, a guitarist far left; too small to name), 25 May, 8 June (a guitarist in blue, far left), 16 June (probable, two photographs), and the undated summer photo | Far right, `x = 7.0` | High for May–June. No photo from July to October yet shows him |
+| Weir | Just downstage of the kit, a little right of its centre, in the straight-on views (25 May, 16 June) | Far left, `x = -5.6` | Medium-high |
+| Lesh | Right of Weir on 25 May, 16 June and 31 July. The undated summer photo, and probably 8 June (a figure in white between Garcia and the kit; no bass visible at this size), have him **left** of the kit, so it varied | Left of the kit, `x = -2.6` | Medium. Right of the kit in 3 of 5 |
+| Keith | At a grand to the **right**: 17 May, 25 May (far right, in line with the band; a second grand far left looks parked) 8 June (far right: the grand under a white cover, and a smaller keyboard beyond it, to the audience's right, with someone at it) and 16 June (far right, lid down) | Right, `x = 4.6` | High for May–June. Agrees with the model |
+| The kit | 25 May and 16 June (probable): **wine-red shells with chrome lugs**, on a riser draped in red velvet. Undated summer: the same red kit. 31 July: butcher-block concert toms | Butcher block | High. The kit changed between 16 June and 31 July, **inside** the target window. See `blender/instruments/drums/README.md` |
+| Under the cluster | **Open** in every photograph: sky and hills (rigging photo), trees (undated summer), a blue backdrop (25 May, 8 June and 16 June), open sky through a scrim (31 July, `bill-kit-anderson-1974-07-31-preshow.jpg`). Only the kit, Garcia's natural-wood 2×12 cabinet, and racks | A 4 × 4 block of sixteen 15"s, 8 ft tall | High. Seven photographs from five or more shows, at least one of them in the target window. The config's own note on `arrays.kickCount`, from `deadsources74`, says the sixteen 15"s were "in a column", not a block |
+| Casters | The cluster's cabinets have casters on their undersides, clearest at Hartford. In colour they show as red and green discs | Not modelled | High |
+| Which side is heavier | 25 May, 8 June and 16 June wide shots: the tallest, densest stacks on the left, behind Garcia; on the right, a few columns and a raised platform of 12"s, then the piano | Piano's columns left, Garcia's right (comment above `arrays` in the config) | Medium. Consistent with each player's speakers standing behind them |
+| Stage width | 25 May: the deck runs well past the Wall on the right, with the piano out in the open | The deck overhangs the scaffold 9 ft each side, from the 10 April drawing | Low. One venue's stage |
+| Scaffold colour | 25 May: rusty brown pipe. 17 May and 31 July: pale | Silver | Low. Probably varied with the venue's own scaffolding |
+| Amp racks | 25 May: McIntosh racks with blue meters stand on the deck beside the players | Under the scaffold, behind the band | Medium |
+| Backdrop | Outdoors: blue tarps on the sides and back of the structure (25 May, 8 June, 16 June), or open sky |
+| Tie-dyes | 8 June: four tie-dyed panels hang high on the scaffold, two over each side, below a valance of blue tarp along the top. `materials.tieDye` already says Courtenay Pollock's tie-dyes hung on the structure | Not in the Blender render | High for 8 June | A black void (§2.4) | High for outdoor shows |
+
+**Two cautions**
+
+- The Wall's heights were checked against Vancouver, 17 May, and most of these photographs are from May
+  and June. The kit change shows the stage did change during the summer. A wide shot from July to October,
+  such as Winterland in October from *The Grateful Dead Movie*, would show whether the layout changed too.
+- Moving Garcia is not only moving his mark. Each player's stacks stood behind the player, so moving Garcia and
+  his columns to the left means rearranging `arrays` as well as `band.members`.
+
+**Still open, in order**
+
+1. Remove or move the 4 × 4 bass-drum block. The sixteen 15"s are confirmed; where they stood is not.
+2. Move Garcia far left, Weir just downstage of the kit, Lesh right of Weir, Keith far right. Rearrange the columns to match.
+3. Model the casters under the cluster.
+4. Find a photograph from July to October that shows Garcia and the keyboards.

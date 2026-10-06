@@ -17,6 +17,11 @@ Blender -b -P blender/instruments/drums/build.py -- --shot hero    # or front; -
 | `bill-anderson-1974-07-31-trio.jpg` | The same show, in colour | The butcher-block finish (laminated light and darker strips round the shells), the white front head, the tom count |
 | `bill-anderson-1974-07-31-weir-mics.jpg`, `-weir-billy.jpg` | The same show | The kit in use, behind Weir |
 | `keith-19741016_1814.jpg` | dead.net, Winterland, 16 Oct 1974 | The same light shells and pale front head, seen partially |
+| `schneider-ucsb-1974-05-25-band.webp`, `-wide.webp` | Steve Schneider, UC Santa Barbara, 25 May 1974 | The **earlier** kit: wine-red shells, chrome lugs, a riser draped in red velvet |
+| `unsourced-band-1974-06-16-desmoines-probable.webp` | Unknown photographer; probably Des Moines, 16 June 1974 (the clothes match the dated Des Moines photos) | The red kit still in use on the first day of the target window |
+| `kirkwest-1974-06-16-desmoines-probable-wide.webp` | Kirk West; probably the same show, straight on | The same red kit and red riser, centred under the cluster |
+
+**The kit changed during the summer.** It was red on 25 May and, probably, on 16 June. It was butcher block by 31 July. So the model is right for 31 July to 20 October, and wrong for the first weeks of the window. See `docs/qa-findings.md` §7.
 
 **Also consulted, not seen directly:**
 - A drum-forum post, seen only as a search summary because the forum blocks automated readers, says he played a wine-red Ludwig early in 1974. It says he moved in summer 1974 to "the butcher block concert tom kit… the one seen in the Grateful Dead movie". The photographs agree.

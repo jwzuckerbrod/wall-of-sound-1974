@@ -47,6 +47,7 @@ export type SourceId =
   | 'pechner'
   | 'photos'
   | 'anderson'
+  | 'schneider'
   | 'blueprints'
   | 'juliens'
   | 'derived';
@@ -121,6 +122,11 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   pechner: {
     title: 'Richard Pechner, "Grateful Dead and the Wall of Sound", sound check, P.N.E. Coliseum, Vancouver, 17 May 1974 — the straight-on full-stage view',
     url: 'https://www.rpechner.com/Music/Grateful-Dead',
+    kind: 'photographic',
+  },
+  schneider: {
+    title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, 25 May 1974 — two colour photographs, close and full-stage, published by Paul Dorpat',
+    url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/',
     kind: 'photographic',
   },
   bear: {
@@ -374,8 +380,8 @@ export const PROVENANCE: Record<string, Provenance> = {
 
   'band.positions': {
     confidence: 'estimated',
-    sources: ['photos', 'derived'],
-    note: 'Which side Garcia stood on in 1974 is not settled by any source found, and it varied. Flip with stage.mirrored.',
+    sources: ['photos', 'pechner', 'schneider', 'anderson', 'derived'],
+    note: 'NOT YET APPLIED: the marks below put Garcia far right, and the photographs disagree. Every photograph found that shows him, from 17 May to (probably) 16 June, has Garcia at the audience\'s far left. Weir stands just downstage of the kit, Lesh usually to Weir\'s right (once left of the kit), and Keith at a grand far right, on 17 May, 25 May, 8 June and (probably) 16 June. No photograph from July to October yet shows Garcia or the keyboards. See docs/qa-findings.md §7.',
   },
   'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
