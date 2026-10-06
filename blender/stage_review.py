@@ -11,13 +11,18 @@ build script saves, stood where the app's config puts its player
 
 This is for reviewing the instruments in place, not a historical record of
 their placing:
-  - the players' marks are the app's (estimated; see band.positions there)
-  - the piano stands tail to the audience, as at Winterland on 16 October 1974
-  - where the Rhodes stood beside it isn't known: here, at Keith's right
+  - the players' marks are the app's, read from scene.json (measured on
+    Pechner's 17 May 1974 photograph; see band.positions in the config)
+  - the grand lies across the stage with its keyboard at the audience's
+    right, as on that photograph; Keith sits at that end
+  - where the Rhodes stood isn't known: here, upstage of Keith at his right
+    hand, which puts it beyond the grand from the audience, as at Oakland on
+    8 June 1974
   - the guitars and the bass rest upright on plain stands, which are review
     props; they will be in the players' hands
 """
 import argparse
+import json
 import math
 import os
 import sys
@@ -30,8 +35,10 @@ INST = os.path.join(ROOT, 'blender', 'instruments')
 WOLF = os.path.join(os.path.dirname(ROOT), 'Garcia Guitars Project', 'guitars', 'wolf', 'wolf.blend')
 IN = 0.0254
 
-# The app's marks (scene frame: x across, +z toward the audience), metres.
-MARKS = {'weir': (-5.6, 5.4), 'lesh': (-2.6, 5.8), 'kreutz': (0.2, 4.3), 'keith': (4.6, 5.2), 'garcia': (7.0, 5.6)}
+# The app's marks (scene frame: x across, +z toward the audience), metres,
+# as scripts/export-scene.mjs writes them from band.members.
+with open(os.path.join(ROOT, 'blender', 'scene.json')) as _f:
+    MARKS = {k: tuple(v) for k, v in json.load(_f)['band'].items()}
 
 
 def load_wall():
@@ -114,18 +121,19 @@ def place(deck):
         r.rotation_euler = (math.radians(90), 0, 0)
         guitar_stand(f'{name} stand', x, y, deck)
         out[key] = r
-    # The piano, tail to the audience, centred on Keith's mark.
+    # The grand across the stage, centred on Keith's mark, keyboard to the
+    # audience's right (+x): its keys face +x, its tail points to the kit.
     r = append(os.path.join(INST, 'piano', 'piano.blend'), 'Grand piano')
     x, y = B(*MARKS['keith'])
-    h = holder('piano on stage', x, y, deck, math.radians(180))
+    h = holder('piano on stage', x, y, deck, math.radians(90))
     r.parent = h
     r.location = (0, -53.9 * IN, 0)
     out['piano'] = r
-    # The Rhodes at Keith's right as he sits at the keys (facing the
-    # audience, his right is -x), end-on to the piano, its keys toward him.
+    # Keith sits past the keyboard facing -x; his right hand is upstage. The
+    # Rhodes stands there, square to the audience, keys toward him.
     r = append(os.path.join(INST, 'rhodes', 'rhodes.blend'), 'Fender Rhodes')
-    keys_y = y + 0.1 * 0 + (53.9 * IN)            # the piano's keys, on the Wall side of its centre
-    h = holder('Rhodes on stage', x - 0.78 - 0.45, keys_y + 0.2, deck, math.radians(90))
+    keys_x = x + 53.9 * IN
+    h = holder('Rhodes on stage', keys_x + 0.75, y + 1.0, deck)
     r.parent = h
     r.location = (0, -11.5 * IN, 0)
     out['rhodes'] = r

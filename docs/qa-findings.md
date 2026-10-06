@@ -258,7 +258,7 @@ views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for ord
 **Still open, in order**
 
 1. Remove or move the 4 × 4 bass-drum block. The sixteen 15"s are confirmed; where they stood is not.
-2. Move Garcia far left, Weir just downstage of the kit, Lesh right of Weir, Keith far right. Rearrange the columns to match.
+2. ~~Move the band and rearrange the columns.~~ Done: §9.
 3. Model the casters under the cluster.
 4. Find a photograph from July to October that shows Garcia and the keyboards.
 
@@ -292,3 +292,47 @@ own, and two of the open items in §6 close with them.
 the 15" columns now stand a little apart. The kick block (§6, still open) is
 untouched. In the browser, the 12"s are still drawn as single cells; only the
 Blender scene pairs them.
+
+---
+
+## 9. The band moved to Pechner's positions
+
+The players' marks are now measured, not estimated. Pechner's 17 May 1974
+photograph is the one the scene's camera is solved against (§6), so a figure's
+place in it gives its place on the stage. Across = (pixel − 398) × distance /
+524.6 px, with the players taken 11.5 m from the camera, 5.3 m in front of the
+tower face.
+
+| | On the photo (px, of 796) | Across (m) | Before |
+|---|---|---|---|
+| Guitarist, far left: **Garcia** | 178 | −4.8 | +7.0 |
+| Guitarist: **Weir** | 322 | −1.7 | −5.6 |
+| The kit | 382 | −0.35 | +0.2 |
+| Figure right of the kit: **Lesh** | 426 | +0.6 | −2.6 |
+| The grand, lying across the stage | 442–546 | +1.0 to +3.2 (2.2 m: a Steinway D is 2.74) | — |
+| **Keith**, at its keyboard end | 562 | +3.6 | +4.6 |
+
+Garcia and Weir are told apart by the other photographs, which all put Garcia
+at the far left (§7). Keith's mark is now the centre of the grand.
+
+**The columns follow the players**, as the Wall was each player's monitor:
+
+- Garcia's main column moves to the left (+5.45 → −6.60), behind him.
+- The piano's columns move to the right (−6.15 / −7.04 → +5.00 / +5.95),
+  behind Keith.
+- Garcia's extension moves behind the kit (+6.24 → +1.60, still 1.6 m back).
+  The 1974 spec sheet puts it "beside Godchaux and behind Kreutzmann"
+  (`arrays.garciaExtensionPlacement`, confirmed). With the band as measured,
+  that's where it goes, and the measured band fits the spec sheet.
+- Everything else stays put. Weir's column stays on the left, near him.
+
+`npm run verify` passes, with the grand's footprint widened to a D across the
+stage (3.0 × 1.7 m), and no player's gear inside a stack.
+`docs/layout-elevation.svg` is regenerated. `blender/stage_review.py` reads the
+marks from `scene.json` instead of its own copy. It lays the grand across the
+stage with the keyboard at the right, and puts the Rhodes upstage of Keith at
+his right hand, beyond the grand as seen from the audience, as at Oakland.
+
+**Still open:** this is the band on 17 May. Weir and Lesh changed places on
+other dates, and on 25 May and 16 June a grand stood at the far right instead.
+Nothing from July to October shows the whole band.

@@ -115,6 +115,8 @@ const scene = {
   bolt: logo.BOLT.map(v3),
   boltBottom: logo.BOLT_BOTTOM,
   boltDiameter: r4(wall.band.logo.diameter),
+  // The players' marks (scene frame, metres): blender/stage_review.py stands the instruments on them.
+  band: Object.fromEntries(wall.band.members.map((m) => [m.id, [r4(wall.band.mirrored ? -m.x : m.x), r4(m.z)]])),
 };
 
 mkdirSync('blender', { recursive: true });

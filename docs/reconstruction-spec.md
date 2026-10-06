@@ -171,27 +171,27 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 
 | x (m) | Array | Floor | Base → top (m) |
 |---|---|---|---|
-| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 3.91 → 9.41 |
-| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 2.13 → 7.01 |
-| −7.04 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 2.13 → 6.28 |
-| −6.15 | **Piano** lows (15″ × 9) | P1 | 2.13 → 7.62 |
-| −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 8.23 |
-| −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 9.75 |
-| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | deck | 0 → 5.15 |
-| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P1 | 2.13 → 7.09 |
-| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level behind the cluster | deck | 0 → 2.44 |
-| +3.04 | **Vocal fill RIGHT** | deck | 0 → 5.15 |
-| +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 9.75 |
-| +5.45 | **Garcia** main (12″ × 14) | P1 | 2.13 → 6.40 |
-| +6.24 | **Garcia extension** (12″ × 6), set back 1.6 m | deck | 0 → 1.83 |
-| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 2.13 → 7.01 |
-| +8.42 | Drums stereo **RIGHT** | P2 | 3.91 → 9.41 |
+| −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 3.91 → 7.33 |
+| −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 2.13 → 7.31 |
+| −6.60 | **Garcia** main (12″ × 14) | P1 | 2.13 → 4.45 |
+| −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 5.44 |
+| −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 10.36 |
+| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | deck | 0 → 3.12 |
+| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P2 | 3.91 → 6.89 |
+| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level behind the cluster | deck | 0 → 2.59 |
+| +1.60 | **Garcia extension** (12″ × 6), set back 1.6 m, behind the kit beside Keith | deck | 0 → 0.99 |
+| +3.04 | **Vocal fill RIGHT** | deck | 0 → 3.12 |
+| +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 10.36 |
+| +5.00 | **Piano** lows (15″ × 9) | P1 | 2.13 → 7.96 |
+| +5.95 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 2.13 → 4.71 |
+| +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 2.13 → 7.31 |
+| +8.42 | Drums stereo **RIGHT** | P2 | 3.91 → 7.33 |
 
-Heights were checked against Pechner's 17 May 1974 photograph (`docs/qa-findings.md` §6); channel positions were not.
+Heights were checked against Pechner's 17 May 1974 photograph (`docs/qa-findings.md` §6, §8). Channel positions were not, except that each player's own stacks now stand on their side of the stage (§9): Garcia's on the left, the piano's on the right, Garcia's extension behind the kit beside Keith, as the 1974 spec sheet says. Heights in this table are for the cabinet sizes of §8.
 
 The skyline that falls out of this — tall flanks either side of a lower, raised, curved centre cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
 
-Blocks butt together with no gap. **The wall is not symmetric about the centreline** — the piano takes two slots on the left, Garcia's main column and his extension take two on the right, and they are not the same width. The real wall was asymmetric for the same reason: it was assembled from what each channel needed, not drawn on a grid.
+Blocks butt together with no gap. **The wall is not symmetric about the centreline**: Garcia's main column takes a slot on the left, the piano's two take the right, and they are not the same width. The real wall was asymmetric for the same reason: it was assembled from what each channel needed, not drawn on a grid.
 
 All array x-positions are **estimated**; the 60 ft envelope they pack into is **confirmed**. No plan drawing of the Wall has been found, and the arrangement varied between venues.
 
@@ -306,7 +306,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
   - **Phil Lesh** — Alembic quadraphonic bass. Lesh had two in 1974; the second, "Mission Control" (serial 74 00008, built by Rick Turner), from 16 June 1974. The earlier one is the right choice for a March–May scene, the later for the Winterland scene.
   - **Keith Godchaux** — grand piano with five Countryman pickups, one per frame division.
   - **Bill Kreutzmann** — drum kit, centre, upstage.
-- **Band positions**, audience view left → right: **Weir · Lesh · Kreutzmann (upstage centre) · Godchaux · Garcia.** Marked **estimated** and exposed in the config as a single `mirrored` boolean, because the record found does not settle which side Garcia stood on in 1974 and it varied. Flipping it is a one-line change.
+- **Band positions**, audience view left → right: **Garcia · Weir · Kreutzmann (upstage centre) · Lesh · Godchaux at a grand lying across the stage, keyboard at the right.** Measured on Pechner's 17 May 1974 photograph through its solved camera; every other photograph found to mid-June agrees on Garcia far left and Keith to the right (`docs/qa-findings.md` §7, §9). Marked **estimated**: Weir and Lesh changed places now and then, and nothing yet shows the whole band between July and October.
 - **Logos.** The mark sprayed on the band's gear was the **lightning bolt alone** — a 5½" white circle, red half and blue half, split by a jagged white bolt. **No skull.** Owsley Stanley's own account (`bear`) says Ernie Fischbach cut it as a single half-circle stencil with a jagged edge, sprayed red, turned over and sprayed blue, and that "we put it on to all our gear" in 1969; his page shows a toolbox still carrying it. The bolt outline in the model is traced from Bob Thomas's drawing of it, red above and blue below as Stanley describes. The skull-and-bolt was a later design by Bob Thomas, and no source found puts it on the equipment, so it is not used as a 1974 mark. **Exception, by the project owner's choice:** the Blender scene puts a skull-and-bolt sticker and a "GRATEFUL DEAD" lettering sticker on some cases and amplifiers, copied from a surviving Wall amplifier and its case (Sotheby's 2021, lot 43). Nothing dates those stickers to 1974; see `materials.stickers` in the config. Applied only to the road cases, at its true 5½" size. It is **not** placed as a backdrop banner or on the speaker cabinets, for which no evidence was found. The evidence is from 1969; nothing found says the mark had changed by 1974.
 - **Arena:** suggested only — a dark bowl of raked seating and a hint of roof structure, unlit, low detail, fading into black. Enough to give scale, not enough to draw the eye.
 
@@ -317,7 +317,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 1. **586 vs 587 JBL drivers.** Unresolved; the model carries 587 and says so.
 2. **26,400 W vs 28,800 W.** Both quoted; the model shows both and explains the arithmetic.
 3. **Per-string bass channels.** Popular account vs the 1974 spec sheet's selectable quad matrix. Both quoted.
-4. **Which side Garcia stood on.** Not settled here; `band.mirrored` flips it.
+4. **Which side Garcia stood on.** Settled for May–June 1974: the audience's left (`docs/qa-findings.md` §7, §9). July to October is still unphotographed.
 5. **Array left-to-right order.** The 1974 top view dimensions the tower grid but does not label which channel stood where. The order above is a reconstruction consistent with photographs, not a documented arrangement. **This remains the largest single piece of invention in the model** and the About page will say so plainly. The 64 ft grid it packs into *is* documented, bay by bay.
 6. **Allocation of drivers to arrays.** The four class totals are historical and asserted at startup. Which array got which share is mostly the reconstruction's own. Confirmed: 16 × 15″ for the bass drum, 20 × 12″ per guitar, 16 bass cabinets a side.
 7. **Cabinet dimensions other than the measured one.** `cab12x2` is measured. `cab12` and `cab15` are proportioned from it.

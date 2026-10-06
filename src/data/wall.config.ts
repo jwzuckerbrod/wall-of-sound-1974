@@ -396,8 +396,8 @@ export const PROVENANCE: Record<string, Provenance> = {
 
   'band.positions': {
     confidence: 'estimated',
-    sources: ['photos', 'pechner', 'schneider', 'anderson', 'derived'],
-    note: 'NOT YET APPLIED: the marks below put Garcia far right, and the photographs disagree. Every photograph found that shows him, from 17 May to (probably) 16 June, has Garcia at the audience\'s far left. Weir stands just downstage of the kit, Lesh usually to Weir\'s right (once left of the kit), and Keith at a grand far right, on 17 May, 25 May, 8 June and (probably) 16 June. No photograph from July to October yet shows Garcia or the keyboards. See docs/qa-findings.md §7.',
+    sources: ['pechner', 'schneider', 'anderson', 'photos', 'deadsources74'],
+    note: 'Measured on Pechner\'s 17 May 1974 photograph through its solved camera, left to right: Garcia, Weir, the kit, Lesh, then the grand lying across the stage with Keith at its keyboard end. Every other photograph found, to (probably) 16 June, also has Garcia at the far left and Keith to the right; Weir and Lesh changed places now and then, and on some dates a grand stands at the far right instead. The spec sheet puts Garcia\'s extension stack "beside Godchaux and behind Kreutzmann", which agrees. No photograph from July to October yet shows the whole band. See docs/qa-findings.md §7 and §9.',
   },
   'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
@@ -683,8 +683,9 @@ const A = (b: ArrayBlock) => b;
  * of sixteen 15"s beside the cluster, and the curved cluster hung at 7 ft. Every
  * block keeps its driver count; only its shape and its floor changed.
  *
- * The wall is not symmetric about the centreline: the piano takes two slots on
- * the left, Garcia's main column plus his extension take two on the right, and
+ * The wall is not symmetric about the centreline: Garcia's main column stands
+ * on the left behind him, the piano's two take the right behind Keith, and
+ * Garcia's extension stands behind the kit beside Keith (arrays.garciaExtensionPlacement),
  * they are not the same width. The real wall was asymmetric for the same reason.
  */
 export const ARRAYS: ArrayBlock[] = [
@@ -721,13 +722,13 @@ export const ARRAYS: ArrayBlock[] = [
 
   // ── Guitars ───────────────────────────────────────────────────────────────
   A({ id: 'weir',     channel: 'rhythmGuitar', band: 'full', cabinet: 'cab12', cols: 2, rows: 10, x: -5.45, baseY: 2.134, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Rhythm guitar — 20 × 12″' }),
-  A({ id: 'garcia',   channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 7,  x:  5.45, baseY: 2.134, z: 0,    curveRadius: 0, explode: [ 1.7, 0, 0.5], label: 'Lead guitar, main — 14 × 12″' }),
-  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  6.24, baseY: 0.000, z: -1.6, curveRadius: 0, explode: [ 1.2, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
+  A({ id: 'garcia',   channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 7,  x: -6.60, baseY: 2.134, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Lead guitar, main — 14 × 12″' }),
+  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  1.60, baseY: 0.000, z: -1.6, curveRadius: 0, explode: [ 0.6, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
 
   // ── Piano — 15″ column in one slot, 12″ and 5″ stacked in the next ─────────
-  A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x: -6.15, baseY: 2.134, z: 0, curveRadius: 0, explode: [-1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
-  A({ id: 'pno-lm',   channel: 'piano', band: 'lowerMid', cabinet: 'cab12',  cols: 3, rows: 4, x: -7.04, baseY: 2.134, z: 0, curveRadius: 0, explode: [-1.8, 0.0, 0.5], label: 'Piano mids — 12 × 12″' }),
-  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x: -7.04, baseY: 3.455, z: 0, curveRadius: 0, explode: [-1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
+  A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x:  5.00, baseY: 2.134, z: 0, curveRadius: 0, explode: [ 1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
+  A({ id: 'pno-lm',   channel: 'piano', band: 'lowerMid', cabinet: 'cab12',  cols: 3, rows: 4, x:  5.95, baseY: 2.134, z: 0, curveRadius: 0, explode: [ 1.8, 0.0, 0.5], label: 'Piano mids — 12 × 12″' }),
+  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x:  5.95, baseY: 3.455, z: 0, curveRadius: 0, explode: [ 1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
 
   // ── Drums & cymbals — stereo, on P2: the tall flanks of the skyline ───────
   A({ id: 'drm-lmL',  channel: 'drumsL', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x: -9.42, baseY: 3.912, z: 0, curveRadius: 0, explode: [-3.0, 0.0, 0.5], label: 'Drums lower mids, left — 12 × 12″' }),
@@ -907,7 +908,7 @@ export const wall = {
   },
 
   band: {
-    /** Flip the whole stage left-for-right. See PROVENANCE['band.positions']. */
+    /** Flip the band's marks left-for-right (not the arrays). Off: the marks are measured. */
     mirrored: false,
     members: [
       // Downstage of the Wall, not tucked into it. The first pass put the kit
@@ -915,11 +916,17 @@ export const wall = {
       // half deep and a grand is over two metres long, both ended up inside the
       // speaker stacks. verify.mjs now checks every piece of gear against the
       // array footprints.
-      { id: 'weir',    name: 'Bob Weir',        instrument: 'Gibson ES-335',                 x: -5.6, z: 5.4 },
-      { id: 'lesh',    name: 'Phil Lesh',       instrument: 'Alembic quadraphonic bass',     x: -2.6, z: 5.8 },
-      { id: 'kreutz',  name: 'Bill Kreutzmann', instrument: 'drum kit',                      x:  0.2, z: 4.3 },
-      { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  4.6, z: 5.2 },
-      { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x:  7.0, z: 5.6 },
+      //
+      // x is measured on Pechner's 17 May 1974 photograph through its solved
+      // camera (blender/build_scene.py, shot 'pechner'), at the players' depth.
+      // Keith's mark is the centre of the grand, which lay across the stage
+      // with its keyboard at the audience's right; he sat at that end, about
+      // 1.5 m further right. See PROVENANCE['band.positions'].
+      { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x: -4.8,  z: 5.6 },
+      { id: 'weir',    name: 'Bob Weir',        instrument: 'Gibson ES-335',                 x: -1.7,  z: 5.6 },
+      { id: 'kreutz',  name: 'Bill Kreutzmann', instrument: 'drum kit',                      x: -0.35, z: 4.3 },
+      { id: 'lesh',    name: 'Phil Lesh',       instrument: 'Alembic quadraphonic bass',     x:  0.6,  z: 6.15 },
+      { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  2.1,  z: 5.0 },
     ],
     /** The 1969 lightning-bolt equipment mark — no skull. Cases only. */
     logo: { id: 'lightningBolt', diameter: IN(5.5), boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },

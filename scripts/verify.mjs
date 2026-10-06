@@ -163,7 +163,8 @@ const GEAR = {
   weir: { w: 1.1, d: 0.9 },
   lesh: { w: 1.1, d: 0.9 },
   kreutz: { w: 1.9, d: 1.9 },
-  keith: { w: 2.4, d: 2.4 },
+  // The grand across the stage, as on Pechner's photograph: a Steinway D, 2.74 m by 1.57.
+  keith: { w: 3.0, d: 1.7 },
   garcia: { w: 1.1, d: 0.9 },
 };
 let clashes = 0;
