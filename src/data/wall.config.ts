@@ -48,6 +48,7 @@ export type SourceId =
   | 'photos'
   | 'anderson'
   | 'schneider'
+  | 'sothebys'
   | 'blueprints'
   | 'juliens'
   | 'derived';
@@ -128,6 +129,11 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, 25 May 1974 — two colour photographs, close and full-stage, published by Paul Dorpat',
     url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/',
     kind: 'photographic',
+  },
+  sothebys: {
+    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends" (2021), lot 43: "Wall of Sound | One of the Dead\'s first MC 2300\'s", serial 1Y421, on its original orange Anvil rolling road case. Steve Parish: used in the Wall for the vocal mid-range, later for Garcia\'s extension speakers. Measured 10.5 × 19 × 17 in. Tape on the front dated 5/1/93',
+    url: 'https://www.sothebys.com/en/buy/auction/2021/from-the-vault-property-from-the-grateful-dead-and-friends/wall-of-sound-one-of-the-deads-first-mc-2300s',
+    kind: 'primary',
   },
   bear: {
     title: 'Owsley Stanley, "This is the logo that Bob Thomas and I designed for Grateful Dead in 1969" — with a photograph of his stencilled toolbox',
@@ -376,7 +382,17 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles. Both are modelled, mixed across the wall.',
   },
   'materials.tieDye': { confidence: 'confirmed', sources: ['deadsources22'], note: 'Courtenay Pollock tie-dyed the fabric panels — on the structure, not over the drivers.' },
-  'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300'], note: 'Blue illuminated meters, black glass panel, 128 lb per amplifier.' },
+  'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, black glass panel, 128 lb per amplifier. The front panel is anodized gold over a black chassis, 10.5 × 19 × 17 in, as measured on a Wall amplifier (Sotheby\'s lot 43).' },
+  'materials.roadCases': {
+    confidence: 'estimated',
+    sources: ['sothebys', 'photos'],
+    note: 'Orange Anvil rolling cases with aluminium edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on 8 June 1974. Wear, tape and labels are modelled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
+  },
+  'materials.stickers': {
+    confidence: 'guessed',
+    sources: ['sothebys'],
+    note: 'ARTISTIC CHOICE, NOT 1974 EVIDENCE. Some cases and amplifiers carry a "GRATEFUL DEAD" lettering sticker and a skull-and-lightning-bolt sticker, as the surviving amplifier and its case do. Nothing dates those stickers to 1974; the same case has tape dated 1993, and the skull-and-bolt was first widely published on the 1976 album. Kept at the project owner\'s request, for realism. The 1969 bolt stencil (band.logo) is still the only mark the evidence supports for 1974. Switch off with structure.amps.stickers.',
+  },
 
   'band.positions': {
     confidence: 'estimated',
@@ -387,7 +403,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.logo': {
     confidence: 'confirmed',
     sources: ['bear', 'syf'],
-    note: 'The mark on the gear was the lightning bolt alone: a 5 1/2" white circle, a red half and a blue half, split by a jagged white bolt. Owsley Stanley\'s own account says it was cut as one half-circle stencil, sprayed red, turned over and sprayed blue, and "we put it on to all our gear" in 1969. The skull with the bolt is a later design by Bob Thomas; no source found puts it on the equipment, so it is not used. Red above, blue below, as Stanley describes it; the bolt outline is traced from Bob Thomas\'s drawing. Evidence is from 1969; nothing found says the mark changed by 1974.',
+    note: 'The mark on the gear was the lightning bolt alone: a 5 1/2" white circle, a red half and a blue half, split by a jagged white bolt. Owsley Stanley\'s own account says it was cut as one half-circle stencil, sprayed red, turned over and sprayed blue, and "we put it on to all our gear" in 1969. The skull with the bolt is a later design by Bob Thomas; no source found puts it on the equipment in 1974. It appears in the Blender scene only as a later sticker, an artistic choice recorded under materials.stickers. Red above, blue below, as Stanley describes it; the bolt outline is traced from Bob Thomas\'s drawing. Evidence is from 1969; nothing found says the mark changed by 1974.',
   },
 };
 
@@ -854,15 +870,17 @@ export const wall = {
     cabling: { runDiameter: 0.050, bundleDiameter: 0.14, color: '#0E0E0E' },
     amps: {
       /** MC-2300, W × H × D. */
-      size: { w: IN(19), h: IN(9.5), d: IN(16) },
+      size: { w: IN(19), h: IN(10.5), d: IN(17) },
       perRack: 4,
       rackCount: 12,
       /**
        * The amps were individually named and numbered, and the names were on
-       * the road cases. Surviving examples: "M-14" (Garcia's), "Budman",
-       * "Ketchup", "Mustard". Stencilled onto the cases in the model.
+       * the road cases. Surviving examples: "M-14" (Garcia's), "M-5" (Sotheby's
+       * lot 43), "Budman", "Ketchup", "Mustard". Stencilled onto the cases in the model.
        */
-      caseNames: ['Budman', 'Ketchup', 'Mustard', 'M-14'],
+      caseNames: ['Budman', 'Ketchup', 'Mustard', 'M-14', 'M-5'],
+      /** Later stickers on some cases and amps. See PROVENANCE['materials.stickers']. */
+      stickers: true,
       /** Amps sit at deck level behind the arrays. Exact distribution undocumented. */
       z: -2.0,
       meterColor: '#3FA9F5',

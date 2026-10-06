@@ -25,6 +25,8 @@ import bpy
 from mathutils import Matrix, Vector
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, 'blender'))
+import roadgear  # noqa: E402  (the amps, cases and stickers)
 
 
 def args():
@@ -126,10 +128,6 @@ def build_materials():
     M['plank'] = wood('Floor plank', '#8f7552', '#5a452e', scale=3.0, rough=0.8)
     M['facing'], _ = principled('Stage skirt, black', '#0b0b0c', 0.9)
     M['cable'], _ = principled('Cable, rubber', '#0e0e0e', 0.6)
-    M['amp'], _ = principled('Amp chassis', '#111214', 0.35, 0.4)
-    M['meter'], b = principled('MC-2300 meters', '#0a1830', 0.3)
-    b.inputs['Emission Color'].default_value = srgb('#5fb6ff')
-    b.inputs['Emission Strength'].default_value = 3.0
     M['floor'], _ = principled('Arena floor', '#5a5750', 0.9)
     M['hall'], _ = principled('Arena interior', '#2a2a2c', 0.95)
     return M
@@ -281,7 +279,7 @@ def build(S, M):
         bpy.data.objects.remove(o)
     root = scene.collection
     colls = {}
-    for n in ('Speakers', 'Scaffold', 'Stage', 'Amps', 'Venue'):
+    for n in ('Speakers', 'Scaffold', 'Stage', 'Gear', 'Venue'):
         c = bpy.data.collections.new(n)
         root.children.link(c)
         colls[n] = c
@@ -307,7 +305,7 @@ def build(S, M):
     for i, t in enumerate(S['cable']):
         place_segment(new_obj(f'cable.{i:03d}', cable, colls['Scaffold']), t['a'], t['b'])
 
-    boxes = {k: unit_box(k, M[k]) for k in ('deck', 'facing', 'plank', 'amp')}
+    boxes = {k: unit_box(k, M[k]) for k in ('deck', 'facing', 'plank')}
     for i, s in enumerate(S['slabs']):
         o = new_obj(f"stage.{s['kind']}.{i}", boxes['deck' if s['kind'] == 'deck' else 'facing'], colls['Stage'])
         o.location = B(s['c'])
@@ -317,15 +315,7 @@ def build(S, M):
         o.location = B(s['c'])
         o.scale = (s['s'][0], s['s'][2], s['s'][1])
 
-    aw, ah, ad = S['ampSize']
-    meter = unit_box('meter', M['meter'])
-    for i, p in enumerate(S['amps']):
-        o = new_obj(f'amp.{i:02d}', boxes['amp'], colls['Amps'])
-        o.location = B(p) + Vector((0, ad / 2, 0))
-        o.scale = (aw, ad, ah)
-        m = new_obj(f'amp.meters.{i:02d}', meter, colls['Amps'])
-        m.location = B(p) + Vector((0, -0.002, ah * 0.1))
-        m.scale = (aw * 0.55, 0.004, ah * 0.28)
+    roadgear.build_gear(S, colls['Gear'], B)
 
     # The hall: a floor, and a dark box of an arena around it.
     floor = unit_box('arena floor', M['floor'])
@@ -378,6 +368,9 @@ SHOTS = {
     # Checking shots: a vocal-low column and the cluster, close up.
     'close': {'size': (800, 600), 'pos': (-2.6, 4.9, 3.2), 'target': (-4.2, 5.4, 0), 'f_px': 700, 'pp': (400, 300)},
     'cluster': {'size': (800, 600), 'pos': (1.5, 4.2, 7.5), 'target': (0, 7.0, 0), 'f_px': 800, 'pp': (400, 300)},
+    # The road gear: a stack of loose cases, and a rack of amps beyond it.
+    'gear': {'size': (1200, 800), 'pos': (-4.7, 4.5, 3.4), 'target': (-6.6, 3.6, 0.6), 'f_px': 1100, 'pp': (600, 400)},
+    'rack': {'size': (1000, 800), 'pos': (-5.6, 4.1, -0.7), 'target': (-6.54, 3.75, -2.2), 'f_px': 900, 'pp': (500, 400)},
 }
 
 

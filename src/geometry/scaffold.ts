@@ -235,5 +235,33 @@ export function stageSlabs(L = scaffoldLayout()): Slab[] {
   ];
 }
 
+/** A road case on the deck: its foot centre (deck-relative y), size and turn about y. */
+export interface StageCase {
+  pos: [number, number, number];
+  size: [number, number, number];
+  rot: number;
+}
+
+/**
+ * Cases stacked along the upstage edge, out of the playing area, with a second
+ * case on about half of them. Where they stood is not documented; this is
+ * stage dressing, shared by the browser and the Blender scene.
+ */
+export function stageCases(L = scaffoldLayout()): StageCase[] {
+  const backZ = L.towerFrontZ + FT(3);
+  const out: StageCase[] = [];
+  const spots = [-22, -14, -6, 7, 15, 23];
+  spots.forEach((ft, i) => {
+    const big = i % 2 === 0;
+    const w = big ? FT(3.6) : FT(2.6);
+    const h = big ? FT(2.4) : FT(1.8);
+    const d = FT(2.2);
+    out.push({ pos: [FT(ft), 0, backZ + (i % 3) * 0.25], size: [w, h, d], rot: (i % 2 ? 1 : -1) * 0.12 });
+    if (i % 3 === 0)
+      out.push({ pos: [FT(ft) + 0.12, h, backZ + (i % 3) * 0.25], size: [w * 0.8, FT(1.4), d * 0.9], rot: 0.05 });
+  });
+  return out;
+}
+
 export const TUBE_RADIUS = wall.structure.scaffold.tubeDiameter / 2;
 export const PLANK = { width: IN(10), thickness: IN(2) };

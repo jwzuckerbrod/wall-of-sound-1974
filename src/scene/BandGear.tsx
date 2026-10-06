@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { FT, wall } from '../data/wall.config';
-import { scaffoldLayout } from '../geometry/scaffold';
+import { wall } from '../data/wall.config';
+import { scaffoldLayout, stageCases } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
 
 /**
@@ -79,23 +79,7 @@ export function BandGear({ shadows }: { shadows: boolean }) {
     .filter((m) => m.id !== 'kreutz')
     .map((m) => ({ id: m.id, x: wall.band.mirrored ? -m.x : m.x, z: m.z }));
 
-  /** Cases stacked along the upstage edge, out of the playing area. */
-  const cases = useMemo(() => {
-    const backZ = L.towerFrontZ + FT(3);
-    const out: { pos: [number, number, number]; size: [number, number, number]; rot: number }[] = [];
-    const spots = [-22, -14, -6, 7, 15, 23];
-    spots.forEach((ft, i) => {
-      const big = i % 2 === 0;
-      const w = big ? FT(3.6) : FT(2.6);
-      const h = big ? FT(2.4) : FT(1.8);
-      const d = FT(2.2);
-      out.push({ pos: [FT(ft), 0, backZ + (i % 3) * 0.25], size: [w, h, d], rot: (i % 2 ? 1 : -1) * 0.12 });
-      // A second case stacked on about half of them.
-      if (i % 3 === 0)
-        out.push({ pos: [FT(ft) + 0.12, h, backZ + (i % 3) * 0.25], size: [w * 0.8, FT(1.4), d * 0.9], rot: 0.05 });
-    });
-    return out;
-  }, [L]);
+  const cases = useMemo(() => stageCases(L), [L]);
 
   return (
     <group name="stage-furniture" position={[0, L.deck.y, 0]}>

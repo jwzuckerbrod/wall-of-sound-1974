@@ -21,7 +21,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'wos-export-'));
 execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
-   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts'],
+   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/geometry/logo.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -39,6 +39,7 @@ const load = (p) => import(pathToFileURL(join(tmp, p)).href);
 const cfg = await load('data/wall.config.js');
 const arrays = await load('geometry/arrays.js');
 const scaf = await load('geometry/scaffold.js');
+const logo = await load('geometry/logo.js');
 
 const { wall, DRIVERS, CABINETS, ARRAYS, cabinetSize, IN } = cfg;
 const L = scaf.scaffoldLayout();
@@ -103,6 +104,15 @@ const scene = {
   cableRadius: r4(wall.structure.cabling.runDiameter / 2),
   amps,
   ampSize: v3([wall.structure.amps.size.w, wall.structure.amps.size.h, wall.structure.amps.size.d]),
+  ampsPerRack: wall.structure.amps.perRack,
+  caseNames: wall.structure.amps.caseNames,
+  stickers: wall.structure.amps.stickers,
+  // Stage dressing (src/scene/BandGear.tsx): feet in world height.
+  cases: scaf.stageCases(L).map((c) => ({ p: v3([c.pos[0], c.pos[1] + deckY, c.pos[2]]), s: v3(c.size), ry: r4(c.rot) })),
+  // The 1969 mark (src/geometry/logo.ts): field-radius units, y down.
+  bolt: logo.BOLT.map(v3),
+  boltBottom: logo.BOLT_BOTTOM,
+  boltDiameter: r4(wall.band.logo.diameter),
 };
 
 mkdirSync('blender', { recursive: true });
