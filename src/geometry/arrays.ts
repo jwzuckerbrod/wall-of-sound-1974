@@ -5,7 +5,7 @@
  * scripts/verify.mjs checks them without a browser. If this file ever emits a
  * number of cells that isn't 641, something is wrong with the config.
  */
-import { ARRAYS, CABINETS, cabinetSize, wall, type ArrayBlock, type CabinetId, type ChannelId, type DriverId } from '../data/wall.config';
+import { ARRAYS, CABINETS, cabinetSize, type ArrayBlock, type CabinetId, type ChannelId, type DriverId, standoffOf } from '../data/wall.config';
 
 export interface Cell {
   /**
@@ -41,8 +41,8 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
   const driver = CABINETS[b.cabinet].driver;
   const cells: Cell[] = [];
   const halfCol = (b.cols - 1) / 2;
-  // Stacks stand proud of the steel, not inside it. See dimensions.arrayStandoff.
-  const blockZ = b.z + wall.dimensions.arrayStandoff;
+  // Stacks stand just behind the front steel; the cluster stands proud of it.
+  const blockZ = b.z + standoffOf(b);
 
   for (let col = 0; col < b.cols; col++) {
     const offset = (col - halfCol) * size.w;

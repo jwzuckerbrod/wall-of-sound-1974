@@ -6,7 +6,7 @@
  * check headlessly that nothing else on the stage, such as a player's spot,
  * has been put inside a stack.
  */
-import { ARRAYS, cabinetSize, wall } from '../data/wall.config';
+import { ARRAYS, cabinetSize, wall, standoffOf } from '../data/wall.config';
 import { scaffoldLayout } from './scaffold';
 
 export interface Box2 {
@@ -25,7 +25,7 @@ export function stageBlockers(): Box2[] {
   for (const b of ARRAYS) {
     const s = cabinetSize(b.cabinet);
     const w = s.w * b.cols;
-    const z = b.z + wall.dimensions.arrayStandoff;
+    const z = b.z + standoffOf(b);
     // Curved blocks bulge upstage at the ends; a straight box over the whole
     // arc is close enough and errs toward solid.
     const depth = b.curveRadius > 0 ? s.d + b.curveRadius * 0.16 : s.d;

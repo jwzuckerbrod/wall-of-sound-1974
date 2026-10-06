@@ -8,6 +8,7 @@ import {
   stageSlabs,
   TUBE_RADIUS,
   type Tube,
+  lightRig,
 } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
 
@@ -116,6 +117,46 @@ export function Cabling({ shadows }: { shadows: boolean }) {
  * across the scaffolding behind and beside the arrays. NOT over the 12s and
  * 15s, which ran bare. See docs/reconstruction-spec.md section 9.
  */
+/**
+ * The stage-lighting bars on the upper corners (structure.lightBars): pipes,
+ * and black cans aimed down at the band. Unlit hardware.
+ */
+export function LightBars({ shadows }: { shadows: boolean }) {
+  const materials = wallMaterials();
+  const rig = useMemo(() => lightRig(), []);
+  const pipeRef = useTubeInstances(rig.pipes);
+  const lampRef = useRef<THREE.InstancedMesh>(null);
+  const { lampDiameter, lampLength } = wall.structure.lightBars;
+  useLayoutEffect(() => {
+    const mesh = lampRef.current;
+    if (!mesh) return;
+    const m = new THREE.Matrix4();
+    const q = new THREE.Quaternion();
+    const up = new THREE.Vector3(0, 1, 0);
+    const at = new THREE.Vector3();
+    const d = new THREE.Vector3();
+    rig.lamps.forEach((l, i) => {
+      at.set(...l.at);
+      d.set(...l.aim).sub(at).normalize();
+      q.setFromUnitVectors(up, d);
+      m.compose(at.clone().addScaledVector(d, lampLength / 2), q, new THREE.Vector3(1, 1, 1));
+      mesh.setMatrixAt(i, m);
+    });
+    mesh.instanceMatrix.needsUpdate = true;
+    mesh.computeBoundingSphere();
+  }, [rig, lampLength]);
+  return (
+    <group name="light-bars">
+      <instancedMesh ref={pipeRef} args={[undefined, materials.steel, rig.pipes.length]} castShadow={shadows}>
+        <cylinderGeometry args={[0.024, 0.024, 1, 7]} />
+      </instancedMesh>
+      <instancedMesh ref={lampRef} args={[undefined, materials.caseBody, rig.lamps.length]} castShadow={shadows}>
+        <cylinderGeometry args={[lampDiameter / 2 * 0.92, lampDiameter / 2, lampLength, 12]} />
+      </instancedMesh>
+    </group>
+  );
+}
+
 export function TieDye() {
   const materials = wallMaterials();
   const L = useMemo(() => scaffoldLayout(), []);

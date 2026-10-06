@@ -125,6 +125,9 @@ def build_materials():
     b.inputs['Sheen Weight'].default_value = 0.3
     M['cap'], _ = principled('Aluminium dust cap', '#d9dbde', 0.22, 1.0)
     M['frame'], _ = principled('Driver frame', '#1b1b1d', 0.45, 0.6)
+    # Stage lamps: black-painted cans, a dark lens.
+    M['lampbody'], _ = principled('Lamp can, black paint', '#121212', 0.5, 0.3)
+    M['lens'], _ = principled('Lamp lens, unlit', '#2b2a27', 0.08, 0.0)
     M['horn'], _ = principled('Horn flare', '#161616', 0.5)
     M['steel'], _ = principled('Galvanised tube', '#a9adb1', 0.38, 1.0)
     # The cluster's 5" strips: dull, oxidised aluminium channel (Sotheby's lot 49).
@@ -361,6 +364,7 @@ def build(S, M, place='arena'):
         o.scale = (s['s'][0], s['s'][2], s['s'][1])
 
     roadgear.build_gear(S, colls['Gear'], B)
+    build_light_rig(S, M, colls['Scaffold'], place)
 
     if place == 'outdoor':
         venue.build_outdoor(S, colls['Venue'], B)
@@ -380,6 +384,70 @@ def build(S, M, place='arena'):
     ):
         o = new_obj(name, hall, colls['Venue'])
         o.location, o.scale = loc, sc
+
+
+def build_light_rig(S, M, coll, place='arena'):
+    """
+    The light bars (structure.lightBars): pipes, and on each lamp a clamp, a
+    yoke and a black can aimed down at the band. Unlit: in daylight they are
+    hardware, and the photographs show them dark.
+    """
+    R = S['lights']
+    pipe = tube_mesh('light pipe', 0.024, M['steel'])
+    keep = lambda o: place == 'arena' or not o.get('indoor')
+    for i, t in enumerate(R['pipes']):
+        if not keep(t):
+            continue
+        place_segment(new_obj(f'light.pipe.{i:02d}', pipe, coll), t['a'], t['b'])
+    r, L = R['dia'] / 2, R['len']
+    bm = bmesh.new()
+    # The can: body, a lip at the front, the lens recessed in it. Built along -Z
+    # (the aim) from its pivot at the origin.
+    body = bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=r, radius2=r * 0.92, depth=L)['verts']
+    bmesh.ops.translate(bm, verts=body, vec=(0, 0, -L / 2 + 0.06))
+    lip = bmesh.ops.create_cone(bm, cap_ends=False, segments=20, radius1=r * 1.08, radius2=r * 1.08, depth=0.03)['verts']
+    bmesh.ops.translate(bm, verts=lip, vec=(0, 0, -L + 0.07))
+    for v in body + lip:
+        for f in v.link_faces:
+            f.material_index = 0
+            f.smooth = True
+    lens = bmesh.ops.create_circle(bm, cap_ends=True, segments=20, radius=r * 0.8)['verts']
+    bmesh.ops.translate(bm, verts=lens, vec=(0, 0, -L + 0.075))
+    for v in lens:
+        for f in v.link_faces:
+            f.material_index = 1
+    # Yoke: two arms either side of the can, joined above it.
+    for sx in (-1, 1):
+        arm = bmesh.ops.create_cube(bm, size=1.0)['verts']
+        bmesh.ops.scale(bm, vec=(0.012, 0.04, 0.2), verts=arm)
+        bmesh.ops.translate(bm, vec=(sx * (r + 0.015), 0, 0.03), verts=arm)
+        for v in arm:
+            for f in v.link_faces:
+                f.material_index = 2
+    me = mesh_from_bm(bm, 'lamp')
+    for k in ('lampbody', 'lens', 'frame'):
+        me.materials.append(M[k])
+    yoke = bmesh.new()
+    top = bmesh.ops.create_cube(yoke, size=1.0)['verts']
+    bmesh.ops.scale(yoke, vec=(2 * r + 0.05, 0.04, 0.014), verts=top)
+    bmesh.ops.translate(yoke, vec=(0, 0, 0.13), verts=top)
+    clamp = bmesh.ops.create_cube(yoke, size=1.0)['verts']
+    bmesh.ops.scale(yoke, vec=(0.05, 0.06, 0.06), verts=clamp)
+    bmesh.ops.translate(yoke, vec=(0, 0, 0.18), verts=clamp)
+    yme = mesh_from_bm(yoke, 'lamp yoke')
+    yme.materials.append(M['frame'])
+    for i, l in enumerate(R['lamps']):
+        if not keep(l):
+            continue
+        at, aim = B(l['at']), B(l['aim'])
+        d = (aim - at).normalized()
+        # The yoke hangs plumb under the pipe and turns to face the aim.
+        h = new_obj(f'light.yoke.{i:02d}', yme, coll)
+        h.location = at
+        h.rotation_euler = (0, 0, math.atan2(d.x, -d.y))
+        o = new_obj(f'light.can.{i:02d}', me, coll)
+        o.location = at
+        o.rotation_euler = d.to_track_quat('-Z', 'Y').to_euler()
 
 
 # ─── light and camera ─────────────────────────────────────────────────────────

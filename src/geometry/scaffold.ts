@@ -5,7 +5,7 @@
  * Nothing here is styled — it emits tube segments and slabs. See
  * docs/reconstruction-spec.md §10 for the transcribed requirements.
  */
-import { ARRAYS, cabinetSize, FT, IN, wall } from '../data/wall.config';
+import { ARRAYS, cabinetSize, FT, IN, wall, standoffOf } from '../data/wall.config';
 
 /** A length of scaffold tube, as a pair of endpoints. */
 export interface Tube {
@@ -125,12 +125,22 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
     for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, top, z], kind: 'standard' });
   });
 
+  // The centre cluster projects forward of the front plane (clusterStandoff),
+  // so front ledgers and braces stop at its edges rather than run through it.
+  const cluster = ARRAYS.filter((b) => b.curveRadius > 0).map((b) => {
+    const s = cabinetSize(b.cabinet);
+    return { x0: b.x - (s.w * b.cols) / 2, x1: b.x + (s.w * b.cols) / 2, y0: deckY + b.baseY, y1: deckY + b.baseY + s.h * b.rows };
+  });
+  const behindCluster = (xa: number, xb: number, ya: number, yb: number) =>
+    cluster.some((c) => Math.min(xa, xb) < c.x1 && Math.max(xa, xb) > c.x0 && Math.min(ya, yb) < c.y1 && Math.max(ya, yb) > c.y0);
+
   // Ledgers along the run, and transoms across the depth, at every lift.
-  // Transoms are skipped on the front line: that plane is the speaker face, and
-  // a tube crossing it would run through the cabinets.
+  // Transoms are skipped on the front line: the stacks stand between the
+  // front two lines, and a tube across the depth would run through them.
   for (const y of L.yLevels) {
     for (const z of towerZ)
       for (let i = 0; i < L.xLines.length - 1; i++) {
+        if (z === towerZ[0] && behindCluster(L.xLines[i], L.xLines[i + 1], y, y)) continue;
         tubes.push({ a: [L.xLines[i], y, z], b: [L.xLines[i + 1], y, z], kind: 'ledger' });
       }
     L.xLines.forEach((x) => {
@@ -139,16 +149,18 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
     });
   }
 
-  // X-braces on the SECOND z-line and the upstage face — never on the front
-  // line, because the front line is the speaker face. Bracing drawn there would
-  // cross the cabinets, which is both wrong and unreadable.
-  for (const z of [towerZ[1], towerZ[towerZ.length - 1]])
+  // X-braces on the front line, the second and the upstage face. The
+  // photographs show the front braces crossing in front of the speaker faces,
+  // which stand just behind them (dimensions.arrayStandoff); only the
+  // cluster, which stands proud, is clear of them.
+  for (const z of [towerZ[0], towerZ[1], towerZ[towerZ.length - 1]])
     for (let li = 0; li < L.yLevels.length - 1; li++) {
       const y0 = L.yLevels[li];
       const y1 = L.yLevels[li + 1];
       for (let i = 0; i < L.xLines.length - 1; i++) {
         const x0 = L.xLines[i];
         const x1 = L.xLines[i + 1];
+        if (z === towerZ[0] && behindCluster(x0, x1, y0, y1)) continue;
         tubes.push({ a: [x0, y0, z], b: [x1, y1, z], kind: 'brace' });
         tubes.push({ a: [x1, y0, z], b: [x0, y1, z], kind: 'brace' });
       }
@@ -200,7 +212,7 @@ export function scaffoldFloors(L = scaffoldLayout()): Slab[] {
     seen.add(key);
 
     const depth = FT(10);
-    const z = wall.dimensions.arrayStandoff - depth / 2 + s.d / 2;
+    const z = standoffOf(b) - depth / 2 + s.d / 2;
     out.push({
       centre: [b.x, L.deck.y + b.baseY - thickness / 2, z],
       size: [width + FT(1), thickness, depth],
@@ -261,6 +273,37 @@ export function stageCases(L = scaffoldLayout()): StageCase[] {
       out.push({ pos: [FT(ft) + 0.12, h, backZ + (i % 3) * 0.25], size: [w * 0.8, FT(1.4), d * 0.9], rot: 0.05 });
   });
   return out;
+}
+
+/** A stage-lighting can: where it hangs and the point it is aimed at. */
+export interface Lamp {
+  at: [number, number, number];
+  aim: [number, number, number];
+  indoor: boolean;
+}
+
+/**
+ * The light bars on both upper corners (structure.lightBars), as pipes and
+ * the lamps hung from them, aimed down at the band's line.
+ */
+export function lightRig(L = scaffoldLayout()): { pipes: (Tube & { indoor: boolean })[]; lamps: Lamp[] } {
+  const rig = wall.structure.lightBars;
+  const pipes: (Tube & { indoor: boolean })[] = [];
+  const lamps: Lamp[] = [];
+  const y = (v: number) => L.deck.y + v;
+  for (const side of [1, -1])
+    for (const bar of rig.bars) {
+      const [ax, ay] = bar.from;
+      const [bx, by] = bar.to;
+      pipes.push({ a: [ax * side, y(ay), rig.z], b: [bx * side, y(by), rig.z], kind: 'ledger', indoor: !!bar.indoor });
+      for (let k = 0; k < bar.lamps; k++) {
+        const t = (k + 0.5) / bar.lamps;
+        const x = (ax + (bx - ax) * t) * side;
+        const at: [number, number, number] = [x, y(ay + (by - ay) * t) - 0.18, rig.z + 0.05];
+        lamps.push({ at, aim: [x * 0.45, L.deck.y + 1.2, wall.dimensions.bandLineZ], indoor: !!bar.indoor });
+      }
+    }
+  return { pipes, lamps };
 }
 
 export const TUBE_RADIUS = wall.structure.scaffold.tubeDiameter / 2;

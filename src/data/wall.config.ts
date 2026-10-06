@@ -348,7 +348,17 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.arrayStandoff': {
     confidence: 'estimated',
     sources: ['photos', 'derived'],
-    note: 'How far the stacks stand proud of the front plane of the towers. Not documented. Set to a little over one cabinet depth, because the photographs plainly show stacks in front of the steel rather than inside it.',
+    note: 'Where the stacks\' faces stand against the front plane of the towers. Negative is behind it. The photographs show the stacks BEHIND the front steel: uprights, ledgers and X-braces cross in front of the speaker faces on both sides, at the Hollywood Bowl on 21 July 1974 and on Pechner\'s 17 May photograph. So the faces sit just behind the front tubes. An earlier note claimed the opposite. The centre cluster is the exception: see dimensions.clusterStandoff. See docs/qa-findings.md §13.',
+  },
+  'dimensions.clusterStandoff': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'The curved centre cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (21 July 1974) and on Pechner\'s 17 May photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
+  },
+  'structure.lightBars': {
+    confidence: 'estimated',
+    sources: ['pechner', 'photos'],
+    note: 'Stage-lighting bars of black can lamps clamped to the scaffold at both upper outer corners, in front of the stacks: on Pechner\'s 17 May photograph, at the Hollywood Bowl on 21 July and at UC Santa Barbara on 25 May. Measured on Pechner\'s photograph through its solved camera: each side a horizontal bar of about 5 lamps, a diagonal bar of about 8 rising toward the centre, and two vertical ladders of about 6. The ladders show only indoors; outdoors the tie-dyes hang in that space and only the flat and diagonal bars are seen. Lamp counts are read off small images; the lamps\' type is not known. The bar along the top front on some dates is not modelled.',
   },
   'structure.guyWires': {
     confidence: 'guessed',
@@ -416,6 +426,10 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: 'The mark on the gear was the lightning bolt alone: a 5 1/2" white circle, a red half and a blue half, split by a jagged white bolt. Owsley Stanley\'s own account says it was cut as one half-circle stencil, sprayed red, turned over and sprayed blue, and "we put it on to all our gear" in 1969. The skull with the bolt is a later design by Bob Thomas; no source found puts it on the equipment in 1974. It appears in the Blender scene only as a later sticker, an artistic choice recorded under materials.stickers. Red above, blue below, as Stanley describes it; the bolt outline is traced from Bob Thomas\'s drawing. Evidence is from 1969; nothing found says the mark changed by 1974.',
   },
 };
+
+/** Where a block's face stands against the towers' front plane. */
+export const standoffOf = (b: ArrayBlock): number =>
+  b.curveRadius > 0 ? wall.dimensions.clusterStandoff : wall.dimensions.arrayStandoff;
 
 export const provenanceOf = (path: string): Provenance =>
   PROVENANCE[path] ?? { confidence: 'guessed', sources: ['derived'], note: 'No provenance recorded.' };
@@ -742,7 +756,7 @@ export const ARRAYS: ArrayBlock[] = [
   // ── Guitars ───────────────────────────────────────────────────────────────
   A({ id: 'weir',     channel: 'rhythmGuitar', band: 'full', cabinet: 'cab12', cols: 2, rows: 10, x: -5.45, baseY: 2.134, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Rhythm guitar — 20 × 12″' }),
   A({ id: 'garcia',   channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 7,  x: -6.60, baseY: 2.134, z: 0,    curveRadius: 0, explode: [-1.7, 0, 0.5], label: 'Lead guitar, main — 14 × 12″' }),
-  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  1.60, baseY: 0.000, z: -1.6, curveRadius: 0, explode: [ 0.6, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
+  A({ id: 'garcia-x', channel: 'leadGuitar',   band: 'full', cabinet: 'cab12', cols: 2, rows: 3,  x:  1.60, baseY: 0.000, z: -1.3, curveRadius: 0, explode: [ 0.6, 0, -0.9], label: 'Lead guitar, extension — 6 × 12″' }),
 
   // ── Piano — 15″ column in one slot, 12″ and 5″ stacked in the next ─────────
   A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x:  5.00, baseY: 2.134, z: 0, curveRadius: 0, explode: [ 1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
@@ -855,7 +869,10 @@ export const wall = {
      * separate object parked in front of an empty cage; they need to sit IN
      * the structure with their faces just clear of the steel.
      */
-    arrayStandoff: 0.16,
+    /** Speaker faces just behind the front tubes. See PROVENANCE['dimensions.arrayStandoff']. */
+    arrayStandoff: -0.06,
+    /** The curved centre cluster stands proud of the steel. */
+    clusterStandoff: 0.16,
   },
 
   structure: {
@@ -899,6 +916,25 @@ export const wall = {
     winterTower1973: { height: FT(30), liftHeight: FT(6), bayWidth: FT(5), braceSpan: FT(5), levels: 3 },
     /** Military-surplus shore-power cable. Arm-thick, and a visual feature. */
     cabling: { runDiameter: 0.050, bundleDiameter: 0.14, color: '#0E0E0E' },
+    /**
+     * Stage-lighting bars on the scaffold, audience-left side; the right is
+     * its mirror. x across and y above the deck, metres, as measured on
+     * Pechner's photograph; z in front of the front plane. Each bar is a pipe
+     * from `from` to `to` with `lamps` cans hung evenly along it, aimed down
+     * at the band. See PROVENANCE['structure.lightBars'].
+     */
+    lightBars: {
+      z: 0.35,
+      lampDiameter: IN(8),
+      lampLength: IN(13),
+      bars: [
+        { id: 'flat',     from: [-9.8, 6.9], to: [-7.3, 6.9], lamps: 5 },
+        { id: 'diagonal', from: [-6.9, 6.9], to: [-4.6, 8.6], lamps: 8 },
+        // Indoors only: outdoors the tie-dyes hang there (Oakland, Hollywood Bowl).
+        { id: 'ladder1',  from: [-9.2, 7.4], to: [-9.2, 10.2], lamps: 6, indoor: true },
+        { id: 'ladder2',  from: [-8.2, 7.4], to: [-8.2, 10.2], lamps: 6, indoor: true },
+      ] as { id: string; from: [number, number]; to: [number, number]; lamps: number; indoor?: boolean }[],
+    },
     amps: {
       /** MC-2300, W × H × D. */
       size: { w: IN(19), h: IN(10.5), d: IN(17) },

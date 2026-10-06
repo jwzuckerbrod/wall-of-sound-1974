@@ -78,7 +78,18 @@ check('deck height (m)', L.deck.y, FTM(10), 1e-9);
 check('deck width (m) = 64 + 9 + 9', L.deck.maxX - L.deck.minX, FTM(82), 1e-6);
 check('deck depth (m) = 40 + 1', L.deck.maxZ - L.deck.minZ, FTM(41), 1e-6);
 check('tower front line at the origin plane', L.towerFrontZ, 0, 1e-9);
-check('speaker faces stand proud of the steel', env.maxZ > L.towerFrontZ, true);
+// The photographs show the stacks behind the front steel and the curved
+// cluster proud of it (dimensions.arrayStandoff, clusterStandoff).
+{
+  const flatFaces = cells.filter((c) => !cfg.ARRAYS.find((b) => b.id === c.block).curveRadius).map((c) => c.position[2] + c.size.d / 2);
+  check('side stacks stand behind the front tubes', Math.max(...flatFaces) < L.towerFrontZ - scaf.TUBE_RADIUS, true);
+  check('the cluster stands proud of the steel', env.maxZ > L.towerFrontZ, true);
+  const rig = scaf.lightRig(L);
+  check('light bars hang in front of the side stacks', Math.min(...rig.lamps.map((l) => l.at[2])) - cfg.wall.structure.lightBars.lampLength > Math.max(...flatFaces), true);
+  const cl = cfg.ARRAYS.filter((b) => b.curveRadius > 0).map((b) => cfg.cabinetSize(b.cabinet).w * b.cols / 2);
+  check('no lamp hangs in front of the cluster', rig.lamps.every((l) => Math.abs(l.at[0]) > Math.max(...cl)), true);
+  console.log(`        light bars: ${rig.pipes.length} pipes, ${rig.lamps.length} lamps`);
+}
 check('cabinets do not float off the front of the towers', env.maxZ - L.towerFrontZ < 1.5, true);
 
 // Richard Pechner, P.N.E. Coliseum, Vancouver, 17 May 1974: a straight-on

@@ -432,3 +432,46 @@ default, since its shot is matched to an indoor photograph.
   not copies of Pollock's designs.
 
 **Not done:** a crowd; the browser app, which keeps its dark arena.
+
+---
+
+## 13. The stacks stand behind the steel; light bars
+
+**The stacks.** The config had every stack 0.16 m in front of the towers'
+front plane (`dimensions.arrayStandoff`), with a note that the photographs
+"plainly show stacks in front of the steel". They show the opposite. At the
+Hollywood Bowl (21 July) and on Pechner's photograph (17 May), the uprights,
+ledgers and X-braces cross **in front of** the speaker faces on both sides.
+The model was also contradicting itself, since its stacks stand on scaffold
+floors inside the towers.
+
+- The flat stacks' faces now stand 6 cm behind the front plane, just behind
+  the tubes.
+- **The curved centre cluster is the exception.** It projects forward of the
+  steel with no tubes across its face, so it keeps its 0.16 m
+  (`dimensions.clusterStandoff`).
+- The front plane gets its X-braces back. The scaffold generator had left
+  them off because they would have cut through cabinets standing in front.
+  Front ledgers and braces stop at the cluster's edges.
+- Garcia's extension, behind the kit, comes forward from 1.6 m to 1.3 m
+  behind the face so it clears the amp racks.
+- `verify` checks the side stacks stand behind the front tubes and the
+  cluster stands proud.
+
+**Light bars** (`structure.lightBars`). Measured on Pechner's photograph
+through its solved camera, each upper outer corner carries:
+
+- a horizontal bar of about 5 black can lamps, 6.9 m above the deck
+- a diagonal bar of about 8, rising toward the centre to 8.6 m
+- two vertical ladders of about 6
+
+They are clamped to the scaffold in front of the stacks and aimed down at the
+band. The right side mirrors the left. The overlay on Pechner's photograph
+lines them up.
+
+- **The ladders are indoor-only.** Outdoors (Oakland, the Hollywood Bowl) the
+  tie-dyes hang in that space, and only the flat and diagonal bars are seen.
+- Blender builds pipes, clamps, yokes and cans, unlit. The browser draws pipes
+  and cans.
+- **Not modelled:** the horizontal bar along the top front seen on some
+  dates; the lamps' make; any light from them.

@@ -108,6 +108,16 @@ const scene = {
   amps,
   ampSize: v3([wall.structure.amps.size.w, wall.structure.amps.size.h, wall.structure.amps.size.d]),
   ampsPerRack: wall.structure.amps.perRack,
+  // Stage-lighting bars (structure.lightBars).
+  lights: (() => {
+    const r = scaf.lightRig(L);
+    return {
+      pipes: r.pipes.map((t) => ({ a: v3(t.a), b: v3(t.b), indoor: t.indoor })),
+      lamps: r.lamps.map((l) => ({ at: v3(l.at), aim: v3(l.aim), indoor: l.indoor })),
+      dia: r4(wall.structure.lightBars.lampDiameter),
+      len: r4(wall.structure.lightBars.lampLength),
+    };
+  })(),
   caseNames: wall.structure.amps.caseNames,
   stickers: wall.structure.amps.stickers,
   // Stage dressing (src/scene/BandGear.tsx): feet in world height.

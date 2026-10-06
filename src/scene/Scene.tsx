@@ -10,7 +10,7 @@ import { BandGear } from './BandGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Lighting } from './Lighting';
-import { Cabling, Scaffold, ScaffoldFloors, ScaleFigures, Stage, TieDye } from './Structure';
+import { Cabling, LightBars, Scaffold, ScaffoldFloors, ScaleFigures, Stage, TieDye } from './Structure';
 import { TourCamera } from './TourCamera';
 import type { TourStop } from './tour';
 import type { View } from './views';
@@ -100,6 +100,7 @@ export function Scene({
       {showScaffold && (
         <>
           <Scaffold shadows={shadows} />
+          <LightBars shadows={shadows} />
           <ScaffoldFloors shadows={shadows} />
           <TieDye />
           <Cabling shadows={shadows} />
