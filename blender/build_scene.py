@@ -124,6 +124,8 @@ def build_materials():
     M['frame'], _ = principled('Driver frame', '#1b1b1d', 0.45, 0.6)
     M['horn'], _ = principled('Horn flare', '#161616', 0.5)
     M['steel'], _ = principled('Galvanised tube', '#a9adb1', 0.38, 1.0)
+    # The cluster's 5" strips: dull, oxidised aluminium channel (Sotheby's lot 49).
+    M['strip'], _ = principled('Cluster strip, aluminium', '#8a8e91', 0.5, 0.9)
     M['deck'] = wood('Deck ply', '#7d6548', '#4a3a28', scale=2.5, rough=0.8)
     M['plank'] = wood('Floor plank', '#8f7552', '#5a452e', scale=3.0, rough=0.8)
     M['facing'], _ = principled('Stage skirt, black', '#0b0b0c', 0.9)
@@ -150,13 +152,15 @@ def box_bm(bm, w, d, h, centre, mat):
         f.material_index = mat
 
 
-def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True):
+def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True, left=True, right=True, back=True):
     """
     One cabinet with its driver, front facing -Y, as a single mesh with
     material slots: ply, baffle, cone, cap, frame, horn.
 
     top/bottom=False leaves that board off, so two cells stacked read as one
     box holding two drivers: how the 12"s were built (Sotheby's lot 47).
+    left/right/back=False do the same across, for the cluster's aluminium
+    strips (lot 49): cells side by side read as one open-backed channel.
     """
     w, h, d, t, inset = cab['w'], cab['h'], cab['d'], cab['shell'], cab['inset']
     oz = cab.get('driverY', 0.0)
@@ -165,13 +169,16 @@ def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True):
 
     # Carcass: sides, top, bottom and back as separate boards, so the front is open.
     tt, tb = (t if top else 0.0), (t if bottom else 0.0)
-    box_bm(bm, t, d, h, (-w / 2 + t / 2, 0, 0), ply)
-    box_bm(bm, t, d, h, (w / 2 - t / 2, 0, 0), ply)
+    if left:
+        box_bm(bm, t, d, h, (-w / 2 + t / 2, 0, 0), ply)
+    if right:
+        box_bm(bm, t, d, h, (w / 2 - t / 2, 0, 0), ply)
     if top:
         box_bm(bm, w - 2 * t, d, t, (0, 0, h / 2 - t / 2), ply)
     if bottom:
         box_bm(bm, w - 2 * t, d, t, (0, 0, -h / 2 + t / 2), ply)
-    box_bm(bm, w - 2 * t, t, h - tt - tb, (0, d / 2 - t / 2, (tb - tt) / 2), ply)
+    if back:
+        box_bm(bm, w - 2 * t, t, h - tt - tb, (0, d / 2 - t / 2, (tb - tt) / 2), ply)
 
     # Baffle board, set back by `inset`, with the driver hole cut through it.
     by = -d / 2 + inset
@@ -298,16 +305,32 @@ def build(S, M):
     for cid, cab in S['cabinets'].items():
         # The 12"s come two to a box (lot 47): a lower cell without its top
         # board and an upper one without its bottom. An odd row out is whole.
+        drv = S['drivers'][cab['driver']]
+        if cab.get('strip'):
+            # A length of strip: end plates at its two ends only, no back,
+            # face and flanges all aluminium.
+            for kind, (l, r) in {'mid': (False, False), 'first': (True, False),
+                                 'last': (False, True), 'single': (True, True)}.items():
+                me = cabinet_prototype(cid, cab, drv, slots, left=l, right=r, back=False)
+                for k in slot_order:
+                    me.materials.append(M['strip'] if k in ('ply', 'baffle') else M[k])
+                protos[cid, kind] = me
+            continue
         kinds = {'whole': (True, True)}
         if cid == 'cab12':
             kinds.update(lower=(False, True), upper=(True, False))
         for kind, (top, bottom) in kinds.items():
-            me = cabinet_prototype(cid, cab, S['drivers'][cab['driver']], slots, top, bottom)
+            me = cabinet_prototype(cid, cab, drv, slots, top, bottom)
             for k in slot_order:
                 me.materials.append(M[k])
             protos[cid, kind] = me
 
     def pair(c):
+        n = S['cabinets'][c['cabinet']].get('strip', 0)
+        if n:
+            k = c['col'] % n
+            first, last = k == 0, k == n - 1 or c['col'] == c.get('cols', 0) - 1
+            return 'single' if first and last else 'first' if first else 'last' if last else 'mid'
         if c['cabinet'] != 'cab12' or (c['row'] == c['rows'] - 1 and c['rows'] % 2):
             return 'whole'
         return 'lower' if c['row'] % 2 == 0 else 'upper'

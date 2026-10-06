@@ -194,6 +194,8 @@ export function shellColor(index: number, out: THREE.Color, cabinet?: CabinetId)
   // The 5-inch and horn sections were not discrete boxes but one big black
   // baffle board drilled with cutouts, which is exactly what the close-up
   // photographs show. So those never take the bare-plywood finish.
+  // The cluster's aluminium strips (Sotheby's lot 49) are bare dull metal.
+  if (cabinet === 'strip5') return out.set('#8f9396');
   const alwaysBlack = cabinet === 'panel5' || cabinet === 'panelHF';
   const r = ((index * 2654435761) % 1013) / 1013;
   const painted = alwaysBlack || r < m.blackFinishRatio;

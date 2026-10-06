@@ -177,10 +177,10 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 | −6.60 | **Garcia** main (12″ × 14) | P1 | 2.13 → 4.45 |
 | −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 5.44 |
 | −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 10.36 |
-| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | deck | 0 → 3.12 |
-| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P2 | 3.91 → 6.89 |
+| −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×36, 7 horns | deck | 0 → 2.98 |
+| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×132 in aluminium strips (4 rows of 33), 20 horns | P2 | 3.91 → 6.61 |
 | +1.60 | **Garcia extension** (12″ × 6), set back 1.6 m, behind the kit beside Keith | deck | 0 → 0.99 |
-| +3.04 | **Vocal fill RIGHT** | deck | 0 → 3.12 |
+| +3.04 | **Vocal fill RIGHT** | deck | 0 → 2.98 |
 | +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 10.36 |
 | +5.00 | **Piano** lows (15″ × 9) | P1 | 2.13 → 7.96 |
 | +5.95 | **Piano** mids (12″ ×12) with highs (5″ ×36) above | P1 | 2.13 → 4.71 |

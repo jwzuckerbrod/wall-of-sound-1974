@@ -312,6 +312,11 @@ export const PROVENANCE: Record<string, Provenance> = {
   },
 
   'arrays.kickCount': { confidence: 'confirmed', sources: ['deadsources74'], note: 'Sixteen 15-inch speakers in a column.' },
+  'arrays.clusterStrips': {
+    confidence: 'estimated',
+    sources: ['sothebys', 'photos'],
+    note: 'The cluster\'s 5"s in curved aluminium strips, as Sotheby\'s 2021 lot 49, which Steve Parish says replaced the first cluster\'s individual plywood cells. The Hollywood Bowl photographs of 21 July 1974 show strips already in use: four rows, the holes a third of the 12" cabinets\' spacing, the band as wide as the 12" section. So 4 rows of 33 at lot 49\'s 5.3 in spacing, each row three lengths of 11 (lot 49\'s hold about 13). That is 132 drivers, 12 more than the cells had, so the vocal fills give up a row of 6 each: the vocals\' 5" total and the 641 are unchanged. Pechner\'s 17 May photograph shows a taller 5" band, probably the plywood cells.',
+  },
   'arrays.kickPosition': {
     confidence: 'guessed',
     sources: ['photos', 'pechner', 'derived'],
@@ -578,7 +583,7 @@ export const CUBE_ROOT_2 = Math.cbrt(2); // 1.259921...
  */
 export const useCubeRootRule = false;
 
-export type CabinetId = 'cab15' | 'cab12' | 'cab12x2' | 'panel5' | 'panelHF';
+export type CabinetId = 'cab15' | 'cab12' | 'cab12x2' | 'panel5' | 'strip5' | 'panelHF';
 
 /**
  * The only cabinet from the Wall that anyone has measured in hand: a vocal fill
@@ -617,6 +622,8 @@ export interface Cabinet {
   baffleInset: number;
   /** Driver centre above (+) or below (−) the middle of the face. Default 0. */
   driverOffsetY?: number;
+  /** For a strip: how many cells make one length of it. */
+  strip?: number;
 }
 
 export const CABINETS: Record<CabinetId, Cabinet> = {
@@ -632,6 +639,10 @@ export const CABINETS: Record<CabinetId, Cabinet> = {
   // Rows 5.5 in high: the height of the cluster's aluminium 5" enclosures
   // (lot 49), and the row pitch Pechner's photo gives the cluster's 5" band.
   panel5: { id: 'panel5', kind: 'panel', driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: IN(5.5), pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
+  // The centre cluster's 5"s in curved aluminium channels, as Sotheby's 2021
+  // lot 49: 5.5 high × 3.5 deep, holes 69/13 in apart. Three lengths of 11 make
+  // a row as wide as the 12" section below. See PROVENANCE['arrays.clusterStrips'].
+  strip5: { id: 'strip5', kind: 'panel', driver: 'jbl5', depth: IN(3.5), widthExplicit: IN(69 / 13), heightExplicit: IN(5.5), pitch: IN(69 / 13), shellThickness: IN(0.125), baffleInset: IN(0.1), strip: 11 },
   panelHF: { id: 'panelHF', kind: 'panel', driver: 'evHorn', depth: 0.250, widthExplicit: 0.225, heightExplicit: 0.160, pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
 };
 
@@ -702,17 +713,17 @@ export const ARRAYS: ArrayBlock[] = [
   // bottom band of each tower snaps to a floor.
 
   // ── Vocals — curved centre cluster on P1, hung clear over the band ────────
-  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.731, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
-  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 20, rows: 6, x:  0.00, baseY: 5.893, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 120 × 5″' }),
+  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.452, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
+  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'strip5',  cols: 33, rows: 4, x:  0.00, baseY: 5.893, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 132 × 5″ in aluminium strips' }),
   A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 3.912, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
   // Vocal fill towers flanking the cluster, on the deck — the role of the one
   // cabinet anybody has measured.
   A({ id: 'voc-lmL',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x: -3.04, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-0.9, 0.2, 0.7], label: 'Vocal fill, left — 18 × 12″' }),
-  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x: -3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 42 × 5″' }),
-  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 2.959, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
+  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 6, x: -3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 36 × 5″' }),
+  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 2.819, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
   A({ id: 'voc-lmR',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x:  3.04, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 0.9, 0.2, 0.7], label: 'Vocal fill, right — 18 × 12″' }),
-  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x:  3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 42 × 5″' }),
-  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 2.959, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
+  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 6, x:  3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 36 × 5″' }),
+  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 2.819, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
   A({ id: 'voc-loL',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x: -4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-1.3, 0.0, 0.6], label: 'Vocal lows, left — 16 × 15″' }),
   A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x:  4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
 

@@ -367,3 +367,39 @@ one free slot in the run, at x = −7.35, between the bass and Garcia's main
 column. That place is a guess (`arrays.kickPosition`). It keeps the count at
 641 and fits the heavier left side the wide photographs show, but nothing yet
 places it. §6's "4 × 4 block" item is closed.
+
+---
+
+## 11. The cluster's 5" band in aluminium strips
+
+The Hollywood Bowl photographs (§10) show the cluster's 5" band close up enough
+to count, at about 8 px a hole.
+
+- **Four rows** of holes, butted together, on top of the 12" section.
+- **Hole spacing a third of the 12" cabinets' spacing**: 5.3" against 16", which
+  is lot 49's spacing (69 in for 13 holes) against lot 47's width.
+- **The band is as wide as the 12" section.** At 5.3", that's 33 to a row
+  (33 × 5.3 in = 4.44 m, against the 12"s' 4.47 m).
+- The band is light grey metal with dark holes, not a black baffle.
+
+**Now:** the `voc-um` block is a new cabinet type, `strip5` (lot 49:
+5.5 × 3.5 in in section, holes 69/13 in apart), **33 × 4 = 132 drivers**, on the
+cluster's arc. In Blender each row is three lengths of 11, with end plates only
+at the ends of each length, open backs, and a dull aluminium face. In the
+browser the cells are coloured aluminium.
+
+**Against the inventory:** the cells were 20 × 6 = 120. The 12 extra come from
+the vocal fills (`voc-umL`, `voc-umR`), 7 rows to 6 each: the same channel and
+the same band, so the vocals' 5" total and the 641 hold. The split between
+cluster and fills was always the reconstruction's own.
+
+**Caveats:**
+
+- Lot 49's strips hold about 13 holes, not 11. Three lengths of 13 would make
+  a row 5.25 m long, wider than the 12" section, which the photographs don't
+  show.
+- Pechner's 17 May photograph shows a taller 5" band (about 2.9 ft, against 1.8
+  now). That is probably the first cluster's plywood cells. The model now shows
+  the cluster as it was by late July.
+- The band now tops out lower; the cluster's mid-height is 17.3 ft against the
+  photo's 16.2, within the 3 ft check.

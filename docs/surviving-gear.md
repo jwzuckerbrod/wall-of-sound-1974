@@ -90,10 +90,10 @@ racks of 4). See *What to decide*.
    photograph suggests a 30"-high face, which would stack 16 high to 40 ft,
    taller than the tower. See `docs/qa-findings.md` §8.
 2. **12" cabinet**: 16 × 13 × 22 in a driver, rows paired into 2 × 12" boxes.
-3. **Vocal cluster**: individual cells, now 5.5" high. Their 8.9" width is kept:
-   with 20 to a row it keeps the 5" band as wide as the 12" section below it, as
-   every photograph shows. Lot 49's 5.3" spacing belongs to the later aluminium
-   strips, and would need more 5"s to a row than the inventory allows.
+3. **Vocal cluster**: first kept as individual cells, 5.5" high; then, on the
+   Hollywood Bowl photographs of 21 July 1974 (`docs/qa-findings.md` §11),
+   changed to lot 49's **aluminium strips**: 4 rows of 33 at 5.3", three lengths
+   of 11 to a row, 132 drivers. The vocal fills give up 12 to keep the total.
 4. **Amp count**: 48, with Parish's "over 70" noted in the config.
 5. **Cases**: in the Blender scene, the amps stand in open-fronted rack cases
    (racks are what the 1974 photographs show on stage): mostly orange, one white,
