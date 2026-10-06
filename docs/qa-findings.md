@@ -193,7 +193,7 @@ Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" abo
 - The photo's cluster is shallower than the model's: its 12" rows pitch at about 15", against the
   24" cabinet rows used here. At this resolution a 12" cone is about 12 px across, so this wants a
   better photo before the cabinet is changed.
-- The photo shows little under the cluster besides the kit. The 4 × 4 bass-drum block is still in the model,
+- (Closed in §10: the block is gone.) The photo shows little under the cluster besides the kit. The 4 × 4 bass-drum block was still in the model,
   behind the cluster, because the 16 × 15" count is confirmed and nothing yet says where else they went.
 - Channel-by-channel placement is still the reconstruction's own. Only the heights are photo-checked.
 - The Cow Palace debut (23 March 1974) had a flat centre cluster, not the cylinder. The model shows the
@@ -336,3 +336,34 @@ his right hand, beyond the grand as seen from the audience, as at Oakland.
 **Still open:** this is the band on 17 May. Weir and Lesh changed places on
 other dates, and on 25 May and 16 June a grand stood at the far right instead.
 Nothing from July to October shows the whole band.
+
+---
+
+## 10. Hollywood Bowl, 21 July 1974, and the bass-drum block
+
+Two colour photographs of the Hollywood Bowl show, before the show, with no
+photographer known (`.shots/reference/unsourced-hollywoodbowl-1974-07-21-a.png`,
+`-b.webp`). This is the first full view of the Wall **inside the target window**.
+
+- **Under the cluster: open.** Only the kit, Garcia's natural-wood 2 × 12"
+  cabinet and dark backing, the same as 17 May, 25 May, 8 June, 16 June and
+  31 July. That settles it.
+- **The grand lies across the stage just right of the kit**, under a white
+  cover, as on Pechner's photograph (§9). A second keyboard area is at the far
+  right under two white umbrellas, with what looks like another grand.
+- **MC 2300 racks stand on the deck**, right of centre: silver-framed, blue
+  meters.
+- **The cluster's 5" band** reads as rows of curved strips with small, closely
+  spaced holes, like the aluminium enclosures of Sotheby's lot 49, more than 20
+  to a row. If so, the strips were in use by late July. Not applied: the 5"
+  allocation would have to change (`docs/surviving-gear.md`, decision 3).
+- Tie-dyes hang high on the scaffold, as at Oakland, and wooden crates numbered
+  "12" stand at either end of the stage.
+
+**The bass-drum block is gone from under the cluster.** Its sixteen 15"s are
+confirmed by the inventory and described as standing "in a column"
+(`arrays.kickCount`). They are now a single column of 16 on the deck, in the
+one free slot in the run, at x = −7.35, between the bass and Garcia's main
+column. That place is a guess (`arrays.kickPosition`). It keeps the count at
+641 and fits the heavier left side the wide photographs show, but nothing yet
+places it. §6's "4 × 4 block" item is closed.

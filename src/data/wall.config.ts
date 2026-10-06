@@ -159,7 +159,7 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   photos: {
     title:
-      'Photographic record — Richard Pechner (rpechner.com), Ken West, the 1974 galleries at vintag.es and designyoutrust.com, dead.net 1974 archive',
+      'Photographic record — Richard Pechner (rpechner.com), Kirk West, the 1974 galleries at vintag.es and designyoutrust.com, dead.net 1974 archive',
     kind: 'photographic',
   },
   derived: {
@@ -312,6 +312,11 @@ export const PROVENANCE: Record<string, Provenance> = {
   },
 
   'arrays.kickCount': { confidence: 'confirmed', sources: ['deadsources74'], note: 'Sixteen 15-inch speakers in a column.' },
+  'arrays.kickPosition': {
+    confidence: 'guessed',
+    sources: ['photos', 'pechner', 'derived'],
+    note: 'Where the bass-drum column stood is not known. It is not under the cluster, where the model had a 4 × 4 block: every photograph found shows that space open, from 17 May to 31 July 1974, Hollywood Bowl on 21 July included. Stood here as the single column the spec sheet describes, in the only free slot in the run, on the deck at the audience\'s left between the bass and Garcia\'s main column. Its 16 drivers keep the inventory at 641.',
+  },
   'arrays.guitarCount': {
     confidence: 'confirmed',
     sources: ['deadsources74'],
@@ -712,7 +717,10 @@ export const ARRAYS: ArrayBlock[] = [
   A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x:  4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
 
   // ── Bass drum — deck level, on the centreline, tucked under the cluster ────
-  A({ id: 'kick',     channel: 'kick',   band: 'full',     cabinet: 'cab15',   cols: 4,  rows: 4, x:  0.00, baseY: 0.000, z: -0.9, curveRadius: 0, explode: [0, 0, -1.6], label: 'Bass drum — 16 × 15″' }),
+  // Not under the cluster: every photograph shows that space open (qa-findings
+  // §7, §10). Sixteen 15"s "in a column" (arrays.kickCount), stood in the one
+  // free slot. Where it really stood is not known: PROVENANCE['arrays.kickPosition'].
+  A({ id: 'kick',     channel: 'kick',   band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 16, x: -7.35, baseY: 0.000, z: 0, curveRadius: 0, explode: [-2.3, 0, 0.6], label: 'Bass drum — 16 × 15″' }),
 
   // ── Bass, quadraphonic — sixteen a side, on P1 ───────────────────────────
   A({ id: 'bass1',    channel: 'bass1',  band: 'full',     cabinet: 'cab15',   cols: 1,  rows: 8, x: -8.54, baseY: 2.134, z: 0, curveRadius: 0, explode: [-2.5, 0, 0.4], label: 'Bass, E string — 8 × 15″' }),

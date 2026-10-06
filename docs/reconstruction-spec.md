@@ -173,12 +173,12 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 |---|---|---|---|
 | −9.42 | Drums stereo **LEFT** — 12″ ×12, then 5″ ×40, then 10 horns | P2 | 3.91 → 7.33 |
 | −8.54 / −7.93 | Bass quad **ch.1 / ch.2** (15″ × 8 each) | P1 | 2.13 → 7.31 |
+| −7.35 | **Bass drum** (15″ × 16, one column; where it stood is a guess) | deck | 0 → 10.36 |
 | −6.60 | **Garcia** main (12″ × 14) | P1 | 2.13 → 4.45 |
 | −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 5.44 |
 | −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 10.36 |
 | −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×42, 7 horns | deck | 0 → 3.12 |
 | 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×120, 20 horns | P2 | 3.91 → 6.89 |
-| 0 | **Bass drum** (15″ × 16, 4 × 4), at deck level behind the cluster | deck | 0 → 2.59 |
 | +1.60 | **Garcia extension** (12″ × 6), set back 1.6 m, behind the kit beside Keith | deck | 0 → 0.99 |
 | +3.04 | **Vocal fill RIGHT** | deck | 0 → 3.12 |
 | +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 10.36 |
@@ -356,7 +356,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 | `mc2300` | Wikipedia, *McIntosh MC-2300* — https://en.wikipedia.org/wiki/McIntosh_MC-2300 |
 | `syf` | Wikipedia, *Steal Your Face* — https://en.wikipedia.org/wiki/Steal_Your_Face |
 | `bear` | Owsley Stanley, *GD Logo* — how the 1969 equipment stencil was designed, cut and sprayed, with a photograph of a stencilled toolbox. http://www.thebear.org/GDLogo.html (archived: https://web.archive.org/web/2012/http://www.thebear.org/GDLogo.html) |
-| `photos` | Photographic record: Richard Pechner (rpechner.com); Ken West; the 1974 galleries at vintag.es and designyoutrust.com; dead.net 1974 archive. Used for massing, materials, driver exposure and structure — not for numbers. |
+| `photos` | Photographic record: Richard Pechner (rpechner.com); Kirk West; the 1974 galleries at vintag.es and designyoutrust.com; dead.net 1974 archive. Used for massing, materials, driver exposure and structure — not for numbers. |
 
 **Explicitly not used as a source for any number:** Grokipedia's entry, which asserts "four towering stacks at 45°" and a "15 ms delay" that no other source supports. Noted here only so the omission is deliberate and on the record.
 

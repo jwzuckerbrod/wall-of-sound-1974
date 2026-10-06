@@ -34,7 +34,6 @@
 </g>
 <g stroke="#0d0f12" stroke-width="1">
 <rect x="698.2" y="465.8" width="47.1" height="57.5" fill="#E8543F" opacity="0.55" rx="2"><title>Lead guitar, extension — 6 × 12″</title></rect>
-<rect x="571.5" y="372.9" width="114.9" height="150.3" fill="#6B7A8F" opacity="0.55" rx="2"><title>Bass drum — 16 × 15″</title></rect>
 <rect x="498.5" y="123.5" width="261.0" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal highs, centre — 20 horns</title></rect>
 <rect x="498.5" y="132.8" width="261.0" height="48.6" fill="#F4C95D" opacity="0.75" rx="2"><title>Vocal upper mids, centre — 120 × 5″</title></rect>
 <rect x="499.3" y="181.4" width="259.3" height="114.9" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lower mids, centre — 66 × 12″</title></rect>
@@ -46,6 +45,7 @@
 <rect x="759.6" y="342.3" width="91.3" height="9.3" fill="#F4C95D" opacity="0.50" rx="2"><title>Vocal fill highs, right — 7 horns</title></rect>
 <rect x="357.1" y="-77.8" width="28.7" height="601.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lows, left — 16 × 15″</title></rect>
 <rect x="872.1" y="-77.8" width="28.7" height="601.1" fill="#F4C95D" opacity="1.00" rx="2"><title>Vocal lows, right — 16 × 15″</title></rect>
+<rect x="188.3" y="-77.8" width="28.7" height="601.1" fill="#6B7A8F" opacity="1.00" rx="2"><title>Bass drum — 16 × 15″</title></rect>
 <rect x="119.3" y="98.9" width="28.7" height="300.5" fill="#14612C" opacity="1.00" rx="2"><title>Bass, E string — 8 × 15″</title></rect>
 <rect x="154.7" y="98.9" width="28.7" height="300.5" fill="#2FA14C" opacity="1.00" rx="2"><title>Bass, A string — 8 × 15″</title></rect>
 <rect x="1017.1" y="98.9" width="28.7" height="300.5" fill="#63C97C" opacity="1.00" rx="2"><title>Bass, D string — 8 × 15″</title></rect>
