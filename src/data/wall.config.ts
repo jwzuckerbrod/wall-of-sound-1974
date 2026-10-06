@@ -131,8 +131,8 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     kind: 'photographic',
   },
   sothebys: {
-    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends" (2021), lot 43: "Wall of Sound | One of the Dead\'s first MC 2300\'s", serial 1Y421, on its original orange Anvil rolling road case. Steve Parish: used in the Wall for the vocal mid-range, later for Garcia\'s extension speakers. Measured 10.5 × 19 × 17 in. Tape on the front dated 5/1/93',
-    url: 'https://www.sothebys.com/en/buy/auction/2021/from-the-vault-property-from-the-grateful-dead-and-friends/wall-of-sound-one-of-the-deads-first-mc-2300s',
+    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends", New York, closed 14 October 2021. Lots 34–50 are Wall of Sound equipment: eight McIntosh MC 2300s with their cases, two ZERO amp cases, six speaker cabinets and the centre cluster\'s aluminium 5-inch enclosures, most with a statement from Steve Parish. Catalogued lot by lot in docs/surviving-gear.md',
+    url: 'https://www.sothebys.com/en/buy/auction/2021/from-the-vault-property-from-the-grateful-dead-and-friends',
     kind: 'primary',
   },
   bear: {
@@ -278,8 +278,8 @@ export const PROVENANCE: Record<string, Provenance> = {
   },
   'cabinets.absoluteSizes': {
     confidence: 'estimated',
-    sources: ['anderson', 'derived', 'photos'],
-    note: 'The 2^(1/3) ratio is documented; absolute sizes are not, EXCEPT for one surviving cabinet Anderson bought at Sotheby\'s and measured: 31 × 22.5 × 24 in, 64 lb, holding two 12-inch JBLs and two small drivers — a vocal fill, stamped JUL 17 1974 with "G. DEAD" written on the cone. That is the only hard cabinet measurement in the whole record and it anchors cab12x2.',
+    sources: ['anderson', 'sothebys', 'pechner', 'derived'],
+    note: 'Sizes from surviving cabinets (docs/surviving-gear.md). 15": 19.5 W × 25.5 H × 29.5 D in, Sotheby\'s 2021 lot 46, read height × width × depth as Sotheby\'s lists the amplifiers; the 25.5" height matches the 24.5" row pitch measured on Pechner\'s photograph and makes the 16-high columns 34 ft against the photo\'s ~35. Lot 50 ("ca. 1974") agrees on the three numbers but its photograph suggests a taller face, which would make those columns taller than the tower, so it is not followed. The driver sits low on the baffle, as on lot 50 (lot 46 has it high). 12": lot 47, a 2 × 12" box of 16 × 26 × 22 in with the drivers stacked; each cell is half of it. 5": rows 5.5 in high, the height of the cluster\'s aluminium enclosures (lot 49) and the photo\'s row pitch; the 8.9 in width is kept so the cluster\'s 5" band stays as wide as its 12" section, as in the photographs. Also, Anderson measured a surviving vocal-fill cabinet, 31 × 22.5 × 24 in, 64 lb, two 12" JBLs and two small drivers, stamped JUL 17 1974: it anchors cab12x2.',
   },
   'cabinets.construction': {
     confidence: 'confirmed',
@@ -610,15 +610,23 @@ export interface Cabinet {
   shellThickness: number;
   /** How far the black baffle sits behind the cabinet's front edge. */
   baffleInset: number;
+  /** Driver centre above (+) or below (−) the middle of the face. Default 0. */
+  driverOffsetY?: number;
 }
 
 export const CABINETS: Record<CabinetId, Cabinet> = {
-  cab15: { id: 'cab15', kind: 'box', driver: 'jbl15', depth: IN(22.5), widthExplicit: IN(24), heightExplicit: IN(24), shellThickness: IN(0.75), baffleInset: IN(0.5) },
-  // cab12's explicit size is half of the measured cabinet's width, at its measured height and depth.
-  cab12: { id: 'cab12', kind: 'box', driver: 'jbl12', depth: IN(22.5), widthExplicit: IN(15.5), heightExplicit: IN(24), shellThickness: IN(0.75), baffleInset: IN(0.5) },
+  // Sotheby's 2021 lot 46, read height × width × depth as Sotheby's lists the
+  // amplifiers: 25.5 × 19.5 × 29.5 in. The 15" sits low on the baffle, as on
+  // lot 50. See PROVENANCE['cabinets.absoluteSizes'] and docs/surviving-gear.md.
+  cab15: { id: 'cab15', kind: 'box', driver: 'jbl15', depth: IN(29.5), widthExplicit: IN(19.5), heightExplicit: IN(25.5), shellThickness: IN(0.75), baffleInset: IN(0.5), driverOffsetY: -IN(4) },
+  // One driver's share of lot 47, a 2 × 12" box of 16 × 26 × 22 in with the two
+  // drivers stacked: each cell is 16 wide, 13 high. Rows pair up into boxes.
+  cab12: { id: 'cab12', kind: 'box', driver: 'jbl12', depth: IN(22), widthExplicit: IN(16), heightExplicit: IN(13), shellThickness: IN(0.75), baffleInset: IN(0.5) },
   // The measured cabinet itself — used for the vocal fills, at true size.
   cab12x2: { id: 'cab12x2', kind: 'box', driver: 'jbl12', depth: IN(22.5), widthExplicit: IN(31), heightExplicit: IN(24), shellThickness: IN(0.75), baffleInset: IN(0.5) },
-  panel5: { id: 'panel5', kind: 'panel', driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: 0.190, pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
+  // Rows 5.5 in high: the height of the cluster's aluminium 5" enclosures
+  // (lot 49), and the row pitch Pechner's photo gives the cluster's 5" band.
+  panel5: { id: 'panel5', kind: 'panel', driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: IN(5.5), pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
   panelHF: { id: 'panelHF', kind: 'panel', driver: 'evHorn', depth: 0.250, widthExplicit: 0.225, heightExplicit: 0.160, pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
 };
 
@@ -660,8 +668,11 @@ const A = (b: ArrayBlock) => b;
 
 /**
  * Cabinet module sizes these positions are packed against (useCubeRootRule = false):
- *   cab15   0.610 w × 0.610 h    cab12   0.394 w × 0.610 h
- *   panel5  0.225 w × 0.190 h    panelHF 0.225 w × 0.160 h
+ *   cab15   0.495 w × 0.648 h    cab12   0.406 w × 0.330 h
+ *   panel5  0.225 w × 0.140 h    panelHF 0.225 w × 0.160 h
+ * (The sizes from the surviving cabinets, Sotheby's 2021: docs/surviving-gear.md.
+ * The x positions predate them and were packed against 24"-wide 15" cabinets,
+ * so the 15" columns now stand a little apart.)
  *
  * Blocks sit side by side along the run. The packed envelope comes to about
  * 62 ft wide — against Anderson's documented sixty feet end to end, within 4% —
@@ -685,17 +696,17 @@ export const ARRAYS: ArrayBlock[] = [
   // bottom band of each tower snaps to a floor.
 
   // ── Vocals — curved centre cluster on P1, hung clear over the band ────────
-  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.931, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
-  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 20, rows: 6, x:  0.00, baseY: 5.791, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 120 × 5″' }),
-  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 2.134, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
+  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.731, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
+  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 20, rows: 6, x:  0.00, baseY: 5.893, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 120 × 5″' }),
+  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 3.912, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
   // Vocal fill towers flanking the cluster, on the deck — the role of the one
   // cabinet anybody has measured.
   A({ id: 'voc-lmL',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x: -3.04, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-0.9, 0.2, 0.7], label: 'Vocal fill, left — 18 × 12″' }),
-  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x: -3.04, baseY: 3.658, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 42 × 5″' }),
-  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 4.988, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
+  A({ id: 'voc-umL',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x: -3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [-0.9, 0.5, 0.7], label: 'Vocal fill mids, left — 42 × 5″' }),
+  A({ id: 'voc-hfL',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x: -3.04, baseY: 2.959, z: 0, curveRadius: 0,   explode: [-0.9, 0.8, 0.7], label: 'Vocal fill highs, left — 7 horns' }),
   A({ id: 'voc-lmR',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x:  3.04, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 0.9, 0.2, 0.7], label: 'Vocal fill, right — 18 × 12″' }),
-  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x:  3.04, baseY: 3.658, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 42 × 5″' }),
-  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 4.988, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
+  A({ id: 'voc-umR',  channel: 'vocals', band: 'upperMid', cabinet: 'panel5',  cols: 6,  rows: 7, x:  3.04, baseY: 1.981, z: 0, curveRadius: 0,   explode: [ 0.9, 0.5, 0.7], label: 'Vocal fill mids, right — 42 × 5″' }),
+  A({ id: 'voc-hfR',  channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 7,  rows: 1, x:  3.04, baseY: 2.959, z: 0, curveRadius: 0,   explode: [ 0.9, 0.8, 0.7], label: 'Vocal fill highs, right — 7 horns' }),
   A({ id: 'voc-loL',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x: -4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-1.3, 0.0, 0.6], label: 'Vocal lows, left — 16 × 15″' }),
   A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x:  4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
 
@@ -716,15 +727,15 @@ export const ARRAYS: ArrayBlock[] = [
   // ── Piano — 15″ column in one slot, 12″ and 5″ stacked in the next ─────────
   A({ id: 'pno-lo',   channel: 'piano', band: 'low',      cabinet: 'cab15',  cols: 1, rows: 9, x: -6.15, baseY: 2.134, z: 0, curveRadius: 0, explode: [-1.5, 0.0, 0.5], label: 'Piano lows — 9 × 15″' }),
   A({ id: 'pno-lm',   channel: 'piano', band: 'lowerMid', cabinet: 'cab12',  cols: 3, rows: 4, x: -7.04, baseY: 2.134, z: 0, curveRadius: 0, explode: [-1.8, 0.0, 0.5], label: 'Piano mids — 12 × 12″' }),
-  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x: -7.04, baseY: 4.572, z: 0, curveRadius: 0, explode: [-1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
+  A({ id: 'pno-um',   channel: 'piano', band: 'upperMid', cabinet: 'panel5', cols: 4, rows: 9, x: -7.04, baseY: 3.455, z: 0, curveRadius: 0, explode: [-1.8, 0.4, 0.5], label: 'Piano highs — 36 × 5″' }),
 
   // ── Drums & cymbals — stereo, on P2: the tall flanks of the skyline ───────
   A({ id: 'drm-lmL',  channel: 'drumsL', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x: -9.42, baseY: 3.912, z: 0, curveRadius: 0, explode: [-3.0, 0.0, 0.5], label: 'Drums lower mids, left — 12 × 12″' }),
-  A({ id: 'drm-umL',  channel: 'drumsL', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x: -9.42, baseY: 7.569, z: 0, curveRadius: 0, explode: [-3.0, 0.4, 0.5], label: 'Drums upper mids, left — 40 × 5″' }),
-  A({ id: 'drm-hfL',  channel: 'drumsL', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x: -9.42, baseY: 9.089, z: 0, curveRadius: 0, explode: [-3.0, 0.8, 0.5], label: 'Drums highs, left — 10 horns' }),
+  A({ id: 'drm-umL',  channel: 'drumsL', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x: -9.42, baseY: 5.893, z: 0, curveRadius: 0, explode: [-3.0, 0.4, 0.5], label: 'Drums upper mids, left — 40 × 5″' }),
+  A({ id: 'drm-hfL',  channel: 'drumsL', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x: -9.42, baseY: 7.011, z: 0, curveRadius: 0, explode: [-3.0, 0.8, 0.5], label: 'Drums highs, left — 10 horns' }),
   A({ id: 'drm-lmR',  channel: 'drumsR', band: 'lowerMid', cabinet: 'cab12',  cols: 2, rows: 6, x:  8.42, baseY: 3.912, z: 0, curveRadius: 0, explode: [ 3.0, 0.0, 0.5], label: 'Drums lower mids, right — 12 × 12″' }),
-  A({ id: 'drm-umR',  channel: 'drumsR', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x:  8.42, baseY: 7.569, z: 0, curveRadius: 0, explode: [ 3.0, 0.4, 0.5], label: 'Drums upper mids, right — 40 × 5″' }),
-  A({ id: 'drm-hfR',  channel: 'drumsR', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x:  8.42, baseY: 9.089, z: 0, curveRadius: 0, explode: [ 3.0, 0.8, 0.5], label: 'Drums highs, right — 10 horns' }),
+  A({ id: 'drm-umR',  channel: 'drumsR', band: 'upperMid', cabinet: 'panel5', cols: 5, rows: 8, x:  8.42, baseY: 5.893, z: 0, curveRadius: 0, explode: [ 3.0, 0.4, 0.5], label: 'Drums upper mids, right — 40 × 5″' }),
+  A({ id: 'drm-hfR',  channel: 'drumsR', band: 'high',     cabinet: 'panelHF',cols: 5, rows: 2, x:  8.42, baseY: 7.011, z: 0, curveRadius: 0, explode: [ 3.0, 0.8, 0.5], label: 'Drums highs, right — 10 horns' }),
 ];
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -872,13 +883,20 @@ export const wall = {
       /** MC-2300, W × H × D. */
       size: { w: IN(19), h: IN(10.5), d: IN(17) },
       perRack: 4,
+      /**
+       * 48 amps. Steve Parish puts "over 70 Mac 2300 amps powering the Wall"
+       * (Sotheby's 2021, lots 34-36); that may count spares and the amps used
+       * for the band's own rigs. Kept at 48 until something splits the count.
+       */
       rackCount: 12,
       /**
        * The amps were individually named and numbered, and the names were on
        * the road cases. Surviving examples: "M-14" (Garcia's), "M-5" (Sotheby's
-       * lot 43), "Budman", "Ketchup", "Mustard". Stencilled onto the cases in the model.
+       * lot 43), "Budman", "Ketchup", "Mustard". The "K" numbers are stencilled
+       * inventory numbers, "from a trip to Europe in 1974" (lot 37). Stencilled
+       * onto the cases in the model.
        */
-      caseNames: ['Budman', 'Ketchup', 'Mustard', 'M-14', 'M-5'],
+      caseNames: ['Budman', 'Ketchup', 'Mustard', 'M-14', 'M-5', 'K14A', 'K18A', 'K27A'],
       /** Later stickers on some cases and amps. See PROVENANCE['materials.stickers']. */
       stickers: true,
       /** Amps sit at deck level behind the arrays. Exact distribution undocumented. */

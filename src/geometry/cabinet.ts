@@ -152,7 +152,7 @@ function driverLayout(id: CabinetId): { driver: Driver; x: number; y: number }[]
       { driver: small, x: small.frameDia * 0.7, y: h * 0.33 },
     ];
   }
-  return [{ driver: d, x: 0, y: 0 }];
+  return [{ driver: d, x: 0, y: CABINETS[id].driverOffsetY ?? 0 }];
 }
 
 const built = new Map<CabinetId, CabinetGeometry>();

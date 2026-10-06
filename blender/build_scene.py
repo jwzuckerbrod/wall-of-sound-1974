@@ -150,31 +150,39 @@ def box_bm(bm, w, d, h, centre, mat):
         f.material_index = mat
 
 
-def cabinet_prototype(cid, cab, drv, slots):
+def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True):
     """
     One cabinet with its driver, front facing -Y, as a single mesh with
     material slots: ply, baffle, cone, cap, frame, horn.
+
+    top/bottom=False leaves that board off, so two cells stacked read as one
+    box holding two drivers: how the 12"s were built (Sotheby's lot 47).
     """
     w, h, d, t, inset = cab['w'], cab['h'], cab['d'], cab['shell'], cab['inset']
+    oz = cab.get('driverY', 0.0)
     bm = bmesh.new()
     ply, baffle, cone, cap, frame, horn = (slots[k] for k in ('ply', 'baffle', 'cone', 'cap', 'frame', 'horn'))
 
     # Carcass: sides, top, bottom and back as separate boards, so the front is open.
+    tt, tb = (t if top else 0.0), (t if bottom else 0.0)
     box_bm(bm, t, d, h, (-w / 2 + t / 2, 0, 0), ply)
     box_bm(bm, t, d, h, (w / 2 - t / 2, 0, 0), ply)
-    box_bm(bm, w - 2 * t, d, t, (0, 0, h / 2 - t / 2), ply)
-    box_bm(bm, w - 2 * t, d, t, (0, 0, -h / 2 + t / 2), ply)
-    box_bm(bm, w - 2 * t, t, h - 2 * t, (0, d / 2 - t / 2, 0), ply)
+    if top:
+        box_bm(bm, w - 2 * t, d, t, (0, 0, h / 2 - t / 2), ply)
+    if bottom:
+        box_bm(bm, w - 2 * t, d, t, (0, 0, -h / 2 + t / 2), ply)
+    box_bm(bm, w - 2 * t, t, h - tt - tb, (0, d / 2 - t / 2, (tb - tt) / 2), ply)
 
     # Baffle board, set back by `inset`, with the driver hole cut through it.
     by = -d / 2 + inset
-    bw, bh, bt = w - 2 * t, h - 2 * t, min(t, 0.019)
-    r_hole = min(drv['coneDia'] / 2 + drv['surroundWidth'], bw / 2 * 0.98, bh / 2 * 0.98)
+    bw, bh, bt = w - 2 * t, h - tt - tb, min(t, 0.019)
+    bz = (tb - tt) / 2
+    r_hole = min(drv['coneDia'] / 2 + drv['surroundWidth'], bw / 2 * 0.98, bh / 2 * 0.98 - abs(oz - bz))
     seg = 48
     hole = bmesh.ops.create_circle(bm, cap_ends=False, segments=seg, radius=r_hole)['verts']
     for v in hole:
-        v.co = Vector((v.co.x, by, v.co.y))
-    corners = [bm.verts.new((sx * bw / 2, by, sz * bh / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        v.co = Vector((v.co.x, by, v.co.y + oz))
+    corners = [bm.verts.new((sx * bw / 2, by, bz + sz * bh / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
     rect = [bm.edges.new((corners[i], corners[(i + 1) % 4])) for i in range(4)]
     ring = list({e for v in hole for e in v.link_edges})
     # Fill between the board's edge and the hole; the inner loop stays open.
@@ -191,7 +199,7 @@ def cabinet_prototype(cid, cab, drv, slots):
         bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(45), 3, 'Z'))
         # -90 about X sends +Z to +Y, so the wide end (radius1, at -Z) faces the audience.
         bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(-90), 3, 'X'))
-        bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by - L / 2, 0))
+        bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by - L / 2, oz))
         for f in {f for v in res['verts'] for f in v.link_faces}:
             f.material_index = horn
         return mesh_from_bm(bm, f'{cid} proto')
@@ -200,7 +208,7 @@ def cabinet_prototype(cid, cab, drv, slots):
     # Paper cone, mouth at the baffle, receding into the box.
     res = bmesh.ops.create_cone(bm, cap_ends=False, segments=seg, radius1=coneR, radius2=capR * 1.15, depth=depth)
     bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(-90), 3, 'X'))
-    bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by + depth / 2, 0))
+    bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by + depth / 2, oz))
     for f in {f for v in res['verts'] for f in v.link_faces}:
         f.material_index = cone
     # Half-roll surround.
@@ -208,11 +216,11 @@ def cabinet_prototype(cid, cab, drv, slots):
     if sw > 0:
         tor = bmesh.ops.create_circle(bm, segments=seg, radius=coneR + sw / 2)['verts']
         for v in tor:
-            v.co = Vector((v.co.x, by - 0.002, v.co.y))
+            v.co = Vector((v.co.x, by - 0.002, v.co.y + oz))
         # A flat annulus is enough at this scale; the roll reads from the shading.
         ring = bmesh.ops.create_circle(bm, segments=seg, radius=coneR)['verts']
         for v in ring:
-            v.co = Vector((v.co.x, by, v.co.y))
+            v.co = Vector((v.co.x, by, v.co.y + oz))
         e1 = [e for v in tor for e in v.link_edges]
         e2 = [e for v in ring for e in v.link_edges]
         br = bmesh.ops.bridge_loops(bm, edges=list(set(e1 + e2)))
@@ -222,7 +230,7 @@ def cabinet_prototype(cid, cab, drv, slots):
     fl_o = bmesh.ops.create_circle(bm, segments=seg, radius=min(drv['frameDia'] / 2, r_hole))['verts']
     fl_i = bmesh.ops.create_circle(bm, segments=seg, radius=coneR + sw * 0.9)['verts']
     for v in fl_o + fl_i:
-        v.co = Vector((v.co.x, by - 0.004, v.co.y))
+        v.co = Vector((v.co.x, by - 0.004, v.co.y + oz))
     br = bmesh.ops.bridge_loops(bm, edges=list({e for v in fl_o + fl_i for e in v.link_edges}))
     for f in br['faces']:
         f.material_index = frame
@@ -232,7 +240,7 @@ def cabinet_prototype(cid, cab, drv, slots):
     bmesh.ops.delete(bm, geom=[v for v in sph['verts'] if v.co.z < -1e-6], context='VERTS')
     bmesh.ops.scale(bm, verts=keep, vec=(1, 1, drv['dustCapRise'] / capR))
     bmesh.ops.rotate(bm, verts=keep, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(90), 3, 'X'))
-    bmesh.ops.translate(bm, verts=keep, vec=(0, by + depth, 0))
+    bmesh.ops.translate(bm, verts=keep, vec=(0, by + depth, oz))
     for f in {f for v in keep for f in v.link_faces}:
         f.material_index = cap
     return mesh_from_bm(bm, f'{cid} proto')
@@ -288,13 +296,24 @@ def build(S, M):
     slots = {k: i for i, k in enumerate(slot_order)}
     protos = {}
     for cid, cab in S['cabinets'].items():
-        me = cabinet_prototype(cid, cab, S['drivers'][cab['driver']], slots)
-        for k in slot_order:
-            me.materials.append(M[k])
-        protos[cid] = me
+        # The 12"s come two to a box (lot 47): a lower cell without its top
+        # board and an upper one without its bottom. An odd row out is whole.
+        kinds = {'whole': (True, True)}
+        if cid == 'cab12':
+            kinds.update(lower=(False, True), upper=(True, False))
+        for kind, (top, bottom) in kinds.items():
+            me = cabinet_prototype(cid, cab, S['drivers'][cab['driver']], slots, top, bottom)
+            for k in slot_order:
+                me.materials.append(M[k])
+            protos[cid, kind] = me
+
+    def pair(c):
+        if c['cabinet'] != 'cab12' or (c['row'] == c['rows'] - 1 and c['rows'] % 2):
+            return 'whole'
+        return 'lower' if c['row'] % 2 == 0 else 'upper'
 
     for i, c in enumerate(S['cells']):
-        o = new_obj(f"{c['block']}.{i:03d}", protos[c['cabinet']], colls['Speakers'])
+        o = new_obj(f"{c['block']}.{i:03d}", protos[c['cabinet'], pair(c)], colls['Speakers'])
         o.location = B(c['p'])
         o.rotation_euler = (0, 0, c['ry'])
 

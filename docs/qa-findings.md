@@ -261,3 +261,34 @@ views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for ord
 2. Move Garcia far left, Weir just downstage of the kit, Lesh right of Weir, Keith far right. Rearrange the columns to match.
 3. Model the casters under the cluster.
 4. Find a photograph from July to October that shows Garcia and the keyboards.
+
+---
+
+## 8. Cabinet sizes from the surviving cabinets
+
+Sotheby's 2021 sale included six speaker cabinets and the cluster's aluminium 5"
+enclosures (`docs/surviving-gear.md`). Their sizes replace the reconstruction's
+own, and two of the open items in §6 close with them.
+
+| Cabinet | Before | Now | From |
+|---|---|---|---|
+| 15" | 24 × 24 × 22.5 in, driver centred | **19.5 × 25.5 × 29.5**, driver 4" low | Lot 46; lot 50 for the driver |
+| 12" | 15.5 × 24 × 22.5 a driver | **16 × 13 × 22** a driver, rows paired into 2 × 12" boxes | Lot 47 |
+| 5" rows | 0.19 m | **5.5 in** (0.14 m) | Lot 49; Pechner |
+
+**Against Pechner (§6):**
+
+- Tallest stacks: **34.0 ft** against the photo's ~35.2 (was 32). The 15"s now
+  stack at 25.5", against the 24.5" pitch measured on the photo.
+- The cluster's 12" rows now stack at 13", against about 15" on the photo (was
+  24"). The 5" band is 6 rows of 5.5", against about 5.8" on the photo.
+- The cluster stands on the 12'-10" floor, since the verifier wants every block
+  on a floor. Its middle comes out at 17.7 ft against the photo's 16.2. The photo
+  puts its underside at 11.6 ft: it was hung, not stood.
+- The overlay (`blender/compare.py`) lines up over the cluster and the tall
+  columns.
+
+**Not changed:** the blocks' x positions were packed against 24"-wide 15"s, so
+the 15" columns now stand a little apart. The kick block (§6, still open) is
+untouched. In the browser, the 12"s are still drawn as single cells; only the
+Blender scene pairs them.

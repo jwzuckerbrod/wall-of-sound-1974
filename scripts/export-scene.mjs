@@ -54,13 +54,15 @@ const cells = arrays.allCells().map((c) => ({
   cabinet: c.cabinet,
   channel: c.channel,
   block: c.block,
+  row: c.row,
+  rows: ARRAYS.find((b) => b.id === c.block).rows,
 }));
 
 const cabinets = Object.fromEntries(
   Object.keys(CABINETS).map((id) => {
     const s = cabinetSize(id);
     const c = CABINETS[id];
-    return [id, { kind: c.kind, driver: c.driver, w: r4(s.w), h: r4(s.h), d: r4(s.d), shell: r4(c.shellThickness), inset: r4(c.baffleInset) }];
+    return [id, { kind: c.kind, driver: c.driver, w: r4(s.w), h: r4(s.h), d: r4(s.d), shell: r4(c.shellThickness), inset: r4(c.baffleInset), driverY: r4(c.driverOffsetY ?? 0) }];
   }),
 );
 
