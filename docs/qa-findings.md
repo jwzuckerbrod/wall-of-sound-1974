@@ -557,3 +557,34 @@ colour print.
 
 Kling's output is an AI image. It stands for "a crowd at a 1974 show", not
 the people who were there, and the story page should say so.
+
+---
+
+## 16. A crowd of real people (MPFB)
+
+The crowd is now real modelled people, not figures. `blender/make_people.py`
+generates them with MPFB, the MakeHuman add-on for Blender (GPL; installed in
+Blender's user extensions), from the MakeHuman community's asset packs,
+downloaded into the ignored `blender/assets/makehuman/zips/` (912 MB):
+
+| Pack | Licence |
+|---|---|
+| MakeHuman system assets, Skins 01 and 02, Poses 01, Bodyparts 05, Hair 01, Shirts 01, Pants 01, Hats 01 | CC0 |
+| Hair 02, Hair 03 | **CC-BY: credit the MakeHuman community and the hair authors wherever the renders are published** |
+
+48 people, saved to the ignored `blender/assets/makehuman/people.blend`:
+young adults, mostly white with some Black and Asian (as the photographs of
+the crowd show), long hair more often than not on men and women alike, beards
+on some men, T-shirts, tank tops, polos and peasant-style tops recoloured from
+a 1970s palette, jeans (wool trousers recoloured as denim) and cut-offs, a
+hat on some, a few shirts off. Poses: standing with arms down; sitting on a
+bench, cross-legged or on the ground (Poses 01); lying back. Each is baked to
+one mesh of about 10,000 faces.
+
+`hollywood_bowl.py` instances a random person of the matching pose at each of
+the crowd's ~8,000 places, turned to face the stage. Without the library it
+falls back to the simple figures.
+
+Assets left out, as wrong for 1974 or wrong-looking: the cargo and harem
+trousers (camouflage and floral prints), a hairstyle with two buns, a beard
+with a purple texture (beards are recoloured brown).

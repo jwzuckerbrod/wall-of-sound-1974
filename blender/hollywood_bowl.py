@@ -39,6 +39,8 @@ import venue
 # Poly Haven's CC0 assets, downloaded by hand into this ignored folder (see
 # docs/qa-findings.md §15). Without them the bowl falls back to simple shapes.
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'polyhaven')
+# Realistic people from blender/make_people.py (MPFB). Without it, simple figures.
+PEOPLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'makehuman', 'people.blend')
 
 # Places the crowd must leave empty (camera positions), set by the caller.
 KEEP_CLEAR = []
@@ -598,6 +600,68 @@ def scatter(coll, name, me, points, mats, yaws=None):
     return o
 
 
+def people_library():
+    """The generated people, one collection per pose, or None if not made yet."""
+    if not os.path.exists(PEOPLE):
+        return None
+    with bpy.data.libraries.load(PEOPLE, link=False) as (src, dst):
+        dst.collections = [c for c in src.collections if c.startswith('people, ')]
+    out = {}
+    for c in dst.collections:
+        if c is None:
+            continue
+        bpy.context.scene.collection.children.link(c)
+        bpy.context.view_layer.layer_collection.children[c.name].exclude = True
+        out[c.name.split(', ', 1)[1]] = c
+    return out or None
+
+
+def scatter_people(coll, name, points, yaws, source, seed):
+    """Instance a random person from `source` at each point, turned by its yaw."""
+    me = bpy.data.meshes.new(name)
+    me.from_pydata(points, [], [])
+    attr = me.attributes.new('yaw', 'FLOAT', 'POINT')
+    attr.data.foreach_set('value', [y + math.pi for y in yaws])   # MakeHuman people face +y, the figures -y
+    o = bpy.data.objects.new(name, me)
+    coll.objects.link(o)
+    g = bpy.data.node_groups.new(name, 'GeometryNodeTree')
+    g.interface.new_socket('Geometry', in_out='INPUT', socket_type='NodeSocketGeometry')
+    g.interface.new_socket('Geometry', in_out='OUTPUT', socket_type='NodeSocketGeometry')
+    n, L = g.nodes, g.links
+    gi, go = n.new('NodeGroupInput'), n.new('NodeGroupOutput')
+    m2p = n.new('GeometryNodeMeshToPoints')
+    ci = n.new('GeometryNodeCollectionInfo')
+    ci.inputs['Collection'].default_value = source
+    ci.inputs['Separate Children'].default_value = True
+    ci.inputs['Reset Children'].default_value = True
+    iop = n.new('GeometryNodeInstanceOnPoints')
+    iop.inputs['Pick Instance'].default_value = True
+    pick = n.new('FunctionNodeRandomValue')
+    pick.data_type = 'INT'
+    pick.inputs['Min'].default_value = 0
+    pick.inputs['Max'].default_value = len(source.objects) - 1
+    pick.inputs['Seed'].default_value = seed
+    na = n.new('GeometryNodeInputNamedAttribute')
+    na.data_type = 'FLOAT'
+    na.inputs['Name'].default_value = 'yaw'
+    cx = n.new('ShaderNodeCombineXYZ')
+    sc = n.new('FunctionNodeRandomValue')
+    sc.data_type = 'FLOAT'
+    sc.inputs['Min'].default_value = 0.95
+    sc.inputs['Max'].default_value = 1.05
+    sc.inputs['Seed'].default_value = seed + 1
+    L.new(gi.outputs['Geometry'], m2p.inputs['Mesh'])
+    L.new(m2p.outputs['Points'], iop.inputs['Points'])
+    L.new(ci.outputs['Instances'], iop.inputs['Instance'])
+    L.new(pick.outputs[0], iop.inputs['Instance Index'])
+    L.new(na.outputs[0], cx.inputs['Z'])
+    L.new(cx.outputs[0], iop.inputs['Rotation'])
+    L.new(sc.outputs[0], iop.inputs['Scale'])
+    L.new(iop.outputs['Instances'], go.inputs['Geometry'])
+    o.modifiers.new(name, 'NODES').node_group = g
+    return o
+
+
 def build_crowd(coll, floor, cy, keep_clear=()):
     """
     About 12,000 people, mostly sitting, as the 1970s photographs show a
@@ -674,6 +738,13 @@ def build_crowd(coll, floor, cy, keep_clear=()):
                 poses['stand'][0].append((x, y, seat_z(rr, floor)))
                 poses['stand'][1].append(rng.uniform(0, 6.283))
             rr += rng.uniform(1.0, 3.0)
+    lib = people_library()
+    if lib:
+        for k, (pose, (pts, yaws)) in enumerate(poses.items()):
+            src = lib.get(pose) or lib.get('stand')
+            if pts and src:
+                scatter_people(coll, f'crowd, {pose}', pts, yaws, src, 101 + 13 * k)
+        return {k: len(v[0]) for k, v in poses.items()}
     # Looks, from a separate stream so the crowd's places don't change with
     # them (an edited render of these places can be laid back over).
     looks = random.Random(7419)
