@@ -19,6 +19,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 ## Running things
 
 - Browser app: `npm run dev` (port 5174; `.claude/launch.json` "wall-of-sound").
+  Story page at `/story.html`; its images via `npm run story:images`.
 - After config changes: `npm run export:scene` (writes `blender/scene.json`).
 - Blender: `/Applications/Blender.app/Contents/MacOS/Blender -b -P <script> -- <args>`
   - `blender/build_scene.py --shot pechner|gear|rack|cluster [--venue arena|outdoor|hollywood]`

@@ -8,6 +8,16 @@ instantly on any device, and it ends by inviting people into the 3D explorer.
 A draft to react to. The copy is working copy; every figure is from the config
 and carries its source.
 
+**Built, first version (7 October 2026):** `story.html` (`src/story/`), at
+<http://localhost:5174/story.html>. Beats 1–7 scroll over pinned images; beat 8
+links to the explorer, which stays at `index.html` for now. Every beat lists
+its sources, every image says whether it's a photograph or a render, and the
+page ends in full credits (qa-findings §17). Images: `npm run story:images`
+copies the graded renders from `.shots/story/v2/` (made by
+`.shots/story/v2/render.sh`) and the Bowl photograph into `public/story/`.
+On a portrait phone each frame shows whole across the width, over a blurred
+copy of itself, rather than cropped to its middle third.
+
 **The place: the Hollywood Bowl, Sunday 21 July 1974.** One real show gives the
 story a sense of place: the white shell, the hills, seventeen thousand people.
 It's inside the Wall's summer, and it's the show with the best photographs of
@@ -130,12 +140,15 @@ curated viewpoint.
 1. **Tone.** The copy above is plain and factual. Warmer and more personal, or
    keep it like a museum label?
 2. **Sound.** A silent story, or our own audio for the microphone beat?
-3. **Photographs.** Approach Pechner, Schneider and Kirk West for permission,
-   or design around renders and links?
+3. ~~**Photographs.**~~ Decided: photographs stay, credited generously (§17).
 4. **The name.** The page uses "the Grateful Dead", a trademark, in a factual
    way. Any plan for the project's own title?
 
 ## To make
+
+- Make the story the front page (`index.html`) and move the explorer to its
+  own page, at deploy. Beat 8 then loads the explorer in the background.
+- A title image: the title screen is plain type on black.
 
 - The channel-tint pass for beat 3, and the evidence tint for beat 7.
 - The paired microphones in Blender, and their diagram.
@@ -143,8 +156,6 @@ curated viewpoint.
 - A short clip for beat 2 (a slow push in), and the meter flicker for beat 6.
 - The camera for beat 1, solved from the Bowl photograph.
 - The red kit, modelled (the Bowl show had the wine-red kit, not the butcher block).
-- Photographic people and trees, if the stylised crowd and hills aren't good
-  enough (see below).
 
 ## The crowd and the hills
 

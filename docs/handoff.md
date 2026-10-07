@@ -26,12 +26,10 @@
 
 ## Other open items
 
-- **Story page**: next up. Outline in `docs/story.md`; page not built;
-  stage 6 (performance on a phone) and stage 7 (deploy) not started. Needs the
-  credits page above.
-- Reference photographs are still git-ignored in `.shots/reference/`; they
-  have to be copied into the site (with credits) for the story page to show
-  them.
+- **Story page**: first version built (`story.html`, `src/story/`; see
+  `docs/story.md` for what's left). Stage 6 (performance on a phone) and
+  stage 7 (deploy) not started. Photographs shown on it are copied into
+  `public/story/` by `npm run story:images`, credited in `src/story/images.ts`.
 - Red kit at the Bowl: recoloured, but still the Hartford concert-tom model.
 - A second, smaller curved cluster low right at the Bowl, not modelled.
 - Where the bass-drum column really stood (guess, `arrays.kickPosition`).

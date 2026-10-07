@@ -52,6 +52,8 @@ export default defineConfig({
     target: 'es2022',
     // Vite 8 bundles with rolldown, which takes manualChunks only as a function.
     rollupOptions: {
+      // Two pages: the 3D explorer, and the story that leads into it.
+      input: { main: resolve(__dirname, 'index.html'), story: resolve(__dirname, 'story.html') },
       output: {
         manualChunks(id) {
           if (id.includes('node_modules/three')) return 'three';

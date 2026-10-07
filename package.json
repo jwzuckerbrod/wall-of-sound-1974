@@ -11,7 +11,8 @@
     "check": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
     "elevation": "node scripts/make-elevation.mjs",
-    "export:scene": "node scripts/export-scene.mjs"
+    "export:scene": "node scripts/export-scene.mjs",
+    "story:images": "zsh scripts/story-images.sh"
   },
   "devDependencies": {
     "@types/react": "^19.3.0",
