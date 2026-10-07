@@ -53,7 +53,7 @@ TOPS_F = ['joepal_crude_t-shirt_female', 'joepal_crude_t-shirt_female', 'toigo_b
           'toigo_basic_tucked_t-shirt', 'toigo_bodice-style_top', 'toigo_bodice-style_top', 'toigo_camisole_top']
 # The wool trousers are recoloured as denim; the cargo and harem pants carry
 # camouflage and floral prints the recolouring can't hide, so they're out.
-BOTTOMS = ['toigo_wool_pants', 'toigo_wool_pants', 'toigo_wool_pants', 'cortu_jeans_shorts']
+BOTTOMS = ['toigo_wool_pants'] * 9 + ['cortu_jeans_shorts']   # jeans for nearly everyone
 HATS = ['fedora01', 'jujube_newsboy_cap', 'grinsegold_uncle_joshis_hat']
 SHOES = ['shoes01', 'shoes02', 'shoes03', 'shoes04', 'shoes05', 'shoes06']
 SIT_BENCH = ['callharvey3d_sittingdefault', 'callharvey3d_sittingnatural', 'anrico_sitting02', 'anrico_sitting03',

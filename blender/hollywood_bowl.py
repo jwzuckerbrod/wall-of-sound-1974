@@ -622,7 +622,7 @@ def scatter_people(coll, name, points, yaws, source, seed):
     me = bpy.data.meshes.new(name)
     me.from_pydata(points, [], [])
     attr = me.attributes.new('yaw', 'FLOAT', 'POINT')
-    attr.data.foreach_set('value', [y + math.pi for y in yaws])   # MakeHuman people face +y, the figures -y
+    attr.data.foreach_set('value', list(yaws))   # people and figures both face -y (checked: feet point -y)
     o = bpy.data.objects.new(name, me)
     coll.objects.link(o)
     g = bpy.data.node_groups.new(name, 'GeometryNodeTree')
@@ -680,7 +680,10 @@ def build_crowd(coll, floor, cy, keep_clear=()):
     def add(pose, p, jitter):
         if not clear(p):
             return
-        face = math.atan2(-(p[0] - 0.0), -(p[1] - (cy + 6)))     # toward the stage
+        # The yaw that turns a model facing -y to look at the stage, at (0, cy + 6).
+        # (The old sign looked toward the stage front-to-back but away from the
+        # centre side-to-side; flat figures hid it.)
+        face = math.atan2(0.0 - p[0], p[1] - (cy + 6))
         poses[pose][0].append(p)
         poses[pose][1].append(face + max(-0.26, min(0.26, rng.gauss(0, jitter))))   # never more than 15 degrees off
 
