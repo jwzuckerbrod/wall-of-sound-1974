@@ -679,5 +679,16 @@ Poly Haven plants and the MakeHuman crowd. The stage lamps carry Blender's
 yoke, clamp, lip and lens in the explorer, and the paired vocal mics, which
 only the explorer had, are in Blender now.
 
+**The instruments in the explorer.** `blender/export_instruments.py` stands
+the Wolf, the ES-335, Mission Control, the grand, the Rhodes, the kit and the
+guitar stands exactly where the renders stand them (`stage_review.py place()`,
+now reading `band.instruments`), joins each, bakes its procedural materials
+to a colour, roughness and metalness atlas with Cycles, and writes a
+Draco-compressed `.glb` to `public/models/` (1.8 MB for all eight). The kit is
+written twice, the Bowl's in wine red. The explorer fetches them after the
+Wall is up. The grey scale figures are off by default now: they stood on the
+same marks and buried the guitars.
+
 **What changes in the renders.** Blender's cabinets are now mixed black and
-bare, so the story's renders need re-rendering.
+bare, so the story's renders were re-made (`.shots/story/v2/render.sh`, then
+`npm run story:images`).

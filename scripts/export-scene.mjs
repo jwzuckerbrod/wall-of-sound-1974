@@ -147,6 +147,8 @@ const scene = {
   bolt: logo.BOLT.map(v3),
   boltBottom: logo.BOLT_BOTTOM,
   boltDiameter: r4(wall.band.logo.diameter),
+  // How the instruments stand on the marks (band.instruments).
+  instruments: wall.band.instruments,
   // The paired vocal microphones (src/scene/BandGear.tsx): foot of each stand, and its parts.
   mics: { at: scaf.vocalMics(L).map(v3), ...scaf.MIC },
   // Courtenay Pollock's tie-dyes (structure.tieDyes): top centre of each, outdoors only.

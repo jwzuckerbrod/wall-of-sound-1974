@@ -33,5 +33,6 @@
 - Red kit at the Bowl: recoloured, but still the Hartford concert-tom model.
 - A second, smaller curved cluster low right at the Bowl, not modelled.
 - Where the bass-drum column really stood (guess, `arrays.kickPosition`).
-- Browser app: no outdoor venue, bare deck (QA 2.2), no Blender props yet
-  (plan: glTF pilot with one MC 2300 rack).
+- Browser app: now matches Blender (qa-findings §18): cabinets, road gear,
+  lamps, tie-dyes, the Bowl (`?venue=bowl`) and the instruments as glTF.
+  Still bare deck (QA 2.2); the Bowl has simple trees and no crowd.

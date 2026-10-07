@@ -1,0 +1,70 @@
+import { useEffect, useState } from 'react';
+import * as THREE from 'three';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import type { Venue } from './Scene';
+
+/**
+ * The band's instruments: the Wolf, the ES-335, Mission Control, the grand,
+ * the Rhodes and the kit, exported from the same Blender models the renders
+ * use (blender/export_instruments.py), already standing where the renders
+ * stand them, with their materials baked to textures. Fetched after the Wall
+ * is up, so they never hold up the first view. At the Bowl the kit is the
+ * wine-red one (band.instruments.bowlKitShell).
+ *
+ * The guitars and the bass rest on plain stands, a review prop: they belong
+ * in the players' hands. See PROVENANCE['band.instrumentPlacement'].
+ */
+
+const BASE = `${import.meta.env.BASE_URL}models/`;
+const COMMON = ['garcia', 'weir', 'lesh', 'piano', 'rhodes', 'stands'];
+
+let loader: GLTFLoader | null = null;
+function gltfLoader() {
+  if (!loader) {
+    const draco = new DRACOLoader().setDecoderPath(`${import.meta.env.BASE_URL}draco/`).setDecoderConfig({ type: 'wasm' });
+    loader = new GLTFLoader().setDRACOLoader(draco);
+  }
+  return loader;
+}
+
+const cache = new Map<string, Promise<THREE.Group>>();
+function model(name: string) {
+  let p = cache.get(name);
+  if (!p) {
+    p = gltfLoader()
+      .loadAsync(`${BASE}${name}.glb`)
+      .then((g) => {
+        g.scene.traverse((o) => {
+          if ((o as THREE.Mesh).isMesh) {
+            o.castShadow = true;
+            o.receiveShadow = true;
+          }
+        });
+        return g.scene;
+      });
+    cache.set(name, p);
+  }
+  return p;
+}
+
+export function Instruments({ venue }: { venue: Venue }) {
+  const names = [...COMMON, venue === 'hollywoodBowl' ? 'drums-bowl' : 'drums'];
+  const [loaded, setLoaded] = useState<Record<string, THREE.Group>>({});
+  const key = names.join(',');
+  useEffect(() => {
+    let live = true;
+    for (const n of key.split(','))
+      model(n)
+        .then((g) => live && setLoaded((s) => ({ ...s, [n]: g })))
+        .catch((e) => console.warn(`instrument ${n}:`, e));
+    return () => {
+      live = false;
+    };
+  }, [key]);
+  return (
+    <group name="instruments">
+      {names.map((n) => loaded[n] && <primitive key={n} object={loaded[n]} />)}
+    </group>
+  );
+}

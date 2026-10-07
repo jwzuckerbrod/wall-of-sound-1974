@@ -245,7 +245,7 @@ export function Hud({
           Amps &amp; cases {options.showAmps ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showBand')} aria-pressed={options.showBand}>
-          Mics {options.showBand ? 'on' : 'off'}
+          Instruments {options.showBand ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showStage')} aria-pressed={options.showStage}>
           Stage {options.showStage ? 'on' : 'off'}

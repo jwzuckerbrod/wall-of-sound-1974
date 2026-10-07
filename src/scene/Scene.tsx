@@ -6,6 +6,7 @@ import { wall } from '../data/wall.config';
 import { tierSettings, type Tier } from '../quality';
 import { Arrays, type ArrayInteraction, type ColorMode } from './Arrays';
 import { BandGear } from './BandGear';
+import { Instruments } from './Instruments';
 import { RoadGear } from './RoadGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
@@ -141,7 +142,12 @@ export function Scene({
       {showAmps && <RoadGear shadows={shadows} />}
       {showStage && <Stage shadows={shadows} />}
       {showFigures && <ScaleFigures shadows={shadows} />}
-      {showBand && <BandGear shadows={shadows} />}
+      {showBand && (
+        <>
+          <BandGear shadows={shadows} />
+          <Instruments venue={venue} />
+        </>
+      )}
 
       {/* Clicking past everything clears the selection. */}
       <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)}>
@@ -170,7 +176,8 @@ export const sceneDefaults: SceneOptions = {
   venue: 'arena',
   showScaffold: true,
   showStage: true,
-  showFigures: true,
+  // Off: the instruments stand on the players' marks and give the scale now.
+  showFigures: false,
   showAmps: true,
   showBand: true,
 };

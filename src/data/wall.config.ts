@@ -460,6 +460,11 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['pechner', 'schneider', 'anderson', 'photos', 'deadsources74'],
     note: 'Measured on Pechner\'s 17 May 1974 photograph through its solved camera, left to right: Garcia, Weir, the kit, Lesh, then the grand lying across the stage with Keith at its keyboard end. Every other photograph found, to (probably) 16 June, also has Garcia at the far left and Keith to the right; Weir and Lesh changed places now and then, and on some dates a grand stands at the far right instead. The spec sheet puts Garcia\'s extension stack "beside Godchaux and behind Kreutzmann", which agrees. At the Hollywood Bowl on 21 July 1974, where the story is set, the order is the same: Garcia, Weir, the kit, Lesh, the pianos (the Bowl photographs, qa-findings §14; confirmed by the project owner, §17). See docs/qa-findings.md §7, §9 and §17.',
   },
+  'band.instrumentPlacement': {
+    confidence: 'guessed',
+    sources: ['pechner', 'photos'],
+    note: 'The grand across the stage with its keyboard at the audience\'s right, Keith at that end, as on Pechner\'s photograph. Where the Rhodes stood isn\'t known: upstage of Keith at his right hand, beyond the grand from the audience, as at Oakland on 8 June 1974. The guitars and the bass stand upright on plain stands, which are review props; they belong in the players\' hands. The Bowl\'s kit is the wine-red one, but its drums are still modelled on the Hartford butcher-block kit.',
+  },
   'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
     confidence: 'confirmed',
@@ -1100,6 +1105,21 @@ export const wall = {
       { id: 'lesh',    name: 'Phil Lesh',       instrument: 'Alembic quadraphonic bass',     x:  0.6,  z: 6.15 },
       { id: 'keith',   name: 'Keith Godchaux',  instrument: 'grand piano, 5 Countryman p/u', x:  2.1,  z: 5.0 },
     ],
+    /**
+     * How the instruments stand on the marks (blender/stage_review.py place(),
+     * and through it the explorer's glTF exports). See
+     * PROVENANCE['band.instrumentPlacement'].
+     */
+    instruments: {
+      /** The grand lies across the stage, centred on Keith's mark, keyboard to the audience's right: half a Steinway D. */
+      pianoKeyboardOffset: IN(53.9),
+      /** The Rhodes: beyond the grand's keyboard, upstage of Keith at his right hand (x, upstage), metres. */
+      rhodesFromKeys: [0.75, 1.0] as [number, number],
+      /** The kit's middle, this far upstage of Kreutzmann's mark. */
+      kitBack: 0.5,
+      /** At the Bowl on 21 July the kit was the wine-red one (qa-findings §14); its drums are still the Hartford toms. */
+      bowlKitShell: '#812730',
+    },
     /** The 1969 lightning-bolt equipment mark — no skull. Cases only. */
     logo: { id: 'lightningBolt', diameter: IN(5.5), boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },
   },

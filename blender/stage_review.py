@@ -39,7 +39,10 @@ IN = 0.0254
 # The app's marks (scene frame: x across, +z toward the audience), metres,
 # as scripts/export-scene.mjs writes them from band.members.
 with open(os.path.join(ROOT, 'blender', 'scene.json')) as _f:
-    MARKS = {k: tuple(v) for k, v in json.load(_f)['band'].items()}
+    _S = json.load(_f)
+    MARKS = {k: tuple(v) for k, v in _S['band'].items()}
+    # How each instrument stands on its mark (band.instruments in the config).
+    PLACE = _S['instruments']
 
 
 def load_wall():
@@ -69,6 +72,15 @@ def append(path, root_name):
         else:
             bpy.data.objects.remove(o)
     return keep
+
+
+def W_srgb(hex_):
+    """sRGB hex to the linear floats Blender's colour inputs expect."""
+    out = []
+    for i in (1, 3, 5):
+        c = int(hex_[i:i + 2], 16) / 255
+        out.append(c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4)
+    return (*out, 1.0)
 
 
 def holder(name, x, y, z, rz=0.0):
@@ -128,13 +140,14 @@ def place(deck, red_kit=False):
     x, y = B(*MARKS['keith'])
     h = holder('piano on stage', x, y, deck, math.radians(90))
     r.parent = h
-    r.location = (0, -53.9 * IN, 0)
+    r.location = (0, -PLACE['pianoKeyboardOffset'], 0)
     out['piano'] = r
     # Keith sits past the keyboard facing -x; his right hand is upstage. The
     # Rhodes stands there, square to the audience, keys toward him.
     r = append(os.path.join(INST, 'rhodes', 'rhodes.blend'), 'Fender Rhodes')
-    keys_x = x + 53.9 * IN
-    h = holder('Rhodes on stage', keys_x + 0.75, y + 1.0, deck)
+    keys_x = x + PLACE['pianoKeyboardOffset']
+    rx, ry = PLACE['rhodesFromKeys']
+    h = holder('Rhodes on stage', keys_x + rx, y + ry, deck)
     r.parent = h
     r.location = (0, -11.5 * IN, 0)
     out['rhodes'] = r
@@ -144,7 +157,7 @@ def place(deck, red_kit=False):
     x, y = B(*MARKS['kreutz'])
     h = holder('drums on stage', x, y, deck)
     r.parent = h
-    r.location = (0, -0.5, 0)
+    r.location = (0, -PLACE['kitBack'], 0)
     out['drums'] = r
     if red_kit:
         # The kit at the Hollywood Bowl on 21 July was the wine-red one, not the
@@ -153,7 +166,7 @@ def place(deck, red_kit=False):
         red = bpy.data.materials.new('Drum shells, wine red lacquer')
         red.use_nodes = True
         b = red.node_tree.nodes['Principled BSDF']
-        b.inputs['Base Color'].default_value = (0.22, 0.02, 0.03, 1)
+        b.inputs['Base Color'].default_value = W_srgb(PLACE['bowlKitShell'])
         b.inputs['Roughness'].default_value = 0.25
         b.inputs['Coat Weight'].default_value = 0.8
         for o in bpy.data.objects:

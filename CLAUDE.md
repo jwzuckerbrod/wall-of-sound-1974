@@ -26,6 +26,12 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   - `blender/stage_review.py --venue hollywood --shot bowl|bowl-hero|garcia|cluster-up|amps|bowl-tower --sun 30,-50 --exposure 0.3 [--samples N --scale % --name X --no-crowd]`
   - `blender/crowd_mask.py mask|composite|tiles|place|grade ...`
   - `blender/make_people.py --count 144` regenerates the crowd library.
+  - `blender/export_instruments.py` bakes the instruments to `public/models/*.glb`
+    for the explorer (after `npm run export:scene`; about a minute).
+- Shared layout code feeds both renderers: `src/geometry/arrays.ts` (each
+  cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
+  (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
+  them, not the Python. The explorer has `?venue=bowl`.
 - Renders go to `.shots/` (ignored). Reference photos are in `.shots/reference/`
   (ignored: other people's photos).
 
