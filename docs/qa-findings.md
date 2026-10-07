@@ -588,3 +588,18 @@ falls back to the simple figures.
 Assets left out, as wrong for 1974 or wrong-looking: the cargo and harem
 trousers (camouflage and floral prints), a hairstyle with two buns, a beard
 with a purple texture (beards are recoloured brown).
+
+**Second pass.** 144 people. Everyone faces the stage within 15° (the
+"talking" turns and random aisle headings are gone, and sitting poses that
+turn the whole figure are straightened before baking). Hair is recoloured to
+a natural range (mostly brown, some dark, a little blond and red; one hair
+asset's texture is ginger). Fewer tank tops and shirts off. Realistic skin
+(MPFB's subsurface-scattering skin) and high-detail eyes; full-detail people
+within 25 m of the camera, a third of the faces beyond. No one within 12 m of
+the camera. The library is 386 MB.
+
+**The ceiling.** MakeHuman people read as people at a distance, but up close
+they look like game characters, not photographs. Past this, the options are a
+library of scanned people (paid, such as Renderpeople), or an AI edit of the
+nearest rows only, which should now work, since the people it starts from
+already look human.

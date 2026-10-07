@@ -605,14 +605,15 @@ def people_library():
     if not os.path.exists(PEOPLE):
         return None
     with bpy.data.libraries.load(PEOPLE, link=False) as (src, dst):
-        dst.collections = [c for c in src.collections if c.startswith('people, ')]
+        dst.collections = [c for c in src.collections if c.startswith('people')]
     out = {}
     for c in dst.collections:
         if c is None:
             continue
         bpy.context.scene.collection.children.link(c)
         bpy.context.view_layer.layer_collection.children[c.name].exclude = True
-        out[c.name.split(', ', 1)[1]] = c
+        tag, pose = c.name.split(', ', 1)
+        out[(tag, pose)] = c
     return out or None
 
 
@@ -674,14 +675,14 @@ def build_crowd(coll, floor, cy, keep_clear=()):
 
     def clear(p):
         # Nobody within 9 m of a camera: close up, simple figures look like what they are.
-        return all((Vector(p) - Vector(c)).length > 9.0 for c in keep_clear)
+        return all((Vector(p) - Vector(c)).length > 12.0 for c in keep_clear)
 
     def add(pose, p, jitter):
         if not clear(p):
             return
         face = math.atan2(-(p[0] - 0.0), -(p[1] - (cy + 6)))     # toward the stage
         poses[pose][0].append(p)
-        poses[pose][1].append(face + rng.gauss(0, jitter))
+        poses[pose][1].append(face + max(-0.26, min(0.26, rng.gauss(0, jitter))))   # never more than 15 degrees off
 
     # The pool circle: blankets and people on them, thicker toward the stage.
     for _ in range(1600):
@@ -692,11 +693,11 @@ def build_crowd(coll, floor, cy, keep_clear=()):
         p = (math.sin(a) * r, cy - math.cos(a) * r, floor)
         u = rng.random()
         if u < 0.45:
-            add('ground', p, 0.35)
+            add('ground', p, 0.13)
         elif u < 0.62:
-            add('lie', p, 0.6)
+            add('lie', p, 0.13)
         else:
-            add('stand', p, 0.7)
+            add('stand', p, 0.13)
     # The benches, but not a congregation: before the show people stand on
     # the treads, perch on the bench backs, sit on the steps, turn to talk, and
     # gather in clusters with gaps between (docs/crowd-references.md).
@@ -715,8 +716,8 @@ def build_crowd(coll, floor, cy, keep_clear=()):
             if rng.random() > base * (0.55 + 0.9 * clump(x, y)):
                 continue
             u = rng.random()
-            talk = rng.random() < 0.18              # turned to someone
-            jit = 1.4 if talk else 0.45
+            # Everyone faces the stage, give or take 15 degrees.
+            jit = 0.13
             if u < 0.34:
                 add('stand', (x, y, z), jit)
             elif u < 0.74:
@@ -726,7 +727,7 @@ def build_crowd(coll, floor, cy, keep_clear=()):
             elif u < 0.95:
                 add('ground', (x, y, z), jit)        # on the tread, back to the bench
             else:
-                add('lie', (x, y, z + 0.42), 1.5)    # stretched out along a bench
+                add('lie', (x, y, z + 0.42), 0.13)   # stretched out along a bench
         r += ROW
     # Walking up and down the aisles.
     for aisle in (-FAN * 0.5, 0.0, FAN * 0.5):
@@ -735,15 +736,21 @@ def build_crowd(coll, floor, cy, keep_clear=()):
             if rng.random() < 0.35:
                 aa = aisle + rng.uniform(-0.01, 0.01)
                 x, y = math.sin(aa) * rr, cy - math.cos(aa) * rr
-                poses['stand'][0].append((x, y, seat_z(rr, floor)))
-                poses['stand'][1].append(rng.uniform(0, 6.283))
+                add('stand', (x, y, seat_z(rr, floor)), 0.13)
             rr += rng.uniform(1.0, 3.0)
     lib = people_library()
     if lib:
+        # Full-detail people within 25 m of the camera, light ones beyond.
+        cams = [Vector(c) for c in keep_clear]
         for k, (pose, (pts, yaws)) in enumerate(poses.items()):
-            src = lib.get(pose) or lib.get('stand')
-            if pts and src:
-                scatter_people(coll, f'crowd, {pose}', pts, yaws, src, 101 + 13 * k)
+            near = [i for i, p in enumerate(pts) if cams and min((Vector(p) - c).length for c in cams) < 25.0]
+            nset = set(near)
+            far = [i for i in range(len(pts)) if i not in nset]
+            for tag, idx in (('people hi', near), ('people', far)):
+                src = lib.get((tag, pose)) or lib.get(('people', pose))
+                if idx and src:
+                    scatter_people(coll, f'crowd, {pose}, {tag}', [pts[i] for i in idx], [yaws[i] for i in idx], src,
+                                   101 + 13 * k)
         return {k: len(v[0]) for k, v in poses.items()}
     # Looks, from a separate stream so the crowd's places don't change with
     # them (an edited render of these places can be laid back over).

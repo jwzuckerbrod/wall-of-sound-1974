@@ -46,9 +46,11 @@ HAIR_LONG = ['long01', 'o4saken_long01', 'elvs_lady_hippy_hair', 'elvs_grump_hai
 HAIR_SHORT = ['cortu_short_messy_hair', 'elvs_maxwell_hair', 'bob01', 'elvs_wavy_bob']
 HAIR_CURLY = ['afro01', 'o4saken_curly01']
 BEARDS = ['wdg_scruffy_beard', 'grinsegold_beard_sigmund_wip']
-TOPS_M = ['elvs_crude_t-shirt_male', 'toigo_basic_tucked_t-shirt', 'namuhekam_male_polo_shirt', 'toigo_keyhole_tank_top']
-TOPS_F = ['joepal_crude_t-shirt_female', 'toigo_camisole_top', 'toigo_bodice-style_top', 'toigo_keyhole_tank_top',
-          'toigo_basic_tucked_t-shirt']
+# Mostly T-shirts and shirts, as in the photographs; a few tank tops.
+TOPS_M = ['elvs_crude_t-shirt_male', 'elvs_crude_t-shirt_male', 'toigo_basic_tucked_t-shirt', 'toigo_basic_tucked_t-shirt',
+          'namuhekam_male_polo_shirt', 'toigo_keyhole_tank_top']
+TOPS_F = ['joepal_crude_t-shirt_female', 'joepal_crude_t-shirt_female', 'toigo_basic_tucked_t-shirt',
+          'toigo_basic_tucked_t-shirt', 'toigo_bodice-style_top', 'toigo_bodice-style_top', 'toigo_camisole_top']
 # The wool trousers are recoloured as denim; the cargo and harem pants carry
 # camouflage and floral prints the recolouring can't hide, so they're out.
 BOTTOMS = ['toigo_wool_pants', 'toigo_wool_pants', 'toigo_wool_pants', 'cortu_jeans_shorts']
@@ -58,6 +60,9 @@ SIT_BENCH = ['callharvey3d_sittingdefault', 'callharvey3d_sittingnatural', 'anri
              'anrico_sitting07', 'callharvey3d_sittinglegscrossed', 'sweetan008_sitting-pose']
 SIT_GROUND = ['callharvey3d_sittingfloor2', 'callharvey3d_lotus', 'wolgade_sit_on_ground_01', 'xhado84_sitting_floor_3']
 LIE = ['callharvey3d_sittingfloorstretch2']
+
+# Natural hair, as in the photographs: mostly brown, some dark, a little blond and red.
+HAIR_COLOURS = ['#3b2a1e', '#4a3424', '#5a3e28', '#2a1f18', '#6b4a2e', '#1c1612', '#7a5a38', '#a07a4a', '#c09a62', '#7a3a22']
 
 # Shirt colours of the period, as in the crowd photographs; denim for most trousers.
 TOP_COLOURS = ['#e9e3d3', '#d8cdb4', '#5c7896', '#a8502e', '#c99a3a', '#6b6a3a', '#7a2e34', '#9a8a6a', '#3a4a5a', '#c56a3a']
@@ -122,7 +127,7 @@ def make_person(rng, pose, A, sk, P):
     rig = body.parent
     skin = f"young_{anc}_{'male' if male else 'female'}"
     if skin in sk:
-        HumanService.set_character_skin(sk[skin], body, skin_type='MAKESKIN')
+        HumanService.set_character_skin(sk[skin], body, skin_type='ENHANCED_SSS')   # light through the skin
 
     def add(name, kind, table):
         if name in table:
@@ -130,7 +135,7 @@ def make_person(rng, pose, A, sk, P):
             return True
         return False
 
-    eyes = os.path.join(LocationService.get_user_data(), 'eyes', 'low-poly', 'low-poly.mhclo')
+    eyes = os.path.join(LocationService.get_user_data(), 'eyes', 'high-poly', 'high-poly.mhclo')
     if os.path.exists(eyes):
         HumanService.add_mhclo_asset(eyes, body, asset_type='Eyes', subdiv_levels=0, material_type='MAKESKIN')
     add(rng.choice(sorted(A['eyebrows'])), 'Eyebrows', A['eyebrows'])
@@ -139,7 +144,7 @@ def make_person(rng, pose, A, sk, P):
     add(hair, 'Hair', A['hair'])
     if male and rng.random() < 0.4:
         add(rng.choice(BEARDS), 'Clothes', A['clothes'])
-    shirt_off = male and rng.random() < 0.12
+    shirt_off = male and rng.random() < 0.05
     top = None
     if not shirt_off:
         top = rng.choice(TOPS_M if male else TOPS_F)
@@ -153,6 +158,8 @@ def make_person(rng, pose, A, sk, P):
     # Colour the clothes from the period palette.
     for o in rig.children:
         n = o.name.lower()
+        if n.startswith(f'{body.name.lower()}.') and any(h.lower() in n for h in HAIR_LONG + HAIR_SHORT + HAIR_CURLY):
+            tint(o, rng.choice(HAIR_COLOURS), 'COLOR', 0.9)
         if 'beard' in n:
             tint(o, rng.choice(['#2e2218', '#4a3420', '#6a4a2a', '#1e1a16']), 'COLOR', 1.0)   # one beard's texture is purple
         if top and top.lower()[:10] in n:
@@ -179,16 +186,38 @@ def make_person(rng, pose, A, sk, P):
     return rig, body
 
 
+def facing(rig):
+    """
+    How far a pose has turned the body about z, from the line between the
+    shoulders, rest against posed. Some of the borrowed sitting poses turn
+    the whole figure; this undoes it.
+    """
+    def yaw(a, b):
+        return math.atan2(b.y - a.y, b.x - a.x)
+    rest = yaw(rig.data.bones['clavicle.L'].head_local, rig.data.bones['clavicle.R'].head_local)
+    pose = yaw(rig.pose.bones['clavicle.L'].head, rig.pose.bones['clavicle.R'].head)
+    pelvis = rig.matrix_world @ rig.pose.bones['spine05'].head if 'spine05' in rig.pose.bones else rig.location
+    return rest - pose, pelvis
+
+
 def bake(rig, name):
-    """The rig and everything on it as one static mesh, feet (or seat) at z = 0, facing -y."""
+    """
+    The rig and everything on it as one static mesh, feet (or seat) at z = 0,
+    centred on the hips and facing the way the rest pose faces. Returns the
+    full-detail mesh and a copy at about a third of the faces, for distance.
+    """
+    from mathutils import Matrix
     bpy.context.view_layer.update()
     dg = bpy.context.evaluated_depsgraph_get()
     dg.update()
+    turn, pelvis = facing(rig)
     parts = [o for o in rig.children_recursive if o.type == 'MESH']
     meshes = []
     for o in parts:
         me = bpy.data.meshes.new_from_object(o.evaluated_get(dg), preserve_all_data_layers=False, depsgraph=dg)
         me.transform(o.matrix_world)
+        me.transform(Matrix.Translation((-pelvis.x, -pelvis.y, 0)))
+        me.transform(Matrix.Rotation(turn, 4, 'Z'))
         meshes.append(me)
     objs = []
     for me in meshes:
@@ -200,18 +229,24 @@ def bake(rig, name):
         ob.select_set(True)
     bpy.context.view_layer.objects.active = objs[0]
     bpy.ops.object.join()
-    person = bpy.context.view_layer.objects.active
-    person.name = name
-    # Lighter for a crowd of thousands: about a third of the faces.
-    d = person.modifiers.new('decimate', 'DECIMATE')
-    d.ratio = 0.35
-    bpy.ops.object.modifier_apply(modifier=d.name)
-    zmin = min(v.co.z for v in person.data.vertices)
-    for v in person.data.vertices:
+    hi = bpy.context.view_layer.objects.active
+    hi.name = name + '.hi'
+    zmin = min(v.co.z for v in hi.data.vertices)
+    for v in hi.data.vertices:
         v.co.z -= zmin
+    for p in hi.data.polygons:
+        p.use_smooth = True
+    lo = hi.copy()
+    lo.data = hi.data.copy()
+    lo.name = name
+    bpy.context.scene.collection.objects.link(lo)
+    d = lo.modifiers.new('decimate', 'DECIMATE')
+    d.ratio = 0.35
+    bpy.context.view_layer.objects.active = lo
+    bpy.ops.object.modifier_apply(modifier=d.name)
     for o in [rig] + parts:
         bpy.data.objects.remove(o, do_unlink=True)
-    return person
+    return hi, lo, math.degrees(turn)
 
 
 def main():
@@ -233,15 +268,17 @@ def main():
     cols = {}
     for k, pose in enumerate(plan):
         rig, _ = make_person(rng, pose, A, sk, P)
-        person = bake(rig, f'person.{pose}.{k:02d}')
-        if pose not in cols:
-            cols[pose] = bpy.data.collections.new(f'people, {pose}')
-            bpy.context.scene.collection.children.link(cols[pose])
-        for c in person.users_collection:
-            c.objects.unlink(person)
-        cols[pose].objects.link(person)
-        person.location = ((k % 12) * 1.2, (k // 12) * 1.6, 0)
-        print('PERSON', person.name, len(person.data.polygons), 'faces')
+        hi, person, turn = bake(rig, f'person.{pose}.{k:03d}')
+        for tag, ob in (('people', person), ('people hi', hi)):
+            key = f'{tag}, {pose}'
+            if key not in cols:
+                cols[key] = bpy.data.collections.new(key)
+                bpy.context.scene.collection.children.link(cols[key])
+            for c in ob.users_collection:
+                c.objects.unlink(ob)
+            cols[key].objects.link(ob)
+            ob.location = ((k % 12) * 1.2, (k // 12) * 1.6 + (30 if tag == 'people hi' else 0), 0)
+        print('PERSON', person.name, len(hi.data.polygons), '/', len(person.data.polygons), 'faces, turned', round(turn), 'deg')
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     if a.test:
         cam = bpy.data.cameras.new('c')
