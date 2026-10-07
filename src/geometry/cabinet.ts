@@ -11,8 +11,10 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { CABINETS, DRIVERS, cabinetSize, type CabinetId, type Driver } from '../data/wall.config';
+import type { Variant } from './arrays';
 
-export type Role = 'shell' | 'baffle' | 'cone' | 'metal';
+/** trim: the horns' grey frames. throat: the horns' black throats. */
+export type Role = 'shell' | 'baffle' | 'cone' | 'metal' | 'trim' | 'throat';
 export type CabinetGeometry = Record<Role, THREE.BufferGeometry | null>;
 
 /** Texture density: one texture tile per this many metres of surface. */
@@ -39,12 +41,9 @@ function panel(w: number, h: number, d: number, x: number, y: number, z: number)
  * opaque panel and the whole wall renders as blank dark rectangles. The holes
  * are what makes it a speaker.
  */
-function drilledBaffle(
-  w: number,
-  h: number,
-  thickness: number,
-  holes: { x: number; y: number; r: number }[],
-): THREE.BufferGeometry {
+type Hole = { x: number; y: number; r: number } | { x: number; y: number; w: number; h: number };
+
+function drilledBaffle(w: number, h: number, thickness: number, holes: Hole[]): THREE.BufferGeometry {
   const shape = new THREE.Shape();
   shape.moveTo(-w / 2, -h / 2);
   shape.lineTo(w / 2, -h / 2);
@@ -54,7 +53,15 @@ function drilledBaffle(
 
   for (const hole of holes) {
     const path = new THREE.Path();
-    path.absarc(hole.x, hole.y, hole.r, 0, Math.PI * 2, true);
+    if ('r' in hole) path.absarc(hole.x, hole.y, hole.r, 0, Math.PI * 2, true);
+    else {
+      // Clockwise, as a hole must be.
+      path.moveTo(hole.x - hole.w / 2, hole.y - hole.h / 2);
+      path.lineTo(hole.x - hole.w / 2, hole.y + hole.h / 2);
+      path.lineTo(hole.x + hole.w / 2, hole.y + hole.h / 2);
+      path.lineTo(hole.x + hole.w / 2, hole.y - hole.h / 2);
+      path.closePath();
+    }
     shape.holes.push(path);
   }
 
@@ -64,15 +71,37 @@ function drilledBaffle(
   return g;
 }
 
-/** An open-fronted box: two sides, top, bottom, back. The front is the baffle. */
-function carcass(w: number, h: number, d: number, t: number): THREE.BufferGeometry {
-  const parts = [
-    panel(w, t, d, 0, h / 2 - t / 2, 0),
-    panel(w, t, d, 0, -h / 2 + t / 2, 0),
-    panel(t, h - 2 * t, d, -w / 2 + t / 2, 0, 0),
-    panel(t, h - 2 * t, d, w / 2 - t / 2, 0, 0),
-    panel(w - 2 * t, h - 2 * t, t, 0, 0, -d / 2 + t / 2),
-  ];
+interface Boards {
+  top: boolean;
+  bottom: boolean;
+  left: boolean;
+  right: boolean;
+  back: boolean;
+}
+
+/** Which boards a cell keeps, by variant. Built the same way as blender/build_scene.py. */
+function boardsOf(variant: Variant): Boards {
+  switch (variant) {
+    case 'lower': return { top: false, bottom: true, left: true, right: true, back: true };
+    case 'upper': return { top: true, bottom: false, left: true, right: true, back: true };
+    case 'first': return { top: true, bottom: true, left: true, right: false, back: false };
+    case 'mid': return { top: true, bottom: true, left: false, right: false, back: false };
+    case 'last': return { top: true, bottom: true, left: false, right: true, back: false };
+    case 'single': return { top: true, bottom: true, left: true, right: true, back: false };
+    default: return { top: true, bottom: true, left: true, right: true, back: true };
+  }
+}
+
+/** An open-fronted box, with whichever boards the variant keeps. The front is the baffle. */
+function carcass(w: number, h: number, d: number, t: number, b: Boards): THREE.BufferGeometry {
+  const tt = b.top ? t : 0;
+  const tb = b.bottom ? t : 0;
+  const parts: THREE.BufferGeometry[] = [];
+  if (b.left) parts.push(panel(t, h, d, -w / 2 + t / 2, 0, 0));
+  if (b.right) parts.push(panel(t, h, d, w / 2 - t / 2, 0, 0));
+  if (b.top) parts.push(panel(w - 2 * t, t, d, 0, h / 2 - t / 2, 0));
+  if (b.bottom) parts.push(panel(w - 2 * t, t, d, 0, -h / 2 + t / 2, 0));
+  if (b.back) parts.push(panel(w - 2 * t, h - tt - tb, t, 0, (tb - tt) / 2, -d / 2 + t / 2));
   const merged = mergeGeometries(parts, false);
   if (!merged) throw new Error('carcass: mergeGeometries returned null');
   return merged;
@@ -82,7 +111,12 @@ interface DriverParts {
   baffle: THREE.BufferGeometry[];
   cone: THREE.BufferGeometry[];
   metal: THREE.BufferGeometry[];
+  trim: THREE.BufferGeometry[];
+  throat: THREE.BufferGeometry[];
 }
+
+/** Width of the T350's cast frame round its mouth. Read off the lot 72 photograph. */
+const HORN_RIM = 0.009;
 
 /**
  * A driver mounted in a baffle at z = frontZ.
@@ -93,25 +127,47 @@ interface DriverParts {
  */
 function driver(d: Driver, x: number, y: number, frontZ: number, detail: 'full' | 'low'): DriverParts {
   const seg = detail === 'full' ? 20 : 10;
-  const out: DriverParts = { baffle: [], cone: [], metal: [] };
+  const out: DriverParts = { baffle: [], cone: [], metal: [], trim: [], throat: [] };
 
   const coneR = d.coneDia / 2;
   const capR = d.dustCapDia / 2;
+
+  if (d.horn) {
+    // The T350 (lot 72): a rectangular horn, mouth flush with the baffle,
+    // narrowing to its throat behind it, in a grey cast frame.
+    const { w, h, depth } = d.horn;
+    const mw = w - 2 * HORN_RIM;
+    const mh = h - 2 * HORN_RIM;
+    // A four-sided cylinder turned 45° is a square of side r·√2; scale it to the mouth.
+    const flare = new THREE.CylinderGeometry(Math.SQRT1_2, Math.SQRT1_2 / 3.2, depth, 4, 1, true);
+    flare.rotateY(Math.PI / 4);
+    flare.rotateX(-Math.PI / 2);
+    flare.scale(mw, mh, 1);
+    flare.translate(x, y, frontZ - depth / 2);
+    out.throat.push(flare);
+    const rim = new THREE.Shape();
+    rim.moveTo(-w / 2, -h / 2);
+    rim.lineTo(w / 2, -h / 2);
+    rim.lineTo(w / 2, h / 2);
+    rim.lineTo(-w / 2, h / 2);
+    rim.closePath();
+    const mouth = new THREE.Path();
+    mouth.moveTo(-mw / 2, -mh / 2);
+    mouth.lineTo(-mw / 2, mh / 2);
+    mouth.lineTo(mw / 2, mh / 2);
+    mouth.lineTo(mw / 2, -mh / 2);
+    mouth.closePath();
+    rim.holes.push(mouth);
+    const frame = new THREE.ExtrudeGeometry(rim, { depth: 0.006, bevelEnabled: false });
+    frame.translate(x, y, frontZ);
+    out.trim.push(frame);
+    return out;
+  }
 
   // Mounting flange, black: an annulus from the surround out to the frame edge.
   const flange = new THREE.RingGeometry(coneR + d.surroundWidth * 0.9, d.frameDia / 2, seg);
   flange.translate(x, y, frontZ + 0.001);
   out.baffle.push(flange);
-
-  if (d.id === 'evHorn') {
-    // A horn, not a cone: a shallow rectangular flare with a throat behind it.
-    const mouth = new THREE.CylinderGeometry(d.frameDia / 2, d.frameDia / 2.9, Math.abs(d.coneDepth), 4, 1, true);
-    mouth.rotateX(Math.PI / 2);
-    mouth.rotateZ(Math.PI / 4);
-    mouth.translate(x, y, frontZ + Math.abs(d.coneDepth) / 2);
-    out.metal.push(mouth);
-    return out;
-  }
 
   // Paper cone: mouth at the baffle, neck receding into the box.
   const cone = new THREE.CylinderGeometry(coneR, capR * 1.15, d.coneDepth, seg, 1, true);
@@ -155,48 +211,43 @@ function driverLayout(id: CabinetId): { driver: Driver; x: number; y: number }[]
   return [{ driver: d, x: 0, y: CABINETS[id].driverOffsetY ?? 0 }];
 }
 
-const built = new Map<CabinetId, CabinetGeometry>();
+const built = new Map<string, CabinetGeometry>();
 
-export function cabinetGeometry(id: CabinetId): CabinetGeometry {
-  const hit = built.get(id);
+export function cabinetGeometry(id: CabinetId, variant: Variant = 'whole'): CabinetGeometry {
+  const key = `${id}:${variant}`;
+  const hit = built.get(key);
   if (hit) return hit;
 
   const cab = CABINETS[id];
   const { w, h, d } = cabinetSize(id);
   const t = cab.shellThickness;
-  const isPanel = cab.kind === 'panel';
+  const boards = boardsOf(variant);
+  const tt = boards.top ? t : 0;
+  const tb = boards.bottom ? t : 0;
   const detail: 'full' | 'low' = cab.driver === 'jbl15' || cab.driver === 'jbl12' ? 'full' : 'low';
 
-  const shellParts: THREE.BufferGeometry[] = [];
-  const baffleParts: THREE.BufferGeometry[] = [];
-  const coneParts: THREE.BufferGeometry[] = [];
-  const metalParts: THREE.BufferGeometry[] = [];
+  const parts: Record<Role, THREE.BufferGeometry[]> = { shell: [], baffle: [], cone: [], metal: [], trim: [], throat: [] };
 
   const slots = driverLayout(id);
-  const frontZ = d / 2 - cab.baffleInset - (isPanel ? 0 : t / 2);
+  const frontZ = d / 2 - cab.baffleInset;
   // Cutouts a shade smaller than the driver frame, so the flange has something
-  // to sit on — which is how a driver is actually mounted.
-  const holes = slots.map((s) => ({ x: s.x, y: s.y, r: s.driver.frameDia * 0.46 }));
+  // to sit on — which is how a driver is actually mounted. A horn's is its mouth.
+  const holes: Hole[] = slots.map((s) =>
+    s.driver.horn
+      ? { x: s.x, y: s.y, w: s.driver.horn.w - 2 * HORN_RIM, h: s.driver.horn.h - 2 * HORN_RIM }
+      : { x: s.x, y: s.y, r: s.driver.frameDia * 0.46 },
+  );
 
-  if (isPanel) {
-    // A cell of a shared baffle board, not a box: one continuous black face
-    // with drilled cutouts, which is what the close-up photographs show.
-    const board = drilledBaffle(w, h, cab.baffleInset * 2, holes);
-    board.translate(0, 0, frontZ);
-    baffleParts.push(board);
-    shellParts.push(panel(w, h, Math.max(0.02, d - cab.baffleInset * 2), 0, 0, -cab.baffleInset));
-  } else {
-    shellParts.push(carcass(w, h, d, t));
-    const board = drilledBaffle(w - t * 2, h - t * 2, t, holes);
-    board.translate(0, 0, frontZ);
-    baffleParts.push(board);
-  }
+  parts.shell.push(carcass(w, h, d, t, boards));
+  // The baffle spans the full height wherever a board is left off, so a
+  // paired box reads as one face holding two drivers.
+  const board = drilledBaffle(w - t * 2, h - tt - tb, Math.min(t, 0.019), holes.map((o) => ({ ...o, y: o.y - (tb - tt) / 2 })));
+  board.translate(0, (tb - tt) / 2, frontZ);
+  parts.baffle.push(board);
 
   for (const slot of slots) {
-    const parts = driver(slot.driver, slot.x, slot.y, frontZ, detail);
-    baffleParts.push(...parts.baffle);
-    coneParts.push(...parts.cone);
-    metalParts.push(...parts.metal);
+    const dp = driver(slot.driver, slot.x, slot.y, frontZ, detail);
+    for (const r of Object.keys(dp) as (keyof DriverParts)[]) parts[r].push(...dp[r]);
   }
 
   /**
@@ -214,12 +265,14 @@ export function cabinetGeometry(id: CabinetId): CabinetGeometry {
     return merged;
   };
   const geo: CabinetGeometry = {
-    shell: merge(shellParts),
-    baffle: merge(baffleParts),
-    cone: merge(coneParts),
-    metal: merge(metalParts),
+    shell: merge(parts.shell),
+    baffle: merge(parts.baffle),
+    cone: merge(parts.cone),
+    metal: merge(parts.metal),
+    trim: merge(parts.trim),
+    throat: merge(parts.throat),
   };
-  built.set(id, geo);
+  built.set(key, geo);
   return geo;
 }
 

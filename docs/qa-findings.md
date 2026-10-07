@@ -625,3 +625,38 @@ The project owner settled three open questions.
   unknown" where not), every borrowed fact links its source, and the site
   has a full credits page (photographers, auction houses, archives, books,
   Poly Haven, the MakeHuman community for Hair 02/03 under CC-BY).
+
+---
+
+## 18. Blender and the explorer, reconciled (7 October 2026)
+
+Blender had become the more detailed model, with most of its detail
+hard-coded in the Python, and the explorer had drifted from it. The project
+owner ruled on each conflict, with the photographs side by side
+(`.shots/conflicts/index.html`, local). Each ruling is now one value in the
+config that both renderers read.
+
+| # | Detail | Ruling | Evidence |
+|---|---|---|---|
+| 1 | Black or bare cabinets | A mix, at `blackFinishRatio`. Blender had every cabinet bare; it now reads the same per-cabinet finish as the explorer, decided once in `src/geometry/arrays.ts` | Pechner 17 May: both finishes in the same columns |
+| 2 | 5" and horn panels | Small plywood cells, one driver each (Blender), not one drilled black board. One finish per block | Oakland 8 June: pale framed grids. Small photos: a reading |
+| 3 | Cluster strips | Aluminium, face and flanges (the explorer had a black face) | Bowl, Oakland; §11 |
+| 4 | Cones | Near-black, `#2A2A2C` (was mid-grey in the explorer) | Every colour photo |
+| 5 | Horns | The T350 as it survives: rectangular, 7.25 × 4.5 × 3.5 in, grey cast frame, black throat. Neither renderer had it right | Julien's 2026 lot 72 |
+| 6 | Scaffold steel | Bright galvanised, `#A9ADB1` (the explorer had darkened it) | Oakland daylight; Pechner |
+| 7 | MC 2300 panel | Brushed gold, black lower strip, 3 knobs and a red rocker (the explorer had black glass and 4 knobs) | Sotheby's 2021 lot 36 |
+| 8 | Road cases | Blender's orange and black Anvils and ZERO cases, stencils, names, stickers | Oakland; Sotheby's lots 36–43 |
+| 9 | Tie-dyes | Four on the front of the scaffold near the top, outdoors only; none indoors | Bowl 21 July; Oakland 8 June |
+| 10 | 12"s | Paired two to a box (Blender) | Sotheby's lot 47 |
+
+**The T350.** Julien's lot 72 is the only surviving tweeter. Its frame is
+plain grey metal and its throat black, with vertical vanes (not modelled). It
+is 7.25 in by 4.5 in, so it fits the 6.3 in high horn cells only on its side:
+modelled landscape. Julien's says these horns sat on the upper part of the
+centre array, above the drums. The model also has horn rows at the tops of the
+vocal fills and the drum stacks; that placement is unchanged and unconfirmed.
+
+**What changes in the renders.** Blender's cabinets are now mixed black and
+bare, so the story's renders need re-rendering. Rulings 7–9 come into the
+explorer next (amps, cases, tie-dyes); the tie-dyes need the explorer's
+outdoor setting.

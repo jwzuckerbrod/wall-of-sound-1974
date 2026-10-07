@@ -7,7 +7,8 @@
  * 15s, because there was none. See docs/reconstruction-spec.md §9.
  */
 import * as THREE from 'three';
-import { wall, type CabinetId } from '../data/wall.config';
+import { wall } from '../data/wall.config';
+import type { Finish } from '../geometry/arrays';
 import {
   baffleMap,
   coneMap,
@@ -24,6 +25,9 @@ export interface WallMaterials {
   baffle: THREE.MeshStandardMaterial;
   cone: THREE.MeshStandardMaterial;
   metal: THREE.MeshStandardMaterial;
+  trim: THREE.MeshStandardMaterial;
+  throat: THREE.MeshStandardMaterial;
+  strip: THREE.MeshStandardMaterial;
   steel: THREE.MeshStandardMaterial;
   deck: THREE.MeshStandardMaterial;
   facing: THREE.MeshStandardMaterial;
@@ -91,6 +95,26 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
     color: m.dustCap.baseColor,
     roughness: m.dustCap.roughness,
     metalness: m.dustCap.metalness,
+    side: THREE.DoubleSide,
+  });
+
+  // The T350 horns: grey cast frame, black throat (Julien's lot 72).
+  const trim = new THREE.MeshStandardMaterial({
+    color: m.hornFrame.baseColor,
+    roughness: m.hornFrame.roughness,
+    metalness: m.hornFrame.metalness,
+  });
+  const throat = new THREE.MeshStandardMaterial({
+    color: m.hornThroat.baseColor,
+    roughness: m.hornThroat.roughness,
+    metalness: m.hornThroat.metalness,
+    side: THREE.DoubleSide,
+  });
+  // The cluster's strips, face and flanges alike (Sotheby's lot 49).
+  const strip = new THREE.MeshStandardMaterial({
+    color: m.stripAluminium.baseColor,
+    roughness: m.stripAluminium.roughness,
+    metalness: m.stripAluminium.metalness,
     side: THREE.DoubleSide,
   });
 
@@ -173,7 +197,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   });
 
   cached = {
-    shell, baffle, cone, metal, steel, deck, facing, cable,
+    shell, baffle, cone, metal, trim, throat, strip, steel, deck, facing, cable,
     ampBody, ampGlass, ampMeter, tieDye, figure,
     chrome, caseBody, caseStencil,
     dispose() {
@@ -185,20 +209,16 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 }
 
 /**
- * Per-cabinet finish. The surviving cabinet is painted matte black all over;
- * photographs show others with the plywood left bare. Both existed, so the
- * wall is mixed — deterministically, so it looks the same on every visit.
+ * Per-cabinet colour. The surviving cabinet is painted matte black all over;
+ * photographs show others with the plywood left bare. Which is which is
+ * decided once, in src/geometry/arrays.ts, so Blender finishes the same
+ * cabinets the same way. `index` only varies the road wear.
  */
-export function shellColor(index: number, out: THREE.Color, cabinet?: CabinetId): THREE.Color {
+export function shellColor(index: number, out: THREE.Color, finish: Finish): THREE.Color {
   const m = wall.materials;
-  // The 5-inch and horn sections were not discrete boxes but one big black
-  // baffle board drilled with cutouts, which is exactly what the close-up
-  // photographs show. So those never take the bare-plywood finish.
-  // The cluster's aluminium strips (Sotheby's lot 49) are bare dull metal.
-  if (cabinet === 'strip5') return out.set('#8f9396');
-  const alwaysBlack = cabinet === 'panel5' || cabinet === 'panelHF';
-  const r = ((index * 2654435761) % 1013) / 1013;
-  const painted = alwaysBlack || r < m.blackFinishRatio;
+  // The strips take their colour from their own material.
+  if (finish === 'metal') return out.setRGB(1, 1, 1);
+  const painted = finish === 'black';
   out.set(painted ? m.plywoodBlack.baseColor : m.plywood.baseColor);
   // Road wear: every cabinet a little different, none of them clean.
   const wear = (((index * 40503) % 211) / 211 - 0.5) * (painted ? 0.1 : 0.22);

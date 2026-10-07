@@ -3,7 +3,7 @@ import { useFrame } from '@react-three/fiber';
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { CHANNELS, wall, type CabinetId, type ChannelId } from '../data/wall.config';
-import { allCells, cellsByCabinet, type Cell } from '../geometry/arrays';
+import { allCells, cellsByCabinet, type Cell, type Variant } from '../geometry/arrays';
 import { cabinetGeometry, type Role } from '../geometry/cabinet';
 import { shellColor, wallMaterials } from '../materials';
 
@@ -21,7 +21,7 @@ export interface ArrayInteraction {
 }
 
 /** Roles drawn for every cabinet, in the order they are added to the scene. */
-const ROLES: Role[] = ['shell', 'baffle', 'cone', 'metal'];
+const ROLES: Role[] = ['shell', 'baffle', 'cone', 'metal', 'trim', 'throat'];
 
 /** How far the exploded view throws a block along its own direction. */
 const EXPLODE_DISTANCE = 2.6;
@@ -32,6 +32,7 @@ const scratchColor = new THREE.Color();
 function RoleMesh({
   role,
   cabinet,
+  variant,
   cells,
   colorMode,
   castShadow,
@@ -39,6 +40,7 @@ function RoleMesh({
 }: {
   role: Role;
   cabinet: CabinetId;
+  variant: Variant;
   cells: Cell[];
   colorMode: ColorMode;
   castShadow: boolean;
@@ -46,7 +48,9 @@ function RoleMesh({
 }) {
   const ref = useRef<THREE.InstancedMesh>(null);
   const materials = wallMaterials();
-  const geometry = cabinetGeometry(cabinet)[role];
+  const geometry = cabinetGeometry(cabinet, variant)[role];
+  // The cluster's strips are aluminium all over, board and face alike.
+  const material = cabinet === 'strip5' && (role === 'shell' || role === 'baffle') ? materials.strip : materials[role];
 
   // Only the outer shell is pickable. Raycasting four overlapping instanced
   // meshes per cabinet would be four times the work for the same answer.
@@ -92,7 +96,7 @@ function RoleMesh({
         if (role === 'baffle') colour.multiplyScalar(0.28);
         if (role === 'cone') colour.multiplyScalar(0.62);
       } else if (role === 'shell') {
-        shellColor(i + cabinet.length * 31, colour, cabinet);
+        shellColor(i + cabinet.length * 31, colour, c.finish);
       } else {
         colour.setRGB(1, 1, 1);
       }
@@ -135,7 +139,7 @@ function RoleMesh({
   return (
     <instancedMesh
       ref={ref}
-      args={[geometry, materials[role], cells.length]}
+      args={[geometry, material, cells.length]}
       castShadow={castShadow && role === 'shell'}
       receiveShadow={castShadow}
       frustumCulled
@@ -175,12 +179,13 @@ export function Arrays({
     // Cells are deck-relative. Without this lift every stack started at the
     // ground and its bottom ten feet were buried inside the stage.
     <group name="arrays" position={[0, wall.dimensions.stageDeckHeight, 0]}>
-      {groups.map(([cabinet, cells]) =>
+      {groups.map(([key, { cabinet, variant, cells }]) =>
         ROLES.map((role) => (
           <RoleMesh
-            key={`${cabinet}:${role}`}
+            key={`${key}:${role}`}
             role={role}
             cabinet={cabinet}
+            variant={variant}
             cells={cells}
             colorMode={colorMode}
             castShadow={shadows}

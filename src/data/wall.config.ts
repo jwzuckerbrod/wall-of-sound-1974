@@ -293,6 +293,11 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: 'No source names the JBL model numbers; those remain period-correct candidates and affect only cone and dust-cap proportions. The tweeter is NOT a guess: a surviving "Wall of Sound 1974" unit from the crew\'s own stock is an Electro-Voice T350.',
   },
   'drivers.tweeterModel': { confidence: 'confirmed', sources: ['juliens'], note: 'Electro-Voice T350. This config previously guessed T-35.' },
+  'drivers.hornT350': {
+    confidence: 'confirmed',
+    sources: ['juliens'],
+    note: 'The surviving unit (Julien\'s 2026, lot 72): 7.25 × 4.5 × 3.5 in, a rectangular horn in a plain grey cast-metal frame, its throat black with vertical vanes. Julien\'s says these sat on the upper part of the centre array, above the drums. Mounted landscape here, since a 7.25 in horn only fits the 6.3 in high horn cells that way. See docs/qa-findings.md §18.',
+  },
   'drivers.smallCone': {
     confidence: 'estimated',
     sources: ['juliens', 'deadsources74'],
@@ -396,10 +401,30 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos', 'juliens'],
     note: 'The big drivers were NOT behind grille cloth — cones, surrounds, aluminium dust caps and mounting screws are visible in every photograph. PARTIAL CORRECTION: surviving Hard Truckers small plywood enclosures are catalogued with tie-dye grille cloth over the 4.5-inch driver. So the small-cone boxes were covered and the 12s and 15s were not, which also explains where Courtenay Pollock\'s tie-dye went. Modelled accordingly.',
   },
+  'materials.cone': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'Near-black. JBL cones of the period are dark grey paper, and every colour photograph (Oakland 8 June, the Hollywood Bowl 21 July 1974) reads them dark against the plywood. Was mid-grey; changed on the project owner\'s ruling, docs/qa-findings.md §18.',
+  },
+  'materials.steel': {
+    confidence: 'estimated',
+    sources: ['photos', 'pechner'],
+    note: 'Bright galvanised steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one.',
+  },
+  'cabinets.panelCells': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'The 5" and horn panels are built as small plywood cells, one driver each, not as one drilled black board: at Oakland the small-driver panels read as pale framed grids. The photographs are small; this is a reading, ruled on by the project owner (docs/qa-findings.md §18). They take the same black-or-bare finish as the other cabinets, one finish per block.',
+  },
+  'cabinets.pairedTwelves': {
+    confidence: 'confirmed',
+    sources: ['sothebys'],
+    note: 'The 12"s came two to a box, stacked (Sotheby\'s 2021 lot 47, 16 × 26 × 22 in), so rows pair up: a lower cell without its top board, an upper one without its bottom. An odd top row is a single box.',
+  },
   'materials.plywood': {
     confidence: 'confirmed',
     sources: ['anderson', 'mixrebuild', 'photos'],
-    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles. Both are modelled, mixed across the wall.',
+    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. Both are modelled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
   },
   'materials.tieDye': { confidence: 'confirmed', sources: ['deadsources22'], note: 'Courtenay Pollock tie-dyed the fabric panels — on the structure, not over the drivers.' },
   'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, black glass panel, 128 lb per amplifier. The front panel is anodized gold over a black chassis, 10.5 × 19 × 17 in, as measured on a Wall amplifier (Sotheby\'s lot 43).' },
@@ -554,6 +579,8 @@ export interface Driver {
   surroundWidth: number;
   /** Bolt circle count for the visible mounting screws. */
   boltCount: number;
+  /** A horn instead of a cone: mouth width and height, and depth behind the baffle. */
+  horn?: { w: number; h: number; depth: number };
 }
 
 export const DRIVERS: Record<DriverId, Driver> = {
@@ -576,6 +603,8 @@ export const DRIVERS: Record<DriverId, Driver> = {
     id: 'evHorn', label: 'Electro-Voice horn tweeter', modelGuess: 'Electro-Voice T350 (confirmed — surviving unit)',
     nominalIn: 0, frameDia: IN(4.5), coneDia: IN(3.4), coneDepth: IN(-1.6), // negative = horn flare projects forward
     dustCapDia: 0, dustCapRise: 0, surroundWidth: 0, boltCount: 4,
+    // The surviving unit, Julien's 2026 lot 72. See PROVENANCE['drivers.hornT350'].
+    horn: { w: IN(7.25), h: IN(4.5), depth: IN(3.5) },
   },
 };
 
@@ -638,6 +667,10 @@ export interface Cabinet {
   driverOffsetY?: number;
   /** For a strip: how many cells make one length of it. */
   strip?: number;
+  /** Rows pair up two drivers to a box (Sotheby's lot 47). */
+  pairRows?: boolean;
+  /** One finish for the whole block, not cabinet by cabinet (the small-driver panels). */
+  finishPerBlock?: boolean;
 }
 
 export const CABINETS: Record<CabinetId, Cabinet> = {
@@ -647,17 +680,18 @@ export const CABINETS: Record<CabinetId, Cabinet> = {
   cab15: { id: 'cab15', kind: 'box', driver: 'jbl15', depth: IN(29.5), widthExplicit: IN(19.5), heightExplicit: IN(25.5), shellThickness: IN(0.75), baffleInset: IN(0.5), driverOffsetY: -IN(4) },
   // One driver's share of lot 47, a 2 × 12" box of 16 × 26 × 22 in with the two
   // drivers stacked: each cell is 16 wide, 13 high. Rows pair up into boxes.
-  cab12: { id: 'cab12', kind: 'box', driver: 'jbl12', depth: IN(22), widthExplicit: IN(16), heightExplicit: IN(13), shellThickness: IN(0.75), baffleInset: IN(0.5) },
+  cab12: { id: 'cab12', kind: 'box', driver: 'jbl12', depth: IN(22), widthExplicit: IN(16), heightExplicit: IN(13), shellThickness: IN(0.75), baffleInset: IN(0.5), pairRows: true },
   // The measured cabinet itself — used for the vocal fills, at true size.
   cab12x2: { id: 'cab12x2', kind: 'box', driver: 'jbl12', depth: IN(22.5), widthExplicit: IN(31), heightExplicit: IN(24), shellThickness: IN(0.75), baffleInset: IN(0.5) },
   // Rows 5.5 in high: the height of the cluster's aluminium 5" enclosures
   // (lot 49), and the row pitch Pechner's photo gives the cluster's 5" band.
-  panel5: { id: 'panel5', kind: 'panel', driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: IN(5.5), pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
+  // Small plywood cells, one driver each. See PROVENANCE['cabinets.panelCells'].
+  panel5: { id: 'panel5', kind: 'box', finishPerBlock: true, driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: IN(5.5), pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
   // The centre cluster's 5"s in curved aluminium channels, as Sotheby's 2021
   // lot 49: 5.5 high × 3.5 deep, holes 69/13 in apart. Three lengths of 11 make
   // a row as wide as the 12" section below. See PROVENANCE['arrays.clusterStrips'].
   strip5: { id: 'strip5', kind: 'panel', driver: 'jbl5', depth: IN(3.5), widthExplicit: IN(69 / 13), heightExplicit: IN(5.5), pitch: IN(69 / 13), shellThickness: IN(0.125), baffleInset: IN(0.1), strip: 11 },
-  panelHF: { id: 'panelHF', kind: 'panel', driver: 'evHorn', depth: 0.250, widthExplicit: 0.225, heightExplicit: 0.160, pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
+  panelHF: { id: 'panelHF', kind: 'box', finishPerBlock: true, driver: 'evHorn', depth: 0.250, widthExplicit: 0.225, heightExplicit: 0.160, pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
 };
 
 /** Resolved outer size of one cabinet or one panel cell. */
@@ -1004,16 +1038,18 @@ export const wall = {
      */
     blackFinishRatio: 0.42,
     baffle: { baseColor: '#141414', roughness: 0.94, metalness: 0.0 },
-    cone: { baseColor: '#8E9198', roughness: 0.86, metalness: 0.0 },
+    /** Near-black paper. See PROVENANCE['materials.cone']. */
+    cone: { baseColor: '#2A2A2C', roughness: 0.88, metalness: 0.0 },
+    /** The T350: grey cast frame, black throat. See PROVENANCE['drivers.hornT350']. */
+    hornFrame: { baseColor: '#8A8E91', roughness: 0.55, metalness: 0.8 },
+    hornThroat: { baseColor: '#161616', roughness: 0.5, metalness: 0.0 },
+    /** The cluster's 5" strips: dull, oxidised aluminium channel (Sotheby's lot 49). */
+    stripAluminium: { baseColor: '#8A8E91', roughness: 0.5, metalness: 0.9 },
     /** Brushed aluminium, not chrome: in a dark hall a mirror just reflects the dark. */
     dustCap: { baseColor: '#D2D6DB', roughness: 0.42, metalness: 0.82 },
     surround: { baseColor: '#1C1C1C', roughness: 0.75, metalness: 0.0 },
-    /**
-     * Galvanised tube, dulled by road use. Bright steel reads as a white cage
-     * in front of the speakers and takes over the frame, which is the opposite
-     * of what the photographs show.
-     */
-    steel: { baseColor: '#5F656B', roughness: 0.62, metalness: 0.9 },
+    /** Bright galvanised tube. See PROVENANCE['materials.steel']. */
+    steel: { baseColor: '#A9ADB1', roughness: 0.38, metalness: 1.0 },
     cable: { baseColor: '#0E0E0E', roughness: 0.68, metalness: 0.0 },
     ampGlass: { baseColor: '#0A0A0C', roughness: 0.12, metalness: 0.2 },
     /**

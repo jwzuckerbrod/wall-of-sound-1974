@@ -57,6 +57,9 @@ const cells = arrays.allCells().map((c) => ({
   row: c.row,
   rows: ARRAYS.find((b) => b.id === c.block).rows,
   col: c.col,
+  // How it's built and how it's finished, decided once in src/geometry/arrays.ts.
+  variant: c.variant,
+  finish: c.finish,
 }));
 
 const cabinets = Object.fromEntries(
@@ -96,7 +99,13 @@ const scene = {
   drivers: Object.fromEntries(Object.entries(DRIVERS).map(([k, d]) => [k, {
     frameDia: r4(d.frameDia), coneDia: r4(d.coneDia), coneDepth: r4(d.coneDepth),
     dustCapDia: r4(d.dustCapDia), dustCapRise: r4(d.dustCapRise), surroundWidth: r4(d.surroundWidth),
+    horn: d.horn ? { w: r4(d.horn.w), h: r4(d.horn.h), depth: r4(d.horn.depth) } : null,
   }])),
+  // Colours, roughness and metalness (wall.materials), for the surfaces both renderers share.
+  materials: Object.fromEntries(
+    ['plywoodBlack', 'baffle', 'cone', 'hornFrame', 'hornThroat', 'stripAluminium', 'steel', 'cable']
+      .map((k) => [k, wall.materials[k]]),
+  ),
   cabinets,
   cells,
   tubes: scaf.scaffoldTubes(L).map((t) => ({ a: v3(t.a), b: v3(t.b), kind: t.kind })),

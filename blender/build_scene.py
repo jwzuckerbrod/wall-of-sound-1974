@@ -117,22 +117,33 @@ def wood(name, light, dark, scale=6.0, rough=0.72):
     return m
 
 
-def build_materials():
+def build_materials(S):
+    """
+    The surfaces the explorer shares take their values from the config
+    (wall.materials, via scene.json). The wood keeps its own shader: Cycles
+    builds the grain procedurally where the explorer multiplies a texture.
+    """
+    C = S['materials']
+    cfg = lambda name, k, **extra: principled(name, C[k]['baseColor'], C[k]['roughness'], C[k]['metalness'], **extra)
     M = {}
     M['ply'] = wood('Birch ply', '#a08a6c', '#6b5842')
+    # Matte black paint over the same birch: the grain still shows, faintly.
+    M['plyBlack'] = wood('Birch ply, black paint', C['plywoodBlack']['baseColor'], '#0c0b09', rough=C['plywoodBlack']['roughness'])
     M['baffle'], _ = principled('Baffle, flat black', '#0d0d0d', 0.85)
-    # Paper cones: mid-grey, matte, with a little sheen at grazing angles.
-    M['cone'], b = principled('Paper cone', '#2a2a2c', 0.88)
+    # Paper cones: near-black, matte, with a little sheen at grazing angles.
+    M['cone'], b = cfg('Paper cone', 'cone')
     b.inputs['Sheen Weight'].default_value = 0.3
     M['cap'], _ = principled('Aluminium dust cap', '#d9dbde', 0.22, 1.0)
     M['frame'], _ = principled('Driver frame', '#1b1b1d', 0.45, 0.6)
     # Stage lamps: black-painted cans, a dark lens.
     M['lampbody'], _ = principled('Lamp can, black paint', '#121212', 0.5, 0.3)
     M['lens'], _ = principled('Lamp lens, unlit', '#2b2a27', 0.08, 0.0)
-    M['horn'], _ = principled('Horn flare', '#161616', 0.5)
-    M['steel'], _ = principled('Galvanised tube', '#a9adb1', 0.38, 1.0)
+    # The T350 (Julien's lot 72): black throat, grey cast frame.
+    M['horn'], _ = cfg('Horn throat', 'hornThroat')
+    M['hornframe'], _ = cfg('Horn frame, cast metal', 'hornFrame')
+    M['steel'], _ = cfg('Galvanised tube', 'steel')
     # The cluster's 5" strips: dull, oxidised aluminium channel (Sotheby's lot 49).
-    M['strip'], _ = principled('Cluster strip, aluminium', '#8a8e91', 0.5, 0.9)
+    M['strip'], _ = cfg('Cluster strip, aluminium', 'stripAluminium')
     M['deck'] = wood('Deck ply', '#7d6548', '#4a3a28', scale=2.5, rough=0.8)
     M['plank'] = wood('Floor plank', '#8f7552', '#5a452e', scale=3.0, rough=0.8)
     M['facing'], _ = principled('Stage skirt, black', '#0b0b0c', 0.9)
@@ -143,6 +154,21 @@ def build_materials():
 
 
 # ─── cabinet prototypes ───────────────────────────────────────────────────────
+
+# Width of the T350's cast frame round its mouth (src/geometry/cabinet.ts HORN_RIM).
+HORN_RIM = 0.009
+
+# The boards each variant keeps (src/geometry/arrays.ts decides the variant):
+# top, bottom, left, right, back.
+BOARDS = {
+    'whole': (True, True, True, True, True),
+    'lower': (False, True, True, True, True),
+    'upper': (True, False, True, True, True),
+    'first': (True, True, True, False, False),
+    'mid': (True, True, False, False, False),
+    'last': (True, True, False, True, False),
+    'single': (True, True, True, True, False),
+}
 
 def mesh_from_bm(bm, name):
     me = bpy.data.meshes.new(name)
@@ -162,7 +188,7 @@ def box_bm(bm, w, d, h, centre, mat):
 def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True, left=True, right=True, back=True):
     """
     One cabinet with its driver, front facing -Y, as a single mesh with
-    material slots: ply, baffle, cone, cap, frame, horn.
+    material slots: ply, baffle, cone, cap, frame, horn, hornframe.
 
     top/bottom=False leaves that board off, so two cells stacked read as one
     box holding two drivers: how the 12"s were built (Sotheby's lot 47).
@@ -172,7 +198,7 @@ def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True, left=True, ri
     w, h, d, t, inset = cab['w'], cab['h'], cab['d'], cab['shell'], cab['inset']
     oz = cab.get('driverY', 0.0)
     bm = bmesh.new()
-    ply, baffle, cone, cap, frame, horn = (slots[k] for k in ('ply', 'baffle', 'cone', 'cap', 'frame', 'horn'))
+    ply, baffle, cone, cap, frame, horn, hornframe = (slots[k] for k in ('ply', 'baffle', 'cone', 'cap', 'frame', 'horn', 'hornframe'))
 
     # Carcass: sides, top, bottom and back as separate boards, so the front is open.
     tt, tb = (t if top else 0.0), (t if bottom else 0.0)
@@ -193,9 +219,17 @@ def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True, left=True, ri
     bz = (tb - tt) / 2
     r_hole = min(drv['coneDia'] / 2 + drv['surroundWidth'], bw / 2 * 0.98, bh / 2 * 0.98 - abs(oz - bz))
     seg = 48
-    hole = bmesh.ops.create_circle(bm, cap_ends=False, segments=seg, radius=r_hole)['verts']
-    for v in hole:
-        v.co = Vector((v.co.x, by, v.co.y + oz))
+    H = drv.get('horn')
+    if H:
+        # The horn's mouth: a rectangle inside its cast frame.
+        mw, mh = H['w'] - 2 * HORN_RIM, H['h'] - 2 * HORN_RIM
+        hole = [bm.verts.new((sx * mw / 2, by, oz + sz * mh / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        for i in range(4):
+            bm.edges.new((hole[i], hole[(i + 1) % 4]))
+    else:
+        hole = bmesh.ops.create_circle(bm, cap_ends=False, segments=seg, radius=r_hole)['verts']
+        for v in hole:
+            v.co = Vector((v.co.x, by, v.co.y + oz))
     corners = [bm.verts.new((sx * bw / 2, by, bz + sz * bh / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
     rect = [bm.edges.new((corners[i], corners[(i + 1) % 4])) for i in range(4)]
     ring = list({e for v in hole for e in v.link_edges})
@@ -205,17 +239,27 @@ def cabinet_prototype(cid, cab, drv, slots, top=True, bottom=True, left=True, ri
         if isinstance(f, bmesh.types.BMFace):
             f.material_index = baffle
 
-    if drv['coneDepth'] < 0:
-        # EV T350: a short rectangular horn projecting forward of the baffle.
-        L = abs(drv['coneDepth'])
-        res = bmesh.ops.create_cone(bm, cap_ends=False, segments=4, radius1=drv['frameDia'] / 2,
-                                    radius2=drv['frameDia'] / 3.2, depth=L)
+    if H:
+        # EV T350 (lot 72): a rectangular horn, mouth flush with the baffle,
+        # narrowing to its throat behind it, in a grey cast frame. Built as
+        # src/geometry/cabinet.ts builds it.
+        L = H['depth']
+        res = bmesh.ops.create_cone(bm, cap_ends=False, segments=4, radius1=math.sqrt(0.5),
+                                    radius2=math.sqrt(0.5) / 3.2, depth=L)
         bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(45), 3, 'Z'))
-        # -90 about X sends +Z to +Y, so the wide end (radius1, at -Z) faces the audience.
-        bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(-90), 3, 'X'))
-        bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by - L / 2, oz))
+        bmesh.ops.scale(bm, verts=res['verts'], vec=(mw, mh, 1))
+        # +90 about X sends -Z to +Y: the wide end (radius1, at -Z) at the
+        # mouth, the throat receding into the box.
+        bmesh.ops.rotate(bm, verts=res['verts'], cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(90), 3, 'X'))
+        bmesh.ops.translate(bm, verts=res['verts'], vec=(0, by + L / 2, oz))
         for f in {f for v in res['verts'] for f in v.link_faces}:
             f.material_index = horn
+        # The frame: a flat rim round the mouth, standing just proud of the baffle.
+        o = [bm.verts.new((sx * H['w'] / 2, by - 0.004, oz + sz * H['h'] / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        i_ = [bm.verts.new((sx * mw / 2, by - 0.004, oz + sz * mh / 2)) for sx, sz in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+        for k in range(4):
+            f = bm.faces.new((o[k], o[(k + 1) % 4], i_[(k + 1) % 4], i_[k]))
+            f.material_index = hornframe
         return mesh_from_bm(bm, f'{cid} proto')
 
     coneR, capR, depth = drv['coneDia'] / 2, drv['dustCapDia'] / 2, drv['coneDepth']
@@ -306,44 +350,29 @@ def build(S, M, place='arena'):
         root.children.link(c)
         colls[n] = c
 
-    slot_order = ['ply', 'baffle', 'cone', 'cap', 'frame', 'horn']
+    slot_order = ['ply', 'baffle', 'cone', 'cap', 'frame', 'horn', 'hornframe']
     slots = {k: i for i, k in enumerate(slot_order)}
+    # One prototype per cabinet, variant (which boards it keeps: the paired
+    # 12"s, the strips' ends) and finish (bare, black, or the strips' metal).
+    # All three are decided in src/geometry/arrays.ts and come in scene.json.
     protos = {}
-    for cid, cab in S['cabinets'].items():
-        # The 12"s come two to a box (lot 47): a lower cell without its top
-        # board and an upper one without its bottom. An odd row out is whole.
-        drv = S['drivers'][cab['driver']]
-        if cab.get('strip'):
-            # A length of strip: end plates at its two ends only, no back,
-            # face and flanges all aluminium.
-            for kind, (l, r) in {'mid': (False, False), 'first': (True, False),
-                                 'last': (False, True), 'single': (True, True)}.items():
-                me = cabinet_prototype(cid, cab, drv, slots, left=l, right=r, back=False)
-                for k in slot_order:
-                    me.materials.append(M['strip'] if k in ('ply', 'baffle') else M[k])
-                protos[cid, kind] = me
+    shell = {'bare': M['ply'], 'black': M['plyBlack'], 'metal': M['strip']}
+    for c in S['cells']:
+        key = (c['cabinet'], c['variant'], c['finish'])
+        if key in protos:
             continue
-        kinds = {'whole': (True, True)}
-        if cid == 'cab12':
-            kinds.update(lower=(False, True), upper=(True, False))
-        for kind, (top, bottom) in kinds.items():
-            me = cabinet_prototype(cid, cab, drv, slots, top, bottom)
-            for k in slot_order:
+        cab = S['cabinets'][c['cabinet']]
+        top, bottom, left, right, back = BOARDS[c['variant']]
+        me = cabinet_prototype(c['cabinet'], cab, S['drivers'][cab['driver']], slots, top, bottom, left, right, back)
+        for k in slot_order:
+            if k == 'ply' or (k == 'baffle' and c['finish'] == 'metal'):
+                me.materials.append(shell[c['finish']])
+            else:
                 me.materials.append(M[k])
-            protos[cid, kind] = me
-
-    def pair(c):
-        n = S['cabinets'][c['cabinet']].get('strip', 0)
-        if n:
-            k = c['col'] % n
-            first, last = k == 0, k == n - 1 or c['col'] == c.get('cols', 0) - 1
-            return 'single' if first and last else 'first' if first else 'last' if last else 'mid'
-        if c['cabinet'] != 'cab12' or (c['row'] == c['rows'] - 1 and c['rows'] % 2):
-            return 'whole'
-        return 'lower' if c['row'] % 2 == 0 else 'upper'
+        protos[key] = me
 
     for i, c in enumerate(S['cells']):
-        o = new_obj(f"{c['block']}.{i:03d}", protos[c['cabinet'], pair(c)], colls['Speakers'])
+        o = new_obj(f"{c['block']}.{i:03d}", protos[c['cabinet'], c['variant'], c['finish']], colls['Speakers'])
         o.location = B(c['p'])
         o.rotation_euler = (0, 0, c['ry'])
 
@@ -546,7 +575,7 @@ def main():
     a = args()
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
-    M = build_materials()
+    M = build_materials(S)
     build(S, M, a.venue)
     lights(a.venue)
     camera(SHOTS[a.shot], a.scale)

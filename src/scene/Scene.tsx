@@ -32,6 +32,7 @@ function RendererSettings({ tier }: { tier: Tier }) {
   const gl = useThree((s) => s.gl);
   const scene = useThree((s) => s.scene);
   const camera = useThree((s) => s.camera);
+  const controls = useThree((s) => s.controls);
   const q = tierSettings(tier);
 
   /**
@@ -43,10 +44,24 @@ function RendererSettings({ tier }: { tier: Tier }) {
    */
   useEffect(() => {
     if (!import.meta.env.DEV) return;
-    (window as unknown as Record<string, unknown>).__renderNow = () => {
+    const w = window as unknown as Record<string, unknown>;
+    w.__renderNow = () => {
       gl.render(scene, camera);
     };
-  }, [gl, scene, camera]);
+    // Points the camera at an exact spot, for close-up captures:
+    // __look([x, y, z], [tx, ty, tz], fov).
+    w.__look = (p: [number, number, number], t: [number, number, number], fov?: number) => {
+      const cam = camera as THREE.PerspectiveCamera;
+      cam.position.set(...p);
+      if (fov) cam.fov = fov;
+      cam.updateProjectionMatrix();
+      const c = controls as unknown as { target: THREE.Vector3; update: () => void } | null;
+      if (c) {
+        c.target.set(...t);
+        c.update();
+      } else cam.lookAt(...t);
+    };
+  }, [gl, scene, camera, controls]);
 
   useEffect(() => {
     gl.shadowMap.enabled = q.shadowMapSize > 0;

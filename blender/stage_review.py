@@ -236,7 +236,7 @@ def main():
     import json
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
-    M = W['build_materials']()
+    M = W['build_materials'](S)
     W['build'](S, M, a.venue)
     W['lights'](a.venue)
     deck = S['deck']['y']

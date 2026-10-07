@@ -5,7 +5,25 @@
  * scripts/verify.mjs checks them without a browser. If this file ever emits a
  * number of cells that isn't 641, something is wrong with the config.
  */
-import { ARRAYS, CABINETS, cabinetSize, type ArrayBlock, type CabinetId, type ChannelId, type DriverId, standoffOf } from '../data/wall.config';
+import { ARRAYS, CABINETS, cabinetSize, wall, type ArrayBlock, type CabinetId, type ChannelId, type DriverId, standoffOf } from '../data/wall.config';
+
+/**
+ * How a cell is built. Most are a whole box. The 12"s pair up two to a box
+ * (lot 47): a lower cell without its top board, an upper one without its
+ * bottom. The cluster's strips (lot 49) are open-backed channels with end
+ * plates only at each length's two ends.
+ */
+export type Variant = 'whole' | 'lower' | 'upper' | 'first' | 'mid' | 'last' | 'single';
+
+/** Bare birch, matte black paint, or the strips' aluminium. */
+export type Finish = 'bare' | 'black' | 'metal';
+
+/** A stable 0–1 number from a string, so the finish mix is the same everywhere and every visit. */
+function unit(key: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < key.length; i++) h = Math.imul(h ^ key.charCodeAt(i), 16777619);
+  return ((h >>> 0) % 100003) / 100003;
+}
 
 export interface Cell {
   /**
@@ -26,6 +44,33 @@ export interface Cell {
   /** Column and row within the block, for staggered effects. */
   col: number;
   row: number;
+  variant: Variant;
+  /**
+   * Decided here, once, so the explorer and Blender (via scene.json) finish
+   * every cabinet the same way. See PROVENANCE['materials.plywood'].
+   */
+  finish: Finish;
+}
+
+function variantOf(b: ArrayBlock, col: number, row: number): Variant {
+  const cab = CABINETS[b.cabinet];
+  if (cab.strip) {
+    const k = col % cab.strip;
+    const first = k === 0;
+    const last = k === cab.strip - 1 || col === b.cols - 1;
+    return first && last ? 'single' : first ? 'first' : last ? 'last' : 'mid';
+  }
+  if (cab.pairRows && !(row === b.rows - 1 && b.rows % 2)) return row % 2 === 0 ? 'lower' : 'upper';
+  return 'whole';
+}
+
+function finishOf(b: ArrayBlock, col: number, row: number): Finish {
+  const cab = CABINETS[b.cabinet];
+  if (cab.strip) return 'metal';
+  // A paired box is one cabinet, so both its cells share a finish.
+  const r = cab.pairRows ? row - (row % 2) : row;
+  const key = cab.finishPerBlock ? b.id : `${b.id}:${col}:${r}`;
+  return unit(key) < wall.materials.blackFinishRatio ? 'black' : 'bare';
 }
 
 /**
@@ -81,6 +126,8 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
         explode: b.explode,
         col,
         row,
+        variant: variantOf(b, col, row),
+        finish: finishOf(b, col, row),
       });
     }
   }
@@ -91,13 +138,14 @@ export function allCells(): Cell[] {
   return ARRAYS.flatMap(cellsForBlock);
 }
 
-/** Cells grouped by cabinet type — one InstancedMesh per group. */
-export function cellsByCabinet(cells = allCells()): Map<CabinetId, Cell[]> {
-  const m = new Map<CabinetId, Cell[]>();
+/** Cells grouped by cabinet type and how they're built — one InstancedMesh per group and role. */
+export function cellsByCabinet(cells = allCells()): Map<string, { cabinet: CabinetId; variant: Variant; cells: Cell[] }> {
+  const m = new Map<string, { cabinet: CabinetId; variant: Variant; cells: Cell[] }>();
   for (const c of cells) {
-    const list = m.get(c.cabinet);
-    if (list) list.push(c);
-    else m.set(c.cabinet, [c]);
+    const key = `${c.cabinet}:${c.variant}`;
+    const g = m.get(key);
+    if (g) g.cells.push(c);
+    else m.set(key, { cabinet: c.cabinet, variant: c.variant, cells: [c] });
   }
   return m;
 }
