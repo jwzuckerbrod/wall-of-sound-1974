@@ -337,7 +337,7 @@ def build_seating(coll, floor, cy):
            for a in [-math.pi / 2 + math.pi * k / 64 for k in range(65)]]
     for a, b in zip(rim, rim[1:]):
         bm.faces.new((c, a, b)).material_index = 2
-    return obj('seating', bm, [mat('Bowl, concrete', '#a49c8c', 0.9), mat('Bench, painted wood', '#6f7b62', 0.7),
+    return obj('seating', bm, [mat('Bowl, concrete', '#a49c8c', 0.9), mat('Bench, weathered wood', '#5d5446', 0.85),
                                mat('Pool circle, paving', '#8f8a80', 0.85)], coll)
 
 
@@ -618,20 +618,47 @@ def build_crowd(coll, floor, cy, keep_clear=()):
             add('lie', p, 0.6)
         else:
             add('stand', p, 0.7)
-    # The benches, filling in toward the stage; a few on their feet.
+    # The benches, but not a congregation: before the show people stand on
+    # the treads, perch on the bench backs, sit on the steps, turn to talk, and
+    # gather in clusters with gaps between (docs/crowd-references.md).
+    def clump(x, y):
+        return (math.sin(x * 0.21 + 1.7) * math.cos(y * 0.19 - 0.3) + 0.6 * math.sin(x * 0.53 - y * 0.47 + 2.0)) * 0.5
+
     r = SEAT_R0
     while r < SEAT_R1:
         z = seat_z(r + ROW, floor)
         n = int(2 * FAN * (r + ROW * 0.55) / 0.55)
-        fill = 0.75 - 0.45 * (r - SEAT_R0) / (SEAT_R1 - SEAT_R0)
+        base = 0.78 - 0.45 * (r - SEAT_R0) / (SEAT_R1 - SEAT_R0)
         for k in range(n):
-            if rng.random() > fill:
+            a = -FAN + 2 * FAN * (k + rng.uniform(0.0, 1.0)) / n
+            rr = r + ROW * rng.uniform(0.35, 0.8)
+            x, y = math.sin(a) * rr, cy - math.cos(a) * rr
+            if rng.random() > base * (0.55 + 0.9 * clump(x, y)):
                 continue
-            a = -FAN + 2 * FAN * (k + rng.uniform(0.2, 0.8)) / n
-            rr = r + ROW * 0.62
-            p = (math.sin(a) * rr, cy - math.cos(a) * rr, z)
-            add('stand' if rng.random() < 0.12 else 'bench', p, 0.15)
+            u = rng.random()
+            talk = rng.random() < 0.18              # turned to someone
+            jit = 1.4 if talk else 0.45
+            if u < 0.34:
+                add('stand', (x, y, z), jit)
+            elif u < 0.74:
+                add('bench', (x, y, z), jit)
+            elif u < 0.84:
+                add('bench', (x, y, z + 0.38), jit)  # up on the bench back
+            elif u < 0.95:
+                add('ground', (x, y, z), jit)        # on the tread, back to the bench
+            else:
+                add('lie', (x, y, z + 0.42), 1.5)    # stretched out along a bench
         r += ROW
+    # Walking up and down the aisles.
+    for aisle in (-FAN * 0.5, 0.0, FAN * 0.5):
+        rr = SEAT_R0
+        while rr < SEAT_R1:
+            if rng.random() < 0.35:
+                aa = aisle + rng.uniform(-0.01, 0.01)
+                x, y = math.sin(aa) * rr, cy - math.cos(aa) * rr
+                poses['stand'][0].append((x, y, seat_z(rr, floor)))
+                poses['stand'][1].append(rng.uniform(0, 6.283))
+            rr += rng.uniform(1.0, 3.0)
     for pose, (pts, yaws) in poses.items():
         scatter(coll, f'crowd, {pose}', figure_mesh(f'person {pose}', pose), pts, mats, yaws)
     return {k: len(v[0]) for k, v in poses.items()}

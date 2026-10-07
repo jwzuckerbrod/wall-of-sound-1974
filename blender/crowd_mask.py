@@ -37,11 +37,14 @@ def save(arr, size, path):
 
 
 def grow(m, r):
+    """Dilate by a disc of radius r. Padded, not wrapped, so nothing leaks across the frame's edges."""
+    h, w = m.shape
+    p = np.pad(m, r)
     out = m.copy()
     for dy in range(-r, r + 1):
         for dx in range(-r, r + 1):
             if dx * dx + dy * dy <= r * r:
-                out = np.maximum(out, np.roll(np.roll(m, dy, 0), dx, 1))
+                out = np.maximum(out, p[r + dy:r + dy + h, r + dx:r + dx + w])
     return out
 
 

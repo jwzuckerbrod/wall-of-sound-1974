@@ -51,3 +51,18 @@ redistributed. Sources and dates are mostly unknown.
    grain) after compositing, so the crowd and the Blender render share one look.
 5. **Keep the mask.** Only crowd pixels come from the edit; the Wall stays as
    modelled.
+
+## Not a congregation
+
+The first Kling pass on the `bowl` shot came out like an audience in pews:
+everyone seated, evenly spaced, facing forward. The photographs show a crowd
+before a show as loose and uneven. The Blender crowd now has, on the benches:
+
+- about a third standing, on the treads or between benches
+- people perched on the bench backs, and some sitting on the steps
+- a few lying along a bench, and blankets in the pool circle
+- clusters and gaps, from a slow noise over the bowl
+- about one in six turned to the side, as if talking
+- people walking in the aisles
+
+And the Kling prompt asks for the same: an informal crowd, not orderly rows.
