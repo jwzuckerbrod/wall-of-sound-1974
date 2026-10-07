@@ -182,7 +182,12 @@ def align(crop, edit, keep):
     return s, dx, dy, e, base
 
 
-def place(render, mask_path, tile_dir, out, max_error=0.045):
+def place(render, mask_path, tile_dir, out, max_error=0.045, keep_below=0.0):
+    """
+    keep_below: take only the part of each tile below this fraction of its
+    height (feathered), for an edit that only got the near rows right.
+    """
+    max_error, keep_below = float(max_error), float(keep_below)
     import json
     import os
     r, size = load(render)
@@ -210,6 +215,9 @@ def place(render, mask_path, tile_dir, out, max_error=0.045):
         fy = np.minimum(np.arange(h), np.arange(h)[::-1]).astype(np.float32)
         fx = np.minimum(np.arange(w), np.arange(w)[::-1]).astype(np.float32)
         feather = np.clip(np.minimum(fy[:, None], fx[None, :]) / 40.0, 0, 1)
+        if keep_below:
+            ramp = np.clip((np.arange(h) - keep_below * h) / 50.0, 0, 1).astype(np.float32)
+            feather = feather * ramp[:, None]
         acc[y0:y0 + h, x0:x0 + w] += e * feather[..., None]
         wsum[y0:y0 + h, x0:x0 + w] += feather
     edited = np.where(wsum[..., None] > 0, acc / np.maximum(wsum, 1e-6)[..., None], r)

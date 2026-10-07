@@ -470,15 +470,20 @@ def _part(bm, kind, size, at, mat, rot=None):
             f.smooth = True
 
 
-def figure_mesh(name, pose):
+def figure_mesh(name, pose, look='long'):
     """
     One person, facing -y, in one of four poses read off the 1970s crowd
     photographs (docs/crowd-references.md): 'stand', 'bench' (sitting on a
     bench, knees forward), 'ground' (sitting cross-legged on the grass) and
-    'lie' (lying back on one elbow). Materials: 0 top, 1 hair, 2 trousers.
+    'lie' (lying back on one elbow). `look` is the head: 'short', 'long'
+    (hair to the shoulders, on men and women alike), 'hat' (long hair under a
+    cowboy or floppy hat) or 'bare' (long hair, shirt off).
+    Materials: 0 top, 1 hair, 2 trousers, 3 hat, 4 skin.
     """
     bm = bmesh.new()
-    TOP, HAIR, LEGS = 0, 1, 2
+    TOP, HAIR, LEGS, HAT, SKIN = 0, 1, 2, 3, 4
+    if look == 'bare':
+        TOP = SKIN
     if pose == 'stand':
         _part(bm, 'box', (0.08, 0.09, 0.42), (-0.1, 0, 0.42), LEGS)
         _part(bm, 'box', (0.08, 0.09, 0.42), (0.1, 0, 0.42), LEGS)
@@ -506,6 +511,14 @@ def figure_mesh(name, pose):
         _part(bm, 'box', (0.06, 0.06, 0.16), (0.22, 0.3, 0.16), TOP)
         _part(bm, 'ball', (0.105, 0.115, 0.13), (0, 0.48, 0.42), HAIR)
         _part(bm, 'box', (0.55, 0.85, 0.01), (0, -0.15, 0.01), TOP)  # a blanket
+    head = {'stand': (0, 0.01, 1.58), 'bench': (0, 0.0, 1.3), 'ground': (0, 0.0, 0.86), 'lie': (0, 0.48, 0.42)}[pose]
+    hx, hy, hz = head
+    if pose != 'lie' and look != 'short':
+        # Long hair: falls behind the head to the shoulders.
+        _part(bm, 'ball', (0.12, 0.07, 0.17), (hx, hy + 0.05, hz - 0.12), HAIR)
+    if pose != 'lie' and look == 'hat':
+        _part(bm, 'box', (0.2, 0.2, 0.008), (hx, hy, hz + 0.08), HAT)      # brim
+        _part(bm, 'ball', (0.1, 0.11, 0.07), (hx, hy, hz + 0.12), HAT)     # crown
     me = bpy.data.meshes.new(name)
     bm.to_mesh(me)
     bm.free()
@@ -516,7 +529,9 @@ def crowd_materials():
     """Clothes and hair picked per person from the instance's random number."""
     out = []
     for name, palette in (('Crowd, clothes', CLOTHES), ('Crowd, hair', ('#2a1d14', '#4a3220', '#7a5a34', '#b08a5a', '#1a1a1a', '#c9b48a')),
-                          ('Crowd, trousers', ('#3b5274', '#2f4560', '#4a628a', '#6f87a8', '#5a4a3a', '#7a5a3a', '#3a3a3a', '#8a3a2a'))):
+                          ('Crowd, trousers', ('#3b5274', '#2f4560', '#4a628a', '#6f87a8', '#5a4a3a', '#7a5a3a', '#3a3a3a', '#8a3a2a')),
+                          ('Crowd, hats', ('#b89a6a', '#8a6a44', '#5a4632', '#2a2522', '#d8c8a0')),
+                          ('Crowd, skin', ('#e8bf9a', '#d9a47e', '#c48a62', '#a8704c', '#8a5a3a', '#f0cfae'))):
         m = bpy.data.materials.new(name)
         m.use_nodes = True
         nt, links = m.node_tree.nodes, m.node_tree.links
@@ -569,9 +584,9 @@ def scatter(coll, name, me, points, mats, yaws=None):
     na.inputs['Name'].default_value = 'yaw'
     cx = n.new('ShaderNodeCombineXYZ')
     sc = n.new('FunctionNodeRandomValue')
-    sc.data_type = 'FLOAT'
-    sc.inputs['Min'].default_value = 0.9
-    sc.inputs['Max'].default_value = 1.08
+    sc.data_type = 'FLOAT_VECTOR'
+    sc.inputs['Min'].default_value = (0.85, 0.9, 0.9)    # slight to broad, short to tall
+    sc.inputs['Max'].default_value = (1.2, 1.1, 1.1)
     L.new(gi.outputs['Geometry'], m2p.inputs['Mesh'])
     L.new(m2p.outputs['Points'], iop.inputs['Points'])
     L.new(oi.outputs['Geometry'], iop.inputs['Instance'])
@@ -659,8 +674,19 @@ def build_crowd(coll, floor, cy, keep_clear=()):
                 poses['stand'][0].append((x, y, seat_z(rr, floor)))
                 poses['stand'][1].append(rng.uniform(0, 6.283))
             rr += rng.uniform(1.0, 3.0)
+    # Looks, from a separate stream so the crowd's places don't change with
+    # them (an edited render of these places can be laid back over).
+    looks = random.Random(7419)
     for pose, (pts, yaws) in poses.items():
-        scatter(coll, f'crowd, {pose}', figure_mesh(f'person {pose}', pose), pts, mats, yaws)
+        split = {'short': ([], []), 'long': ([], []), 'hat': ([], []), 'bare': ([], [])}
+        for p, y in zip(pts, yaws):
+            u = looks.random()
+            k = 'short' if u < 0.25 else 'hat' if u < 0.37 else 'bare' if u < 0.47 else 'long'
+            split[k][0].append(p)
+            split[k][1].append(y)
+        for look, (pp, yy) in split.items():
+            if pp:
+                scatter(coll, f'crowd, {pose}, {look}', figure_mesh(f'person {pose} {look}', pose, look), pp, mats, yy)
     return {k: len(v[0]) for k, v in poses.items()}
 
 
@@ -677,7 +703,7 @@ def build_haze(coll):
     nt, links = m.node_tree.nodes, m.node_tree.links
     nt.remove(nt['Principled BSDF'])
     vol = nt.new('ShaderNodeVolumePrincipled')
-    vol.inputs['Density'].default_value = 0.0035
+    vol.inputs['Density'].default_value = 0.0045
     vol.inputs['Color'].default_value = venue.srgb('#d9d2c2')
     links.new(vol.outputs['Volume'], nt['Material Output'].inputs['Volume'])
     o = obj('haze', bm, [m], coll)

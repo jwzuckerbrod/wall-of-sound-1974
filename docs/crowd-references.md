@@ -66,3 +66,21 @@ before a show as loose and uneven. The Blender crowd now has, on the benches:
 - people walking in the aisles
 
 And the Kling prompt asks for the same: an informal crowd, not orderly rows.
+
+## The wide shot (`bowl-hero`)
+
+From high in the seats most people are a few pixels tall, and no image edit
+tried so far repaints them: Kling O1, on the whole frame and on 16:9 tiles,
+reframed and kept the figures; Nano Banana Pro (20 credits a tile) kept the
+framing and made the nearest third of a tile into real 1970s people, but left
+the rest as figures. So for this shot the distant crowd is Blender's:
+
+- each figure has a look: short hair, long hair to the shoulders, long hair
+  under a hat (cowboy and floppy hats), or long hair and shirt off; and a
+  build, slight to broad, short to tall
+- haze a little thicker, and a wide aperture to soften the crowd
+- the looks come from their own random stream, so the crowd's places stay
+  fixed and an edited render can be laid back over a new one
+
+The Nano Banana Pro tile's near rows are laid into the frame
+(`crowd_mask.py place ... 1.0 0.5`: alignment accepted, lower half only).

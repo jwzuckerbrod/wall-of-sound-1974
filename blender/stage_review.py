@@ -184,7 +184,9 @@ SHOTS = {
     # At the Hollywood Bowl (--venue hollywood). Seated eye heights in the
     # bowl's rows; the stage front is at y = -6.71.
     'bowl': dict(loc=(-3.0, -46.7, 6.72), target=(0.5, 0.0, 8.6), lens=50, fstop=2.0),
-    'bowl-hero': dict(loc=(-38.0, -60.0, 14.2), target=(0.0, 0.0, 8.5), lens=42, fstop=2.8),
+    # f/0.6 is not a real lens at this distance; it gives the crowd the softness
+    # a long lens and haze give a photograph from high in the seats.
+    'bowl-hero': dict(loc=(-38.0, -60.0, 14.2), target=(0.0, 0.0, 8.5), lens=42, fstop=0.6),
     'bowl-tower': dict(loc=(3.0, -0.4, 15.35), target=(-3.0, -60.0, 9.0), lens=20),
 }
 
