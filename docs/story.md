@@ -1,0 +1,157 @@
+# The story page: outline
+
+The front door to the project. Most people will arrive on a phone from a shared
+link and stay a couple of minutes, so the story has to work for them first. It
+scrolls, it's built from pre-rendered Cycles images and short clips that load
+instantly on any device, and it ends by inviting people into the 3D explorer.
+
+A draft to react to. The copy is working copy; every figure is from the config
+and carries its source.
+
+**The place: the Hollywood Bowl, Sunday 21 July 1974.** One real show gives the
+story a sense of place: the white shell, the hills, seventeen thousand people.
+It's inside the Wall's summer, and it's the show with the best photographs of
+the Wall. What we know of the Bowl in 1974 is in `qa-findings` §14.
+
+**Hero renders:** `.shots/story/hollywood/` (not in the repo), made by
+`blender/stage_review.py --venue hollywood --shot <name> --sun 30,-50 --exposure 0.3`,
+plus `build_scene.py --shot pechner` for the opening.
+
+---
+
+## The shape
+
+Eight beats, one idea each. On a phone, each is about one screen: an image that
+holds while a line or two of copy scrolls past, then the next image takes over.
+On desktop the same beats, wider.
+
+| # | Beat | Image | Motion |
+|---|---|---|---|
+| 1 | It was real | A photograph of the Wall at the Bowl, then our render from the same seat | Crossfade, photo to render |
+| 2 | The whole thing | `bowl-hero` | Slow push in |
+| 3 | Six systems, not one | `bowl`, from the seats, with each channel tinted in turn | The tint moves channel by channel |
+| 4 | Each player's own wall | `garcia` | Hold |
+| 5 | The singing problem | `cluster-up`, then a diagram of the paired mics | Diagram draws itself |
+| 6 | The power | `amps` | Hold; the meters flicker |
+| 7 | What we know, and how well | `bowl-tower`, from the top of the Wall over the crowd, with the evidence tint | Tint fades in |
+| 8 | Step inside | The live 3D view, already loaded | Tap to explore |
+
+---
+
+## The beats
+
+### 1. It was real
+
+> Sunday, 21 July 1974. The Hollywood Bowl.
+>
+> The Grateful Dead have brought the largest sound system anyone had built: a
+> wall of speakers four storeys high, standing in front of the Bowl's shell.
+> This is a photograph of it that afternoon. *(crossfade)* This is our
+> reconstruction, from the same seat.
+
+The crossfade carries the whole premise. It needs the camera solved from the
+Bowl photograph, as Pechner's was (`qa-findings` §6); the `bowl` shot is placed
+by eye for now. **Rights:** the Bowl photographs have no credit. Find the
+photographer, or open on the render alone. Pechner's matched photograph is the
+fallback, set indoors in Vancouver.
+
+### 2. The whole thing
+
+> 641 speakers. 48 McIntosh amplifiers. 38 feet of steel. 75 tons on the road,
+> 28 of them the sound system alone. It went up and came down at every show
+> from 23 March to 20 October 1974, and then never again.
+
+Image: `bowl-hero`, from high in the seats, the shell and the crowd around it.
+
+### 3. Six systems, not one
+
+> It wasn't one PA. It was six, each carrying one thing: vocals, Garcia's
+> guitar, Weir's guitar, the piano, the drums, and Lesh's bass, which ran
+> quadraphonic. Nothing was mixed together until it reached the air. That's why
+> it sounded clear.
+
+Image: `bowl`, from the seats, straight on, with each channel tinted in turn. The tint is a
+render pass per channel (to make). The quadraphonic bass is contested in the
+sources; the explorer says so.
+
+### 4. Each player's own wall
+
+> There were no monitor speakers. The Wall was the monitor: each player stood
+> in front of their own stack, its lower half playing to the band and its upper
+> half throwing to the crowd. Jerry Garcia's guitar came out of the column
+> behind him.
+
+Image: `garcia`, on stage looking up at his column. Reads best once the
+instruments are in hands, not on stands.
+
+### 5. The singing problem
+
+> A microphone in front of 26,000 watts should howl. Theirs didn't. Each singer
+> sang into a matched pair of microphones, 60 mm apart, wired in opposite
+> polarity. The voice reached one; the Wall reached both, and cancelled itself
+> out.
+
+Image: `cluster-up`, the curved centre cluster from below, then a diagram of the
+paired microphones (to draw). This is the beat people remember. **Not in the
+Blender scene yet:** the paired microphones themselves. The browser has them.
+**No band recordings** without a licence; if there's sound here, it's our own
+demonstration of the cancellation.
+
+### 6. The power
+
+> Forty-eight McIntosh MC 2300s, 600 watts each, 128 pounds each. The crew
+> named them. Garcia's favourite was called Budman.
+
+Image: `amps`, the racks under the cluster with the meters lit. The count
+(48, or Parish's "over 70") is shown as a range in the explorer.
+
+### 7. What we know, and how well
+
+> Nobody drew a plan of the Wall. This reconstruction is built from scaffolding
+> drawings dated 10 April 1974, a press sheet from that year, the cabinets that
+> survive, and every photograph we could date. Where we're sure, it's solid.
+> Where we've had to estimate, it's marked.
+
+Image: `bowl-tower`, from the top of the Wall out over the crowd to the hills,
+with the evidence tint fading in (confirmed, estimated, guessed). Links to the photograph record
+and the register of surviving equipment.
+
+### 8. Step inside
+
+> Walk the stage. Stand where the audience stood. Climb the tower.
+
+The live 3D view, loaded in the background while the story played, opening on a
+curated viewpoint.
+
+---
+
+## Open questions for you
+
+1. **Tone.** The copy above is plain and factual. Warmer and more personal, or
+   keep it like a museum label?
+2. **Sound.** A silent story, or our own audio for the microphone beat?
+3. **Photographs.** Approach Pechner, Schneider and Kirk West for permission,
+   or design around renders and links?
+4. **The name.** The page uses "the Grateful Dead", a trademark, in a factual
+   way. Any plan for the project's own title?
+
+## To make
+
+- The channel-tint pass for beat 3, and the evidence tint for beat 7.
+- The paired microphones in Blender, and their diagram.
+- Instruments in hands rather than on stands, for beat 4.
+- A short clip for beat 2 (a slow push in), and the meter flicker for beat 6.
+- The camera for beat 1, solved from the Bowl photograph.
+- The red kit, modelled (the Bowl show had the wine-red kit, not the butcher block).
+- Photographic people and trees, if the stylised crowd and hills aren't good
+  enough (see below).
+
+## The crowd and the hills
+
+They're simple figures and shapes, made in code. At a distance, with haze and
+depth of field, they read as a crowd and a canyon. Close up they read as
+models. To make them photographic would take outside assets: scanned or
+modelled people, real tree models, an HDRI sky. Free libraries such as Poly
+Haven (CC0) have trees and skies; people are harder. Each download needs your
+say-so. Kling could add motion to finished frames (haze, cloth), but it
+shouldn't be asked to invent people or the Wall.

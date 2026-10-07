@@ -475,3 +475,85 @@ lines them up.
   and cans.
 - **Not modelled:** the horizontal bar along the top front seen on some
   dates; the lamps' make; any light from them.
+
+---
+
+## 14. The story is set at the Hollywood Bowl, 21 July 1974
+
+The story page needs a sense of place, so its renders are set at one show: the
+Hollywood Bowl on 21 July 1974. It's inside the target window, has the best
+photographic record of the Wall in the window, and is instantly recognisable.
+`blender/hollywood_bowl.py`, `--venue hollywood`.
+
+**The photographs:** `unsourced-hollywoodbowl-1974-07-21-a.png` and `-b.webp`
+(the user's, dated; no credit); `-probable-band.webp` and `-probable-crowd.png`
+(the bandshell matches; undated). Also saved: `unsourced-bw-wall-undated.webp`.
+
+**The Bowl in 1974**, from the photographs and the Bowl's histories:
+
+- The 1929 shell, white, concentric arches, measured on the wide photograph
+  against the Wall's 64 ft: about 14.5 m in radius, its crown about 15.5 m
+  above the stage. The often-quoted "45 ft" is the same order.
+- Frank Gehry's cardboard Sonotubes of the 1970s: in the photographs, two long
+  horizontal tubes spanning the shell about 11 m up, and a bank of vertical
+  tubes, 5–6.5 m tall, round the sides and back of the Wall. Plus a row of tall
+  white panels in the shell's crown.
+- No reflecting pool: it was removed in 1972. The semicircle in front of the
+  stage was open floor.
+- No tarps. Wooded hills behind and beside the shell. The stage faces
+  southwest, so the afternoon sun comes from behind the crowd.
+- **The show time isn't recorded** in the archives found. The photographs are
+  in daylight. The renders use about 5:15 pm (sun 30° up, computed for the
+  date and place), since at 6:30 pm the sun is behind the canyon's western
+  hills.
+
+**Findings:**
+
+- **The kit at the Bowl is the wine-red one**, on a natural-wood riser, not
+  the butcher block of Hartford (31 July). So the change was between 21 and
+  31 July. For the Bowl, `stage_review.py` recolours the kit's shells, but its
+  drums are still the concert toms modelled from Hartford, which isn't right.
+  The red kit needs its own model.
+- **A second, smaller curved cluster** stands low on the right of the Wall in
+  the wide photograph, under the right-hand stacks. Not in the model, and
+  nothing yet says what it carried.
+- The band: Garcia far left, Weir, the kit, Lesh right of it, and the grand
+  across the stage right of the kit, under a white cover. As modelled (§9).
+- Tie-dyes and light bars, as modelled (§12, §13).
+
+**Stylised, not photographed:** the crowd is simple figures, the trees are
+simple shapes, and the hills are a heightfield. Depth of field and haze carry
+them at a distance; close up they read as models. See `docs/story.md`.
+
+---
+
+## 15. Scenery and crowd for the story renders
+
+**Scenery** (`blender/hollywood_bowl.py`). Poly Haven assets, CC0, downloaded by
+hand into `blender/assets/polyhaven/` (ignored, 147 MB): Searsia burchellii and
+S. lucida (standing in for the canyon's oaks and chaparral), Shrub 02, the Aerial
+Grass Rock ground texture, and the Kiara 7 late-afternoon sky. About 64,000
+plants are instanced on the slopes. The sky is turned so its glow agrees with the
+sun lamp, and its own sun is capped so the scene isn't lit twice. Without the
+folder, the bowl falls back to simple shapes.
+
+**Crowd.** Four poses read off the 1970s crowd photographs
+(`docs/crowd-references.md`): sitting on a bench, sitting on the grass, lying on
+a blanket, standing. Each faces the stage, with tops, hair and trousers coloured
+per person from a 1970s palette (little tie-dye). Mostly seated on the benches,
+with blankets in the pool circle.
+
+**Making it photographic** (`blender/crowd_mask.py`). The crowd mask is the
+difference between renders with and without the crowd. Only those pixels are
+taken from an AI-edited image (Kling), so the Wall, the scaffold, the shell and
+the band can't change. Then one grade over the whole frame to match a 1974
+colour print.
+
+- First Kling test (1 credit): it replaced the distant crowd with a dozen large
+  people at the camera, in modern clothes. Through the mask they came out
+  headless. Wrong scale, wrong era.
+- Second (1 credit): the posed crowd, with three of the 1970s photographs as
+  style references, told to keep every figure's place and size. See `story.md`.
+
+Kling's output is an AI image. It stands for "a crowd at a 1974 show", not
+the people who were there, and the story page should say so.

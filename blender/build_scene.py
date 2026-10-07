@@ -28,6 +28,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'blender'))
 import roadgear  # noqa: E402  (the amps, cases and stickers)
 import venue  # noqa: E402  (outdoors: sky, ground, tarps)
+import hollywood_bowl  # noqa: E402  (the Hollywood Bowl, 21 July 1974)
 
 
 def args():
@@ -38,7 +39,7 @@ def args():
     p.add_argument('--scale', type=float, default=2.0)
     p.add_argument('--out', default=os.path.join(ROOT, '.shots', 'blender'))
     p.add_argument('--save', action='store_true')
-    p.add_argument('--venue', default='arena', choices=['arena', 'outdoor'],
+    p.add_argument('--venue', default='arena', choices=['arena', 'outdoor', 'hollywood'],
                    help='arena: the hall of Pechner\'s photograph; outdoor: sky, ground and tarps')
     return p.parse_args(argv)
 
@@ -369,6 +370,9 @@ def build(S, M, place='arena'):
     if place == 'outdoor':
         venue.build_outdoor(S, colls['Venue'], B)
         return
+    if place == 'hollywood':
+        hollywood_bowl.build(S, colls['Venue'], B, hollywood_bowl.KEEP_CLEAR)
+        return
     # The hall: a floor, and a dark box of an arena around it.
     floor = unit_box('arena floor', M['floor'])
     o = new_obj('arena floor', floor, colls['Venue'])
@@ -454,6 +458,9 @@ def build_light_rig(S, M, coll, place='arena'):
 
 def lights(place='arena'):
     """A sound check under house and work lights: broad, soft, from the front and above."""
+    if place == 'hollywood':
+        hollywood_bowl.lights()
+        return
     if place == 'outdoor':
         venue.outdoor_lights()
         return

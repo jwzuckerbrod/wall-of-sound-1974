@@ -379,9 +379,12 @@ def outdoor_lights():
     world.node_tree.links.new(sky.outputs['Color'], bg.inputs['Color'])
     bg.inputs['Strength'].default_value = 0.12
     L = bpy.data.lights.new('sun', 'SUN')
-    L.energy = 3.2
+    # Low sun is weaker and warmer: through more air.
+    low = max(0.0, min(1.0, (math.radians(25) - SUN_ELEVATION) / math.radians(20)))
+    L.energy = 3.2 - 1.4 * low
     L.angle = math.radians(0.53)
-    L.color = srgb('#fff4e4')[:3]
+    warm, day = srgb('#ffb877'), srgb('#fff4e4')
+    L.color = tuple(d + (w - d) * low for w, d in zip(warm[:3], day[:3]))
     o = bpy.data.objects.new('sun', L)
     bpy.context.scene.collection.objects.link(o)
     o.rotation_mode = 'QUATERNION'

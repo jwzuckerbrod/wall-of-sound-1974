@@ -105,7 +105,7 @@ def guitar_stand(name, x, y, deck):
     me.materials.append(m)
 
 
-def place(deck):
+def place(deck, red_kit=False):
     B = lambda x, z: (x, -z)                     # scene (x, z) -> Blender (x, y); audience at -Y
     out = {}
     # Guitars and bass: upright, facing the audience, resting on a stand.
@@ -146,6 +146,21 @@ def place(deck):
     r.parent = h
     r.location = (0, -0.5, 0)
     out['drums'] = r
+    if red_kit:
+        # The kit at the Hollywood Bowl on 21 July was the wine-red one, not the
+        # butcher block of 31 July (qa-findings §14). Only the finish changes:
+        # its drums are still the concert toms modelled from Hartford.
+        red = bpy.data.materials.new('Drum shells, wine red lacquer')
+        red.use_nodes = True
+        b = red.node_tree.nodes['Principled BSDF']
+        b.inputs['Base Color'].default_value = (0.22, 0.02, 0.03, 1)
+        b.inputs['Roughness'].default_value = 0.25
+        b.inputs['Coat Weight'].default_value = 0.8
+        for o in bpy.data.objects:
+            if o.type == 'MESH':
+                for slot in o.material_slots:
+                    if slot.material and slot.material.name.startswith('Butcher block'):
+                        slot.material = red
     return out
 
 
@@ -156,6 +171,21 @@ SHOTS = {
     'band': dict(loc=(-9.5, -11.5, 4.6), target=(1.5, -4.8, 3.8), lens=32),
     # Keith's corner and the drums.
     'keys': dict(loc=(8.8, -9.8, 5.4), target=(2.2, -4.2, 3.6), lens=35),
+    # Hero shots for the story page (docs/story.md). Eye height on the field
+    # is 1.7 m; the deck top is at 3.05.
+    # From the height of a mixing platform in the crowd, as many of the 1974
+    # photographs were taken.
+    'hero': dict(loc=(-17.0, -27.0, 4.6), target=(1.0, 0.0, 9.0), lens=38),
+    'audience': dict(loc=(0.0, -38.0, 4.6), target=(0.0, 0.0, 9.2), lens=36),
+    'cluster-up': dict(loc=(1.6, -6.8, 4.8), target=(0.0, 0.0, 9.2), lens=26),
+    'garcia': dict(loc=(-3.2, -7.8, 4.75), target=(-6.8, 0.0, 9.5), lens=22),
+    'tower': dict(loc=(-6.4, -0.6, 15.7), target=(0.4, -6.5, 3.2), lens=22),
+    'amps': dict(loc=(0.3, -3.6, 4.3), target=(1.4, 2.0, 3.7), lens=28),
+    # At the Hollywood Bowl (--venue hollywood). Seated eye heights in the
+    # bowl's rows; the stage front is at y = -6.71.
+    'bowl': dict(loc=(-3.0, -46.7, 6.72), target=(0.5, 0.0, 8.6), lens=50, fstop=2.0),
+    'bowl-hero': dict(loc=(-38.0, -60.0, 14.2), target=(0.0, 0.0, 8.5), lens=42, fstop=2.8),
+    'bowl-tower': dict(loc=(3.0, -0.4, 15.35), target=(-3.0, -60.0, 9.0), lens=20),
 }
 
 
@@ -168,6 +198,11 @@ def camera(shot):
     bpy.context.scene.collection.objects.link(o)
     o.location = s['loc']
     o.rotation_euler = (Vector(s['target']) - Vector(s['loc'])).to_track_quat('-Z', 'Y').to_euler()
+    if 'fstop' in s:
+        # Focus on the Wall: the crowd and the hills fall soft, as through a lens.
+        cam.dof.use_dof = True
+        cam.dof.focus_distance = (Vector(s['target']) - Vector(s['loc'])).length
+        cam.dof.aperture_fstop = s['fstop']
     sc = bpy.context.scene
     sc.camera = o
     sc.render.resolution_x, sc.render.resolution_y = 1920, 1080
@@ -181,10 +216,21 @@ def main():
     p.add_argument('--samples', type=int, default=128)
     p.add_argument('--out', default=os.path.join(ROOT, '.shots', 'blender'))
     p.add_argument('--save', action='store_true')
-    p.add_argument('--venue', default='outdoor', choices=['outdoor', 'arena'])
+    p.add_argument('--venue', default='outdoor', choices=['outdoor', 'arena', 'hollywood'])
+    p.add_argument('--sun', default=None, help='outdoors: sun elevation,azimuth in degrees (azimuth 0 = behind the audience)')
+    p.add_argument('--name', default=None, help='output name, in place of stage-<shot>')
+    p.add_argument('--exposure', type=float, default=0.0)
+    p.add_argument('--no-crowd', action='store_true', help='hollywood: leave the crowd out (for a crowd mask)')
+    p.add_argument('--scale', type=int, default=100, help='resolution percentage')
     a = p.parse_args(argv)
 
     W = load_wall()
+    import hollywood_bowl
+    hollywood_bowl.KEEP_CLEAR[:] = [SHOTS[a.shot]['loc']]
+    if a.sun:
+        import venue
+        el, az = (float(v) for v in a.sun.split(','))
+        venue.SUN_ELEVATION, venue.SUN_AZIMUTH = math.radians(el), math.radians(az)
     import json
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
@@ -192,13 +238,19 @@ def main():
     W['build'](S, M, a.venue)
     W['lights'](a.venue)
     deck = S['deck']['y']
-    place(deck)
+    place(deck, red_kit=a.venue == 'hollywood')
     camera(a.shot)
+    if a.no_crowd:
+        for o in bpy.data.objects:
+            if o.name.startswith('crowd'):
+                o.hide_render = True
     W['render_settings'](a.samples)
+    bpy.context.scene.view_settings.exposure = a.exposure
+    bpy.context.scene.render.resolution_percentage = a.scale
     os.makedirs(a.out, exist_ok=True)
     if a.save:
         bpy.ops.wm.save_as_mainfile(filepath=os.path.join(ROOT, 'blender', 'stage.blend'))
-    out = os.path.join(a.out, f'stage-{a.shot}.png')
+    out = os.path.join(a.out, f'{a.name or "stage-" + a.shot}.png')
     bpy.context.scene.render.filepath = out
     bpy.ops.render.render(write_still=True)
     print('RENDERED', out)

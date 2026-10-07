@@ -29,3 +29,6 @@ __pycache__/
 # The stage with the instruments on it, written by blender/stage_review.py --save
 blender/stage.blend
 blender/stage.blend1
+
+# Downloaded third-party assets (Poly Haven, CC0); fetched by hand, not committed
+blender/assets/
