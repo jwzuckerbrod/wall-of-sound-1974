@@ -603,3 +603,25 @@ they look like game characters, not photographs. Past this, the options are a
 library of scanned people (paid, such as Renderpeople), or an AI edit of the
 nearest rows only, which should now work, since the people it starts from
 already look human.
+
+---
+
+## 17. Decisions, 7 October 2026
+
+The project owner settled three open questions.
+
+- **The crowd stays as it is.** No scanned-people pack. The 144 MakeHuman
+  people (§16) carry the wide shots with haze and the 1974 grade; detail shots
+  are framed without crowd close to the camera.
+- **The band at the Hollywood Bowl, 21 July 1974: Garcia, Weir, the kit,
+  Lesh, the pianos**, left to right from the audience. This is the order the
+  Bowl photographs show (§14) and the order already modelled (§9), so no
+  marks move. The Weir/Lesh swaps seen on other dates (§7) no longer matter
+  for the story.
+- **Rights: photographs, marks and logos stay in the repo and on the public
+  site**, including the traced skull-and-bolt, the GRATEFUL DEAD stencil and
+  reference photographs. In return, credit generously: every photograph
+  shown carries its photographer and source where known ("photographer
+  unknown" where not), every borrowed fact links its source, and the site
+  has a full credits page (photographers, auction houses, archives, books,
+  Poly Haven, the MakeHuman community for Hair 02/03 under CC-BY).

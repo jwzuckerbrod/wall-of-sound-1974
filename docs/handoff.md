@@ -15,27 +15,25 @@
 - **Crowd**: 144 MakeHuman people (`blender/make_people.py`, §16), facing the
   stage (facing bug fixed in `0b2443a`), jeans, natural hair.
 
-## Open decision: the crowd
+## Decided (7 October 2026, qa-findings §17)
 
-The crowd is believable at a distance but **not photographic up close**.
-AI edits haven't fixed it (§15, §16, `docs/crowd-references.md`). The user was
-choosing between:
-
-1. **Buy a scanned-people pack** (e.g. Renderpeople, ~$200–600) for the near
-   rows, MakeHuman in the distance. Recommended for photoreal.
-2. **Accept the current crowd**, lean on haze and grade, and use close shots
-   without crowd for detail.
+- **Crowd: accepted as it is.** Lean on haze and grade; frame detail shots
+  without crowd close to the camera. No scanned-people pack.
+- **Band at the Bowl: Garcia, Weir, the kit, Lesh, the pianos**, as modelled.
+- **Rights: photos, marks and logos stay** in the repo and on the public site.
+  Credit generously: photographer and source on every photo shown, sources
+  linked, and a full credits page on the site.
 
 ## Other open items
 
+- **Story page**: next up. Outline in `docs/story.md`; page not built;
+  stage 6 (performance on a phone) and stage 7 (deploy) not started. Needs the
+  credits page above.
+- Reference photographs are still git-ignored in `.shots/reference/`; they
+  have to be copied into the site (with credits) for the story page to show
+  them.
 - Red kit at the Bowl: recoloured, but still the Hartford concert-tom model.
 - A second, smaller curved cluster low right at the Bowl, not modelled.
 - Where the bass-drum column really stood (guess, `arrays.kickPosition`).
-- Band layout July–October (Weir/Lesh swapped on some dates).
 - Browser app: no outdoor venue, bare deck (QA 2.2), no Blender props yet
   (plan: glTF pilot with one MC 2300 rack).
-- Story page itself not built; stage 6 (performance on a phone) and stage 7
-  (deploy) not started.
-- Rights before any public launch: photo permissions (Pechner, Schneider,
-  Kirk West, Sotheby's), trademarks (skull, name), the traced logo file in the
-  public repo.
