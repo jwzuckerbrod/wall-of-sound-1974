@@ -216,6 +216,19 @@ export function Hud({
         </ul>
       </section>
 
+      <section>
+        <h2>Where</h2>
+        <ul className="views">
+          {(Object.keys(wall.venues) as (keyof typeof wall.venues)[]).map((v) => (
+            <li key={v}>
+              <button onClick={() => setOptions({ ...options, venue: v })} aria-current={options.venue === v}>
+                {wall.venues[v].label}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </section>
+
       <section className="controls">
         <h2>Show</h2>
         <button
@@ -229,10 +242,10 @@ export function Hud({
           Scaffold {options.showScaffold ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showAmps')} aria-pressed={options.showAmps}>
-          Amps {options.showAmps ? 'on' : 'off'}
+          Amps &amp; cases {options.showAmps ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showBand')} aria-pressed={options.showBand}>
-          Mics &amp; cases {options.showBand ? 'on' : 'off'}
+          Mics {options.showBand ? 'on' : 'off'}
         </button>
         <button onClick={toggle('showStage')} aria-pressed={options.showStage}>
           Stage {options.showStage ? 'on' : 'off'}

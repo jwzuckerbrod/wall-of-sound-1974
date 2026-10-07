@@ -155,55 +155,76 @@ export const baffleMap = () =>
 // ─── tie-dye ─────────────────────────────────────────────────────────────────
 
 /**
- * Courtenay Pollock tie-dyed the fabric panels that hung on the structure.
- * His work is mandala-like: concentric rings radiating from a knotted centre,
- * with the dye bleeding along the folds. This is a mandala generator, not a
- * copy of any particular piece of his.
+ * One of Courtenay Pollock's tie-dyes (structure.tieDyes), as Blender's
+ * shader draws it (blender/venue.py tiedye_material): dye bands round a
+ * centre a little off middle, a spiral on even panels and rings with petals
+ * on odd ones, their edges bled by noise, with pale crazing where the folds
+ * kept the dye out. Drawn on the panel's own proportions so the rings stay
+ * round.
  */
-export const tieDyeMap = () =>
-  make('tiedye', 512, (ctx, s) => {
-    const img = ctx.createImageData(s, s);
-    // Muted on purpose. In the 1974 photographs these panels are hung in
-    // shadow behind the arrays and read as deep, dusty colour — not the
-    // saturated rainbow a tie-dye generator wants to produce. A bright version
-    // of this pulls the eye straight off the thing the page is about.
-    const palette = [
-      [104, 44, 40], [118, 78, 36], [124, 112, 52],
-      [54, 84, 52], [40, 62, 92], [68, 46, 84],
-    ];
-    const cx = s * 0.5;
-    const cy = s * 0.5;
-    const n = palette.length;
-    for (let y = 0; y < s; y++) {
-      for (let x = 0; x < s; x++) {
-        const dx = x - cx;
-        const dy = y - cy;
-        const ang = Math.atan2(dy, dx);
-        // Folds pull the dye into radial spokes; the bleed wobbles the rings.
-        // Both can push the radius negative near the knot, so clamp before
-        // indexing: a negative band index reads off the end of the palette.
-        const spokes = Math.sin(ang * 16) * 6;
-        const bleed = (fbm(x / 26, y / 26, 4) - 0.5) * 26;
-        const r = Math.max(0, Math.hypot(dx, dy) + spokes + bleed);
-
-        const band = (r / 26) % n;
-        const i0 = Math.floor(band);
-        const t = band - i0;
-        const a = palette[i0 % n];
-        const b = palette[(i0 + 1) % n];
-        // Dye bands hold their colour then bleed into the next over the last
-        // sixth of the ring, rather than blending evenly across it.
-        const mix = t > 0.84 ? (t - 0.84) / 0.16 : 0;
-
-        const i = (y * s + x) * 4;
-        img.data[i] = a[0] + (b[0] - a[0]) * mix;
-        img.data[i + 1] = a[1] + (b[1] - a[1]) * mix;
-        img.data[i + 2] = a[2] + (b[2] - a[2]) * mix;
-        img.data[i + 3] = 255;
+export function tieDyeTexture(k: number, palette: readonly string[], aspect: number): THREE.Texture {
+  const key = `tiedye-${k}`;
+  const hit = cache.get(key);
+  if (hit) return hit;
+  const w = 256;
+  const h = Math.round(w / aspect);
+  const canvas = document.createElement('canvas');
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d')!;
+  const img = ctx.createImageData(w, h);
+  const pal = palette.map((c) => new THREE.Color(c));
+  const pale = new THREE.Color('#efe6d2');
+  const cx = 0.5 + 0.08 * (hash(k, 7) - 0.5);
+  const cy = 0.55 + 0.1 * (hash(k, 8) - 0.5);
+  const freq = 9 + 4 * hash(k, 9);
+  const col = new THREE.Color();
+  // Crazing: distance to the nearest edge between random cells.
+  const cell = (x: number, y: number) => {
+    const xi = Math.floor(x);
+    const yi = Math.floor(y);
+    let f1 = 9;
+    let f2 = 9;
+    for (let j = -1; j <= 1; j++)
+      for (let i = -1; i <= 1; i++) {
+        const px = xi + i + hash(xi + i + k * 31, yi + j);
+        const py = yi + j + hash(yi + j, xi + i + k * 17);
+        const d = Math.hypot(x - px, y - py);
+        if (d < f1) [f1, f2] = [d, f1];
+        else if (d < f2) f2 = d;
       }
+    return f2 - f1;
+  };
+  for (let y = 0; y < h; y++)
+    for (let x = 0; x < w; x++) {
+      const u = x / w;
+      const v = 1 - y / h;
+      const wob = (fbm(u * 6 + k, v * 6, 5) - 0.5) * 0.1;
+      const px = (u - cx) * aspect + wob;
+      const py = v - cy + wob;
+      const r = Math.hypot(px, py);
+      const ang = Math.atan2(py, px);
+      const band = r * freq + (k % 2 === 0 ? ang / Math.PI : Math.sin(ang * 8));
+      const t = (((band % 1) + 1) % 1) * pal.length;
+      const i0 = Math.floor(t) % pal.length;
+      const f = t - Math.floor(t);
+      const ease = f * f * (3 - 2 * f);
+      col.copy(pal[i0]).lerp(pal[(i0 + 1) % pal.length], ease);
+      const vein = Math.max(0, 1 - cell(px * 7 + 10, py * 7 + 10) / 0.04);
+      col.lerp(pale, vein * 0.7);
+      const o = (y * w + x) * 4;
+      img.data[o] = col.r * 255;
+      img.data[o + 1] = col.g * 255;
+      img.data[o + 2] = col.b * 255;
+      img.data[o + 3] = 255;
     }
-    ctx.putImageData(img, 0, 0);
-  });
+  ctx.putImageData(img, 0, 0);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
+  cache.set(key, tex);
+  return tex;
+}
 
 // ─── steel ───────────────────────────────────────────────────────────────────
 

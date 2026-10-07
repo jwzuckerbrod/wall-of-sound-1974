@@ -666,6 +666,18 @@ inherited bugs fixed on the way: the case names repeated after eight racks
 (two "Budman"s; racks past the list now go unnamed), and a case meant to stack
 on another floated when the one below became ZERO cases.
 
+**The Bowl and the tie-dyes in the explorer.** The Bowl's dimensions moved
+out of `hollywood_bowl.py` into `venues.hollywoodBowl`, laid out by
+`src/geometry/bowl.ts` for both renderers: shell, crossbeam tubes, Sonotubes
+(their heights now from the shared seeded generator, so they differ a little
+from the earlier renders), crown panels, seating, the pool circle and the
+canyon's shape. The explorer has a venue switch (`?venue=bowl`): indoors as on
+Pechner's photograph, or the Bowl in afternoon sun, with the four tie-dyes
+(`structure.tieDyes`, placed by `tieDyePanels()`) and without the light bars'
+ladders. Its trees are simple shapes and it has no crowd; Blender keeps its
+Poly Haven plants and the MakeHuman crowd. The stage lamps carry Blender's
+yoke, clamp, lip and lens in the explorer, and the paired vocal mics, which
+only the explorer had, are in Blender now.
+
 **What changes in the renders.** Blender's cabinets are now mixed black and
-bare, so the story's renders need re-rendering. The tie-dyes (ruling 9) need
-the explorer's outdoor setting, which comes next.
+bare, so the story's renders need re-rendering.

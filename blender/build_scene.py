@@ -394,6 +394,7 @@ def build(S, M, place='arena'):
         o.scale = (s['s'][0], s['s'][2], s['s'][1])
 
     roadgear.build_gear(S, colls['Gear'], B)
+    build_mics(S, M, colls['Gear'])
     build_light_rig(S, M, colls['Scaffold'], place)
 
     if place == 'outdoor':
@@ -417,6 +418,41 @@ def build(S, M, place='arena'):
     ):
         o = new_obj(name, hall, colls['Venue'])
         o.location, o.scale = loc, sc
+
+
+def build_mics(S, M, coll):
+    """
+    The paired vocal microphones, as the explorer draws them
+    (src/scene/BandGear.tsx; positions from src/geometry/scaffold.ts
+    vocalMics): a chrome stand on a weighted base, and two matched capsules
+    60 mm apart, wired in opposite polarity, pointing at the singer.
+    """
+    K = S['mics']
+    chrome, _ = principled('Mic stand, chrome', '#c8ccd2', 0.22, 0.95)
+    dark, _ = principled('Mic capsule, black', '#1e1c18', 0.5, 0.3)
+    bm = bmesh.new()
+    st = bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=K['standRadius'], radius2=K['standRadius'], depth=K['standHeight'])['verts']
+    bmesh.ops.translate(bm, verts=st, vec=(0, 0, K['standHeight'] / 2))
+    base = bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=K['baseRadius'], radius2=K['baseRadius'] - 0.02, depth=0.04)['verts']
+    bmesh.ops.translate(bm, verts=base, vec=(0, 0, 0.02))
+    for v in st + base:
+        for f in v.link_faces:
+            f.material_index = 0
+    for dz in (0.0, K['spacing']):
+        cap = bmesh.ops.create_cone(bm, cap_ends=True, segments=12, radius1=K['capsuleRadius'], radius2=K['capsuleRadius'],
+                                    depth=K['capsuleLength'] + 2 * K['capsuleRadius'])['verts']
+        # Lying along -Y, toward the singer and the audience.
+        bmesh.ops.rotate(bm, verts=cap, cent=(0, 0, 0), matrix=Matrix.Rotation(math.radians(90), 3, 'X'))
+        bmesh.ops.translate(bm, verts=cap, vec=(0, -0.02, K['capsuleY'] + dz))
+        for v in cap:
+            for f in v.link_faces:
+                f.material_index = 1
+    me = mesh_from_bm(bm, 'paired mics')
+    me.materials.append(chrome)
+    me.materials.append(dark)
+    for i, p in enumerate(K['at']):
+        o = new_obj(f'mics.{i}', me, coll)
+        o.location = B(p)
 
 
 def build_light_rig(S, M, coll, place='arena'):

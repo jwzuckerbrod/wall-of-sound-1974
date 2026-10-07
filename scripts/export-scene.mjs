@@ -21,7 +21,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'wos-export-'));
 execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
-   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/geometry/logo.ts', 'src/geometry/roadgear.ts'],
+   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/geometry/logo.ts', 'src/geometry/roadgear.ts', 'src/geometry/bowl.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -39,6 +39,7 @@ const load = (p) => import(pathToFileURL(join(tmp, p)).href);
 const cfg = await load('data/wall.config.js');
 const arrays = await load('geometry/arrays.js');
 const gear = await load('geometry/roadgear.js');
+const bowl = await load('geometry/bowl.js');
 const scaf = await load('geometry/scaffold.js');
 const logo = await load('geometry/logo.js');
 
@@ -146,6 +147,20 @@ const scene = {
   bolt: logo.BOLT.map(v3),
   boltBottom: logo.BOLT_BOTTOM,
   boltDiameter: r4(wall.band.logo.diameter),
+  // The paired vocal microphones (src/scene/BandGear.tsx): foot of each stand, and its parts.
+  mics: { at: scaf.vocalMics(L).map(v3), ...scaf.MIC },
+  // Courtenay Pollock's tie-dyes (structure.tieDyes): top centre of each, outdoors only.
+  tieDyes: scaf.tieDyePanels(L).map((t) => ({ top: v3(t.top), w: t.width, h: t.height, palette: wall.structure.tieDyes.palettes[t.palette] })),
+  // The Hollywood Bowl (venues.hollywoodBowl, src/geometry/bowl.ts).
+  bowl: (() => {
+    const V = wall.venues.hollywoodBowl;
+    return {
+      stageDrop: V.stageDrop, poolRadius: V.poolRadius, seating: V.seating, shell: V.shell,
+      beamTubes: V.beamTubes, crownPanels: V.crownPanels, sun: V.sun, colours: V.colours,
+      sonotubes: bowl.sonotubes().map((t) => ({ x: r4(t.x), z: r4(t.z), height: r4(t.height) })),
+      sonotubeDiameter: V.sonotubes.diameter,
+    };
+  })(),
   // The players' marks (scene frame, metres): blender/stage_review.py stands the instruments on them.
   band: Object.fromEntries(wall.band.members.map((m) => [m.id, [r4(wall.band.mirrored ? -m.x : m.x), r4(m.z)]])),
 };

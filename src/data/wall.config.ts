@@ -360,6 +360,17 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos'],
     note: 'The curved centre cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (21 July 1974) and on Pechner\'s 17 May photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
   },
+  'venues.arena': { confidence: 'confirmed', sources: ['pechner'], note: 'Indoors, as on Pechner\'s 17 May 1974 photograph: the light bars\' ladders show, the tie-dyes don\'t.' },
+  'venues.hollywoodBowl': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph against the Wall\'s 64 ft scaffold; the reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14.',
+  },
+  'structure.tieDyes': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'Courtenay Pollock\'s tie-dyes: four, hung on the front of the scaffold near the top, at Oakland (8 June 1974) and the Hollywood Bowl (21 July). Scaled off the Oakland photograph, about 4.3 ft wide and 8 ft tall; each kept above the stacks below it, clear of the three 34 ft columns. Outdoors only: indoors (Pechner, 17 May) the light bars\' ladders hang there instead. Their designs are spirals and rings in the photographs\' colours, not copies of the real cloths.',
+  },
   'structure.lightBars': {
     confidence: 'estimated',
     sources: ['pechner', 'photos'],
@@ -953,6 +964,24 @@ export const wall = {
     },
     /** The 1973-74 Winter Season tower, drawn at 3/8" = 1'. A smaller, earlier rig. */
     winterTower1973: { height: FT(30), liftHeight: FT(6), bayWidth: FT(5), braceSpan: FT(5), levels: 3 },
+    /**
+     * Courtenay Pollock's tie-dyes, on the front of the scaffold near the top,
+     * outdoors only. x across, metres; they hang from the second-highest lift.
+     * See PROVENANCE['structure.tieDyes'].
+     */
+    tieDyes: {
+      x: [-8.6, -6.1, 6.4, 8.9],
+      width: 1.3,
+      height: 2.46,
+      /** In front of the scaffold's front face. */
+      standoff: 0.22,
+      palettes: [
+        ['#C8202A', '#F07A1A', '#F4CF2A', '#2F9A4A', '#2456B8', '#6A2E9A'],
+        ['#7A1FA0', '#D62A7A', '#F2A02A', '#F6E04A', '#38A0C8', '#1F3F9A'],
+        ['#1F6FB8', '#29A8A0', '#9AC83A', '#F4D43A', '#E8562A', '#A8203A'],
+        ['#E0402A', '#F4B02A', '#3AA848', '#2A78C8', '#8A2AA8', '#D83A8A'],
+      ],
+    },
     /** Military-surplus shore-power cable. Arm-thick, and a visual feature. */
     cabling: { runDiameter: 0.050, bundleDiameter: 0.14, color: '#0E0E0E' },
     /**
@@ -1111,6 +1140,44 @@ export const wall = {
      */
     grilleCloth: null,
     tieDyeGrille: { appliesTo: ['panel5'] as CabinetId[], roughness: 0.95, metalness: 0.0, sheen: 0.3 },
+  },
+
+  /**
+   * Where the Wall stands. The explorer can show either; Blender's
+   * build_scene.py --venue picks one. See PROVENANCE['venues.arena'] and
+   * ['venues.hollywoodBowl'].
+   */
+  venues: {
+    /** The hall of Pechner's photograph, P.N.E. Coliseum, Vancouver, 17 May 1974. */
+    arena: { label: 'Indoors: Vancouver, 17 May 1974', outdoor: false },
+    /**
+     * The Hollywood Bowl, Sunday 21 July 1974, where the story is set. Sizes
+     * measured on the wide photograph against the Wall's 64 ft scaffold
+     * (docs/qa-findings.md §14). Lengths in metres; "back" is upstage of the
+     * Wall's front plane, from the scene origin.
+     */
+    hollywoodBowl: {
+      label: 'Hollywood Bowl, 21 July 1974',
+      outdoor: true,
+      /** The floor in front of the stage, below the stage deck. */
+      stageDrop: 1.4,
+      /** The old reflecting pool's circle, gone by 1972: open paving. */
+      poolRadius: 15,
+      seating: { halfAngle: DEG(62), firstRow: 16, lastRow: 112, rowDepth: 0.95, rise: 0.12, steepen: 0.0018 },
+      /** The 1929 shell: concentric white rings, springing just above the stage. */
+      shell: { rings: 6, outerRadius: 14.5, ringStep: 1.35, frontBack: 7.0, ringDepth: 1.25, spring: 1.0, hood: 0.6 },
+      /** Frank Gehry's Sonotubes: two long tubes across the shell, and a bank of uprights round the Wall. */
+      beamTubes: [
+        { height: 10.6, back: 6.4, radius: 0.42 },
+        { height: 11.35, back: 6.9, radius: 0.42 },
+      ],
+      sonotubes: { diameter: 0.82, spacing: 0.88, minHeight: 5.0, maxHeight: 6.6, inset: 1.2, front: -1.0, back: 6.6, seed: 721 },
+      /** Tall white panels in the shell's crown. */
+      crownPanels: { count: 15, radius: 9.8, from: DEG(30), to: DEG(150), width: 0.95, height: 2.3, back: 8.6 },
+      /** About 5:15 pm: 30° up, from behind the crowd's left. The show time isn't recorded. */
+      sun: { elevation: DEG(30), azimuth: DEG(-50) },
+      colours: { shell: '#E8E6DF', shellInside: '#D9D8D2', sonotube: '#DCDDE0', panel: '#EFEFEA', concrete: '#A49C8C', bench: '#5D5446', paving: '#8F8A80', stage: '#6D6A63' },
+    },
   },
 
   /** Quality tiers. Chosen at load from device capability, overridable by the visitor. */

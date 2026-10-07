@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
-import { wall } from '../data/wall.config';
-import { scaffoldLayout } from '../geometry/scaffold';
+import { MIC, vocalMics } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
 
 /**
@@ -26,15 +25,15 @@ function VocalMic() {
   const m = wallMaterials();
   return (
     <group>
-      <mesh position={[0, 0.72, 0]} material={m.chrome} castShadow>
-        <cylinderGeometry args={[0.016, 0.016, 1.44, 8]} />
+      <mesh position={[0, MIC.standHeight / 2, 0]} material={m.chrome} castShadow>
+        <cylinderGeometry args={[MIC.standRadius, MIC.standRadius, MIC.standHeight, 8]} />
       </mesh>
       <mesh position={[0, 0.02, 0]} material={m.caseBody}>
-        <cylinderGeometry args={[0.15, 0.17, 0.04, 12]} />
+        <cylinderGeometry args={[MIC.baseRadius - 0.02, MIC.baseRadius, 0.04, 12]} />
       </mesh>
-      {[0, 0.06].map((dy, i) => (
-        <mesh key={i} position={[0, 1.46 + dy, 0.02]} rotation={[Math.PI / 2, 0, 0]} material={m.caseBody}>
-          <capsuleGeometry args={[0.019, 0.05, 3, 8]} />
+      {[0, MIC.spacing].map((dy, i) => (
+        <mesh key={i} position={[0, MIC.capsuleY + dy, 0.02]} rotation={[Math.PI / 2, 0, 0]} material={m.caseBody}>
+          <capsuleGeometry args={[MIC.capsuleRadius, MIC.capsuleLength, 3, 8]} />
         </mesh>
       ))}
     </group>
@@ -42,16 +41,11 @@ function VocalMic() {
 }
 
 export function BandGear({ shadows }: { shadows: boolean }) {
-  const L = useMemo(() => scaffoldLayout(), []);
-
-  const mics = wall.band.members
-    .filter((m) => m.id !== 'kreutz')
-    .map((m) => ({ id: m.id, x: wall.band.mirrored ? -m.x : m.x, z: m.z }));
-
+  const mics = useMemo(() => vocalMics(), []);
   return (
-    <group name="stage-furniture" position={[0, L.deck.y, 0]}>
-      {mics.map((m) => (
-        <group key={m.id} position={[m.x, 0, m.z + 0.3]}>
+    <group name="stage-furniture">
+      {mics.map((p, i) => (
+        <group key={i} position={p}>
           <VocalMic />
         </group>
       ))}

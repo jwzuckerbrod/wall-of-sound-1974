@@ -1,4 +1,4 @@
-import { Environment, Lightformer } from '@react-three/drei';
+import { Environment, Lightformer, Sky } from '@react-three/drei';
 import * as THREE from 'three';
 import { FT, wall } from '../data/wall.config';
 import { scaffoldLayout } from '../geometry/scaffold';
@@ -93,6 +93,47 @@ export function Lighting({ tier }: { tier: Tier }) {
         <cylinderGeometry args={[FT(230), FT(230), FT(230), 32, 1, true]} />
         <meshBasicMaterial color="#0a0b0e" side={THREE.BackSide} fog={false} />
       </mesh>
+    </>
+  );
+}
+
+/**
+ * The Hollywood Bowl at about 5:15 pm (venues.hollywoodBowl.sun): the sun 30°
+ * up behind the crowd's left shoulder, lighting the Wall's face, under an
+ * afternoon sky, as blender/venue.py outdoor_lights() sets it.
+ */
+export function DaylightLighting({ tier }: { tier: Tier }) {
+  const q = tierSettings(tier);
+  const { elevation, azimuth } = wall.venues.hollywoodBowl.sun;
+  const ce = Math.cos(elevation);
+  // Toward the sun, scene frame: azimuth 0 is straight behind the audience.
+  const sun = new THREE.Vector3(Math.sin(azimuth) * ce, Math.sin(elevation), Math.cos(azimuth) * ce);
+  const far = sun.clone().multiplyScalar(80);
+  return (
+    <>
+      <Sky distance={4000} sunPosition={far.toArray()} turbidity={6} rayleigh={1.6} mieCoefficient={0.006} mieDirectionalG={0.85} />
+      <Environment resolution={tier === 'low' ? 64 : 128} frames={1} background={false} environmentIntensity={0.9}>
+        {/* Sky dome overhead, and the warm sun side: what the dust caps and the steel reflect. */}
+        <Lightformer form="rect" intensity={1.6} color="#bcd2ec" scale={[200, 200, 1]} position={[0, 60, 0]} rotation={[Math.PI / 2, 0, 0]} />
+        <Lightformer form="rect" intensity={5} color="#ffe2b8" scale={[40, 20, 1]} position={far.clone().multiplyScalar(0.6).toArray()} target={[0, 6, 0]} />
+        <Lightformer form="rect" intensity={0.6} color="#6b6a4a" scale={[200, 200, 1]} position={[0, -2, 0]} rotation={[-Math.PI / 2, 0, 0]} />
+      </Environment>
+      <hemisphereLight args={['#b9cde6', '#4d4a33', 0.55]} />
+      <directionalLight
+        position={far.toArray()}
+        intensity={3.0}
+        color="#fff0dc"
+        castShadow={q.shadowMapSize > 0}
+        shadow-mapSize={[q.shadowMapSize, q.shadowMapSize]}
+        shadow-bias={-0.0005}
+        shadow-normalBias={0.03}
+        shadow-camera-left={-30}
+        shadow-camera-right={30}
+        shadow-camera-top={30}
+        shadow-camera-bottom={-20}
+        shadow-camera-near={20}
+        shadow-camera-far={160}
+      />
     </>
   );
 }

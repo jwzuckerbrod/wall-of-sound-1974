@@ -191,18 +191,10 @@ def build_tarps(S, coll, B):
 
 # ─── tie-dyes ─────────────────────────────────────────────────────────────────
 
-# Scaled off the Oakland photograph: about 4.3 ft wide and 8 ft tall. The x
-# places keep each panel above the stacks below it rather than in front of
-# them, clear of the three 34 ft columns.
-TIEDYE_X = (-8.6, -6.1, 6.4, 8.9)
-TIEDYE_W, TIEDYE_H = 1.3, 2.46
-
-PALETTES = (
-    ('#c8202a', '#f07a1a', '#f4cf2a', '#2f9a4a', '#2456b8', '#6a2e9a'),
-    ('#7a1fa0', '#d62a7a', '#f2a02a', '#f6e04a', '#38a0c8', '#1f3f9a'),
-    ('#1f6fb8', '#29a8a0', '#9ac83a', '#f4d43a', '#e8562a', '#a8203a'),
-    ('#e0402a', '#f4b02a', '#3aa848', '#2a78c8', '#8a2aa8', '#d83a8a'),
-)
+# Placement, size and colours are the config's (structure.tieDyes), laid out
+# by src/geometry/scaffold.ts tieDyePanels() and handed over in scene.json.
+TIEDYE_W, TIEDYE_H = 1.3, 2.46     # replaced per panel from scene.json in build_tiedyes
+PALETTES = ()
 
 
 def tiedye_material(k):
@@ -337,11 +329,11 @@ def cloth_panel(name, mat, top_centre, width, height, seed, coll, res=0.04):
 
 
 def build_tiedyes(S, coll, B):
-    deck = S['deck']['y']
-    x0, x1, z0, z1, top, xs, levels = scaffold_extent(S)
-    hang = levels[-2] if len(levels) >= 2 else top     # just under the tarp strip
-    for k, x in enumerate(TIEDYE_X):
-        cloth_panel(f'tie-dye.{k}', tiedye_material(k), B((x, hang, z1 + 0.22)), TIEDYE_W, TIEDYE_H, 31 + k, coll)
+    global TIEDYE_W, TIEDYE_H, PALETTES
+    PALETTES = tuple(t['palette'] for t in S['tieDyes'])
+    for k, t in enumerate(S['tieDyes']):
+        TIEDYE_W, TIEDYE_H = t['w'], t['h']
+        cloth_panel(f'tie-dye.{k}', tiedye_material(k), B(tuple(t['top'])), t['w'], t['h'], 31 + k, coll)
 
 
 # ─── sky and ground ───────────────────────────────────────────────────────────

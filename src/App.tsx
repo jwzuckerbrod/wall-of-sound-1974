@@ -10,7 +10,7 @@ import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
 import { TOUR } from './scene/tour';
-import { VIEWS, viewFromSearch, type ViewId } from './scene/views';
+import { VIEWS, viewFromSearch, viewIn, type ViewId } from './scene/views';
 import { Hud } from './ui/Hud';
 
 function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
@@ -39,7 +39,23 @@ export default function App() {
     return forced && forced in wall.render.tiers ? (forced as Tier) : detectTier();
   });
   const [autoTier, setAutoTier] = useState(true);
-  const [options, setOptions] = useState<SceneOptions>(sceneDefaults);
+  // ?venue=bowl opens at the Hollywood Bowl.
+  const [options, setOptionsState] = useState<SceneOptions>(() => ({
+    ...sceneDefaults,
+    venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
+  }));
+  const setOptions = useCallback((next: SceneOptions | ((o: SceneOptions) => SceneOptions)) => {
+    setOptionsState((o) => {
+      const n = typeof next === 'function' ? next(o) : next;
+      if (n.venue !== o.venue) {
+        const url = new URL(window.location.href);
+        if (n.venue === 'hollywoodBowl') url.searchParams.set('venue', 'bowl');
+        else url.searchParams.delete('venue');
+        window.history.replaceState(null, '', url);
+      }
+      return n;
+    });
+  }, []);
   const [fps, setFps] = useState(0);
 
   // Inspection state: what the cursor is over, what is pinned open, which
@@ -56,7 +72,7 @@ export default function App() {
     [hovered, selected, isolated, explode],
   );
 
-  const view = VIEWS[viewId];
+  const view = useMemo(() => viewIn(viewId, options.venue), [viewId, options.venue]);
   const hud = initial.hud;
   const q = tierSettings(tier);
   const tourStop = TOUR[stopIndex];

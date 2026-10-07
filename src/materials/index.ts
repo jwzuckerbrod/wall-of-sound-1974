@@ -16,7 +16,6 @@ import {
   plywoodMap,
   plywoodRoughness,
   steelRoughness,
-  tieDyeMap,
 } from './textures';
 
 export interface WallMaterials {
@@ -31,7 +30,6 @@ export interface WallMaterials {
   deck: THREE.MeshStandardMaterial;
   facing: THREE.MeshStandardMaterial;
   cable: THREE.MeshStandardMaterial;
-  tieDye: THREE.MeshStandardMaterial;
   figure: THREE.MeshStandardMaterial;
   chrome: THREE.MeshStandardMaterial;
   caseBody: THREE.MeshStandardMaterial;
@@ -154,13 +152,6 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   });
   const cable = new THREE.MeshStandardMaterial({ color: m.cable.baseColor, roughness: m.cable.roughness });
 
-  const tieDye = new THREE.MeshStandardMaterial({
-    map: tune(tieDyeMap().clone(), 1),
-    color: 0x9a938a,
-    roughness: 0.98,
-    metalness: 0,
-    side: THREE.DoubleSide,
-  });
 
   // Scale reference, not a character: legible but not the brightest thing in
   // the frame, which is where a near-white figure ends up in a dark hall.
@@ -171,7 +162,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 
   cached = {
     shell, baffle, cone, metal, trim, throat, strip, steel, deck, facing, cable,
-    tieDye, figure,
+    figure,
     chrome, caseBody,
     dispose() {
       for (const v of Object.values(this)) if (v instanceof THREE.Material) v.dispose();

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
-import { ARRAYS, cabinetSize, FT, wall } from '../data/wall.config';
+import { ARRAYS, cabinetSize, wall } from '../data/wall.config';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import {
   scaffoldFloors,
   scaffoldLayout,
@@ -9,8 +10,10 @@ import {
   TUBE_RADIUS,
   type Tube,
   lightRig,
+  tieDyePanels,
 } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
+import { tieDyeTexture } from '../materials/textures';
 
 interface Scratch {
   a: THREE.Vector3; b: THREE.Vector3; d: THREE.Vector3;
@@ -119,71 +122,126 @@ export function Cabling({ shadows }: { shadows: boolean }) {
  */
 /**
  * The stage-lighting bars on the upper corners (structure.lightBars): pipes,
- * and black cans aimed down at the band. Unlit hardware.
+ * and on each lamp a clamp, a yoke and a black can aimed down at the band,
+ * built as blender/build_scene.py build_light_rig() builds them. Unlit
+ * hardware. Outdoors the ladders are gone: the tie-dyes hang there.
  */
-export function LightBars({ shadows }: { shadows: boolean }) {
+const LAMP = {
+  body: new THREE.MeshStandardMaterial({ color: '#121212', roughness: 0.5, metalness: 0.3 }),
+  lens: new THREE.MeshStandardMaterial({ color: '#2b2a27', roughness: 0.08 }),
+  frame: new THREE.MeshStandardMaterial({ color: '#1b1b1d', roughness: 0.45, metalness: 0.6 }),
+};
+
+function lampGeometries() {
+  const { lampDiameter, lampLength: L } = wall.structure.lightBars;
+  const r = lampDiameter / 2;
+  // The can along -Z (the aim) from its pivot at the origin: wide at the front.
+  const body = new THREE.CylinderGeometry(r * 0.92, r, L, 20).rotateX(Math.PI / 2).translate(0, 0, -L / 2 + 0.06);
+  const lip = new THREE.CylinderGeometry(r * 1.08, r * 1.08, 0.03, 20, 1, true).rotateX(Math.PI / 2).translate(0, 0, -L + 0.07);
+  const can = mergeGeometries([body.toNonIndexed(), lip.toNonIndexed()], false)!;
+  const lens = new THREE.CircleGeometry(r * 0.8, 20).rotateY(Math.PI).translate(0, 0, -L + 0.075);
+  // The yoke's arms either side of the can, turning with it.
+  const arms = mergeGeometries([-1, 1].map((sx) => new THREE.BoxGeometry(0.012, 0.04, 0.2).translate(sx * (r + 0.015), 0, 0.03)), false)!;
+  // The bar above and the pipe clamp: these only turn about the vertical.
+  const yoke = mergeGeometries(
+    [new THREE.BoxGeometry(2 * r + 0.05, 0.014, 0.04).translate(0, 0.13, 0), new THREE.BoxGeometry(0.05, 0.06, 0.06).translate(0, 0.18, 0)],
+    false,
+  )!;
+  return { can, lens, arms, yoke };
+}
+
+export function LightBars({ shadows, outdoor }: { shadows: boolean; outdoor: boolean }) {
   const materials = wallMaterials();
-  const rig = useMemo(() => lightRig(), []);
+  const rig = useMemo(() => {
+    const r = lightRig();
+    const keep = <T extends { indoor: boolean }>(x: T) => !outdoor || !x.indoor;
+    return { pipes: r.pipes.filter(keep), lamps: r.lamps.filter(keep) };
+  }, [outdoor]);
+  const geo = useMemo(lampGeometries, []);
   const pipeRef = useTubeInstances(rig.pipes);
-  const lampRef = useRef<THREE.InstancedMesh>(null);
-  const { lampDiameter, lampLength } = wall.structure.lightBars;
+  const refs = { can: useRef<THREE.InstancedMesh>(null), lens: useRef<THREE.InstancedMesh>(null), arms: useRef<THREE.InstancedMesh>(null), yoke: useRef<THREE.InstancedMesh>(null) };
   useLayoutEffect(() => {
-    const mesh = lampRef.current;
-    if (!mesh) return;
     const m = new THREE.Matrix4();
-    const q = new THREE.Quaternion();
+    const y = new THREE.Matrix4();
     const up = new THREE.Vector3(0, 1, 0);
     const at = new THREE.Vector3();
-    const d = new THREE.Vector3();
+    const aim = new THREE.Vector3();
     rig.lamps.forEach((l, i) => {
       at.set(...l.at);
-      d.set(...l.aim).sub(at).normalize();
-      q.setFromUnitVectors(up, d);
-      m.compose(at.clone().addScaledVector(d, lampLength / 2), q, new THREE.Vector3(1, 1, 1));
-      mesh.setMatrixAt(i, m);
+      aim.set(...l.aim);
+      // -Z toward the aim, the can's top kept up, as Blender's track-to does.
+      m.lookAt(at, aim, up).setPosition(at);
+      const d = aim.clone().sub(at);
+      y.makeRotationY(Math.atan2(d.x, d.z)).setPosition(at);
+      for (const k of ['can', 'lens', 'arms'] as const) refs[k].current?.setMatrixAt(i, m);
+      refs.yoke.current?.setMatrixAt(i, y);
     });
-    mesh.instanceMatrix.needsUpdate = true;
-    mesh.computeBoundingSphere();
-  }, [rig, lampLength]);
+    for (const ref of Object.values(refs)) {
+      const mesh = ref.current;
+      if (!mesh) continue;
+      mesh.count = rig.lamps.length;
+      mesh.instanceMatrix.needsUpdate = true;
+      mesh.computeBoundingSphere();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rig]);
+  const n = rig.lamps.length;
   return (
     <group name="light-bars">
-      <instancedMesh ref={pipeRef} args={[undefined, materials.steel, rig.pipes.length]} castShadow={shadows}>
+      <instancedMesh key={`pipes-${rig.pipes.length}`} ref={pipeRef} args={[undefined, materials.steel, rig.pipes.length]} castShadow={shadows}>
         <cylinderGeometry args={[0.024, 0.024, 1, 7]} />
       </instancedMesh>
-      <instancedMesh ref={lampRef} args={[undefined, materials.caseBody, rig.lamps.length]} castShadow={shadows}>
-        <cylinderGeometry args={[lampDiameter / 2 * 0.92, lampDiameter / 2, lampLength, 12]} />
-      </instancedMesh>
+      <instancedMesh key={`can-${n}`} ref={refs.can} args={[geo.can, LAMP.body, n]} castShadow={shadows} />
+      <instancedMesh key={`lens-${n}`} ref={refs.lens} args={[geo.lens, LAMP.lens, n]} />
+      <instancedMesh key={`arms-${n}`} ref={refs.arms} args={[geo.arms, LAMP.frame, n]} castShadow={shadows} />
+      <instancedMesh key={`yoke-${n}`} ref={refs.yoke} args={[geo.yoke, LAMP.frame, n]} castShadow={shadows} />
     </group>
   );
 }
 
-export function TieDye() {
-  const materials = wallMaterials();
-  const L = useMemo(() => scaffoldLayout(), []);
-  const panels = useMemo(() => {
-    // Small, low and behind the stacks. The first pass hung four huge bright
-    // mandalas high in an empty cage, which made the tie-dye the loudest thing
-    // in the frame — it is meant to be fabric glimpsed through the structure.
-    const back = L.towerBackZ - 0.06;
-    const h = FT(7);
-    const w = FT(7);
-    const y = L.deck.y + FT(8);
-    const mid = (L.towerFrontZ + L.towerBackZ) / 2;
-    const out: { pos: [number, number, number]; rot: [number, number, number]; size: [number, number] }[] = [];
-    // Three across the back wall, two on the returns. Sparse on purpose: these
-    // are fabric panels hung on a structure, not wallpaper.
-    for (const x of [-FT(20), FT(20)]) out.push({ pos: [x, y, back], rot: [0, 0, 0], size: [w, h] });
-    out.push({ pos: [-L.footprint.width / 2 - 0.05, y, mid], rot: [0, Math.PI / 2, 0], size: [FT(10), h] });
-    out.push({ pos: [L.footprint.width / 2 + 0.05, y, mid], rot: [0, -Math.PI / 2, 0], size: [FT(10), h] });
-    return out;
-  }, [L]);
+/**
+ * Courtenay Pollock's tie-dyes (structure.tieDyes), outdoors only: cloth hung
+ * from its top edge, with gentle vertical folds and a slight sway, as
+ * blender/venue.py cloth_panel() hangs it.
+ */
+function clothGeometry(width: number, height: number, seed: number) {
+  const g = new THREE.PlaneGeometry(width, height, 24, 40);
+  const pos = g.getAttribute('position');
+  const h = (i: number) => {
+    const n = Math.sin((seed + i) * 127.1) * 43758.5453;
+    return n - Math.floor(n);
+  };
+  for (let i = 0; i < pos.count; i++) {
+    const a = pos.getX(i) / width + 0.5;
+    const t = 0.5 - pos.getY(i) / height; // 0 at the top, 1 at the hem
+    let fold = 0.035 * Math.sin(2 * Math.PI * a * 3 + h(0) * 6) * (0.2 + t);
+    fold += 0.012 * Math.sin(2 * Math.PI * a * 9 + h(1) * 6) * t;
+    const sway = 0.05 * t * t * (h(2) - 0.5);
+    pos.setZ(i, fold + sway);
+  }
+  g.translate(0, -height / 2, 0);
+  g.computeVertexNormals();
+  return g;
+}
 
+export function TieDye() {
+  const panels = useMemo(
+    () =>
+      tieDyePanels().map((p, k) => ({
+        ...p,
+        geometry: clothGeometry(p.width, p.height, 31 + k),
+        material: new THREE.MeshStandardMaterial({
+          map: tieDyeTexture(k, wall.structure.tieDyes.palettes[p.palette], p.width / p.height),
+          roughness: 0.85,
+          side: THREE.DoubleSide,
+        }),
+      })),
+    [],
+  );
   return (
     <group name="tie-dye">
       {panels.map((p, i) => (
-        <mesh key={i} position={p.pos} rotation={p.rot} material={materials.tieDye}>
-          <planeGeometry args={p.size} />
-        </mesh>
+        <mesh key={i} position={p.top} geometry={p.geometry} material={p.material} castShadow receiveShadow />
       ))}
     </group>
   );

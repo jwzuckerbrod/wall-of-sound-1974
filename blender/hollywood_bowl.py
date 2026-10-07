@@ -26,6 +26,7 @@ crowd's left shoulder and lights the Wall's face.
 The crowd is simple figures, coloured at random from 1970s clothes. Nobody in
 it is anybody.
 """
+import json
 import math
 import os
 import random
@@ -45,11 +46,16 @@ PEOPLE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'mak
 # Places the crowd must leave empty (camera positions), set by the caller.
 KEEP_CLEAR = []
 
-STAGE_DROP = 1.4      # the floor in front of the stage, below the stage
-POOL_R = 15.0         # the old pool circle, from the stage front's centre
-FAN = math.radians(62)  # the seating's half-angle
-SEAT_R0, SEAT_R1 = 16.0, 112.0
-ROW = 0.95
+# The Bowl's numbers are the config's (venues.hollywoodBowl), via scene.json,
+# laid out by src/geometry/bowl.ts, so the explorer builds the same Bowl.
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scene.json')) as _f:
+    BOWL = json.load(_f)['bowl']
+STAGE_DROP = BOWL['stageDrop']        # the floor in front of the stage, below the stage
+POOL_R = BOWL['poolRadius']           # the old pool circle, from the stage front's centre
+FAN = BOWL['seating']['halfAngle']    # the seating's half-angle
+SEAT_R0, SEAT_R1 = BOWL['seating']['firstRow'], BOWL['seating']['lastRow']
+ROW = BOWL['seating']['rowDepth']
+COL = BOWL['colours']
 
 
 def mat(name, hex_, rough, **extra):
@@ -79,7 +85,7 @@ def obj(name, bm, mats, coll):
 def seat_z(r, floor):
     """Height of the seating at radius r: gentle in the boxes, steeper up the hill."""
     t = max(0.0, r - SEAT_R0)
-    return floor + 0.12 * t + 0.0018 * t * t
+    return floor + BOWL['seating']['rise'] * t + BOWL['seating']['steepen'] * t * t
 
 
 def smooth(a, b, x):
@@ -339,17 +345,19 @@ def build_seating(coll, floor, cy):
            for a in [-math.pi / 2 + math.pi * k / 64 for k in range(65)]]
     for a, b in zip(rim, rim[1:]):
         bm.faces.new((c, a, b)).material_index = 2
-    return obj('seating', bm, [mat('Bowl, concrete', '#a49c8c', 0.9), mat('Bench, weathered wood', '#5d5446', 0.85),
-                               mat('Pool circle, paving', '#8f8a80', 0.85)], coll)
+    return obj('seating', bm, [mat('Bowl, concrete', COL['concrete'], 0.9), mat('Bench, weathered wood', COL['bench'], 0.85),
+                               mat('Pool circle, paving', COL['paving'], 0.85)], coll)
 
 
 # ─── the shell, the tubes, the panels ─────────────────────────────────────────
 
 def build_shell(coll, deck):
-    white = mat('Shell, white transite', '#e8e6df', 0.55)
-    inner = mat('Shell, inside', '#d9d8d2', 0.7)
+    white = mat('Shell, white transite', COL['shell'], 0.55)
+    inner = mat('Shell, inside', COL['shellInside'], 0.7)
     bm = bmesh.new()
-    rings, R0, dR, y0, dy, spring = 6, 14.5, 1.35, 7.0, 1.25, 1.0
+    sh = BOWL['shell']
+    rings, R0, dR, y0, dy, spring = sh['rings'], sh['outerRadius'], sh['ringStep'], sh['frontBack'], sh['ringDepth'], sh['spring']
+    hood = sh['hood']
     seg = 48
     zc = deck + spring
 
@@ -379,12 +387,12 @@ def build_shell(coll, deck):
             f.material_index = 0
             f.smooth = True
     # The outer hood: the front arch's face, and its back over the hill.
-    front = arc(R0 + 0.6, y0)
+    front = arc(R0 + hood, y0)
     vo = [bm.verts.new(p) for p in front]
     vi = [bm.verts.new(p) for p in arc(R0, y0)]
     for k in range(len(vo) - 1):
         bm.faces.new((vo[k], vo[k + 1], vi[k + 1], vi[k])).material_index = 0
-    back = arc(R0 + 0.6, y0 + dy * rings + 1.5)
+    back = arc(R0 + hood, y0 + dy * rings + 1.5)
     vk = [bm.verts.new(p) for p in back]
     vo2 = [bm.verts.new(p) for p in front]
     for k in range(len(vk) - 1):
@@ -401,15 +409,15 @@ def build_shell(coll, deck):
     bmesh.ops.create_cube(f, size=1.0)
     bmesh.ops.scale(f, vec=(2 * R0 + 2, yw - 5.6, 0.3), verts=f.verts)
     bmesh.ops.translate(f, vec=(0, (yw + 5.6) / 2, deck - 0.15), verts=f.verts)
-    obj('bowl stage', f, [mat('Stage, grey paint', '#6d6a63', 0.8)], coll)
+    obj('bowl stage', f, [mat('Stage, grey paint', COL['stage'], 0.8)], coll)
     return shell, (y0, R0, yw)
 
 
 def build_tubes(coll, deck, y0, R0):
-    card = mat('Sonotube, painted card', '#dcdde0', 0.75)
+    card = mat('Sonotube, painted card', COL['sonotube'], 0.75)
     bm = bmesh.new()
     # Two long horizontal tubes across the shell, round-ended.
-    for z, y, r in ((deck + 10.6, 6.4, 0.42), (deck + 11.35, 6.9, 0.42)):
+    for z, y, r in ((deck + t['height'], t['back'], t['radius']) for t in BOWL['beamTubes']):
         L = 2 * (R0 + 0.4)
         c = bmesh.ops.create_cone(bm, cap_ends=False, segments=32, radius1=r, radius2=r, depth=L)['verts']
         bmesh.ops.rotate(bm, verts=c, cent=(0, 0, 0), matrix=__import__('mathutils').Matrix.Rotation(math.pi / 2, 3, 'Y'))
@@ -417,34 +425,31 @@ def build_tubes(coll, deck, y0, R0):
         for sx in (-1, 1):
             s = bmesh.ops.create_uvsphere(bm, u_segments=24, v_segments=12, radius=r)['verts']
             bmesh.ops.translate(bm, verts=s, vec=(sx * L / 2, y, z))
-    # The bank of vertical tubes round the sides and back of the Wall.
-    rng = random.Random(721)
-    d, gap = 0.82, 0.88
-    path = []
-    x = -R0 + 1.2
-    for y in [-1.0 + gap * k for k in range(int((6.6 - -1.0) / gap) + 1)]:
-        path.append((x, y))
-    for k in range(int(2 * (R0 - 1.2) / gap) + 1):
-        path.append((-R0 + 1.2 + gap * k, 6.6))
-    for y in [6.6 - gap * k for k in range(1, int(7.6 / gap) + 1)]:
-        path.append((R0 - 1.2, y))
-    for (px, py) in path:
-        h = rng.uniform(5.0, 6.6)
+    # The bank of vertical tubes round the sides and back of the Wall, each
+    # its own height (laid out by src/geometry/bowl.ts sonotubes()).
+    d = BOWL['sonotubeDiameter']
+    for t in BOWL['sonotubes']:
+        h = t['height']
         c = bmesh.ops.create_cone(bm, cap_ends=True, segments=20, radius1=d / 2, radius2=d / 2, depth=h)['verts']
-        bmesh.ops.translate(bm, verts=c, vec=(px, py, deck + h / 2))
+        bmesh.ops.translate(bm, verts=c, vec=(t['x'], -t['z'], deck + h / 2))
     for f in bm.faces:
         f.smooth = True
     obj('sonotubes', bm, [card], coll)
     # The panels in the shell's crown.
     p = bmesh.new()
-    n = 15
+    P = BOWL['crownPanels']
+    n = P['count']
     for k in range(n):
-        a = math.radians(30 + 120 * k / (n - 1))
-        cx, cz = -math.cos(a) * 9.8, deck + 1.0 + math.sin(a) * 9.8 + 1.2
+        a = P['from'] + (P['to'] - P['from']) * k / (n - 1)
+        cx, cz = -math.cos(a) * P['radius'], deck + sh_spring() + math.sin(a) * P['radius'] + 1.2
         v = bmesh.ops.create_cube(p, size=1.0)['verts']
-        bmesh.ops.scale(p, vec=(0.95, 0.06, 2.3), verts=v)
-        bmesh.ops.translate(p, vec=(cx, 8.6, cz), verts=v)
-    obj('reflector panels', p, [mat('Panel, white', '#efefea', 0.5)], coll)
+        bmesh.ops.scale(p, vec=(P['width'], 0.06, P['height']), verts=v)
+        bmesh.ops.translate(p, vec=(cx, P['back'], cz), verts=v)
+    obj('reflector panels', p, [mat('Panel, white', COL['panel'], 0.5)], coll)
+
+
+def sh_spring():
+    return BOWL['shell']['spring']
 
 
 # ─── the crowd ────────────────────────────────────────────────────────────────

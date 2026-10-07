@@ -1,3 +1,5 @@
+import { wall } from '../data/wall.config';
+import { bowlFrame, seatEye } from '../geometry/bowl';
 /**
  * Named camera positions, so a screenshot can be reproduced exactly rather
  * than hand-orbited. Append ?view=oblique (and &hud=0) to the URL.
@@ -80,3 +82,20 @@ export function viewFromSearch(search: string): { view: View; id: ViewId; hud: b
   const id = (raw in VIEWS ? raw : 'front') as ViewId;
   return { view: VIEWS[id], id, hud: p.get('hud') !== '0' };
 }
+
+/**
+ * A view as it stands at a venue. At the Hollywood Bowl the ground rises
+ * toward the seats, so a view from the crowd is lifted to a seated eye in the
+ * row it stands in, rather than left under the hill.
+ */
+export function viewIn(id: ViewId, venue: 'arena' | 'hollywoodBowl'): View {
+  const v: View = VIEWS[id];
+  if (venue !== 'hollywoodBowl') return v;
+  const f = bowlFrame();
+  const back = v.position[2] - f.front;
+  if (back < V_FIRST_ROW) return v;
+  const [x, y] = seatEye(v.position[0], back, f);
+  return { ...v, position: [x, Math.max(v.position[1], y), v.position[2]] };
+}
+
+const V_FIRST_ROW = wall.venues.hollywoodBowl.seating.firstRow;

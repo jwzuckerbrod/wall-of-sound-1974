@@ -9,7 +9,8 @@ import { BandGear } from './BandGear';
 import { RoadGear } from './RoadGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
-import { Lighting } from './Lighting';
+import { Bowl } from './Bowl';
+import { DaylightLighting, Lighting } from './Lighting';
 import { Cabling, LightBars, Scaffold, ScaffoldFloors, ScaleFigures, Stage, TieDye } from './Structure';
 import { TourCamera } from './TourCamera';
 import type { TourStop } from './tour';
@@ -18,8 +19,12 @@ import type { View } from './views';
 /** Orbit around it, or be taken round it. */
 export type NavMode = 'orbit' | 'tour';
 
+/** Where the Wall stands (wall.venues). */
+export type Venue = 'arena' | 'hollywoodBowl';
+
 export interface SceneOptions {
   colorMode: ColorMode;
+  venue: Venue;
   showScaffold: boolean;
   showStage: boolean;
   showFigures: boolean;
@@ -81,6 +86,7 @@ function RendererSettings({ tier }: { tier: Tier }) {
 
 export function Scene({
   colorMode,
+  venue,
   showScaffold,
   showStage,
   showFigures,
@@ -100,14 +106,25 @@ export function Scene({
 }) {
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
+  const outdoor = wall.venues[venue].outdoor;
 
   return (
     <>
-      <color attach="background" args={['#0a0c0f']} />
-      <fog attach="fog" args={['#0a0c0f', 55, 240]} />
-
       <RendererSettings tier={tier} />
-      <Lighting tier={tier} />
+      {outdoor ? (
+        <>
+          {/* Afternoon haze down the canyon. */}
+          <fog attach="fog" args={['#c9cdc8', 120, 900]} />
+          <DaylightLighting tier={tier} />
+          <Bowl shadows={shadows} />
+        </>
+      ) : (
+        <>
+          <color attach="background" args={['#0a0c0f']} />
+          <fog attach="fog" args={['#0a0c0f', 55, 240]} />
+          <Lighting tier={tier} />
+        </>
+      )}
 
       <Arrays colorMode={colorMode} shadows={shadows} interaction={interaction} />
       <BlockOutline blockId={interaction.hovered} />
@@ -115,9 +132,9 @@ export function Scene({
       {showScaffold && (
         <>
           <Scaffold shadows={shadows} />
-          <LightBars shadows={shadows} />
+          <LightBars shadows={shadows} outdoor={outdoor} />
           <ScaffoldFloors shadows={shadows} />
-          <TieDye />
+          {outdoor && <TieDye />}
           <Cabling shadows={shadows} />
         </>
       )}
@@ -137,7 +154,7 @@ export function Scene({
         target={view.target}
         maxPolarAngle={Math.PI / 2 - 0.02}
         minDistance={2.5}
-        maxDistance={200}
+        maxDistance={outdoor ? 400 : 200}
         enableDamping
         dampingFactor={0.06}
       />
@@ -150,6 +167,7 @@ export function Scene({
 
 export const sceneDefaults: SceneOptions = {
   colorMode: 'material',
+  venue: 'arena',
   showScaffold: true,
   showStage: true,
   showFigures: true,

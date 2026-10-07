@@ -308,3 +308,32 @@ export function lightRig(L = scaffoldLayout()): { pipes: (Tube & { indoor: boole
 
 export const TUBE_RADIUS = wall.structure.scaffold.tubeDiameter / 2;
 export const PLANK = { width: IN(10), thickness: IN(2) };
+
+/**
+ * Where the tie-dyes hang (structure.tieDyes): the top centre of each, on the
+ * front of the scaffold, from the second-highest lift. Read off the tubes the
+ * way blender/venue.py used to: the highest tubes give the front face, the
+ * horizontal ones the lifts.
+ */
+export function tieDyePanels(L = scaffoldLayout()): { top: [number, number, number]; width: number; height: number; palette: number }[] {
+  const T = wall.structure.tieDyes;
+  const tubes = scaffoldTubes(L);
+  const top = Math.max(...tubes.map((t) => Math.max(t.a[1], t.b[1])));
+  const front = Math.max(...tubes.filter((t) => Math.max(t.a[1], t.b[1]) > top - 0.05).flatMap((t) => [t.a[2], t.b[2]]));
+  const lifts = [...new Set(tubes.filter((t) => Math.abs(t.a[1] - t.b[1]) < 1e-3 && t.a[1] > L.deck.y + 0.1).map((t) => Math.round(t.a[1] * 100) / 100))].sort((a, b) => a - b);
+  const hang = lifts.length >= 2 ? lifts[lifts.length - 2] : top;
+  return T.x.map((x, k) => ({ top: [x, hang, front + T.standoff], width: T.width, height: T.height, palette: k % T.palettes.length }));
+}
+
+/**
+ * The paired vocal microphones: one stand in front of each player but the
+ * drummer, 0.3 m downstage of the mark, the two capsules 60 mm apart. Drawn
+ * by src/scene/BandGear.tsx and, via scene.json, by blender/build_scene.py.
+ */
+export const MIC = { standHeight: 1.44, standRadius: 0.016, baseRadius: 0.17, capsuleRadius: 0.019, capsuleLength: 0.05, capsuleY: 1.46, spacing: 0.06 };
+
+export function vocalMics(L = scaffoldLayout()): [number, number, number][] {
+  return wall.band.members
+    .filter((m) => m.id !== 'kreutz')
+    .map((m) => [wall.band.mirrored ? -m.x : m.x, L.deck.y, m.z + 0.3]);
+}
