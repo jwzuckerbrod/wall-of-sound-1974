@@ -21,7 +21,7 @@ const tmp = mkdtempSync(join(tmpdir(), 'wos-export-'));
 execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
-   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/geometry/logo.ts'],
+   '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts', 'src/geometry/logo.ts', 'src/geometry/roadgear.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -38,6 +38,7 @@ for (const f of walk(tmp)) {
 const load = (p) => import(pathToFileURL(join(tmp, p)).href);
 const cfg = await load('data/wall.config.js');
 const arrays = await load('geometry/arrays.js');
+const gear = await load('geometry/roadgear.js');
 const scaf = await load('geometry/scaffold.js');
 const logo = await load('geometry/logo.js');
 
@@ -127,8 +128,18 @@ const scene = {
       len: r4(wall.structure.lightBars.lampLength),
     };
   })(),
-  caseNames: wall.structure.amps.caseNames,
-  stickers: wall.structure.amps.stickers,
+  // The road gear: every case, label and sticker, decided once (src/geometry/roadgear.ts).
+  gear: (() => {
+    const C = wall.structure.roadCases;
+    const Z = C.zeroSize;
+    return {
+      casterHeight: C.casterHeight, wall: C.wall, rackSetback: C.rackSetback, slotGap: r4(C.slotGap),
+      zeroSize: v3([Z.w, Z.h, Z.d]),
+      colours: C.colours,
+      panel: wall.structure.amps.panel,
+      plan: gear.roadGearPlan(L),
+    };
+  })(),
   // Stage dressing (src/scene/BandGear.tsx): feet in world height.
   cases: scaf.stageCases(L).map((c) => ({ p: v3([c.pos[0], c.pos[1] + deckY, c.pos[2]]), s: v3(c.size), ry: r4(c.rot) })),
   // The 1969 mark (src/geometry/logo.ts): field-radius units, y down.

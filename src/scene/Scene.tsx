@@ -4,9 +4,9 @@ import { useEffect } from 'react';
 import * as THREE from 'three';
 import { wall } from '../data/wall.config';
 import { tierSettings, type Tier } from '../quality';
-import { Amps } from './Amps';
 import { Arrays, type ArrayInteraction, type ColorMode } from './Arrays';
 import { BandGear } from './BandGear';
+import { RoadGear } from './RoadGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Lighting } from './Lighting';
@@ -121,7 +121,7 @@ export function Scene({
           <Cabling shadows={shadows} />
         </>
       )}
-      {showAmps && <Amps shadows={shadows} />}
+      {showAmps && <RoadGear shadows={shadows} />}
       {showStage && <Stage shadows={shadows} />}
       {showFigures && <ScaleFigures shadows={shadows} />}
       {showBand && <BandGear shadows={shadows} />}

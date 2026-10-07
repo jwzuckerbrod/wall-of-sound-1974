@@ -16,7 +16,6 @@ import {
   plywoodMap,
   plywoodRoughness,
   steelRoughness,
-  stencilMap,
   tieDyeMap,
 } from './textures';
 
@@ -32,14 +31,10 @@ export interface WallMaterials {
   deck: THREE.MeshStandardMaterial;
   facing: THREE.MeshStandardMaterial;
   cable: THREE.MeshStandardMaterial;
-  ampBody: THREE.MeshStandardMaterial;
-  ampGlass: THREE.MeshStandardMaterial;
-  ampMeter: THREE.MeshStandardMaterial;
   tieDye: THREE.MeshStandardMaterial;
   figure: THREE.MeshStandardMaterial;
   chrome: THREE.MeshStandardMaterial;
   caseBody: THREE.MeshStandardMaterial;
-  caseStencil: THREE.MeshStandardMaterial;
   dispose(): void;
 }
 
@@ -159,21 +154,6 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   });
   const cable = new THREE.MeshStandardMaterial({ color: m.cable.baseColor, roughness: m.cable.roughness });
 
-  const ampBody = new THREE.MeshStandardMaterial({ color: '#2a2d31', roughness: 0.45, metalness: 0.75 });
-  const ampGlass = new THREE.MeshStandardMaterial({
-    color: m.ampGlass.baseColor,
-    roughness: m.ampGlass.roughness,
-    metalness: m.ampGlass.metalness,
-  });
-  // Emissive so the bloom pass catches it. This is the detail everyone who
-  // stood in front of the Wall remembers: a bank of blue meters in the dark.
-  const ampMeter = new THREE.MeshStandardMaterial({
-    color: '#0b1a2a',
-    emissive: new THREE.Color(wall.structure.amps.meterColor),
-    emissiveIntensity: wall.structure.amps.meterEmissiveIntensity,
-    roughness: 0.3,
-  });
-
   const tieDye = new THREE.MeshStandardMaterial({
     map: tune(tieDyeMap().clone(), 1),
     color: 0x9a938a,
@@ -188,18 +168,11 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 
   const chrome = new THREE.MeshStandardMaterial({ color: '#c8ccd2', roughness: 0.22, metalness: 0.95 });
   const caseBody = new THREE.MeshStandardMaterial({ color: '#1e1c18', roughness: 0.72, metalness: 0.08 });
-  // The 1969 lightning-bolt equipment mark, sprayed on the cases.
-  const caseStencil = new THREE.MeshStandardMaterial({
-    map: tune(stencilMap().clone(), 1),
-    alphaTest: 0.5,
-    roughness: 0.78,
-    metalness: 0.05,
-  });
 
   cached = {
     shell, baffle, cone, metal, trim, throat, strip, steel, deck, facing, cable,
-    ampBody, ampGlass, ampMeter, tieDye, figure,
-    chrome, caseBody, caseStencil,
+    tieDye, figure,
+    chrome, caseBody,
     dispose() {
       for (const v of Object.values(this)) if (v instanceof THREE.Material) v.dispose();
       cached = null;

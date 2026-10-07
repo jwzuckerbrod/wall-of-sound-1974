@@ -656,7 +656,16 @@ modelled landscape. Julien's says these horns sat on the upper part of the
 centre array, above the drums. The model also has horn rows at the tops of the
 vocal fills and the drum stacks; that placement is unchanged and unconfirmed.
 
+**The road gear, one plan.** Blender used to pick each case's colour and each
+label with Python's random generator, which the explorer can't reproduce.
+`src/geometry/roadgear.ts` now makes every choice once (seeded,
+`structure.roadCases`) and both renderers build from that plan: Blender via
+`scene.json`, the explorer in `src/scene/RoadGear.tsx`, which merges the gear
+into one mesh per material and draws every label from one texture atlas. Two
+inherited bugs fixed on the way: the case names repeated after eight racks
+(two "Budman"s; racks past the list now go unnamed), and a case meant to stack
+on another floated when the one below became ZERO cases.
+
 **What changes in the renders.** Blender's cabinets are now mixed black and
-bare, so the story's renders need re-rendering. Rulings 7–9 come into the
-explorer next (amps, cases, tie-dyes); the tie-dyes need the explorer's
-outdoor setting.
+bare, so the story's renders need re-rendering. The tie-dyes (ruling 9) need
+the explorer's outdoor setting, which comes next.

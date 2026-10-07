@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { wall } from '../data/wall.config';
-import { scaffoldLayout, stageCases } from '../geometry/scaffold';
+import { scaffoldLayout } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
 
 /**
@@ -12,9 +12,8 @@ import { wallMaterials } from '../materials';
  * subject; an honest empty stage reads better than bad instruments, and
  * docs/qa-findings.md records the decision.
  *
- * What stays is the stage furniture that is both documented and legible at
- * this scale: the paired vocal microphones, and the road cases carrying the
- * 1969 lightning-bolt equipment mark.
+ * What stays here is the paired vocal microphones. The road cases and the
+ * amps are in RoadGear.tsx.
  */
 
 /**
@@ -42,36 +41,6 @@ function VocalMic() {
   );
 }
 
-/**
- * A flight case with the lightning-bolt mark sprayed on its face.
- *
- * Owsley Stanley came up with the mark in 1969 so the crew could pick their
- * gear out of the heap at the back of a festival stage, and it went on all of
- * it. At its real size — a 5 1/2" circle — it is small on a case, as it was.
- */
-function RoadCase({ w, h, d }: { w: number; h: number; d: number }) {
-  const m = wallMaterials();
-  return (
-    <group>
-      <mesh position={[0, h / 2, 0]} material={m.caseBody} castShadow receiveShadow>
-        <boxGeometry args={[w, h, d]} />
-      </mesh>
-      {/* Mark on the long face, a little proud so it never z-fights. */}
-      <mesh position={[0, h * 0.62, d / 2 + 0.004]} material={m.caseStencil}>
-        <planeGeometry args={[wall.band.logo.diameter, wall.band.logo.diameter]} />
-      </mesh>
-      {/* Corner caps and a pair of latches. */}
-      {[-1, 1].map((sx) =>
-        [-1, 1].map((sz) => (
-          <mesh key={`${sx}${sz}`} position={[(sx * w) / 2, h - 0.03, (sz * d) / 2]} material={m.chrome}>
-            <boxGeometry args={[0.07, 0.07, 0.07]} />
-          </mesh>
-        )),
-      )}
-    </group>
-  );
-}
-
 export function BandGear({ shadows }: { shadows: boolean }) {
   const L = useMemo(() => scaffoldLayout(), []);
 
@@ -79,18 +48,11 @@ export function BandGear({ shadows }: { shadows: boolean }) {
     .filter((m) => m.id !== 'kreutz')
     .map((m) => ({ id: m.id, x: wall.band.mirrored ? -m.x : m.x, z: m.z }));
 
-  const cases = useMemo(() => stageCases(L), [L]);
-
   return (
     <group name="stage-furniture" position={[0, L.deck.y, 0]}>
       {mics.map((m) => (
         <group key={m.id} position={[m.x, 0, m.z + 0.3]}>
           <VocalMic />
-        </group>
-      ))}
-      {cases.map((c, i) => (
-        <group key={i} position={c.pos} rotation={[0, c.rot, 0]}>
-          <RoadCase w={c.size[0]} h={c.size[1]} d={c.size[2]} />
         </group>
       ))}
       {shadows ? null : null}

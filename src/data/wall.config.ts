@@ -427,11 +427,16 @@ export const PROVENANCE: Record<string, Provenance> = {
     note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. Both are modelled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
   },
   'materials.tieDye': { confidence: 'confirmed', sources: ['deadsources22'], note: 'Courtenay Pollock tie-dyed the fabric panels — on the structure, not over the drivers.' },
-  'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, black glass panel, 128 lb per amplifier. The front panel is anodized gold over a black chassis, 10.5 × 19 × 17 in, as measured on a Wall amplifier (Sotheby\'s lot 43).' },
+  'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, 128 lb per amplifier. The front panel is brushed, anodized gold over a black chassis, with a black strip along the bottom carrying three knobs and a red power rocker, 10.5 × 19 × 17 in, as on the Wall amplifiers Sotheby\'s sold (lots 36 and 43). Not black glass: an earlier version of the explorer had that wrong (docs/qa-findings.md §18).' },
   'materials.roadCases': {
     confidence: 'estimated',
     sources: ['sothebys', 'photos'],
     note: 'Orange Anvil rolling cases with aluminium edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on 8 June 1974. Wear, tape and labels are modelled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
+  },
+  'structure.roadCases': {
+    confidence: 'estimated',
+    sources: ['sothebys', 'juliens', 'photos'],
+    note: 'What the cases are comes from the survivors: orange Anvil rack cases with aluminium edging and ball corners (Sotheby\'s lot 43), a white one (lot 40), Budman\'s black one with folded rusted corners and a piano hinge (lot 36), and the amps\' empty ZERO metal cases (lots 34-35); orange-red cases stand under the piano at Oakland on 8 June 1974. Names are the crew\'s (structure.amps.caseNames). How many of each, and which carries which label, is invented for variety (structure.roadCases.odds).',
   },
   'materials.stickers': {
     confidence: 'guessed',
@@ -993,6 +998,55 @@ export const wall = {
       z: -2.0,
       meterColor: '#3FA9F5',
       meterEmissiveIntensity: 2.4,
+      /**
+       * The front, from the straight-on photograph of Budman (Sotheby's 2021
+       * lot 36): brushed gold panel over a black chassis, a black strip along
+       * the bottom with three knurled knobs and a red rocker, two meters, the
+       * McIntosh badge upper right. See PROVENANCE['materials.mcIntoshMeters'].
+       */
+      panel: { gold: '#CDB888', strip: '#0B0B0B', stripHeight: IN(3.5), chassisWidth: IN(17.2) },
+    },
+    /**
+     * The cases the amps rode in, and the loose cases on the deck. Built by
+     * src/geometry/roadgear.ts, which makes every choice once (which case is
+     * orange, which amp has a sticker) for the explorer and Blender alike.
+     * See PROVENANCE['structure.roadCases'].
+     */
+    roadCases: {
+      seed: 1974,
+      /** Caster wheel, fork and plate, floor to case bottom. */
+      casterHeight: 0.11,
+      /** Case wall: 3/8" ply under its laminate. */
+      wall: 0.012,
+      /** Amp fronts behind the case's front edge, clearing the handles. */
+      rackSetback: 0.055,
+      /** Between amps in a rack. */
+      slotGap: IN(0.5),
+      /** A ZERO metal case for one amplifier (lots 34-35). */
+      zeroSize: { w: IN(21), h: IN(20), d: IN(19) },
+      colours: {
+        orange: '#B4512C', // lot 43
+        white: '#D9D4C7', // lot 40, Weir's
+        black: '#141414', // lot 36, Budman
+        zeroOrange: '#CF5A2A', // lots 34-35
+        zeroPurple: '#7A3B8F',
+      },
+      /** How often each thing happens. Invented, for variety; the surviving cases set what the things are. */
+      odds: {
+        rackWhite: 0.12,
+        looseZero: 0.65,
+        zeroPurple: 0.3,
+        looseBlack: 0.3,
+        ampDuctLabel: 0.7,
+        ampSticker: 0.2,
+        endName: 0.6,
+        endWordSticker: 0.4,
+        endSkull: 0.35,
+        zeroName: 0.5,
+        frontName: 0.6,
+        frontWordSticker: 0.55,
+        frontSkull: 0.45,
+      },
     },
   },
 
@@ -1051,7 +1105,6 @@ export const wall = {
     /** Bright galvanised tube. See PROVENANCE['materials.steel']. */
     steel: { baseColor: '#A9ADB1', roughness: 0.38, metalness: 1.0 },
     cable: { baseColor: '#0E0E0E', roughness: 0.68, metalness: 0.0 },
-    ampGlass: { baseColor: '#0A0A0C', roughness: 0.12, metalness: 0.2 },
     /**
      * The 12s and 15s ran bare — no cloth over the cones. Only the small-cone
      * enclosures were covered, in Courtenay Pollock's tie-dye.

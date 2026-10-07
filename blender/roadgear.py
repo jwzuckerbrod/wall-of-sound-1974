@@ -37,10 +37,13 @@ SANS = FONTS + 'Arial Bold.ttf'
 
 MARKS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'marks')
 
-CASTER_H = 0.11     # caster wheel, fork and plate, floor to case bottom
-PANEL = 0.012       # case wall: 3/8" ply under its laminate
-RACK_SETBACK = 0.055  # amp fronts behind the case's front edge, clearing the handles
-SLOT_GAP = 0.5 * IN   # between amps in a rack (scripts/export-scene.mjs)
+# From the config (structure.roadCases), via scene.json.
+with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scene.json')) as _f:
+    _RC = json.load(_f)['gear']
+CASTER_H = _RC['casterHeight']      # caster wheel, fork and plate, floor to case bottom
+PANEL = _RC['wall']                 # case wall: 3/8" ply under its laminate
+RACK_SETBACK = _RC['rackSetback']   # amp fronts behind the case's front edge, clearing the handles
+SLOT_GAP = _RC['slotGap']           # between amps in a rack
 
 
 def srgb(hex_):
@@ -202,6 +205,11 @@ CASE_FINISHES = {
 }
 
 
+# The base colours are the config's (structure.roadCases.colours); the wear around them is Blender's own.
+for _k, _c in (('orange', 'orange'), ('white', 'white'), ('black', 'black'), ('zero_orange', 'zeroOrange'), ('zero_purple', 'zeroPurple')):
+    CASE_FINISHES[_k]['base'] = _RC['colours'][_c]
+
+
 def case_paint(name, base, faded, grime, scuff, worn, dust, crackle):
     """Case laminate: faded in patches, grimed, scuffed, worn through at the edges, dusty on top."""
     s = Sh(name)
@@ -264,7 +272,7 @@ def anodized_gold():
     """The MC 2300's panel: champagne-gold anodizing, brushed, scratched, rubbed bright at the edges."""
     s = Sh('MC 2300 panel, anodized gold')
     brushed = s.noise(260.0, 2.0, 0.5, stretch=(0.02, 1.0, 1.0))
-    c = s.mix('#cdb888', s.mul(brushed, 0.35), '#e0d0a6')
+    c = s.mix(_RC['panel']['gold'], s.mul(brushed, 0.35), '#e0d0a6')
     c = s.mix(c, s.band(s.noise(10.0, 8.0), 0.55, 0.85, 0.45), '#6e6247')
     scratch = s.band(s.noise(40.0, 14.0, 0.75, stretch=(0.15, 1.0, 1.0)), 0.66, 0.69, 0.8)
     c = s.mix(c, scratch, '#d9cba3')
@@ -805,135 +813,98 @@ def decal_object(name, P, G, coll, parent, loc, rot_z=0.0):
 
 # ─── placing it ───────────────────────────────────────────────────────────────
 
+def draw_decals(G, S, P, decals, y):
+    """
+    One face's marks, from the plan (src/geometry/roadgear.ts, via scene.json):
+    face coordinates x across and z up, laid at depth y and stepping toward
+    the viewer so later marks sit on earlier ones.
+    """
+    for i, d in enumerate(decals):
+        yy = y - 0.0004 * i
+        at = d['at']
+        k = d['kind']
+        if k == 'tape':
+            L, W, a = d['length'], d['width'], d['angle']
+            c, s_ = math.cos(a), math.sin(a)
+            pts = [(-L / 2, -W / 2), (L / 2, -W / 2), (L / 2, W / 2), (-L / 2, W / 2)]
+            P.flat(d['tape'], [(at[0] + x * c - z * s_, at[1] + x * s_ + z * c) for x, z in pts], yy)
+            if d.get('text'):
+                P.text('marker', d['text'], SANS, W * 0.62, tuple(at), yy - 0.0003, width=L * 0.8)
+        elif k == 'skullSticker':
+            syf_sticker(G, S, P, tuple(at), d['height'], yy)
+        elif k == 'skullStamp':
+            syf_stamp(G, P, tuple(at), d['height'], yy, paint=d['paint'])
+        elif k == 'wordSticker':
+            word_sticker(G, P, tuple(at), d['width'], yy)
+        elif k == 'wordStencil':
+            stencil_wordmark(P, tuple(at), d['width'], yy, paint=d['paint'])
+        elif k == 'stencilText':
+            P.text(d['paint'], d['text'], STENCIL, d['size'], tuple(at), yy)
+        elif k == 'bolt':
+            mark_1969(G, S, P, tuple(at), yy)
+
+
 def build_gear(S, coll, B):
-    """Racks of amps in their cases, the loose cases, and what is stuck on them."""
+    """
+    Racks of amps in their cases, the loose cases, and what is stuck on them,
+    all as the plan in scene.json lays them out (src/geometry/roadgear.ts):
+    the explorer builds the same gear from the same plan.
+    """
     G = materials()
-    rng = random.Random(1974)
-    stickers = S.get('stickers', True)
-    names = S.get('caseNames', [])
+    R = S['gear']
     deck = S['deck']['y']
     aw, ah, ad = S['ampSize']
     amp = mc2300(G, (aw, ah, ad))
+    zw, zh, zd = R['zeroSize']
 
-    # Racks: the exported amps come in columns of four at one x.
-    racks = {}
-    for p in S['amps']:
-        racks.setdefault(round(p[0], 3), p)
-    per = S.get('ampsPerRack', 4)
-    rw, rd = aw + 2 * PANEL + 0.02, ad + RACK_SETBACK + 0.04
-    rh = CASTER_H + 2 * PANEL + per * (ah + SLOT_GAP) + 0.01
-    rack_cases = {st: anvil(G, rw, rh, rd, open_front=True, style=st) for st in ('orange', 'black', 'white')}
-    for n, (x, p) in enumerate(sorted(racks.items())):
-        name = names[n % len(names)] if names else None
-        # Budman's case is black (lot 36); the rest, black or orange at random.
-        # Of the surviving cased amps, five are orange, one white, one black
-        # (Budman, lot 36).
-        style = 'black' if name == 'Budman' else ('white' if rng.random() < 0.12 else 'orange')
-        front = B(p)
-        # The amps sit on the case floor, not at the exported height: the case
-        # and its casters lift them. Only x and the front plane are kept.
+    rack_cases = {}
+    for n, r in enumerate(R['plan']['racks']):
+        rw, rh, rd = r['size']
+        key = (r['style'], rw, rh, rd)
+        if key not in rack_cases:
+            rack_cases[key] = anvil(G, rw, rh, rd, open_front=True, style=r['style'])
+        front = B(r['front'])
+        # The amps' fronts on the plan's front plane; the case behind them.
         base = Vector((front.x, front.y - RACK_SETBACK + rd / 2, deck))
-        case = bpy.data.objects.new(f'rack.{n:02d}', rack_cases[style])
+        case = bpy.data.objects.new(f'rack.{n:02d}', rack_cases[key])
         coll.objects.link(case)
         case.location = base
-        for k in range(per):
+        for k, a_ in enumerate(r['amps']):
             a = bpy.data.objects.new(f'rack.{n:02d}.amp.{k}', amp)
             coll.objects.link(a)
             a.parent = case
-            a.location = (0, -rd / 2 + RACK_SETBACK, CASTER_H + PANEL + (ah + SLOT_GAP) * k + SLOT_GAP / 2 + ah / 2)
-            # As on the surviving amps (docs/surviving-gear.md): a white tape
-            # strip under the meters with a four-digit number, duct tape with
-            # an "M-" number by the badge; now and then a sticker.
-            P = Parts()
-            unit = n * per + k
-            tape_label(P, rng, (-1.6 * IN, 0.35 * IN), -0.0075, str(1001 + unit), length=3.2 * IN)
-            if rng.random() < 0.7:
-                tape_label(P, rng, (5.7 * IN, 3.75 * IN), -0.0075, f'M-{unit + 1}', key='duct', length=1.9 * IN)
-            if stickers and rng.random() < 0.2:
-                syf_sticker(G, S, P, (6.9 * IN, 0.4 * IN), 1.6 * IN, -0.0072)
-            if P.keys:
+            a.location = (0, -rd / 2 + RACK_SETBACK, a_['y'])
+            if a_['decals']:
+                P = Parts()
+                draw_decals(G, S, P, a_['decals'], -0.0072)
                 decal_object(f'rack.{n:02d}.amp.{k}.labels', P, G, coll, a, (0, 0, 0))
-            else:
-                P.bm.free()
-        # Both ends of the case.
-        for side in (-1, 1):
+        for e in r['ends']:
+            if not e['decals']:
+                continue
             P = Parts()
-            if style == 'black':
-                if stickers and side == -1:
-                    stencil_wordmark(P, (0.0, rh * 0.42), rd * 0.62, -0.0004)
-                elif stickers:
-                    syf_stamp(G, P, (0.0, rh * 0.45), min(rd * 0.75, 0.36), -0.0004)
-                if name and side == 1:
-                    P.text('stamp', name.upper(), STENCIL, 3.0 * IN, (0.0, rh * 0.18), -0.0004)
-            else:
-                if name and rng.random() < 0.6:
-                    P.text('s_black', name.upper(), STENCIL, 3.4 * IN,
-                           (rng.uniform(-0.08, 0.08), rh * rng.uniform(0.22, 0.32)), -0.0004)
-                if stickers and rng.random() < 0.4:
-                    word_sticker(G, P, (rng.uniform(-0.08, 0.06), rh * rng.uniform(0.62, 0.74)), 8.0 * IN, -0.0008)
-                if stickers and rng.random() < 0.35:
-                    syf_sticker(G, S, P, (rng.uniform(0.07, 0.12), rh * rng.uniform(0.4, 0.5)), 4.5 * IN, -0.0008)
-            for _ in range(rng.randint(0, 2)):
-                tape_strip(P, rng, (rng.uniform(-0.15, 0.15), rh * rng.uniform(0.2, 0.85)), -0.0012, rng.random() < 0.4)
-            if P.keys:
-                # The decal's -y face turned to face out of this end of the case.
-                decal_object(f'rack.{n:02d}.end.{side}', P, G, coll, case,
-                             (side * (rw / 2 + 0.0005), 0, 0), rot_z=math.radians(90 * side))
-            else:
-                P.bm.free()
+            draw_decals(G, S, P, e['decals'], -0.0004)
+            # The decal's -y face turned to face out of this end of the case.
+            side = e['side']
+            decal_object(f'rack.{n:02d}.end.{side}', P, G, coll, case,
+                         (side * (rw / 2 + 0.0005), 0, 0), rot_z=math.radians(90 * side))
 
-    # Loose cases along the upstage edge (the browser's stageCases()). Most
-    # spots get the amps' empty ZERO cases, stacked: the cases dated to the
-    # Wall (lots 34-35). The rest are Anvil trunks.
-    zeros = {col: zero_case(G, col) for col in ('orange', 'purple')}
-    zw, zh, zd = 21 * IN, 20 * IN, 19 * IN
-    for i, c in enumerate(S['cases']):
-        w, h, d = c['s']
-        if rng.random() < 0.65:
-            base = B(c['p'])
-            across = max(1, int(w / (zw + 0.03)))
-            for a in range(across):
-                for lvl in range(rng.randint(1, 2)):
-                    col = 'purple' if rng.random() < 0.3 else 'orange'
-                    o = bpy.data.objects.new(f'zero.{i:02d}.{a}.{lvl}', zeros[col])
-                    coll.objects.link(o)
-                    off = Vector(((a - (across - 1) / 2) * (zw + 0.03), 0, lvl * zh))
-                    off.rotate(Matrix.Rotation(c['ry'], 3, 'Z'))
-                    o.location = base + off
-                    o.rotation_euler = (0, 0, c['ry'] + rng.uniform(-0.06, 0.06))
-                    P = Parts()
-                    yz = -zd / 2 - 0.006
-                    if names and rng.random() < 0.5:
-                        P.text('s_white', rng.choice(names).upper(), STENCIL, 2.2 * IN, (0, zh * 0.62), yz)
-                    for _ in range(rng.randint(0, 2)):
-                        tape_strip(P, rng, (rng.uniform(-0.15, 0.15), rng.uniform(0.1, zh - 0.08)), yz - 0.0004)
-                    if P.keys:
-                        decal_object(f'zero.{i:02d}.{a}.{lvl}.marks', P, G, coll, o, (0, 0, 0))
-                    else:
-                        P.bm.free()
-            continue
-        style = 'black' if rng.random() < 0.3 else 'orange'
-        case = bpy.data.objects.new(f'case.{i:02d}', anvil(G, w, h, d, style=style))
+    zeros = {col: zero_case(G, col, (zw, zh, zd)) for col in ('orange', 'purple')}
+    for i, z in enumerate(R['plan']['zeros']):
+        o = bpy.data.objects.new(f'zero.{i:02d}', zeros[z['colour']])
+        coll.objects.link(o)
+        o.location = B(z['pos'])
+        o.rotation_euler = (0, 0, z['rot'])
+        if z['decals']:
+            P = Parts()
+            draw_decals(G, S, P, z['decals'], -zd / 2 - 0.006)
+            decal_object(f'zero.{i:02d}.marks', P, G, coll, o, (0, 0, 0))
+
+    for i, c in enumerate(R['plan']['cases']):
+        w, h, d = c['size']
+        case = bpy.data.objects.new(f'case.{i:02d}', anvil(G, w, h, d, style=c['style']))
         coll.objects.link(case)
-        case.location = B(c['p'])
-        case.rotation_euler = (0, 0, c['ry'])
+        case.location = B(c['pos'])
+        case.rotation_euler = (0, 0, c['rot'])
         P = Parts()
-        y = -d / 2 - 0.0005
-        lo, hi = CASTER_H + 0.08, CASTER_H + (h - CASTER_H) * 0.7
-        if style == 'black':
-            # As Budman's: the wordmark stencilled big across the front.
-            if stickers:
-                stencil_wordmark(P, (-w * 0.08, (lo + hi) / 2), min(w * 0.55, 0.5), y)
-            mark_1969(G, S, P, (w * 0.36, lo + 0.06), y - 0.0004)
-        else:
-            mark_1969(G, S, P, (w * 0.28, (lo + hi) / 2 + 0.03), y)
-            # Too short a case and the stencil would sit under the stickers.
-            if names and h > 0.6 and rng.random() < 0.6:
-                P.text('s_black', names[i % len(names)].upper(), STENCIL, 3.6 * IN, (-w * 0.28, lo + 0.06), y - 0.0004)
-            if stickers and rng.random() < 0.55:
-                word_sticker(G, P, (-w * rng.uniform(0.05, 0.2), hi - 0.06), min(9.0 * IN, w * 0.42), y - 0.0008)
-            if stickers and rng.random() < 0.45:
-                syf_sticker(G, S, P, (w * rng.uniform(0.0, 0.1), lo + 0.07), 4.5 * IN, y - 0.0008)
-        for _ in range(rng.randint(1, 3)):
-            tape_strip(P, rng, (rng.uniform(-0.4, 0.4) * w, rng.uniform(lo, hi)), y - 0.0012, rng.random() < 0.45)
+        draw_decals(G, S, P, c['front'], -d / 2 - 0.0005)
         decal_object(f'case.{i:02d}.front', P, G, coll, case, (0, 0, 0))

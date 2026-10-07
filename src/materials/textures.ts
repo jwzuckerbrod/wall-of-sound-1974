@@ -7,7 +7,6 @@
  * are cached by key, so a texture is built once however many materials use it.
  */
 import * as THREE from 'three';
-import { BOLT, BOLT_BOTTOM } from '../geometry/logo';
 
 const cache = new Map<string, THREE.Texture>();
 
@@ -204,54 +203,6 @@ export const tieDyeMap = () =>
       }
     }
     ctx.putImageData(img, 0, 0);
-  });
-
-// ─── equipment stencil ───────────────────────────────────────────────────────
-
-
-/**
- * The 1969 equipment mark: a white circle, red above and blue below, split by
- * a jagged white lightning bolt. No skull.
- *
- * Owsley Stanley's account (thebear.org/GDLogo.html) gives the build: a 5 1/2"
- * circle of white, then a 5" field sprayed red on top and blue below through a
- * half-circle stencil with a jagged edge, the white showing through as the bolt
- * and as a 1/4" rim. The skull was a separate design Bob Thomas drew a few days
- * later; nothing found puts it on the gear.
- *
- * The canvas is the 5 1/2" circle, on a transparent ground.
- */
-export const stencilMap = () =>
-  make('stencil', 512, (ctx, s) => {
-    ctx.clearRect(0, 0, s, s);
-    const c = s / 2;
-    const R = (s / 5.5) * 2.5; // the 5" field
-    const P = (i: number): [number, number] => [c + BOLT[i][0] * R, c + BOLT[i][1] * R];
-    const angle = (i: number) => Math.atan2(BOLT[i][1], BOLT[i][0]);
-
-    // White ground, 5 1/2".
-    ctx.fillStyle = '#ece6d8';
-    ctx.beginPath();
-    ctx.arc(c, c, s / 2, 0, Math.PI * 2);
-    ctx.fill();
-
-    // Blue: the bolt's blue edge, then the rim back round the right-hand side.
-    ctx.fillStyle = '#2a4a86';
-    ctx.beginPath();
-    for (let i = 0; i <= BOLT_BOTTOM; i++) ctx.lineTo(...P(i));
-    ctx.arc(c, c, R, angle(BOLT_BOTTOM), angle(0), true);
-    ctx.closePath();
-    ctx.fill();
-
-    // Red: up the bolt's red edge, then the rim back round the left-hand side.
-    ctx.fillStyle = '#b3342b';
-    ctx.beginPath();
-    ctx.moveTo(...P(BOLT_BOTTOM));
-    for (let i = BOLT_BOTTOM + 1; i < BOLT.length; i++) ctx.lineTo(...P(i));
-    ctx.lineTo(...P(0));
-    ctx.arc(c, c, R, angle(0), angle(BOLT_BOTTOM), true);
-    ctx.closePath();
-    ctx.fill();
   });
 
 // ─── steel ───────────────────────────────────────────────────────────────────
