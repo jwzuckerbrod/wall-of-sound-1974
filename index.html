@@ -2,6 +2,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      // Served from a folder (…/wall-of-sound/), every file is relative to it.
+      // Without the closing slash they would load from the folder above and
+      // the page would never start, so add it before anything else loads.
+      if (!/\/$|\.html$/.test(location.pathname)) location.replace(location.pathname + '/' + location.search + location.hash);
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="theme-color" content="#0a0c0f" />
     <title>The Wall of Sound, 1974 — an explorable 3D reconstruction</title>
