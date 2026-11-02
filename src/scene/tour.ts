@@ -24,7 +24,7 @@ export const TOUR: TourStop[] = [
     id: 'whole',
     title: 'Sixty feet of speakers',
     body:
-      'The Wall of Sound, as it stood in the summer of 1974. Six hundred and forty-one drivers across sixty feet, on a scaffold tower sixty-four feet wide and forty deep that rises thirty-eight feet ten inches above the stage. The stage deck is itself ten feet off the ground, and the five figures on it are 1.75 metres tall.',
+      'The Wall of Sound, as it stood in the summer of 1974. Six hundred and forty-one drivers across sixty feet, on a scaffold tower sixty-four feet wide and forty deep that rises thirty-eight feet ten inches above the stage. The stage deck is itself ten feet off the ground.',
     position: [0, DECK + 12, 52],
     target: [0, DECK + 6.5, -1],
     fov: 42,

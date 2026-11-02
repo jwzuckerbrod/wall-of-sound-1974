@@ -6,8 +6,8 @@
 export type UnitSystem = 'imperial' | 'metric';
 
 export const UNIT_LABEL: Record<UnitSystem, string> = {
-  imperial: 'ft · in',
-  metric: 'metres',
+  imperial: 'Feet',
+  metric: 'Metres',
 };
 
 const M_PER_FT = 0.3048;

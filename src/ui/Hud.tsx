@@ -5,7 +5,7 @@ import { scaffoldTubes } from '../geometry/scaffold';
 import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { NavMode, SceneOptions } from '../scene/Scene';
 import { VIEWS, type ViewId } from '../scene/views';
-import { NavPanel } from './NavPanel';
+import { NavPanel, TOUCH } from './NavPanel';
 import { area, long, short, UNIT_LABEL, type UnitSystem } from './units';
 
 export function Hud({
@@ -52,7 +52,8 @@ export function Hud({
   openAbout: () => void;
 }) {
   // On a narrow window the panel would cover the thing it describes.
-  const [open, setOpen] = useState(() => window.innerWidth >= 900);
+  // Closed on arrival, so the first thing anyone sees is the Wall, not a panel over it.
+  const [open, setOpen] = useState(false);
   const [inventoryError, setInventoryError] = useState<string | null>(null);
 
   const stats = useMemo(() => {
@@ -98,8 +99,12 @@ export function Hud({
           <button className="collapse" onClick={() => setOpen(!open)} aria-expanded={open}>
             {open ? 'Hide panel' : 'Show panel'}
           </button>
-          <button className="collapse" onClick={() => setUnits(units === 'imperial' ? 'metric' : 'imperial')}>
-            {UNIT_LABEL[units]}
+          <button
+            className="collapse"
+            onClick={() => setUnits(units === 'imperial' ? 'metric' : 'imperial')}
+            aria-label={`Units: ${UNIT_LABEL[units]}. Switch to ${UNIT_LABEL[units === 'imperial' ? 'metric' : 'imperial']}`}
+          >
+            Units: {UNIT_LABEL[units]}
           </button>
           <button className="collapse" onClick={openAbout}>
             About <kbd>I</kbd>
@@ -268,7 +273,7 @@ export function Hud({
         </ul>
       </section>
 
-      <footer>Drag to orbit · scroll to zoom{fps > 0 ? ` · ${fps} fps` : ''}</footer>
+      <footer>{TOUCH ? 'Drag to turn · pinch to zoom' : 'Drag to turn · scroll to zoom'}{fps > 0 ? ` · ${fps} fps` : ''}</footer>
     </div>
   );
 }

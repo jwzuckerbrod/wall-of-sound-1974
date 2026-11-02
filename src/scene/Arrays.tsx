@@ -144,6 +144,7 @@ function RoleMesh({
       receiveShadow={castShadow}
       frustumCulled
       raycast={pickable ? undefined : () => null}
+      userData={{ pickable }}
       onPointerMove={
         pickable
           ? (e) => {

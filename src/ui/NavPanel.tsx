@@ -1,9 +1,12 @@
 import type { NavMode } from '../scene/Scene';
 import { TOUR } from '../scene/tour';
 
+/** A touch screen with no mouse: the hints talk about pinching, not scrolling or keys. */
+export const TOUCH = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
+
 const MODES: { id: NavMode; label: string; key: string; hint: string }[] = [
-  { id: 'orbit', label: 'Orbit', key: 'O', hint: 'Drag to turn it, scroll to zoom.' },
-  { id: 'tour', label: 'Tour', key: 'T', hint: 'Arrow keys or the buttons below move between stops.' },
+  { id: 'orbit', label: 'Orbit', key: 'O', hint: TOUCH ? 'Drag to turn it, pinch to zoom.' : 'Drag to turn it, scroll to zoom.' },
+  { id: 'tour', label: 'Tour', key: 'T', hint: TOUCH ? 'Back and Next move between stops.' : 'Arrow keys or the buttons below move between stops.' },
 ];
 
 /**

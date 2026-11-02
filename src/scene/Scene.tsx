@@ -150,7 +150,7 @@ export function Scene({
       )}
 
       {/* Clicking past everything clears the selection. */}
-      <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)}>
+      <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)} userData={{ pickable: true }}>
         <planeGeometry args={[400, 400]} />
         <meshBasicMaterial visible={false} />
       </mesh>

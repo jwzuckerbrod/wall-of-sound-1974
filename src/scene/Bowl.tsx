@@ -208,8 +208,10 @@ export function Bowl({ shadows }: { shadows: boolean }) {
       <mesh geometry={g.seating.concrete} material={m.concrete} receiveShadow={shadows} />
       <mesh geometry={g.seating.bench} material={m.bench} receiveShadow={shadows} />
       <mesh geometry={g.seating.pool} material={m.paving} receiveShadow={shadows} />
-      <mesh geometry={g.shell.white} material={m.shell} receiveShadow={shadows} castShadow={shadows} />
-      <mesh geometry={g.shell.inside} material={m.inside} receiveShadow={shadows} castShadow={shadows} />
+      {/* No shadows on the shell: its thin double-sided surfaces shadowed
+          themselves into black blotches (acne) under the low sun. */}
+      <mesh geometry={g.shell.white} material={m.shell} />
+      <mesh geometry={g.shell.inside} material={m.inside} />
       <mesh geometry={g.tubes} material={m.tube} receiveShadow={shadows} castShadow={shadows} />
       <mesh geometry={g.panels} material={m.panel} receiveShadow={shadows} castShadow={shadows} />
       <mesh position={[0, f.deck - 0.15, -(backWall + 5.6) / 2]} material={m.stage} receiveShadow={shadows}>

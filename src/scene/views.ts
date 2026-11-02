@@ -28,6 +28,15 @@ export interface View {
 }
 
 export const VIEWS = {
+  // The first thing anyone sees: low, from the crowd, a little off centre, so
+  // the Wall reads as forty-odd feet of speakers rather than a flat elevation.
+  hero: {
+    label: 'From the crowd, house left',
+    position: [-15, 6.5, 34],
+    target: [0.5, 8.6, 0],
+    fov: 40,
+    fit: true,
+  },
   front: {
     label: 'Front, house centre',
     position: [0, 9, 38],
@@ -78,8 +87,10 @@ export type ViewId = keyof typeof VIEWS;
 
 export function viewFromSearch(search: string): { view: View; id: ViewId; hud: boolean } {
   const p = new URLSearchParams(search);
-  const raw = p.get('view') ?? 'front';
-  const id = (raw in VIEWS ? raw : 'front') as ViewId;
+  // A portrait phone opens straight on: the three-quarter view crops the Wall's far end.
+  const portrait = typeof window !== 'undefined' && window.innerHeight > window.innerWidth;
+  const raw = p.get('view') ?? (portrait ? 'front' : 'hero');
+  const id = (raw in VIEWS ? raw : 'hero') as ViewId;
   return { view: VIEWS[id], id, hud: p.get('hud') !== '0' };
 }
 

@@ -1,4 +1,4 @@
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, events as pointerEvents, useFrame } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { wall, type ChannelId } from './data/wall.config';
@@ -12,6 +12,28 @@ import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/S
 import { TOUR } from './scene/tour';
 import { VIEWS, viewFromSearch, viewIn, type ViewId } from './scene/views';
 import { Hud } from './ui/Hud';
+
+/** Whether a mesh, or something it sits in, is marked as clickable (userData.pickable). */
+function isPickable(o: THREE.Object3D | null): boolean {
+  for (; o; o = o.parent) if (o.userData.pickable) return true;
+  return false;
+}
+
+/**
+ * Fades out the loading screen in index.html once the model has actually
+ * drawn: a few frames in, so the first visible frame is a finished one.
+ */
+function BootDone() {
+  const frames = useRef(0);
+  useFrame(() => {
+    if (++frames.current !== 3) return;
+    const boot = document.getElementById('boot');
+    if (!boot) return;
+    boot.classList.add('done');
+    setTimeout(() => boot.remove(), 700);
+  });
+  return null;
+}
 
 function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
   // Refs, not locals: onSample re-renders this component, which would reset counters.
@@ -39,7 +61,7 @@ export default function App() {
     return forced && forced in wall.render.tiers ? (forced as Tier) : detectTier();
   });
   const [autoTier, setAutoTier] = useState(true);
-  // ?venue=bowl opens at the Hollywood Bowl.
+  // Opens indoors; ?venue=bowl opens at the Hollywood Bowl.
   const [options, setOptionsState] = useState<SceneOptions>(() => ({
     ...sceneDefaults,
     venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
@@ -184,6 +206,10 @@ export default function App() {
           preserveDrawingBuffer: import.meta.env.DEV,
         }}
         camera={{ position: view.position, fov: view.fov ?? 42, near: 0.1, far: 600 }}
+        // Only the speakers (and the empty ground, to clear a selection) take
+        // clicks. Without this the scaffold tubes in front of every stack
+        // caught the click first and the Wall could not be picked.
+        events={(store) => ({ ...pointerEvents(store), filter: (hits) => hits.filter((h) => isPickable(h.object)) })}
         onCreated={({ gl }) => {
           gl.outputColorSpace = THREE.SRGBColorSpace;
         }}
@@ -198,6 +224,7 @@ export default function App() {
         />
         <Post tier={tier} />
         <FpsProbe onSample={setFps} />
+        <BootDone />
       </Canvas>
 
       {hud && (

@@ -93,17 +93,26 @@ canvas { display: block; touch-action: none; }
   color: var(--faint);
 }
 
-.hud dl {
+.hud dl,
+.array-panel dl {
   display: grid;
   grid-template-columns: auto 1fr;
   gap: 2px 12px;
   margin: 0;
 }
-.hud dt { color: var(--dim); }
-.hud dd {
+.hud dt,
+.array-panel dt { color: var(--dim); }
+.hud dd,
+.array-panel dd {
   margin: 0;
   text-align: right;
   font-variant-numeric: tabular-nums;
+}
+.array-panel dl { font-size: 12px; margin: 0 0 13px; }
+
+/* Keyboard shortcuts mean nothing on a phone. */
+@media (hover: none) {
+  kbd { display: none; }
 }
 
 .check {
@@ -419,4 +428,10 @@ canvas { display: block; touch-action: none; }
 
 @media (max-width: 720px) {
   .hud { width: calc(100vw - 32px); max-height: 46dvh; }
+  /* A phone gets the title, the buttons and the way round; the rest is in the panel. */
+  .hud { top: 10px; left: 10px; width: calc(100vw - 20px); padding: 12px 14px 10px; }
+  .hud header p,
+  .hud .peek,
+  .hud .always > h2 { display: none; }
+  .hud h1 { font-size: 17px; }
 }

@@ -3,13 +3,80 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>The Wall of Sound — 1974</title>
+    <meta name="theme-color" content="#0a0c0f" />
+    <title>The Wall of Sound, 1974 — an explorable 3D reconstruction</title>
     <meta
       name="description"
-      content="An explorable 3D reconstruction of the Grateful Dead's Wall of Sound, the PA system they toured in 1974."
+      content="Walk around the Grateful Dead's Wall of Sound, the 641-speaker PA they toured in 1974, rebuilt in 3D from photographs, scaffolding drawings and surviving equipment, every source credited."
     />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <!-- What a shared link shows. The image URL has to be absolute: set for GitHub Pages. -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="The Wall of Sound, 1974" />
+    <meta
+      property="og:description"
+      content="An explorable 3D reconstruction of the Grateful Dead's 641-speaker PA, from photographs, drawings and surviving equipment."
+    />
+    <meta property="og:image" content="https://jwzuckerbrod.github.io/wall-of-sound-1974/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      /* Shown from the first byte, before any JavaScript arrives; faded out by
+         src/App.tsx once the model has drawn its first frames. */
+      #boot {
+        position: fixed;
+        inset: 0;
+        z-index: 50;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 14px;
+        background: #0a0c0f;
+        color: #e8e6e1;
+        font-family: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+        transition: opacity 0.6s ease;
+      }
+      #boot.done { opacity: 0; pointer-events: none; }
+      #boot h1 { margin: 0; font-weight: 500; font-size: clamp(26px, 6vw, 40px); letter-spacing: -0.01em; }
+      #boot p { margin: 0; color: #99a0a8; font-size: 14px; }
+      #boot .bar { width: 160px; height: 2px; background: #2b3037; overflow: hidden; border-radius: 1px; }
+      #boot .bar::after {
+        content: '';
+        display: block;
+        width: 40%;
+        height: 100%;
+        background: #e9b85a;
+        animation: boot 1.2s ease-in-out infinite;
+      }
+      @keyframes boot { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+      @media (prefers-reduced-motion: reduce) { #boot .bar::after { animation: none; width: 100%; opacity: 0.5; } }
+    </style>
   </head>
   <body>
+    <div id="boot" role="status" aria-live="polite">
+      <h1>The Wall of Sound</h1>
+      <p>Raising 641 speakers…</p>
+      <div class="bar"></div>
+    </div>
+    <script>
+      // Without WebGL the model can never draw, so say so rather than spin forever;
+      // and if it is merely slow, say that too.
+      (function () {
+        var msg = document.querySelector('#boot p');
+        var gl = null;
+        try { gl = document.createElement('canvas').getContext('webgl2'); } catch (e) {}
+        if (!gl) {
+          msg.textContent = 'This needs a browser that can draw 3D (WebGL 2). Try a recent Chrome, Safari or Firefox.';
+          document.querySelector('#boot .bar').remove();
+          return;
+        }
+        setTimeout(function () {
+          if (document.getElementById('boot')) msg.textContent = 'Still raising it… a slow connection, or a slow device.';
+        }, 20000);
+      })();
+    </script>
     <div id="root"></div>
     <noscript>This reconstruction needs JavaScript and WebGL. The written spec is in docs/reconstruction-spec.md.</noscript>
     <script type="module" src="/src/main.tsx"></script>
