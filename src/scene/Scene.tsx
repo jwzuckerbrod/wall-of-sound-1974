@@ -100,6 +100,7 @@ export function Scene({
   pose,
   interaction,
   activeStop,
+  dots,
   onPickStop,
   onPickInstrument,
   offset,
@@ -111,6 +112,8 @@ export function Scene({
   pose: Pose;
   interaction: ArrayInteraction;
   activeStop: number | null;
+  /** Dots on the model; off when the page runs without its interface (?hud=0, an embed). */
+  dots: boolean;
   onPickStop: (i: number) => void;
   onPickInstrument: (id: string) => void;
   /** Room to make for an open card, in pixels: beside it, or above it on a phone. */
@@ -180,7 +183,7 @@ export function Scene({
       {navMode === 'tour' && <TourCamera stop={pose} active />}
       {/* At a tour stop the camera is in close and the dots would float over
           the shot; they come back on the overview, or when the card closes. */}
-      <Hotspots active={activeStop} onPick={onPickStop} hidden={interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
+      <Hotspots active={activeStop} onPick={onPickStop} hidden={!dots || interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
       <ViewOffset room={offset.room} up={offset.up} />
     </>
   );

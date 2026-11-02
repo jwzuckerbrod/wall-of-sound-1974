@@ -257,6 +257,7 @@ export default function App() {
           pose={pose}
           interaction={interaction}
           activeStop={hud ? stop : null}
+          dots={hud}
           onPickStop={goToStop}
           onPickInstrument={pickInstrument}
           offset={offset}
