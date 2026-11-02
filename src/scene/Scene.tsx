@@ -14,7 +14,8 @@ import { Bowl } from './Bowl';
 import { DaylightLighting, Lighting } from './Lighting';
 import { Cabling, LightBars, Scaffold, ScaffoldFloors, ScaleFigures, Stage, TieDye } from './Structure';
 import { TourCamera } from './TourCamera';
-import type { TourStop } from './tour';
+import { Hotspots, ViewOffset } from './Hotspots';
+import type { Pose } from './TourCamera';
 import type { View } from './views';
 
 /** Orbit around it, or be taken round it. */
@@ -96,14 +97,24 @@ export function Scene({
   view,
   tier,
   navMode,
-  tourStop,
+  pose,
   interaction,
+  activeStop,
+  onPickStop,
+  onPickInstrument,
+  offset,
 }: SceneOptions & {
   view: View;
   tier: Tier;
   navMode: NavMode;
-  tourStop: TourStop;
+  /** Where the camera flies to when navMode is 'tour'. */
+  pose: Pose;
   interaction: ArrayInteraction;
+  activeStop: number | null;
+  onPickStop: (i: number) => void;
+  onPickInstrument: (id: string) => void;
+  /** Room to make for an open card, in pixels: beside it, or above it on a phone. */
+  offset: { room: number; up: number };
 }) {
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
@@ -145,7 +156,7 @@ export function Scene({
       {showBand && (
         <>
           <BandGear shadows={shadows} />
-          <Instruments venue={venue} />
+          <Instruments venue={venue} onPick={onPickInstrument} />
         </>
       )}
 
@@ -166,7 +177,11 @@ export function Scene({
       />
       {/* After OrbitControls, so `controls` is in the store when these run. */}
       {navMode === 'orbit' && <FitCamera view={view} />}
-      {navMode === 'tour' && <TourCamera stop={tourStop} active />}
+      {navMode === 'tour' && <TourCamera stop={pose} active />}
+      {/* At a tour stop the camera is in close and the dots would float over
+          the shot; they come back on the overview, or when the card closes. */}
+      <Hotspots active={activeStop} onPick={onPickStop} hidden={interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
+      <ViewOffset room={offset.room} up={offset.up} />
     </>
   );
 }

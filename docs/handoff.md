@@ -36,3 +36,10 @@
 - Browser app: now matches Blender (qa-findings §18): cabinets, road gear,
   lamps, tie-dyes, the Bowl (`?venue=bowl`) and the instruments as glTF.
   Still bare deck (QA 2.2); the Bowl has simple trees and no crowd.
+- **Live** at https://jwzuckerbrod.github.io/wall-of-sound-1974/ (GitHub
+  Pages, deployed on every push to master). Redesigned after a UX audit
+  (2 November 2026): an overview card on arrival, dots on the model for the
+  tour stops, one card on the right (a sheet on phones), a bottom bar with
+  "Take it apart", "Colour by system" and viewpoints, settings in a menu.
+- Not yet: a full-screen instrument viewer (needs higher-resolution exports),
+  the story page as the front door.

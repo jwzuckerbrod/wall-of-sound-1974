@@ -1200,10 +1200,14 @@ export const wall = {
     },
   },
 
-  /** Quality tiers. Chosen at load from device capability, overridable by the visitor. */
+  /**
+   * Quality tiers. Chosen at load from device capability, overridable by the
+   * visitor. SSAO is off at every tier: close in, it speckled the deck and the
+   * cabinets with grain, and the shadows carry the depth well enough without it.
+   */
   render: {
     tiers: {
-      high:   { pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: true,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
+      high:   { pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: false,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
       medium: { pixelRatioCap: 1.5, shadowMapSize: 1024, softShadows: false, ssao: false, bloom: true,  bloomStrength: 0.14, anisotropy: 4, maxLights: 4, instanceLod: true },
       low:    { pixelRatioCap: 1.0, shadowMapSize: 512,  softShadows: false, ssao: false, bloom: false, bloomStrength: 0,    anisotropy: 1, maxLights: 2, instanceLod: true },
     },

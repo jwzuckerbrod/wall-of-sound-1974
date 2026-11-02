@@ -335,5 +335,12 @@ export const MIC = { standHeight: 1.44, standRadius: 0.016, baseRadius: 0.17, ca
 export function vocalMics(L = scaffoldLayout()): [number, number, number][] {
   return wall.band.members
     .filter((m) => m.id !== 'kreutz')
-    .map((m) => [wall.band.mirrored ? -m.x : m.x, L.deck.y, m.z + 0.3]);
+    .map((m) => {
+      // Keith's mark is the middle of the grand; he sat at its keyboard end
+      // (band.instruments), so his stand is there, beside the keys, not
+      // through the lid.
+      const x = m.id === 'keith' ? m.x + wall.band.instruments.pianoKeyboardOffset + 0.1 : m.x;
+      const z = m.id === 'keith' ? m.z + 0.55 : m.z + 0.3;
+      return [wall.band.mirrored ? -x : x, L.deck.y, z];
+    });
 }

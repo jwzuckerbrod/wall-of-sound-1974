@@ -10,7 +10,7 @@ export const TIERS = Object.keys(wall.render.tiers) as Tier[];
 export const tierSettings = (t: Tier) => wall.render.tiers[t];
 
 export const TIER_LABEL: Record<Tier, string> = {
-  high: 'High — shadows, AO, bloom',
+  high: 'High — soft shadows, bloom',
   medium: 'Medium — bloom only',
   low: 'Low — no post-processing',
 };

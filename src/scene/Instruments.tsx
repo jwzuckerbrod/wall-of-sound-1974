@@ -48,7 +48,7 @@ function model(name: string) {
   return p;
 }
 
-export function Instruments({ venue }: { venue: Venue }) {
+export function Instruments({ venue, onPick }: { venue: Venue; onPick: (id: string) => void }) {
   const names = [...COMMON, venue === 'hollywoodBowl' ? 'drums-bowl' : 'drums'];
   const [loaded, setLoaded] = useState<Record<string, THREE.Group>>({});
   const key = names.join(',');
@@ -64,7 +64,26 @@ export function Instruments({ venue }: { venue: Venue }) {
   }, [key]);
   return (
     <group name="instruments">
-      {names.map((n) => loaded[n] && <primitive key={n} object={loaded[n]} />)}
+      {names.map(
+        (n) =>
+          loaded[n] && (
+            // Click one for its card. The stands are a prop, not an instrument.
+            <group
+              key={n}
+              userData={{ pickable: n !== 'stands' }}
+              onClick={
+                n === 'stands'
+                  ? undefined
+                  : (e) => {
+                      e.stopPropagation();
+                      onPick(n === 'drums-bowl' ? 'drums' : n);
+                    }
+              }
+            >
+              <primitive object={loaded[n]} />
+            </group>
+          ),
+      )}
     </group>
   );
 }

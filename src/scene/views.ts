@@ -1,5 +1,6 @@
 import { wall } from '../data/wall.config';
 import { bowlFrame, seatEye } from '../geometry/bowl';
+import { TOUR } from './tour';
 /**
  * Named camera positions, so a screenshot can be reproduced exactly rather
  * than hand-orbited. Append ?view=oblique (and &hud=0) to the URL.
@@ -110,3 +111,31 @@ export function viewIn(id: ViewId, venue: 'arena' | 'hollywoodBowl'): View {
 }
 
 const V_FIRST_ROW = wall.venues.hollywoodBowl.seating.firstRow;
+
+const PIANO = TOUR.find((s) => s.id === 'piano')!;
+
+/**
+ * The viewpoints in the bottom bar: where to stand. Flown to, not cut to.
+ * Crowd views are a standing eye in the hall; at the Bowl, viewIn() lifts
+ * them to a seated eye in the row they stand in.
+ */
+export const VIEWPOINTS = {
+  crowdCentre: { label: 'Crowd, centre', position: [0, 1.7, 30], target: [0, 7.8, 0], fov: 50 },
+  crowdLeft: { label: 'Crowd, left', position: [-15, 1.7, 34], target: [0, 7.8, 0], fov: 48 },
+  crowdRight: { label: 'Crowd, right', position: [18, 1.7, 40], target: [0, 7.8, 0], fov: 46 },
+  above: { label: 'Above', position: [4, 33, 30], target: [0, 4, -4], fov: 38 },
+  piano: { label: 'At the piano', position: PIANO.position, target: PIANO.target, fov: PIANO.fov },
+} satisfies Record<string, View>;
+
+export type ViewpointId = keyof typeof VIEWPOINTS;
+
+/** A viewpoint as it stands at a venue (see viewIn). */
+export function viewpointIn(id: ViewpointId, venue: 'arena' | 'hollywoodBowl'): View {
+  const v: View = VIEWPOINTS[id];
+  if (venue !== 'hollywoodBowl' || v.position[1] > 3) return v;
+  const f = bowlFrame();
+  const back = v.position[2] - f.front;
+  if (back < V_FIRST_ROW) return v;
+  const [x, y] = seatEye(v.position[0], back, f);
+  return { ...v, position: [x, y, v.position[2]] };
+}

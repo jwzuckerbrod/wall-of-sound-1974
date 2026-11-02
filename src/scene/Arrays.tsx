@@ -101,7 +101,8 @@ function RoleMesh({
         colour.setRGB(1, 1, 1);
       }
 
-      if (isolated && c.channel !== isolated) colour.multiplyScalar(0.12);
+      // Isolating a channel shows its whole system: all four bass channels, all three drum ones.
+      if (isolated && CHANNELS[c.channel].system !== CHANNELS[isolated].system) colour.multiplyScalar(0.12);
       if (c.block === selected) colour.lerp(HIGHLIGHT, 0.45);
       else if (c.block === hovered) colour.lerp(HIGHLIGHT, 0.22);
 

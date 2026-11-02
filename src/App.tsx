@@ -9,9 +9,11 @@ import { ArrayPanel } from './ui/ArrayPanel';
 import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
-import { TOUR } from './scene/tour';
-import { VIEWS, viewFromSearch, viewIn, type ViewId } from './scene/views';
-import { Hud } from './ui/Hud';
+import type { Pose } from './scene/TourCamera';
+import { TOUR, instrumentPose } from './scene/tour';
+import { VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
+import { InstrumentCard, SpotCard } from './ui/Cards';
+import { BottomBar, Hint, TopBar } from './ui/Controls';
 
 /** Whether a mesh, or something it sits in, is marked as clickable (userData.pickable). */
 function isPickable(o: THREE.Object3D | null): boolean {
@@ -53,9 +55,9 @@ function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
 
 export default function App() {
   const initial = useMemo(() => viewFromSearch(window.location.search), []);
-  const [viewId, setViewId] = useState<ViewId>(initial.id);
+  const viewId = initial.id;
   const [navMode, setNavMode] = useState<NavMode>('orbit');
-  const [stopIndex, setStopIndex] = useState(0);
+  const [pose, setPose] = useState<Pose>(TOUR[0]);
   const [tier, setTier] = useState<Tier>(() => {
     const forced = new URLSearchParams(window.location.search).get('tier');
     return forced && forced in wall.render.tiers ? (forced as Tier) : detectTier();
@@ -80,37 +82,81 @@ export default function App() {
   }, []);
   const [fps, setFps] = useState(0);
 
+  // What the card on the right shows: a tour stop (the overview on arrival),
+  // a speaker block someone clicked, an instrument, or nothing.
+  const [stop, setStop] = useState<number | null>(initial.hud ? 0 : null);
+  const [instrument, setInstrument] = useState<string | null>(null);
+
   // Inspection state: what the cursor is over, what is pinned open, which
-  // channel is isolated, and how far apart the exploded view has pulled things.
+  // system is isolated, and how far apart the exploded view has pulled things.
   const [hovered, setHovered] = useState<string | null>(null);
-  const [selected, setSelected] = useState<string | null>(null);
+  const [selected, setSelectedState] = useState<string | null>(null);
   const [isolated, setIsolated] = useState<ChannelId | null>(null);
   const [explode, setExplode] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
   const [units, setUnits] = useState<UnitSystem>('imperial');
 
+  /** Clicking a speaker block opens its card in place of whatever was there. */
+  const setSelected = useCallback((id: string | null) => {
+    setSelectedState(id);
+    if (id) {
+      setStop(null);
+      setInstrument(null);
+    }
+  }, []);
+
   const interaction: ArrayInteraction = useMemo(
     () => ({ hovered, selected, isolated, explode, onHover: setHovered, onSelect: setSelected }),
-    [hovered, selected, isolated, explode],
+    [hovered, selected, isolated, explode, setSelected],
   );
 
   const view = useMemo(() => viewIn(viewId, options.venue), [viewId, options.venue]);
   const hud = initial.hud;
   const q = tierSettings(tier);
-  const tourStop = TOUR[stopIndex];
 
-  const selectView = useCallback((id: ViewId) => {
-    setViewId(id);
-    setNavMode('orbit');
-    const url = new URL(window.location.href);
-    url.searchParams.set('view', id);
-    window.history.replaceState(null, '', url);
-  }, []);
-
+  /** Fly to a tour stop and open its card. The overview (0) opens its card where the camera is. */
   const goToStop = useCallback((i: number) => {
-    setStopIndex(((i % TOUR.length) + TOUR.length) % TOUR.length);
+    const n = ((i % TOUR.length) + TOUR.length) % TOUR.length;
+    setStop(n);
+    setSelectedState(null);
+    setInstrument(null);
+    setPose(TOUR[n]);
     setNavMode('tour');
   }, []);
+
+  const goToViewpoint = useCallback(
+    (id: ViewpointId) => {
+      setPose(viewpointIn(id, options.venue));
+      setNavMode('tour');
+    },
+    [options.venue],
+  );
+
+  const pickInstrument = useCallback((id: string) => {
+    setInstrument(id);
+    setStop(null);
+    setSelectedState(null);
+    setPose(instrumentPose(id));
+    setNavMode('tour');
+  }, []);
+
+  const closeCard = useCallback(() => {
+    setStop(null);
+    setSelectedState(null);
+    setInstrument(null);
+  }, []);
+
+  const cardOpen = hud && (stop !== null || !!selected || !!instrument);
+
+  // Make room for the card: the 360px card and its margins on a wide screen;
+  // on a phone, lift the picture out of the sheet.
+  const [wide, setWide] = useState(() => window.innerWidth > 720);
+  useEffect(() => {
+    const on = () => setWide(window.innerWidth > 720);
+    window.addEventListener('resize', on);
+    return () => window.removeEventListener('resize', on);
+  }, []);
+  const offset = cardOpen ? (wide ? { room: 300, up: 0 } : { room: 0, up: Math.round(window.innerHeight * 0.2) }) : { room: 0, up: 0 };
 
   /**
    * Global shortcuts. Deliberately skipped while focus is in a control, so
@@ -120,18 +166,20 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // Escape always closes, wherever focus is.
+      if (e.key === 'Escape') {
+        if (aboutOpen) setAboutOpen(false);
+        else closeCard();
+        return;
+      }
       const el = document.activeElement;
       if (el instanceof HTMLElement && ['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
 
-      const ids = Object.keys(VIEWS) as ViewId[];
+      const ids = Object.keys(VIEWPOINTS) as ViewpointId[];
       const n = Number(e.key);
-      if (n >= 1 && n <= ids.length) return selectView(ids[n - 1]);
+      if (n >= 1 && n <= ids.length) return goToViewpoint(ids[n - 1]);
 
       switch (e.key.toLowerCase()) {
-        case 'o':
-          return setNavMode('orbit');
-        case 't':
-          return goToStop(stopIndex);
         case 'x':
           return setExplode((v) => (v > 0.5 ? 0 : 1));
         case 'c':
@@ -143,31 +191,18 @@ export default function App() {
           break;
       }
 
-      // Arrows page the tour, but only when the tour is what is running.
-      if (navMode === 'tour') {
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') {
-          e.preventDefault();
-          goToStop(stopIndex + 1);
-        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-          e.preventDefault();
-          goToStop(stopIndex - 1);
-        } else if (e.key === 'Home') {
-          e.preventDefault();
-          goToStop(0);
-        } else if (e.key === 'End') {
-          e.preventDefault();
-          goToStop(TOUR.length - 1);
-        }
-      }
-      if (e.key === 'Escape') {
-        if (aboutOpen) setAboutOpen(false);
-        else if (selected) setSelected(null);
-        else if (navMode !== 'orbit') setNavMode('orbit');
+      // Arrows walk the tour.
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+        e.preventDefault();
+        goToStop((stop ?? 0) + 1);
+      } else if ((e.key === 'ArrowLeft' || e.key === 'PageUp') && stop !== null) {
+        e.preventDefault();
+        goToStop(stop - 1);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [navMode, stopIndex, goToStop, selectView, aboutOpen, selected]);
+  }, [stop, goToStop, goToViewpoint, aboutOpen, closeCard, setOptions]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -219,8 +254,12 @@ export default function App() {
           view={view}
           tier={tier}
           navMode={navMode}
-          tourStop={tourStop}
+          pose={pose}
           interaction={interaction}
+          activeStop={hud ? stop : null}
+          onPickStop={goToStop}
+          onPickInstrument={pickInstrument}
+          offset={offset}
         />
         <Post tier={tier} />
         <FpsProbe onSample={setFps} />
@@ -228,41 +267,38 @@ export default function App() {
       </Canvas>
 
       {hud && (
-        <Hud
-          options={options}
-          setOptions={setOptions}
-          fps={fps}
-          viewId={viewId}
-          setViewId={selectView}
-          tier={tier}
-          setTier={(t) => {
-            setAutoTier(false);
-            setTier(t);
-          }}
-          navMode={navMode}
-          setNavMode={setNavMode}
-          stopIndex={stopIndex}
-          goToStop={goToStop}
-          units={units}
-          setUnits={setUnits}
-          selected={selected}
-          setSelected={setSelected}
-          isolated={isolated}
-          setIsolated={setIsolated}
-          explode={explode}
-          setExplode={setExplode}
-          openAbout={() => setAboutOpen(true)}
-        />
-      )}
-
-      {hud && selected && (
-        <ArrayPanel
-          blockId={selected}
-          units={units}
-          onClose={() => setSelected(null)}
-          onIsolate={setIsolated}
-          isolated={isolated}
-        />
+        <>
+          <TopBar
+            options={options}
+            setOptions={setOptions}
+            units={units}
+            setUnits={setUnits}
+            tier={tier}
+            setTier={(t) => {
+              setAutoTier(false);
+              setTier(t);
+            }}
+            openAbout={() => setAboutOpen(true)}
+            onHome={() => goToStop(0)}
+          />
+          <BottomBar
+            explode={explode}
+            setExplode={setExplode}
+            options={options}
+            setOptions={setOptions}
+            isolated={isolated}
+            setIsolated={setIsolated}
+            onViewpoint={goToViewpoint}
+          />
+          <Hint />
+          {stop !== null && (
+            <SpotCard index={stop} onGo={goToStop} onClose={closeCard} isolated={isolated} onIsolate={setIsolated} />
+          )}
+          {selected && (
+            <ArrayPanel blockId={selected} units={units} onClose={closeCard} onIsolate={setIsolated} isolated={isolated} />
+          )}
+          {instrument && <InstrumentCard id={instrument} onClose={closeCard} isolated={isolated} onIsolate={setIsolated} />}
+        </>
       )}
 
       {aboutOpen && <About onClose={() => setAboutOpen(false)} />}

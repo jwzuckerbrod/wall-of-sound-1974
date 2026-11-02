@@ -1,7 +1,12 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import type { TourStop } from './tour';
+/** Where to put the camera: a tour stop, or a viewpoint. */
+export interface Pose {
+  position: [number, number, number];
+  target: [number, number, number];
+  fov?: number;
+}
 
 const DURATION = 1.7;
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
@@ -19,7 +24,7 @@ interface OrbitLike {
  * Honours prefers-reduced-motion by cutting straight to the pose: a long
  * sweeping camera move is exactly the kind of thing that setting exists for.
  */
-export function TourCamera({ stop, active }: { stop: TourStop; active: boolean }) {
+export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as OrbitLike | null;
 
