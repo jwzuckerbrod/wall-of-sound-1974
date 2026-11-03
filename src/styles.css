@@ -487,6 +487,24 @@ button, a.pill { font: inherit; color: inherit; }
 .brand-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
 .brand-year { font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; }
 .top-actions { display: flex; gap: 8px; }
+.top { align-items: flex-start; }
+.top-left { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; pointer-events: none; }
+.top-left > * { pointer-events: auto; }
+.venue-switch { display: inline-flex; padding: 3px; border-radius: 999px; }
+.venue-switch button {
+  height: 30px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--dim);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+.venue-switch button:hover { color: var(--ink); }
+.venue-switch button[aria-checked='true'] { background: rgba(233, 184, 90, 0.2); color: var(--ink); }
+.venue-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .pill {
   display: inline-flex;
@@ -714,6 +732,7 @@ button, a.pill { font: inherit; color: inherit; }
   .top { top: 10px; left: 10px; right: 10px; }
   .brand { height: 36px; padding: 0 12px; }
   .brand-name { font-size: 14px; }
+  .venue-switch button { height: 28px; padding: 0 12px; font-size: 12.5px; }
   .pill { height: 36px; padding: 0 12px; font-size: 13px; }
   .top-actions { gap: 6px; }
   .top-actions a.pill { display: none; }

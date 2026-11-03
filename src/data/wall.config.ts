@@ -1176,7 +1176,7 @@ export const wall = {
    */
   venues: {
     /** The hall of Pechner's photograph, P.N.E. Coliseum, Vancouver, 17 May 1974. */
-    arena: { label: 'Indoors: Vancouver, 17 May 1974', outdoor: false },
+    arena: { label: 'Indoors: Vancouver, 17 May 1974', short: 'Indoors', outdoor: false },
     /**
      * The Hollywood Bowl, Sunday 21 July 1974, where the story is set. Sizes
      * measured on the wide photograph against the Wall's 64 ft scaffold
@@ -1185,6 +1185,7 @@ export const wall = {
      */
     hollywoodBowl: {
       label: 'Hollywood Bowl, 21 July 1974',
+      short: 'Outdoors',
       outdoor: true,
       /** The floor in front of the stage, below the stage deck. */
       stageDrop: 1.4,

@@ -165,10 +165,26 @@ export function TopBar({
   );
   return (
     <header className="top">
-      <button className="brand" onClick={onHome} aria-label="The Wall of Sound: back to the overview">
-        <span className="brand-name">The Wall of Sound</span>
-        <span className="brand-year">1974</span>
-      </button>
+      <div className="top-left">
+        <button className="brand" onClick={onHome} aria-label="The Wall of Sound: back to the overview">
+          <span className="brand-name">The Wall of Sound</span>
+          <span className="brand-year">1974</span>
+        </button>
+        {/* Where: always on screen, so indoors and outdoors are one tap apart. */}
+        <div className="venue-switch glass" role="radiogroup" aria-label="Where">
+          {(Object.keys(wall.venues) as (keyof typeof wall.venues)[]).map((v) => (
+            <button
+              key={v}
+              role="radio"
+              aria-checked={options.venue === v}
+              title={wall.venues[v].label}
+              onClick={() => setOptions({ ...options, venue: v })}
+            >
+              {wall.venues[v].short}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="top-actions">
         <a className="pill" href="./story.html">
           The story
@@ -182,13 +198,6 @@ export function TopBar({
         <Menu label="Settings">
           {() => (
             <div className="settings">
-              <h3>Where</h3>
-              {(Object.keys(wall.venues) as (keyof typeof wall.venues)[]).map((v) => (
-                <label className="check-row" key={v}>
-                  <input type="radio" name="venue" checked={options.venue === v} onChange={() => setOptions({ ...options, venue: v })} />
-                  {wall.venues[v].label}
-                </label>
-              ))}
               <h3>Show</h3>
               {toggle('showScaffold', 'Scaffold and lights')}
               {toggle('showAmps', 'Amplifiers and cases')}
