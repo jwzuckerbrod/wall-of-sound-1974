@@ -254,3 +254,12 @@ figcaption a { color: inherit; }
   .motion-push .layer .main { transform: none; }
   .d-wave { animation: none; opacity: 0.8; }
 }
+
+/* ── The signal-path diagram (PathDiagram.tsx): the typical PA on the first card, the Wall on the second ── */
+.path-diagram .pd-a { --draw: clamp(0, calc((var(--p, 0) - 0.18) * 4), 1); opacity: clamp(0, calc((var(--p, 0) - 0.16) * 8), 1); }
+.path-diagram .pd-b { --draw: clamp(0, calc((var(--p, 0) - 0.34) * 4), 1); opacity: clamp(0, calc((var(--p, 0) - 0.32) * 8), 1); }
+.path-diagram .pd-c { --draw: clamp(0, calc((var(--p, 0) - 0.55) * 3.5), 1); opacity: clamp(0, calc((var(--p, 0) - 0.53) * 8), 1); }
+.d-tiny { font-family: var(--sans); font-size: 14px; fill: var(--ink); }
+.d-dim { fill: var(--dim); }
+.d-mix { color: #b9b4aa; }
+.d-dash { stroke-dasharray: 0.02 0.015; stroke-dashoffset: 0; opacity: calc(var(--draw, 1)); }

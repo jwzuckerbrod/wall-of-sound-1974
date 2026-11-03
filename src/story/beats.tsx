@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 import { wall, CHANNELS, type SourceId } from '../data/wall.config';
 import { IMAGES, type StoryImage } from './images';
 import { ListenCompare, ListenWall } from '../ui/Listen';
+import { MicDiagram } from './MicDiagram';
+import { PathDiagram } from './PathDiagram';
 
 /**
  * The story's eight beats (docs/story.md). Every figure is read from the
@@ -15,7 +17,7 @@ export type Motion =
   | 'crossfade'
   /** A slow push in. */
   | 'push'
-  /** The paired-microphone diagram draws itself over the image. */
+  /** The beat's diagram draws itself over the image. */
   | 'diagram';
 
 export interface Beat {
@@ -26,6 +28,8 @@ export interface Beat {
   /** Each entry is one card that scrolls past over the image. */
   cards: ReactNode[];
   sources: SourceId[];
+  /** For motion 'diagram': the SVG that draws itself from --draw. */
+  diagram?: ReactNode;
 }
 
 const S = wall.system;
@@ -128,6 +132,38 @@ export const BEATS: Beat[] = [
     ],
   },
   {
+    id: 'paths',
+    images: [IMAGES.bowlSystems],
+    motion: 'diagram',
+    diagram: <PathDiagram />,
+    sources: ['deadsources74', 'wiki', 'duncan1982', 'pell', 'coules2021'],
+    cards: [
+      <>
+        <p className="figure">One mix, or none.</p>
+        <p>
+          On a typical stage of the early 1970s, every microphone ran out to a mixing desk in the crowd. It all came
+          back as one mix, out of speaker stacks at the front corners of the stage. The players heard themselves
+          through monitors fed from the same desk.
+        </p>
+        <p className="aside">
+          Musicians on those stages, the band's 1974 technical report said, “don't really know how they sound.”
+        </p>
+      </>,
+      <>
+        <p className="figure">The Wall had no mixing desk.</p>
+        <p>
+          Each instrument went straight to its own amplifiers and its own speakers, behind the player who made the
+          sound. The singers set their own levels, with a volume control on each microphone.
+        </p>
+        <p>The band heard exactly what the crowd heard.</p>
+        <p className="aside">
+          The typical PA here is a composite: practice varied from band to band and changed fast. One exception on
+          the Wall: Ned Lagin's keyboard shared the vocal system.
+        </p>
+      </>,
+    ],
+  },
+  {
     id: 'listen',
     images: [IMAGES.photoBowl],
     motion: 'hold',
@@ -170,6 +206,7 @@ export const BEATS: Beat[] = [
     id: 'singing',
     images: [IMAGES.clusterUp],
     motion: 'diagram',
+    diagram: <MicDiagram />,
     sources: ['wiki', 'mcintosh', 'deadsources74'],
     cards: [
       <>

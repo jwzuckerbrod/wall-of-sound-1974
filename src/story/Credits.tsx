@@ -28,7 +28,7 @@ const MODELLING: { name: string; what: string; licence: string; url: string }[] 
 const ORDER: SourceId[] = [
   'blueprints', 'deadsources74', 'deadsources22', 'anderson', 'sothebys', 'juliens', 'bear',
   'pechner', 'schneider', 'photos', 'tapes',
-  'mcintosh', 'mc2300', 'mixtest', 'mixrebuild', 'relix', 'owsinski', 'mayberry', 'upa', 'wiki', 'syf', 'derived',
+  'mcintosh', 'mc2300', 'mixtest', 'mixrebuild', 'relix', 'owsinski', 'mayberry', 'upa', 'wiki', 'syf', 'duncan1982', 'pell', 'coules2021', 'kennedy2025', 'derived',
 ];
 
 function PhotoOnPage({ img }: { img: StoryImage }) {

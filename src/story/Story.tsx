@@ -3,7 +3,6 @@ import { SOURCES, type SourceId } from '../data/wall.config';
 import { BEATS, type Beat } from './beats';
 import { Credits } from './Credits';
 import { IMAGES, srcOf, type StoryImage } from './images';
-import { MicDiagram } from './MicDiagram';
 import { shortSource } from './sources';
 
 /**
@@ -102,9 +101,9 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
             <Caption img={b} />
           </figure>
         )}
-        {beat.motion === 'diagram' && (
+        {beat.diagram && (
           <div className="diagram-panel">
-            <MicDiagram />
+            {beat.diagram}
           </div>
         )}
       </div>

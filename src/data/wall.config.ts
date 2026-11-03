@@ -52,6 +52,10 @@ export type SourceId =
   | 'blueprints'
   | 'juliens'
   | 'tapes'
+  | 'duncan1982'
+  | 'pell'
+  | 'coules2021'
+  | 'kennedy2025'
   | 'derived';
 
 export interface SourceRef {
@@ -169,6 +173,26 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     url: 'https://archive.org/details/GratefulDead',
     kind: 'recording',
   },
+  duncan1982: {
+    title: 'Ben Duncan, "Sound on Stage: A Short History of British PA", Electronics & Music Maker, August 1982',
+    url: 'https://www.muzines.co.uk/articles/sound-on-stage/4336',
+    kind: 'trade',
+  },
+  pell: {
+    title: 'Becky Pell, "Hear at Last: A History of Stage Monitoring", ProSoundWeb / Live Sound International',
+    url: 'https://www.prosoundweb.com/hear-at-last-a-history-of-stage-monitoring/',
+    kind: 'trade',
+  },
+  coules2021: {
+    title: 'Andy Coules, "The History of Live Sound, Part 2", HARMAN Insights, 7 January 2021',
+    url: 'https://pro.harman.com/insights/?p=9668',
+    kind: 'trade',
+  },
+  kennedy2025: {
+    title: 'David K. Kennedy, "The History of P.A. Loudspeakers, Part 3", FRONT of HOUSE, 29 May 2025',
+    url: 'https://fohonline.com/?p=381315',
+    kind: 'trade',
+  },
   derived: {
     title: 'Derived in docs/reconstruction-spec.md from confirmed facts',
     kind: 'derivation',
@@ -186,6 +210,12 @@ export interface Provenance {
  * from here, so nothing can be shown to a visitor without its confidence level.
  */
 export const PROVENANCE: Record<string, Provenance> = {
+  'comparison.signalPath': {
+    confidence: 'estimated',
+    sources: ['deadsources74', 'wiki', 'duncan1982', 'pell', 'coules2021', 'kennedy2025'],
+    note:
+      'The story\'s signal-path diagram. The Wall: no mixing console, a volume control on each vocal microphone, each instrument to its own speakers, the Wall as the monitor (the July 1974 report; Owsley Stanley, quoted on Wikipedia). The "typical PA" is a composite, and practice varied band to band and year to year: mixing moved out front and the instruments were miked through the PA (Duncan 1982); vocal systems "occupy the front corners of the stage" (the 1974 report); ground-stacked point sources (Coules 2021; Clair began flying arena systems c. 1971–72, Kennedy 2025); monitors fed from the front-of-house desk until separate monitor desks spread in the mid-1970s (Pell; Duncan, single source on the date). Mono v. stereo out front, and how much of the guitars reached the crowd straight from the backline, are not documented. Exception on the Wall: Ned Lagin\'s keyboard went through the vocal system (Grateful Dead Sources).',
+  },
   'meta.debut': { confidence: 'confirmed', sources: ['wiki', 'mcintosh', 'deadsources74'] },
   'meta.retired': { confidence: 'confirmed', sources: ['wiki', 'deadsources22'] },
   'meta.prototypeTest': {

@@ -23,6 +23,10 @@ const SHORT: Record<SourceId, string> = {
   blueprints: 'the 1974 scaffolding drawings',
   juliens: "Julien's Auctions 2026",
   tapes: "Rob Bertrando's tapes",
+  duncan1982: 'Ben Duncan, 1982',
+  pell: 'Becky Pell',
+  coules2021: 'Andy Coules, 2021',
+  kennedy2025: 'David K. Kennedy, 2025',
   derived: 'our derivations',
 };
 
