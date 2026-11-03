@@ -55,6 +55,16 @@ export const IMAGES = {
     widths: [960, 1920],
     focus: '50% 50%',
   },
+  /** The same frame as `bowl`, every cabinet in its system's colour (the explorer's channel colours). */
+  bowlSystems: {
+    id: 'bowl-systems',
+    kind: 'render',
+    alt: 'The same view of the reconstructed Wall with each speaker block coloured by the system it belonged to: vocals gold in the centre, Garcia red, Weir purple, piano teal, drums blue, and four shades of green for the bass.',
+    caption: 'The same view, each speaker coloured by its system.',
+    credit: RENDER_CREDIT,
+    widths: [960, 1920],
+    focus: '50% 50%',
+  },
   bowlHero: {
     id: 'bowl-hero',
     kind: 'render',

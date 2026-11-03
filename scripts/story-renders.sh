@@ -14,11 +14,13 @@ cd "$(dirname "$0")/.."
 B=/Applications/Blender.app/Contents/MacOS/Blender
 O=.shots/story/v2
 mkdir -p $O
-shots=(${@:-bowl-photo bowl-hero bowl garcia cluster-up amps bowl-tower})
+shots=(${@:-bowl-photo bowl-hero bowl bowl-systems garcia cluster-up amps bowl-tower})
 for shot in $shots; do
   start=$(date +%s)
   if [ $shot = bowl-photo ]; then
     where=(--camera blender/cameras/bowl-1974-07-21.json)
+  elif [ $shot = bowl-systems ]; then
+    where=(--shot bowl --tint systems)
   else
     where=(--shot $shot)
   fi

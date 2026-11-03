@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { wall, type SourceId } from '../data/wall.config';
+import { wall, CHANNELS, type SourceId } from '../data/wall.config';
 import { IMAGES, type StoryImage } from './images';
 
 /**
@@ -34,6 +34,16 @@ const ft = (m: number) => {
 };
 const day = (iso: string) =>
   new Date(`${iso}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+
+/** Beat 3's colour key: each system and its channels' colours, as the systems render paints them. */
+const KEY: [string, string[]][] = [
+  ['Vocals', [CHANNELS.vocals.color]],
+  ["Garcia's guitar", [CHANNELS.leadGuitar.color]],
+  ["Weir's guitar", [CHANNELS.rhythmGuitar.color]],
+  ['Piano', [CHANNELS.piano.color]],
+  ['Drums', [CHANNELS.kick.color, CHANNELS.drumsL.color, CHANNELS.drumsR.color]],
+  ["Lesh's bass, four channels", [CHANNELS.bass1.color, CHANNELS.bass2.color, CHANNELS.bass3.color, CHANNELS.bass4.color]],
+];
 
 export const BEATS: Beat[] = [
   {
@@ -84,8 +94,8 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'systems',
-    images: [IMAGES.bowl],
-    motion: 'hold',
+    images: [IMAGES.bowl, IMAGES.bowlSystems],
+    motion: 'crossfade',
     sources: ['wiki', 'mcintosh', 'deadsources74'],
     cards: [
       <>
@@ -96,6 +106,18 @@ export const BEATS: Beat[] = [
         </p>
       </>,
       <>
+        <ul className="key">
+          {KEY.map(([label, colours]) => (
+            <li key={label}>
+              <span className="key-dots">
+                {colours.map((c) => (
+                  <i key={c} style={{ background: c }} />
+                ))}
+              </span>
+              {label}
+            </li>
+          ))}
+        </ul>
         <p>Nothing was mixed together until it reached the air. That is why it sounded so clear.</p>
         <p className="aside">
           How Lesh's four bass channels were split is disputed: one per string, or a quadraphonic mix of three

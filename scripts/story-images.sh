@@ -35,7 +35,7 @@ photo() {    # photo <reference file> <name>
   echo "$2"
 }
 
-for shot in bowl-hero bowl garcia cluster-up amps bowl-tower; do render $shot; done
+for shot in bowl-hero bowl bowl-systems garcia cluster-up amps bowl-tower; do render $shot; done
 match
 photo unsourced-hollywoodbowl-1974-07-21-b.webp photo-bowl-1974-07-21
 du -sh $OUT

@@ -83,6 +83,32 @@ def W_srgb(hex_):
     return (*out, 1.0)
 
 
+def tint_systems(S):
+    """
+    The story's colour-by-system pass (beat 3): each cabinet's boards and
+    baffle in its channel's colour (CHANNELS in the config, the explorer's
+    overlay colours), cones and horns left as they are. Rendered through the
+    same camera as the plain shot so the two crossfade in register.
+    """
+    mats = {}
+    for cid, ch in S['channels'].items():
+        m = bpy.data.materials.new(f'System {cid}')
+        m.use_nodes = True
+        b = m.node_tree.nodes['Principled BSDF']
+        col = W_srgb(ch['color'])
+        b.inputs['Base Color'].default_value = col
+        b.inputs['Roughness'].default_value = 0.6
+        b.inputs['Emission Color'].default_value = col
+        b.inputs['Emission Strength'].default_value = 0.35
+        mats[cid] = m
+    for o in bpy.data.collections['Speakers'].objects:
+        c = S['cells'][int(o.name.rsplit('.', 1)[1])]
+        m = mats[c['channel']]
+        for k in (0, 1):  # ply, baffle (build_scene.py slot_order)
+            o.material_slots[k].link = 'OBJECT'
+            o.material_slots[k].material = m
+
+
 def holder(name, x, y, z, rz=0.0):
     e = bpy.data.objects.new(name, None)
     bpy.context.scene.collection.objects.link(e)
@@ -271,6 +297,7 @@ def main():
     p.add_argument('--exposure', type=float, default=0.0)
     p.add_argument('--no-crowd', action='store_true', help='hollywood: leave the crowd out (for a crowd mask)')
     p.add_argument('--scale', type=int, default=100, help='resolution percentage')
+    p.add_argument('--tint', choices=['systems'], default=None, help='colour each cabinet by its system (story beat 3)')
     p.add_argument('--camera', default=None, help='a camera solved from a photo (blender/cameras/*.json), in place of --shot')
     a = p.parse_args(argv)
 
@@ -292,6 +319,8 @@ def main():
     W['lights'](a.venue)
     deck = S['deck']['y']
     place(deck, red_kit=a.venue == 'hollywood')
+    if a.tint == 'systems':
+        tint_systems(S)
     if a.camera:
         solved_camera(a.camera)
     else:
