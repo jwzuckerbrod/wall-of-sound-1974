@@ -16,9 +16,7 @@ export type Motion =
   /** The second image fades in over the first as the reader scrolls. */
   | 'crossfade'
   /** A slow push in. */
-  | 'push'
-  /** The beat's diagram draws itself over the image. */
-  | 'diagram';
+  | 'push';
 
 export interface Beat {
   id: string;
@@ -28,8 +26,8 @@ export interface Beat {
   /** Each entry is one card that scrolls past over the image. */
   cards: ReactNode[];
   sources: SourceId[];
-  /** For motion 'diagram': the SVG that draws itself from --draw. */
-  diagram?: ReactNode;
+  /** A diagram, as a figure of its own between the cards: after card `after`. */
+  diagram?: { node: ReactNode; after: number; label: string };
 }
 
 const S = wall.system;
@@ -134,8 +132,8 @@ export const BEATS: Beat[] = [
   {
     id: 'paths',
     images: [IMAGES.bowlSystems],
-    motion: 'diagram',
-    diagram: <PathDiagram />,
+    motion: 'hold',
+    diagram: { node: <PathDiagram />, after: 0, label: 'signal-path' },
     sources: ['deadsources74', 'wiki', 'duncan1982', 'pell', 'coules2021'],
     cards: [
       <>
@@ -205,8 +203,8 @@ export const BEATS: Beat[] = [
   {
     id: 'singing',
     images: [IMAGES.clusterUp],
-    motion: 'diagram',
-    diagram: <MicDiagram />,
+    motion: 'hold',
+    diagram: { node: <MicDiagram />, after: 0, label: 'paired-microphone' },
     sources: ['wiki', 'mcintosh', 'deadsources74'],
     cards: [
       <>

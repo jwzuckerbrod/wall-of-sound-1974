@@ -1,8 +1,10 @@
 import { CHANNELS } from '../data/wall.config';
 
 /**
- * The paired microphones (beat 5). Its lines draw themselves from the CSS
- * variable --draw (0 to 1), which the story sets from scroll position.
+ * The paired microphones (beat 5). It draws itself in when it comes into view
+ * (DiagramFigure), then loops: the voice keeps lighting the near capsule; the
+ * Wall's wavefronts travel in, reach both capsules at once, and both flash and
+ * cancel. Animation: .dg in story.css.
  *
  * Not to scale: the capsules are 60 mm apart and the Wall about three metres
  * behind the singer.
@@ -10,7 +12,7 @@ import { CHANNELS } from '../data/wall.config';
 export function MicDiagram() {
   const voice = CHANNELS.vocals.color;
   return (
-    <svg className="mic-diagram" viewBox="0 0 640 400" role="img" aria-labelledby="mic-title mic-desc">
+    <svg className="diagram mic-diagram" viewBox="0 0 640 400" role="img" aria-labelledby="mic-title mic-desc">
       <title id="mic-title">How the paired microphones cancelled the Wall</title>
       <desc id="mic-desc">
         A singer sings into the nearer of two microphones, wired in opposite polarity. The voice reaches the near one
@@ -39,8 +41,8 @@ export function MicDiagram() {
 
       {/* The two capsules, 60 mm apart, opposite polarity. */}
       <g className="d-in d2">
-        <rect x="222" y="168" width="34" height="16" rx="8" className="d-line" pathLength={1} />
-        <rect x="292" y="168" width="34" height="16" rx="8" className="d-line" pathLength={1} />
+        <rect x="222" y="168" width="34" height="16" rx="8" className="d-line cap-near" pathLength={1} style={{ ['--voice' as string]: voice }} />
+        <rect x="292" y="168" width="34" height="16" rx="8" className="d-line cap-far" pathLength={1} />
         <text x="239" y="158" className="d-sign" textAnchor="middle">+</text>
         <text x="309" y="158" className="d-sign" textAnchor="middle">−</text>
         <path d="M239 200 v10 M309 200 v10 M239 210 h70" className="d-line d-faint" pathLength={1} />
@@ -57,9 +59,10 @@ export function MicDiagram() {
         ))}
         <text x="562" y="290" className="d-label" textAnchor="middle">The Wall</text>
       </g>
+      {/* The Wall's sound: flat wavefronts travelling in to the capsules. */}
       <g className="d-wall">
         {[0, 1, 2].map((i) => (
-          <path key={i} d={`M${500 - i * 46} 92 v168`} className="d-line d-wave" pathLength={1} style={{ animationDelay: `${i * 0.3}s` }} />
+          <path key={i} d="M520 92 v168" className="d-front" style={{ animationDelay: `${1.4 + i}s` }} />
         ))}
       </g>
 

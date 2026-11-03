@@ -1,14 +1,17 @@
+import { useState } from 'react';
 import { CHANNELS } from '../data/wall.config';
 
 /**
- * One mix, or none (the story's signal-path beat). Above, a typical early-1970s
- * PA: every source into one desk out in the crowd, one mix out to stacks at
- * the stage's front corners, a monitor mix back to the stage. Below, the Wall:
- * each source straight to its own speakers behind the player. Draws itself
- * from --draw: the typical PA first, then the Wall.
+ * One mix, or none (the story's signal-path beat), one half at a time with a
+ * switch between them.
+ *
+ * Typical PA: six coloured pulses run into one desk out in the crowd and come
+ * out as one grey pulse, to stacks at the stage's front corners and back to the
+ * stage as the monitor mix. The Wall: each pulse keeps its colour all the way
+ * to its own speakers, behind the player.
  *
  * The typical PA is a composite; see PROVENANCE['comparison.signalPath'].
- * Not to scale.
+ * Not to scale. Animation and draw-in: .dg in story.css.
  */
 
 const SOURCES: { label: string; color: string }[] = [
@@ -21,111 +24,125 @@ const SOURCES: { label: string; color: string }[] = [
 ];
 
 const DOT_X = 170;
-const rowY = (top: number, i: number) => top + 46 + i * 28;
+const rowY = (i: number) => 44 + i * 36;
 
-function Sources({ top }: { top: number }) {
+function Sources() {
   return (
     <>
       {SOURCES.map((s, i) => (
         <g key={s.label}>
-          <text x={DOT_X - 14} y={rowY(top, i) + 6} className="d-small" textAnchor="end">
+          <text x={DOT_X - 14} y={rowY(i) + 6} className="d-small" textAnchor="end">
             {s.label}
           </text>
-          <circle cx={DOT_X} cy={rowY(top, i)} r="5" style={{ fill: s.color }} />
+          <circle cx={DOT_X} cy={rowY(i)} r="5" style={{ fill: s.color }} />
         </g>
       ))}
     </>
   );
 }
 
-function Speaker({ x, y, w, h, color }: { x: number; y: number; w: number; h: number; color?: string }) {
+/** A line, and a pulse that runs along it (`when`: which part of the cycle). */
+function Wire({ d, color, when, dashed }: { d: string; color?: string; when: 'first' | 'second' | 'full'; dashed?: boolean }) {
+  return (
+    <g style={color ? { color } : undefined} className={color ? undefined : 'd-mix'}>
+      <path d={d} className={`d-line${dashed ? ' d-dash' : ''}`} pathLength={1} />
+      <path d={d} className={`d-pulse p-${when}`} pathLength={1} />
+    </g>
+  );
+}
+
+function Speaker({ x, y, w, h, color, flash }: { x: number; y: number; w: number; h: number; color?: string; flash: 'late' | 'end' }) {
   const r = Math.min(w, h) * 0.3;
   return (
-    <g style={color ? { color } : undefined}>
+    <g style={color ? { color } : undefined} className={`d-speaker flash-${flash}${color ? '' : ' d-mix'}`}>
       <rect x={x} y={y} width={w} height={h} rx="2" className="d-line" pathLength={1} />
       <circle cx={x + w / 2} cy={y + h / 2} r={r} className="d-line" pathLength={1} />
     </g>
   );
 }
 
-export function PathDiagram() {
-  const A = 0; // the typical PA
-  const B = 300; // the Wall
-  const desk = { x: 340, y: rowY(A, 2.5) - 24, w: 104, h: 48 };
-  const deskMidY = desk.y + desk.h / 2;
+function TypicalPA() {
+  const desk = { x: 330, y: 106, w: 110, h: 50 };
+  const my = desk.y + desk.h / 2;
+  const out = desk.x + desk.w;
   return (
-    <svg className="mic-diagram path-diagram" viewBox="0 0 640 560" role="img" aria-labelledby="path-title path-desc">
-      <title id="path-title">One mix, or none</title>
-      <desc id="path-desc">
-        Above, a typical early-1970s PA: vocals, both guitars, piano, drums and bass all run to one mixing desk out in
-        the crowd, come out as one mix to speaker stacks at the front corners of the stage, and a monitor mix goes back
-        to the players. Below, the Wall: each of the six runs straight to its own speakers behind the player, with no
-        mixing desk.
-      </desc>
-
-      {/* ── A typical PA ── */}
-      <g className="pd-a">
-        <text x="20" y={A + 22} className="d-label">A typical PA, early 1970s</text>
-        <Sources top={A} />
-        {SOURCES.map((s, i) => {
-          const y = rowY(A, i);
-          return (
-            <path
-              key={s.label}
-              d={`M${DOT_X + 8} ${y} C ${DOT_X + 90} ${y}, ${desk.x - 70} ${deskMidY}, ${desk.x} ${deskMidY}`}
-              className="d-line"
-              style={{ color: s.color }}
-              pathLength={1}
-            />
-          );
-        })}
+    <>
+      <Sources />
+      {SOURCES.map((s, i) => (
+        <Wire
+          key={s.label}
+          color={s.color}
+          when="first"
+          d={`M${DOT_X + 8} ${rowY(i)} C ${DOT_X + 90} ${rowY(i)}, ${desk.x - 70} ${my}, ${desk.x} ${my}`}
+        />
+      ))}
+      <g className="d-mix">
         <rect x={desk.x} y={desk.y} width={desk.w} height={desk.h} rx="4" className="d-line" pathLength={1} />
-        <text x={desk.x + desk.w / 2} y={deskMidY - 3} className="d-tiny" textAnchor="middle">Mixing desk</text>
-        <text x={desk.x + desk.w / 2} y={deskMidY + 15} className="d-tiny d-dim" textAnchor="middle">in the crowd</text>
       </g>
-      <g className="pd-b">
-        {/* One mix out, the colour gone: everything is now one signal. */}
-        <path
-          d={`M${desk.x + desk.w} ${deskMidY} h22 M${desk.x + desk.w + 22} ${deskMidY} C 500 ${deskMidY}, 510 ${A + 70}, 550 ${A + 70} M${desk.x + desk.w + 22} ${deskMidY} C 500 ${deskMidY}, 510 ${A + 200}, 550 ${A + 200}`}
-          className="d-line d-mix"
-          pathLength={1}
-        />
-        <text x={desk.x + desk.w + 12} y={desk.y - 8} className="d-tiny d-dim">one mix</text>
-        <Speaker x={554} y={A + 48} w={48} h={44} />
-        <Speaker x={554} y={A + 178} w={48} h={44} />
-        <text x={578} y={A + 128} className="d-tiny d-dim" textAnchor="middle">
-          <tspan x={578}>stacks at the</tspan>
-          <tspan x={578} dy="16">stage's corners</tspan>
-        </text>
-        {/* The monitor mix, back from the desk to the players. */}
-        <path
-          d={`M${desk.x + desk.w / 2} ${desk.y + desk.h} V${A + 252} H${DOT_X} V${rowY(A, 5) + 12}`}
-          className="d-line d-mix d-dash"
-          pathLength={1}
-        />
-        <text x={(DOT_X + desk.x + desk.w / 2) / 2} y={A + 272} className="d-tiny d-dim" textAnchor="middle">monitor mix, back to the stage</text>
-      </g>
+      <text x={desk.x + desk.w / 2} y={my - 3} className="d-tiny" textAnchor="middle">Mixing desk</text>
+      <text x={desk.x + desk.w / 2} y={my + 15} className="d-tiny d-dim" textAnchor="middle">in the crowd</text>
 
-      {/* ── The Wall ── */}
-      <g className="pd-c">
-        <path d={`M20 ${B - 6} H620`} className="d-line d-faint" pathLength={1} />
-        <text x="20" y={B + 22} className="d-label">The Wall, 1974</text>
-        <Sources top={B} />
-        {SOURCES.map((s, i) => {
-          const y = rowY(B, i);
-          return (
-            <g key={s.label}>
-              <path d={`M${DOT_X + 8} ${y} H${548}`} className="d-line" style={{ color: s.color }} pathLength={1} />
-              <Speaker x={554} y={y - 11} w={48} h={22} color={s.color} />
-            </g>
-          );
-        })}
-        <text x={360} y={B + 24} className="d-tiny d-dim" textAnchor="middle">no mixing desk: levels set on stage</text>
-        <text x={578} y={B + 228} className="d-tiny d-dim" textAnchor="middle">
-          <tspan x={578}>its own speakers,</tspan>
-          <tspan x={578} dy="16">behind the player</tspan>
-        </text>
-      </g>
-    </svg>
+      {/* One mix out, the colour gone: everything is now one signal. */}
+      <Wire when="second" d={`M${out} ${my} C ${out + 60} ${my}, 500 70, 552 70`} />
+      <Wire when="second" d={`M${out} ${my} C ${out + 60} ${my}, 500 200, 552 200`} />
+      <text x={out + 10} y={desk.y - 8} className="d-tiny d-dim">one mix</text>
+      <Speaker x={554} y={48} w={48} h={44} flash="late" />
+      <Speaker x={554} y={178} w={48} h={44} flash="late" />
+      <text x={578} y={128} className="d-tiny d-dim" textAnchor="middle">
+        <tspan x={578}>stacks at the</tspan>
+        <tspan x={578} dy="16">stage's corners</tspan>
+      </text>
+
+      {/* The monitor mix, back from the desk to the players. */}
+      <Wire when="second" dashed d={`M${desk.x + desk.w / 2} ${desk.y + desk.h} V262 H${DOT_X} V${rowY(5) + 12}`} />
+      <text x={(DOT_X + desk.x + desk.w / 2) / 2} y={284} className="d-tiny d-dim" textAnchor="middle">
+        monitor mix, back to the stage
+      </text>
+    </>
+  );
+}
+
+function TheWall() {
+  return (
+    <>
+      <Sources />
+      <text x={360} y={18} className="d-tiny d-dim" textAnchor="middle">no mixing desk: levels set on stage</text>
+      {SOURCES.map((s, i) => (
+        <g key={s.label}>
+          <Wire color={s.color} when="full" d={`M${DOT_X + 8} ${rowY(i)} H548`} />
+          <Speaker x={554} y={rowY(i) - 13} w={48} h={26} color={s.color} flash="end" />
+        </g>
+      ))}
+      <text x={578} y={264} className="d-tiny d-dim" textAnchor="middle">
+        <tspan x={578}>its own speakers,</tspan>
+        <tspan x={578} dy="16">behind the player</tspan>
+      </text>
+    </>
+  );
+}
+
+export function PathDiagram() {
+  const [side, setSide] = useState<'pa' | 'wall'>('pa');
+  return (
+    <>
+      <div className="dg-switch" role="group" aria-label="Which system to show">
+        <button aria-pressed={side === 'pa'} onClick={() => setSide('pa')}>
+          A typical PA, early 1970s
+        </button>
+        <button aria-pressed={side === 'wall'} onClick={() => setSide('wall')}>
+          The Wall, 1974
+        </button>
+      </div>
+      {/* Keyed, so a switch draws the other half in afresh. */}
+      <svg key={side} className="diagram" viewBox="0 0 640 296" role="img" aria-labelledby="path-title path-desc">
+        <title id="path-title">{side === 'pa' ? 'A typical early-1970s PA: one mix' : 'The Wall: no mix'}</title>
+        <desc id="path-desc">
+          {side === 'pa'
+            ? 'Vocals, both guitars, piano, drums and bass all run to one mixing desk out in the crowd. They come out as one mix, to speaker stacks at the front corners of the stage, and a monitor mix goes back to the players.'
+            : 'Vocals, both guitars, piano, drums and bass each run straight to their own speakers behind the player, with no mixing desk.'}
+        </desc>
+        {side === 'pa' ? <TypicalPA /> : <TheWall />}
+      </svg>
+    </>
   );
 }

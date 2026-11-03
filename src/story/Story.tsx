@@ -1,13 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { SOURCES, type SourceId } from '../data/wall.config';
 import { BEATS, type Beat } from './beats';
 import { Credits } from './Credits';
+import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, srcOf, type StoryImage } from './images';
 import { shortSource } from './sources';
 
 /**
  * Sets --p (0 to 1) on each beat as the reader scrolls through it. CSS does
- * the rest: crossfades, the push in, the diagram drawing itself. One listener,
+ * the rest: crossfades and the push in (diagrams run themselves: DiagramFigure). One listener,
  * one write per beat per frame.
  */
 function useScrollProgress(root: React.RefObject<HTMLElement | null>) {
@@ -101,20 +102,24 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
             <Caption img={b} />
           </figure>
         )}
-        {beat.diagram && (
-          <div className="diagram-panel">
-            {beat.diagram}
-          </div>
-        )}
       </div>
       <div className="cards">
         {beat.cards.map((c, i) => (
-          <div className="card-slot" key={i}>
-            <div className="card">
-              {c}
-              {i === beat.cards.length - 1 && <SourceLine ids={beat.sources} />}
+          <Fragment key={i}>
+            <div className="card-slot">
+              <div className="card">
+                {c}
+                {i === beat.cards.length - 1 && <SourceLine ids={beat.sources} />}
+              </div>
             </div>
-          </div>
+            {beat.diagram?.after === i && (
+              <div className="card-slot slot-figure">
+                <figure className="card card-figure">
+                  <DiagramFigure label={beat.diagram.label}>{beat.diagram.node}</DiagramFigure>
+                </figure>
+              </div>
+            )}
+          </Fragment>
         ))}
         <div className="hold" />
       </div>

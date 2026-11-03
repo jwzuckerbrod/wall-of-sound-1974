@@ -168,25 +168,6 @@ figcaption a { color: inherit; }
   }
 }
 
-/* ── The paired-microphone diagram ─────────────────────────────────────── */
-
-.motion-diagram { --draw: clamp(0, calc((var(--p, 0) - 0.3) * 2.4), 1); }
-.diagram-panel {
-  position: absolute;
-  left: 50%;
-  top: max(52px, 8svh);
-  transform: translateX(-50%);
-  width: min(calc(100vw - 32px), 640px);
-  background: rgba(14, 13, 11, 0.86);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 8px;
-  opacity: clamp(0, calc((var(--p, 0) - 0.22) * 5), 1);
-}
-@media (min-width: 900px) {
-  .diagram-panel { left: auto; right: 5vw; top: 50%; transform: translateY(-50%); width: min(46vw, 640px); }
-}
-.mic-diagram { width: 100%; height: auto; display: block; }
 .d-line {
   fill: none;
   stroke: currentColor;
@@ -195,7 +176,6 @@ figcaption a { color: inherit; }
   stroke-dasharray: 1;
   stroke-dashoffset: calc(1 - var(--draw, 1));
 }
-.mic-diagram { color: var(--ink); }
 .d-faint { opacity: 0.55; }
 .d-wall { color: #8fa3b8; }
 .d-wall-text { fill: #8fa3b8; }
@@ -206,10 +186,7 @@ figcaption a { color: inherit; }
 .d-result { font-size: 23px; }
 .d-ok { fill: #8fd19e; }
 .d-no { fill: #e8806e; }
-.d-in { opacity: clamp(0, calc(var(--draw, 1) * 3), 1); }
-.d4 { opacity: clamp(0, calc((var(--draw, 1) - 0.65) * 3), 1); }
-.d-wave { animation: wave 1.6s ease-in-out infinite; }
-@keyframes wave { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+
 
 /* ── Step inside ───────────────────────────────────────────────────────── */
 
@@ -255,11 +232,80 @@ figcaption a { color: inherit; }
   .d-wave { animation: none; opacity: 0.8; }
 }
 
-/* ── The signal-path diagram (PathDiagram.tsx): the typical PA on the first card, the Wall on the second ── */
-.path-diagram .pd-a { --draw: clamp(0, calc((var(--p, 0) - 0.18) * 4), 1); opacity: clamp(0, calc((var(--p, 0) - 0.16) * 8), 1); }
-.path-diagram .pd-b { --draw: clamp(0, calc((var(--p, 0) - 0.34) * 4), 1); opacity: clamp(0, calc((var(--p, 0) - 0.32) * 8), 1); }
-.path-diagram .pd-c { --draw: clamp(0, calc((var(--p, 0) - 0.55) * 3.5), 1); opacity: clamp(0, calc((var(--p, 0) - 0.53) * 8), 1); }
+/* ── Diagrams (DiagramFigure.tsx): a figure in the reading flow ──────────────
+   Draws itself in once on first view (--draw 0 → 1), then loops; .still
+   (paused, or off screen) stops the loop. Reduced motion: drawn, still. */
+
+@property --draw { syntax: '<number>'; inherits: true; initial-value: 1; }
+
+.card-slot.slot-figure { align-items: center; justify-content: center; }
+.card-figure { width: min(100%, 44rem); max-width: none; margin: 0; padding: 14px 14px 10px; }
+.dg { position: relative; }
+.diagram { width: 100%; height: auto; display: block; color: var(--ink); }
+.dg:not(.drawn) .diagram { --draw: 0; }
+.dg.drawn .diagram { animation: draw-in 1.4s ease-out both; }
+@keyframes draw-in { from { --draw: 0; } to { --draw: 1; } }
+.dg.still .diagram, .dg.still .diagram * { animation-play-state: paused !important; }
+
+.d-in { opacity: clamp(0, calc(var(--draw, 1) * 3), 1); }
+.d4 { opacity: clamp(0, calc((var(--draw, 1) - 0.65) * 3), 1); }
 .d-tiny { font-family: var(--sans); font-size: 14px; fill: var(--ink); }
 .d-dim { fill: var(--dim); }
 .d-mix { color: #b9b4aa; }
-.d-dash { stroke-dasharray: 0.02 0.015; stroke-dashoffset: 0; opacity: calc(var(--draw, 1)); }
+.d-dash { stroke-dasharray: 0.02 0.015; stroke-dashoffset: 0; opacity: var(--draw, 1); }
+
+/* Pulses: one short dash running along its wire. */
+.d-pulse { fill: none; stroke: currentColor; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 0.035 2; stroke-dashoffset: 0.04; opacity: 0; }
+.dg.drawn .p-first { animation: p-first 3s linear 1.4s infinite; }
+.dg.drawn .p-second { animation: p-second 3s linear 1.4s infinite; }
+.dg.drawn .p-full { animation: p-full 3s linear 1.4s infinite; }
+@keyframes p-first { 0% { stroke-dashoffset: 0.04; opacity: 1; } 45% { stroke-dashoffset: -1; opacity: 1; } 46%, 100% { opacity: 0; } }
+@keyframes p-second { 0%, 49% { stroke-dashoffset: 0.04; opacity: 0; } 50% { opacity: 1; } 92% { stroke-dashoffset: -1; opacity: 1; } 93%, 100% { opacity: 0; } }
+@keyframes p-full { 0% { stroke-dashoffset: 0.04; opacity: 1; } 85% { stroke-dashoffset: -1; opacity: 1; } 86%, 100% { opacity: 0; } }
+
+/* Speakers light as the pulse arrives. */
+.d-speaker { opacity: 0.8; }
+.dg.drawn .flash-end { animation: flash-end 3s linear 1.4s infinite; }
+.dg.drawn .flash-late { animation: flash-late 3s linear 1.4s infinite; }
+@keyframes flash-end { 0%, 82% { opacity: 0.8; } 88% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); } 100% { opacity: 0.8; } }
+@keyframes flash-late { 0%, 89% { opacity: 0.8; } 94% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); } 100% { opacity: 0.8; } }
+
+/* The mic diagram: the voice's arcs, the Wall's travelling wavefronts, the capsules. */
+.dg.drawn .d-wave { animation: wave 1.6s ease-in-out infinite; }
+@keyframes wave { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
+.d-front { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; opacity: 0; }
+.dg.drawn .d-front { animation: front 3s linear infinite; }
+@keyframes front { 0% { transform: translateX(0); opacity: 0; } 15% { opacity: 0.9; } 92% { opacity: 0.9; } 100% { transform: translateX(-178px); opacity: 0; } }
+.dg.drawn .cap-near, .dg.drawn .cap-far { animation: cap-flash 1s ease-out 4.4s infinite; }
+.dg.drawn .cap-near { animation: cap-flash 1s ease-out 4.4s infinite, voice-fill 1.6s ease-in-out infinite; }
+@keyframes cap-flash { 0% { stroke: #8fa3b8; stroke-width: 3.5; } 35%, 100% { stroke: currentColor; stroke-width: 2; } }
+@keyframes voice-fill { 0%, 100% { fill: transparent; } 50% { fill: color-mix(in srgb, var(--voice) 45%, transparent); } }
+
+.dg-pause {
+  position: absolute; right: 0; top: 0;
+  width: 30px; height: 30px; border-radius: 50%;
+  border: 1px solid var(--rule); background: rgba(14, 13, 11, 0.8); color: var(--dim);
+  display: grid; place-items: center; cursor: pointer; padding: 0;
+}
+.dg-pause svg { width: 12px; height: 12px; fill: currentColor; }
+.dg-pause:hover { color: var(--ink); }
+.dg-switch { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; padding: 3px; width: max-content; max-width: 100%; border: 1px solid var(--rule); border-radius: 999px; font-family: var(--sans); font-size: 13px; }
+.dg-switch button { border: 0; background: transparent; color: var(--dim); font: inherit; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
+.dg-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.2); color: var(--ink); }
+.dg-pause:focus-visible, .dg-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Phones: the figure takes the width, and the diagram's words grow to stay readable. */
+@media (max-width: 600px) {
+  .card-slot.slot-figure { padding-left: 8px; padding-right: 8px; }
+  .card-figure { padding: 10px 8px 8px; }
+  .diagram .d-tiny { font-size: 18px; }
+  .diagram .d-small { font-size: 20px; }
+  .mic-diagram .d-label { font-size: 24px; }
+  .mic-diagram .d-result { font-size: 25px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dg .diagram, .dg .diagram * { animation: none !important; }
+  .dg:not(.drawn) .diagram { --draw: 1; }
+  .dg-pause { display: none; }
+}
