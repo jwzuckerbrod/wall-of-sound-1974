@@ -692,3 +692,49 @@ same marks and buried the guitars.
 **What changes in the renders.** Blender's cabinets are now mixed black and
 bare, so the story's renders were re-made (`.shots/story/v2/render.sh`, then
 `npm run story:images`).
+
+---
+
+## 19. The Hollywood Bowl photograph, solved (3 November 2026)
+
+The story opens by fading the 21 July 1974 photograph
+(`unsourced-hollywoodbowl-1974-07-21-b.webp`, 1020 × 720) into a render
+from the same seat. That needs the photographer's camera, so it is now
+solved rather than placed by eye: `blender/solve_camera.py`, from points in
+`blender/cameras/bowl-1974-07-21.json`.
+
+**Method.** Six points read off the photo whose positions the model knows:
+the scaffold's two outer uprights at the top and at the deck (64 ft apart,
+38'-10" tall), and the vocal cluster's top and foot. A pinhole camera,
+principal point at the frame's centre, is fitted by least squares: 5.4 px
+RMS. The checks agree with the model at about 35 px a metre: cluster 128
+px wide against 133 expected, 98 px tall against 95, the tower 414 px
+against 418.
+
+**The distance problem.** A near-frontal view fixes where the camera looks
+and its lens-to-distance ratio, but barely the distance: pinned anywhere
+from 20 m to 80 m, the fit only moves from 5.8 to 5.4 px. The photograph
+settles it: the photographer stood in the crowd (heads fill the bottom of
+the frame), so the camera goes where the fitted height meets a standing eye
+(1.6 m) over the Bowl's seating. **Result:** 47 m out from the Wall's face,
+5.2 m right of centre, eye 7.2 m above the model's ground, a 24° vertical
+field of view (a short telephoto), level within a degree.
+
+**What the overlay shows.** Through that camera the Wall lands on the
+photo's Wall. The Bowl does not:
+
+- The 1929 shell is much bigger than modelled: in the photo it spans
+  nearly the whole frame, far past both sides of the Wall; the model's
+  barely clears the scaffold.
+- The crossbeam tubes and the Sonotube banks stand further out to the sides.
+
+The Bowl was measured by eye against an unsolved view (§14), so this is
+expected; it is the next thing to re-measure, through this camera.
+
+**Also seen:** the Wall appears to stand on the Bowl's own stage, its feet
+at the stage floor, with no sign of a 10 ft deck. If so, the venue differs
+from the arena configuration the model's deck follows. Not changed yet.
+
+`stage_review.py --camera blender/cameras/bowl-1974-07-21.json` renders
+through the solved camera at twice the photo's size; `compare.py --color`
+overlays it.

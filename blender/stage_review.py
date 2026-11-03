@@ -224,6 +224,40 @@ def camera(shot):
     sc.render.resolution_percentage = 100
 
 
+def solved_camera(path, scale=2):
+    """
+    A camera solved from a photograph (blender/solve_camera.py): the photo's
+    own framing, lens and roll, rendered at `scale` times the photo's size
+    so the render can be laid over it. Returns its Blender location.
+    """
+    import numpy as np
+    from mathutils import Matrix
+    spec = json.load(open(path))
+    c, (W, H) = spec['camera'], spec['size']
+    yaw, pitch, roll = (math.radians(c[k]) for k in ('yaw_deg', 'pitch_deg', 'roll_deg'))
+    cy, sy, cp, sp, cr, sr = math.cos(yaw), math.sin(yaw), math.cos(pitch), math.sin(pitch), math.cos(roll), math.sin(roll)
+    M = (np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]]) @ np.array([[1, 0, 0], [0, cp, -sp], [0, sp, cp]])
+         @ np.array([[cr, -sr, 0], [sr, cr, 0], [0, 0, 1]]))
+    # Scene frame (y up, +z to the audience) to Blender's (z up, audience at -y).
+    P = np.array([[1, 0, 0], [0, 0, -1], [0, 1, 0]])
+    cam = bpy.data.cameras.new('camera')
+    cam.sensor_fit = 'HORIZONTAL'
+    cam.sensor_width = 36.0
+    cam.lens = c['f_px'] / W * 36.0
+    cam.clip_end = 600
+    o = bpy.data.objects.new('camera', cam)
+    bpy.context.scene.collection.objects.link(o)
+    x, y, z = c['position']
+    o.location = (x, -z, y)
+    o.rotation_mode = 'QUATERNION'
+    o.rotation_quaternion = Matrix((P @ M).tolist()).to_quaternion()
+    sc = bpy.context.scene
+    sc.camera = o
+    sc.render.resolution_x, sc.render.resolution_y = W * scale, H * scale
+    sc.render.resolution_percentage = 100
+    return o.location.copy()
+
+
 def main():
     argv = sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else []
     p = argparse.ArgumentParser()
@@ -237,16 +271,20 @@ def main():
     p.add_argument('--exposure', type=float, default=0.0)
     p.add_argument('--no-crowd', action='store_true', help='hollywood: leave the crowd out (for a crowd mask)')
     p.add_argument('--scale', type=int, default=100, help='resolution percentage')
+    p.add_argument('--camera', default=None, help='a camera solved from a photo (blender/cameras/*.json), in place of --shot')
     a = p.parse_args(argv)
 
     W = load_wall()
     import hollywood_bowl
-    hollywood_bowl.KEEP_CLEAR[:] = [SHOTS[a.shot]['loc']]
+    if a.camera:
+        c = json.load(open(a.camera))['camera']['position']
+        hollywood_bowl.KEEP_CLEAR[:] = [(c[0], -c[2], c[1])]
+    else:
+        hollywood_bowl.KEEP_CLEAR[:] = [SHOTS[a.shot]['loc']]
     if a.sun:
         import venue
         el, az = (float(v) for v in a.sun.split(','))
         venue.SUN_ELEVATION, venue.SUN_AZIMUTH = math.radians(el), math.radians(az)
-    import json
     with open(os.path.join(ROOT, 'blender', 'scene.json')) as f:
         S = json.load(f)
     M = W['build_materials'](S)
@@ -254,7 +292,10 @@ def main():
     W['lights'](a.venue)
     deck = S['deck']['y']
     place(deck, red_kit=a.venue == 'hollywood')
-    camera(a.shot)
+    if a.camera:
+        solved_camera(a.camera)
+    else:
+        camera(a.shot)
     if a.no_crowd:
         for o in bpy.data.objects:
             if o.name.startswith('crowd'):

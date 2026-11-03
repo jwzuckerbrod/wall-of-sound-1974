@@ -1,0 +1,110 @@
+{
+  "photo": ".shots/reference/unsourced-hollywoodbowl-1974-07-21-b.webp",
+  "size": [
+    1020,
+    720
+  ],
+  "note": "Points read off the photograph (pixels, origin top left) against the same points in the model's scene frame (metres, y up, +z toward the audience). The scaffold's outer uprights are hidden at the foot by a hat and the umbrellas, so their feet are taken where the uprights' lines meet the stacks' feet on the deck. The photographer stood in the crowd (heads fill the bottom of the frame), so the camera is put at a standing eye, 1.6 m, above the Bowl's seating (seat_eye); without that the distance is undetermined (docs/qa-findings.md \u00a719).",
+  "points": [
+    {
+      "name": "scaffold top, left outer upright",
+      "world": [
+        -9.754,
+        14.884,
+        0
+      ],
+      "px": [
+        157,
+        227
+      ]
+    },
+    {
+      "name": "scaffold top, right outer upright",
+      "world": [
+        9.754,
+        14.884,
+        0
+      ],
+      "px": [
+        846,
+        211
+      ]
+    },
+    {
+      "name": "deck, left outer upright",
+      "world": [
+        -9.754,
+        3.048,
+        0
+      ],
+      "px": [
+        160,
+        642
+      ]
+    },
+    {
+      "name": "deck, right outer upright",
+      "world": [
+        9.754,
+        3.048,
+        0
+      ],
+      "px": [
+        852,
+        639
+      ]
+    },
+    {
+      "name": "vocal cluster, foot of the 12s, middle",
+      "world": [
+        0,
+        6.96,
+        0.16
+      ],
+      "px": [
+        494,
+        490
+      ]
+    },
+    {
+      "name": "vocal cluster, top of the horns, middle",
+      "world": [
+        0,
+        9.66,
+        0.16
+      ],
+      "px": [
+        494,
+        392
+      ]
+    }
+  ],
+  "camera": {
+    "position": [
+      5.203,
+      7.242,
+      47.076
+    ],
+    "target": [
+      0.418,
+      10.776,
+      0.0
+    ],
+    "yaw_deg": 5.8033,
+    "pitch_deg": 4.2712,
+    "roll_deg": -0.575,
+    "f_px": 1685.0,
+    "vfov_deg": 24.12,
+    "rms_px": 5.43,
+    "errors_px": [
+      3.1,
+      5.4,
+      5.7,
+      2.8,
+      6.4,
+      7.6
+    ]
+  },
+  "seat_eye": 1.6,
+  "scene": "blender/scene.json"
+}
