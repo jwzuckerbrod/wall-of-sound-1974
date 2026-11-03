@@ -84,6 +84,21 @@ Image: `bowl`, from the seats, straight on, with each channel tinted in turn. Th
 render pass per channel (to make). The quadraphonic bass is contested in the
 sources; the explorer says so.
 
+### 3½. Listen
+
+Real recordings, streamed from the Internet Archive (never copied here), in
+`src/data/recordings.ts` and played by `src/ui/Listen.tsx` (also the explorer's
+Listen button). Audience tapes only: a soundboard tape is the desk's feed and
+never went through the Wall.
+
+- The Wall on its own: Rob Bertrando's tape of the Bowl, 21 July 1974,
+  front of the desk, Sony ECM-22Ps on cassette (*Scarlet Begonias*, *U.S. Blues*).
+- Before and after: the same songs (*Sugar Magnolia*, *Me and My Uncle*) from
+  Bertrando's tape of the Hollywood Palladium, 6 August 1971, same microphones,
+  40–50 ft back, on reel-to-reel. One switch flips between them and keeps the
+  place. The page says what isn't held steady: indoors v. outdoors, the better
+  recorder on the older show, three years of the band.
+
 ### 4. Each player's own wall
 
 > There were no monitor speakers. The Wall was the monitor: each player stood

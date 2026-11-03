@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { wall, CHANNELS, type SourceId } from '../data/wall.config';
 import { IMAGES, type StoryImage } from './images';
+import { ListenCompare, ListenWall } from '../ui/Listen';
 
 /**
  * The story's eight beats (docs/story.md). Every figure is read from the
@@ -123,6 +124,27 @@ export const BEATS: Beat[] = [
           How Lesh's four bass channels were split is disputed: one per string, or a quadraphonic mix of three
           pickups. The explorer shows both.
         </p>
+      </>,
+    ],
+  },
+  {
+    id: 'listen',
+    images: [IMAGES.photoBowl],
+    motion: 'hold',
+    sources: ['tapes'],
+    cards: [
+      <>
+        <p className="figure">Listen.</p>
+        <p>This is the Wall that afternoon, taped on a cassette recorder in the crowd at the Bowl.</p>
+        <ListenWall />
+      </>,
+      <>
+        <p className="figure">The same songs, three years apart.</p>
+        <p>
+          The same taper recorded the band in Hollywood in 1971, before the Wall, with the same kind of microphone.
+          Switch between them as they play.
+        </p>
+        <ListenCompare />
       </>,
     ],
   },

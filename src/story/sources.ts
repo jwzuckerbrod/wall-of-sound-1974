@@ -22,6 +22,7 @@ const SHORT: Record<SourceId, string> = {
   sothebys: "Sotheby's 2021",
   blueprints: 'the 1974 scaffolding drawings',
   juliens: "Julien's Auctions 2026",
+  tapes: "Rob Bertrando's tapes",
   derived: 'our derivations',
 };
 

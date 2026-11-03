@@ -1,0 +1,34 @@
+/* The listening players (src/ui/Listen.tsx), on the story's cards and in the explorer's Listen panel. */
+.ls { --ls-accent: #e9b85a; font-size: 0.86em; }
+.ls-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.ls-row { display: grid; gap: 6px; }
+.ls-title { font-weight: 600; }
+.ls-transport { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 10px; }
+.ls-play {
+  width: 34px; height: 34px; border-radius: 50%; border: 0; padding: 0;
+  display: grid; place-items: center; cursor: pointer;
+  background: var(--ls-accent); color: #1a1408;
+}
+.ls-play svg { width: 14px; height: 14px; fill: currentColor; }
+.ls-play[data-loading] { animation: ls-pulse 1s ease-in-out infinite; }
+@keyframes ls-pulse { 50% { opacity: 0.55; } }
+.ls-play:focus-visible, .ls-switch button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.ls-bar { width: 100%; margin: 0; height: 18px; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.ls-bar::-webkit-slider-runnable-track {
+  height: 4px; border-radius: 2px;
+  background: linear-gradient(to right, var(--ls-accent) calc(var(--f, 0) * 100%), rgba(255, 255, 255, 0.18) 0);
+}
+.ls-bar::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.18); }
+.ls-bar::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--ls-accent); }
+.ls-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -4px; border-radius: 50%; background: #fff; border: 0; }
+.ls-bar::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; }
+.ls-time { font-variant-numeric: tabular-nums; font-size: 0.85em; opacity: 0.7; white-space: nowrap; }
+.ls-switch { display: inline-flex; width: max-content; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px; padding: 2px; }
+.ls-switch button {
+  border: 0; background: transparent; color: inherit; font: inherit; font-size: 0.92em;
+  padding: 4px 12px; border-radius: 999px; cursor: pointer; opacity: 0.75;
+}
+.ls-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.22); opacity: 1; }
+.ls-credit { font-size: 0.86em; opacity: 0.72; margin: 12px 0 0 !important; }
+.ls-credit a { color: inherit; margin-right: 10px; }
+.ls-caveats { margin: 8px 0 0; padding-left: 1.1em; font-size: 0.82em; opacity: 0.72; display: grid; gap: 3px; }

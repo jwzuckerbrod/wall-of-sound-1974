@@ -5,6 +5,7 @@ import { wall, type ChannelId } from './data/wall.config';
 import { detectTier, downgrade, tierSettings, type Tier } from './quality';
 import type { ArrayInteraction } from './scene/Arrays';
 import { About } from './ui/About';
+import { ListenPanel } from './ui/Listen';
 import { ArrayPanel } from './ui/ArrayPanel';
 import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
@@ -94,6 +95,7 @@ export default function App() {
   const [isolated, setIsolated] = useState<ChannelId | null>(null);
   const [explode, setExplode] = useState(0);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [listenOpen, setListenOpen] = useState(false);
   const [units, setUnits] = useState<UnitSystem>('imperial');
 
   /** Clicking a speaker block opens its card in place of whatever was there. */
@@ -168,7 +170,8 @@ export default function App() {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
       // Escape always closes, wherever focus is.
       if (e.key === 'Escape') {
-        if (aboutOpen) setAboutOpen(false);
+        if (listenOpen) setListenOpen(false);
+        else if (aboutOpen) setAboutOpen(false);
         else closeCard();
         return;
       }
@@ -202,7 +205,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [stop, goToStop, goToViewpoint, aboutOpen, closeCard, setOptions]);
+  }, [stop, goToStop, goToViewpoint, aboutOpen, listenOpen, closeCard, setOptions]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -280,6 +283,7 @@ export default function App() {
               setTier(t);
             }}
             openAbout={() => setAboutOpen(true)}
+            openListen={() => setListenOpen(true)}
             onHome={() => goToStop(0)}
           />
           <BottomBar
@@ -303,6 +307,7 @@ export default function App() {
       )}
 
       {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
+      {listenOpen && <ListenPanel onClose={() => setListenOpen(false)} />}
     </>
   );
 }

@@ -144,6 +144,7 @@ export function TopBar({
   tier,
   setTier,
   openAbout,
+  openListen,
   onHome,
 }: {
   options: SceneOptions;
@@ -153,6 +154,7 @@ export function TopBar({
   tier: Tier;
   setTier: (t: Tier) => void;
   openAbout: () => void;
+  openListen: () => void;
   onHome: () => void;
 }) {
   const toggle = (k: 'showScaffold' | 'showAmps' | 'showBand' | 'showStage' | 'showFigures', label: string) => (
@@ -171,6 +173,9 @@ export function TopBar({
         <a className="pill" href="./story.html">
           The story
         </a>
+        <button className="pill" onClick={openListen}>
+          Listen
+        </button>
         <button className="pill" onClick={openAbout}>
           About
         </button>
