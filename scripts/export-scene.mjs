@@ -158,9 +158,10 @@ const scene = {
     const V = wall.venues.hollywoodBowl;
     return {
       stageDrop: V.stageDrop, poolRadius: V.poolRadius, seating: V.seating, shell: V.shell,
-      beamTubes: V.beamTubes, crownPanels: V.crownPanels, sun: V.sun, colours: V.colours,
+      beamTubes: V.beamTubes, beamLength: V.beamLength, crownPanels: V.crownPanels, sun: V.sun, colours: V.colours,
       sonotubes: bowl.sonotubes().map((t) => ({ x: r4(t.x), z: r4(t.z), height: r4(t.height) })),
       sonotubeDiameter: V.sonotubes.diameter,
+      panels: bowl.crownPanels(bowl.bowlFrame(L)).map(v3),
     };
   })(),
   // The players' marks (scene frame, metres): blender/stage_review.py stands the instruments on them.

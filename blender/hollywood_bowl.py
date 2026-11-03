@@ -360,11 +360,12 @@ def build_shell(coll, deck):
     hood = sh['hood']
     seg = 48
     zc = deck + spring
+    cx = sh.get('centreX', 0.0)    # measured off the Wall's centreline (§19)
 
     def arc(R, y):
-        pts = [(-R, y, deck)]
-        pts += [(-math.cos(math.pi * k / seg) * R, y, zc + math.sin(math.pi * k / seg) * R) for k in range(seg + 1)]
-        pts += [(R, y, deck)]
+        pts = [(cx - R, y, deck)]
+        pts += [(cx - math.cos(math.pi * k / seg) * R, y, zc + math.sin(math.pi * k / seg) * R) for k in range(seg + 1)]
+        pts += [(cx + R, y, deck)]
         return pts
 
     for i in range(rings):
@@ -408,7 +409,7 @@ def build_shell(coll, deck):
     f = bmesh.new()
     bmesh.ops.create_cube(f, size=1.0)
     bmesh.ops.scale(f, vec=(2 * R0 + 2, yw - 5.6, 0.3), verts=f.verts)
-    bmesh.ops.translate(f, vec=(0, (yw + 5.6) / 2, deck - 0.15), verts=f.verts)
+    bmesh.ops.translate(f, vec=(cx, (yw + 5.6) / 2, deck - 0.15), verts=f.verts)
     obj('bowl stage', f, [mat('Stage, grey paint', COL['stage'], 0.8)], coll)
     return shell, (y0, R0, yw)
 
@@ -418,7 +419,7 @@ def build_tubes(coll, deck, y0, R0):
     bm = bmesh.new()
     # Two long horizontal tubes across the shell, round-ended.
     for z, y, r in ((deck + t['height'], t['back'], t['radius']) for t in BOWL['beamTubes']):
-        L = 2 * (R0 + 0.4)
+        L = BOWL['beamLength']
         c = bmesh.ops.create_cone(bm, cap_ends=False, segments=32, radius1=r, radius2=r, depth=L)['verts']
         bmesh.ops.rotate(bm, verts=c, cent=(0, 0, 0), matrix=__import__('mathutils').Matrix.Rotation(math.pi / 2, 3, 'Y'))
         bmesh.ops.translate(bm, verts=c, vec=(0, y, z))
@@ -438,18 +439,13 @@ def build_tubes(coll, deck, y0, R0):
     # The panels in the shell's crown.
     p = bmesh.new()
     P = BOWL['crownPanels']
-    n = P['count']
-    for k in range(n):
-        a = P['from'] + (P['to'] - P['from']) * k / (n - 1)
-        cx, cz = -math.cos(a) * P['radius'], deck + sh_spring() + math.sin(a) * P['radius'] + 1.2
+    # Laid out by src/geometry/bowl.ts crownPanels(), scene frame.
+    for x, y, z in BOWL['panels']:
         v = bmesh.ops.create_cube(p, size=1.0)['verts']
         bmesh.ops.scale(p, vec=(P['width'], 0.06, P['height']), verts=v)
-        bmesh.ops.translate(p, vec=(cx, P['back'], cz), verts=v)
+        bmesh.ops.translate(p, vec=(x, -z, y), verts=v)
     obj('reflector panels', p, [mat('Panel, white', COL['panel'], 0.5)], coll)
 
-
-def sh_spring():
-    return BOWL['shell']['spring']
 
 
 # ─── the crowd ────────────────────────────────────────────────────────────────

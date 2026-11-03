@@ -364,7 +364,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'venues.hollywoodBowl': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph against the Wall\'s 64 ft scaffold; the reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14.',
+    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
   'structure.tieDyes': {
     confidence: 'estimated',
@@ -1184,16 +1184,32 @@ export const wall = {
       /** The old reflecting pool's circle, gone by 1972: open paving. */
       poolRadius: 15,
       seating: { halfAngle: DEG(62), firstRow: 16, lastRow: 112, rowDepth: 0.95, rise: 0.12, steepen: 0.0018 },
-      /** The 1929 shell: concentric white rings, springing just above the stage. */
-      shell: { rings: 6, outerRadius: 14.5, ringStep: 1.35, frontBack: 7.0, ringDepth: 1.25, spring: 1.0, hood: 0.6 },
-      /** Frank Gehry's Sonotubes: two long tubes across the shell, and a bank of uprights round the Wall. */
+      /**
+       * The 1929 shell: concentric white rings. Measured through the camera
+       * solved from the 21 July photograph (docs/qa-findings.md §19): the
+       * front arch 17.8 m in radius, centred 2.45 m above the stage and
+       * 2.3 m to the audience's right of the Wall's centre, at the depth the
+       * model already had (7 m behind the Wall's face; one photo cannot fix it).
+       */
+      shell: { rings: 6, outerRadius: 17.8, ringStep: 1.66, frontBack: 7.0, ringDepth: 1.25, spring: 2.45, hood: 0.6, centreX: 2.3 },
+      /**
+       * Frank Gehry's Sonotubes: two long tubes across the shell, and a bank
+       * of uprights either side of the Wall. Heights, diameters and spans
+       * measured through the solved camera (§19); depths as before.
+       */
       beamTubes: [
-        { height: 10.6, back: 6.4, radius: 0.42 },
-        { height: 11.35, back: 6.9, radius: 0.42 },
+        { height: 11.05, back: 6.4, radius: 0.65 },
+        { height: 12.2, back: 6.9, radius: 0.55 },
       ],
-      sonotubes: { diameter: 0.82, spacing: 0.88, minHeight: 5.0, maxHeight: 6.6, inset: 1.2, front: -1.0, back: 6.6, seed: 721 },
-      /** Tall white panels in the shell's crown. */
-      crownPanels: { count: 15, radius: 9.8, from: DEG(30), to: DEG(150), width: 0.95, height: 2.3, back: 8.6 },
+      beamLength: 30,
+      sonotubes: { diameter: 1.0, spacing: 1.05, minHeight: 7.4, maxHeight: 8.4, sideX: 12.0, front: -1.0, back: 6.6, seed: 721 },
+      /**
+       * Tall white panels hung across the shell's crown: a shallow row over
+       * the Wall, not following the shell's curve. Measured through the
+       * solved camera (§19): centres 16.5 m above the stage in the middle,
+       * about 1.5 m lower at the ends, from 11.8 m left to 10.4 m right.
+       */
+      crownPanels: { count: 15, left: -11.8, right: 10.4, height: 2.2, width: 0.75, rise: 16.5, sag: 1.5, back: 8.6 },
       /** About 5:15 pm: 30° up, from behind the crowd's left. The show time isn't recorded. */
       sun: { elevation: DEG(30), azimuth: DEG(-50) },
       colours: { shell: '#E8E6DF', shellInside: '#D9D8D2', sonotube: '#DCDDE0', panel: '#EFEFEA', concrete: '#A49C8C', bench: '#5D5446', paving: '#8F8A80', stage: '#6D6A63' },

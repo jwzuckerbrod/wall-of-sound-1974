@@ -118,7 +118,7 @@ function seatingGeometry(f: BowlFrame) {
 
 function tubesGeometry(f: BowlFrame) {
   const parts: THREE.BufferGeometry[] = [];
-  const L = 2 * (V.shell.outerRadius + 0.4);
+  const L = V.beamLength;
   for (const t of V.beamTubes) {
     parts.push(new THREE.CylinderGeometry(t.radius, t.radius, L, 32, 1, true).rotateZ(Math.PI / 2).translate(0, f.deck + t.height, -t.back));
     for (const sx of [-1, 1]) parts.push(new THREE.SphereGeometry(t.radius, 20, 10).translate((sx * L) / 2, f.deck + t.height, -t.back));
@@ -214,7 +214,7 @@ export function Bowl({ shadows }: { shadows: boolean }) {
       <mesh geometry={g.shell.inside} material={m.inside} />
       <mesh geometry={g.tubes} material={m.tube} receiveShadow={shadows} castShadow={shadows} />
       <mesh geometry={g.panels} material={m.panel} receiveShadow={shadows} castShadow={shadows} />
-      <mesh position={[0, f.deck - 0.15, -(backWall + 5.6) / 2]} material={m.stage} receiveShadow={shadows}>
+      <mesh position={[V.shell.centreX, f.deck - 0.15, -(backWall + 5.6) / 2]} material={m.stage} receiveShadow={shadows}>
         <boxGeometry args={[2 * R0 + 2, 0.3, backWall - 5.6]} />
       </mesh>
       <Trees f={f} />

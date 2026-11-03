@@ -63,34 +63,38 @@ export function terrainHeight(x: number, z: number, f: BowlFrame) {
 /** One of the shell's arches at radius R, `back` upstage: a half circle springing from the stage, with feet. */
 export function shellArc(R: number, back: number, f: BowlFrame, seg = 48): [number, number, number][] {
   const zc = f.deck + V.shell.spring;
-  const pts: [number, number, number][] = [[-R, f.deck, -back]];
+  const cx = V.shell.centreX;
+  const pts: [number, number, number][] = [[cx - R, f.deck, -back]];
   for (let k = 0; k <= seg; k++) {
     const a = (Math.PI * k) / seg;
-    pts.push([-Math.cos(a) * R, zc + Math.sin(a) * R, -back]);
+    pts.push([cx - Math.cos(a) * R, zc + Math.sin(a) * R, -back]);
   }
-  pts.push([R, f.deck, -back]);
+  pts.push([cx + R, f.deck, -back]);
   return pts;
 }
 
 /** The bank of upright Sonotubes round the sides and back of the Wall, each its own height. */
 export function sonotubes(): { x: number; z: number; height: number }[] {
   const T = V.sonotubes;
-  const R0 = V.shell.outerRadius;
   const rng = generator(T.seed);
   const path: [number, number][] = [];
-  const x0 = -R0 + T.inset;
+  // Either side of the Wall at ±sideX (measured, §19), and a row behind it.
+  const x0 = -T.sideX;
   for (let k = 0; k <= Math.floor((T.back - T.front) / T.spacing); k++) path.push([x0, T.front + T.spacing * k]);
-  for (let k = 0; k <= Math.floor((2 * (R0 - T.inset)) / T.spacing); k++) path.push([x0 + T.spacing * k, T.back]);
-  for (let k = 1; k <= Math.floor((T.back - T.front) / T.spacing); k++) path.push([R0 - T.inset, T.back - T.spacing * k]);
+  for (let k = 0; k <= Math.floor((2 * T.sideX) / T.spacing); k++) path.push([x0 + T.spacing * k, T.back]);
+  for (let k = 1; k <= Math.floor((T.back - T.front) / T.spacing); k++) path.push([T.sideX, T.back - T.spacing * k]);
   return path.map(([x, back]) => ({ x, z: -back, height: rng.uniform(T.minHeight, T.maxHeight) }));
 }
 
-/** The tall white panels in the shell's crown. */
+/** The tall white panels across the shell's crown: centres along a shallow curve, highest in the middle. */
 export function crownPanels(f: BowlFrame): [number, number, number][] {
   const P = V.crownPanels;
+  const mid = (P.left + P.right) / 2;
+  const half = (P.right - P.left) / 2;
   return Array.from({ length: P.count }, (_, k) => {
-    const a = P.from + ((P.to - P.from) * k) / (P.count - 1);
-    return [-Math.cos(a) * P.radius, f.deck + V.shell.spring + Math.sin(a) * P.radius + 1.2, -P.back];
+    const x = P.left + ((P.right - P.left) * k) / (P.count - 1);
+    const t = (x - mid) / half;
+    return [x, f.deck + P.rise - P.sag * t * t, -P.back];
   });
 }
 

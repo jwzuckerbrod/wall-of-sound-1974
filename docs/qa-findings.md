@@ -728,8 +728,28 @@ photo's Wall. The Bowl does not:
   barely clears the scaffold.
 - The crossbeam tubes and the Sonotube banks stand further out to the sides.
 
-The Bowl was measured by eye against an unsolved view (§14), so this is
-expected; it is the next thing to re-measure, through this camera.
+The Bowl was measured by eye against an unsolved view (§14), so this was
+expected.
+
+**Re-measured through the solved camera.** A point in the photo is a ray
+from the camera; where it crosses the plane a part stands in gives its true
+size. One photo cannot fix a part's depth, so each keeps the depth the
+model had; sizes and heights are measured. In `venues.hollywoodBowl`:
+
+| | Was (§14, by eye) | Now (measured) |
+|---|---|---|
+| Shell front arch | 14.5 m radius, springing 1 m above the stage, centred on the Wall | 17.8 m radius, centred 2.45 m above the stage and 2.3 m to the audience's right of the Wall's centre (a circle through 14 points on its edge, 0.6 m worst fit) |
+| Crown panels | on an arc following the shell | a shallow row across the crown over the Wall, centres 16.5 m above the stage, 1.5 m lower at the ends, from 11.8 m left to 10.4 m right; 2.2 × 0.75 m |
+| Crossbeam tubes | 10.6 and 11.35 m up, 0.84 m across | 11.05 m (the front one, 1.3 m across) and 12.2 m (1.1 m across); 30 m long |
+| Sonotube banks | 5.0–6.6 m tall, 0.82 m, at the shell's sides | 7.4–8.4 m tall, 1.0 m across, 12 m either side of the Wall's centre |
+
+Rendered through the camera, the shell, tubes, banks and panels now land on
+the photograph's. Still not matched: the shell's inner rings (the photo is
+too small to read them), and the right-hand bank's short front row of
+tubes, about 4 m tall, which the model leaves out.
+
+The shell's offset to the right may be real (the Wall set a little off the
+Bowl's centreline) or partly the camera's error; it is kept as measured.
 
 **Also seen:** the Wall appears to stand on the Bowl's own stage, its feet
 at the stage floor, with no sign of a 10 ft deck. If so, the venue differs

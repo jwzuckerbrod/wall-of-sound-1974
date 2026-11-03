@@ -12,6 +12,10 @@ import { TOUR } from './tour';
  *
  * Hidden while the Wall is pulled apart: the anchors belong to the assembled
  * Wall, and dots floating over empty space would point at nothing.
+ *
+ * Hidden with CSS rather than unmounted: each Html is its own React root, and
+ * tearing them all down mid-commit (as starting the tour did) makes React try
+ * to remove nodes drei has already detached, which throws in the console.
  */
 export function Hotspots({
   active,
@@ -23,12 +27,17 @@ export function Hotspots({
   onPick: (i: number) => void;
   hidden: boolean;
 }) {
-  if (hidden) return null;
   return (
     <group name="hotspots">
       {TOUR.map((s, i) =>
         s.anchor ? (
-          <Html key={s.id} position={s.anchor} center zIndexRange={[5, 0]} style={{ pointerEvents: 'none' }}>
+          <Html
+            key={s.id}
+            position={s.anchor}
+            center
+            zIndexRange={[5, 0]}
+            style={{ pointerEvents: 'none', display: hidden ? 'none' : undefined }}
+          >
             <button
               className="dot"
               aria-current={active === i}
