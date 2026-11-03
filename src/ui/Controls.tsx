@@ -186,18 +186,28 @@ export function TopBar({
         </div>
       </div>
       <div className="top-actions">
-        <a className="pill" href="./story.html">
+        <a className="pill pill-story" href="./story.html">
           The story
         </a>
-        <button className="pill" onClick={openListen}>
+        <button className="pill pill-listen" onClick={openListen}>
           Listen
         </button>
-        <button className="pill" onClick={openAbout}>
+        <button className="pill pill-about" onClick={openAbout}>
           About
         </button>
         <Menu label="Settings">
-          {() => (
+          {(close) => (
             <div className="settings">
+              {/* Phones: About lives here, to leave room for The story. */}
+              <button
+                className="check-row settings-about"
+                onClick={() => {
+                  close();
+                  openAbout();
+                }}
+              >
+                About this reconstruction
+              </button>
               <h3>Show</h3>
               {toggle('showScaffold', 'Scaffold and lights')}
               {toggle('showAmps', 'Amplifiers and cases')}

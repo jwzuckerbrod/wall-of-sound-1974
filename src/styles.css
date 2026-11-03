@@ -457,7 +457,7 @@ canvas { display: block; touch-action: none; }
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
 }
 
-button, a.pill { font: inherit; color: inherit; }
+button, .pill { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid #7fb3f5; outline-offset: 2px; }
 
 /* ── top ─────────────────────────────────────────────────────────────── */
@@ -561,6 +561,7 @@ button, a.pill { font: inherit; color: inherit; }
 .settings h3:first-child { margin-top: 4px; }
 .check-row { display: flex; align-items: center; gap: 9px; padding: 6px; font-size: 13.5px; border-radius: 8px; cursor: pointer; }
 .check-row:hover { background: rgba(255, 255, 255, 0.05); }
+.settings-about { display: none; width: 100%; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13.5px; text-align: left; }
 .check-row input { accent-color: var(--accent); margin: 0; }
 
 /* ── dots ────────────────────────────────────────────────────────────── */
@@ -735,7 +736,14 @@ button, a.pill { font: inherit; color: inherit; }
   .venue-switch button { height: 28px; padding: 0 12px; font-size: 12.5px; }
   .pill { height: 36px; padding: 0 12px; font-size: 13px; }
   .top-actions { gap: 6px; }
-  .top-actions a.pill { display: none; }
+  /* Phones: Listen and Settings on the first row, The story under them;
+     About moves into Settings. */
+  .top-actions { display: grid; grid-template-columns: auto auto; justify-items: end; gap: 8px 6px; }
+  .pill-about { display: none; }
+  .pill-listen { order: 1; }
+  .top-actions > .menu { order: 2; }
+  .pill-story { order: 3; grid-column: 1 / -1; }
+  .settings-about { display: flex; }
   .card,
   .array-panel {
     top: auto;
