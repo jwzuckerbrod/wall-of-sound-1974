@@ -32,6 +32,20 @@ export const IMAGES = {
     creditUrl: 'https://github.com/jwzuckerbrod/wall-of-sound-1974/issues',
     focus: '50% 45%',
   },
+  /**
+   * The reconstruction through the photographer's own camera, solved from the
+   * photograph (docs/qa-findings.md §19): same seat, same lens, same frame, so
+   * the two crossfade in register.
+   */
+  bowlPhotoMatch: {
+    id: 'bowl-photo',
+    kind: 'render',
+    alt: 'The reconstructed Wall of Sound at the Hollywood Bowl, from the same seat and with the same framing as the photograph before it.',
+    caption: 'The reconstruction, from the same seat.',
+    credit: RENDER_CREDIT,
+    widths: [1020, 2040],
+    focus: '50% 45%',
+  },
   bowl: {
     id: 'bowl',
     kind: 'render',

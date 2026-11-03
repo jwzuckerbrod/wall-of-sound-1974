@@ -12,6 +12,7 @@
     "verify": "node scripts/verify.mjs",
     "elevation": "node scripts/make-elevation.mjs",
     "export:scene": "node scripts/export-scene.mjs",
+    "story:renders": "zsh scripts/story-renders.sh",
     "story:images": "zsh scripts/story-images.sh"
   },
   "devDependencies": {

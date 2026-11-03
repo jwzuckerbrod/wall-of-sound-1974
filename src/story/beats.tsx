@@ -38,7 +38,7 @@ const day = (iso: string) =>
 export const BEATS: Beat[] = [
   {
     id: 'real',
-    images: [IMAGES.photoBowl, IMAGES.bowl],
+    images: [IMAGES.photoBowl, IMAGES.bowlPhotoMatch],
     motion: 'crossfade',
     sources: ['photos'],
     cards: [
@@ -51,7 +51,7 @@ export const BEATS: Beat[] = [
         <p>This is a photograph of it that afternoon.</p>
       </>,
       <>
-        <p>This is our reconstruction, from the seats.</p>
+        <p>This is our reconstruction, from the same seat.</p>
         <p className="aside">
           Built from scaffolding drawings, surviving equipment and every photograph we could date. Nothing here is
           from a film or a recording.
