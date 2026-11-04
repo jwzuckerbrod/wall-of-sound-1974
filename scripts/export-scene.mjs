@@ -151,6 +151,7 @@ const scene = {
   instruments: wall.band.instruments,
   // The paired vocal microphones (src/scene/BandGear.tsx): foot of each stand, and its parts.
   mics: { at: scaf.vocalMics(L).map(v3), ...scaf.MIC },
+  crewAloft: wall.structure.crewAloft,
   // Courtenay Pollock's tie-dyes (structure.tieDyes): top centre of each, outdoors only.
   tieDyes: scaf.tieDyePanels(L).map((t) => ({ top: v3(t.top), w: t.width, h: t.height, palette: wall.structure.tieDyes.palettes[t.palette] })),
   // The Hollywood Bowl (venues.hollywoodBowl, src/geometry/bowl.ts).

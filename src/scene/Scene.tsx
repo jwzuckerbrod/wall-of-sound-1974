@@ -6,7 +6,7 @@ import { wall } from '../data/wall.config';
 import { tierSettings, type Tier } from '../quality';
 import { Arrays, type ArrayInteraction, type ColorMode } from './Arrays';
 import { BandGear } from './BandGear';
-import { Instruments } from './Instruments';
+import { CrewAloft, Instruments } from './Instruments';
 import { RoadGear } from './RoadGear';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
@@ -52,6 +52,7 @@ function RendererSettings({ tier }: { tier: Tier }) {
   useEffect(() => {
     if (!import.meta.env.DEV) return;
     const w = window as unknown as Record<string, unknown>;
+    w.__scene = scene;
     w.__renderNow = () => {
       gl.render(scene, camera);
     };
@@ -157,6 +158,7 @@ export function Scene({
           <ScaffoldFloors shadows={shadows} />
           {outdoor && <TieDye />}
           <Cabling shadows={shadows} />
+          <CrewAloft />
         </>
       )}
       {showAmps && <RoadGear shadows={shadows} />}

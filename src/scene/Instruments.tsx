@@ -49,6 +49,27 @@ function model(name: string) {
   return p;
 }
 
+/** Two of the crew at the top corners of the scaffold (structure.crewAloft), fetched after the Wall is up. */
+export function CrewAloft() {
+  const [crew, setCrew] = useState<THREE.Group | null>(null);
+  useEffect(() => {
+    let live = true;
+    model('crew')
+      .then((g) => {
+        // Nothing near them to shadow, and three times the triangles to draw it.
+        g.traverse((o) => {
+          o.castShadow = false;
+        });
+        if (live) setCrew(g);
+      })
+      .catch((e) => console.warn('crew:', e));
+    return () => {
+      live = false;
+    };
+  }, []);
+  return crew && <primitive object={crew} />;
+}
+
 export function Instruments({ venue, onPick }: { venue: Venue; onPick: (id: string) => void }) {
   const names = [...COMMON, venue === 'hollywoodBowl' ? 'drums-bowl' : 'drums'];
   const [loaded, setLoaded] = useState<Record<string, THREE.Group>>({});

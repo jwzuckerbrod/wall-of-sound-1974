@@ -422,6 +422,11 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos'],
     note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
+  'structure.crewAloft': {
+    confidence: 'estimated',
+    sources: ['pechner', 'photos'],
+    note: 'Two of the crew at the top corners of the steel, generic figures, not portraits of anyone. Pechner\'s 17 May 1974 photograph has two men in exactly this place: one at the top rail in a pale T-shirt and dark trousers, arm along the tube, one on the ladder below him. An undated 1974 outdoor photograph has a man climbing in a white T-shirt and dark jeans, and one sitting high up in a pale shirt and tan trousers with an arm raised. No harness shows in any of them, at their small size. Rope is from the hoists on rope that IATSE Local 205\'s 2014 article describes (newsletter.iatse205.org/?p=815), and a rope hangs at the top rail on Pechner\'s photograph. The poses are invented, and neither photograph names these men. See docs/qa-findings.md §23.',
+  },
   'structure.tieDyes': {
     confidence: 'estimated',
     sources: ['photos'],
@@ -1040,6 +1045,60 @@ export const wall = {
      * outdoors only. x across, metres; they hang from the second-highest lift.
      * See PROVENANCE['structure.tieDyes'].
      */
+    /**
+     * Two of the crew at the top corners, in the scene frame (metres, +y up, +z
+     * toward the audience). Wrists and ankles are where the limb reaches: a
+     * hand on a tube, a boot on a ledger. blender/make_roadies.py poses people
+     * to them, and verify.mjs keeps them on the steel.
+     * yaw: which way the person faces, degrees (0 the audience, -180 the Wall). See PROVENANCE['structure.crewAloft'].
+     */
+    crewAloft: [
+      {
+        id: 'hauling',
+        // Out on the end of the tower, one boot on the end of a ledger and one braced on the corner standard, hauling a hand line.
+        yaw: -130,
+        hips: [10.1, 14.0, -0.2],
+        lean: -10,
+        look: { yaw: -30, pitch: 24 },
+        handL: [9.83, 14.56, -0.04],
+        handR: [10.5, 14.12, -0.68],
+        footL: [9.7, 13.04, 0.13],
+        footR: [9.88, 13.42, -0.12],
+        grips: ['handL', 'footL', 'footR'],
+        /** Over the top ledger, through the hand, and down to the deck. */
+        rope: [[9.75, 14.91, -0.86], [10.5, 14.12, -0.68], [10.78, 3.06, -0.78]],
+        height: 0.62,
+        hair: 'elvs_maxwell_hair',
+        hairColour: '#5a3e28',
+        beard: null,
+        top: 'elvs_crude_t-shirt_male',
+        topColour: '#e4decd',
+        trousersColour: '#2f4560',
+        shoes: 'shoes02',
+      },
+      {
+        id: 'astride',
+        // Sitting on the top rail at the other corner, facing out, working at a clamp below his right hand.
+        yaw: 0,
+        hips: [-8.74, 15.03, 0.05],
+        lean: 16,
+        look: { yaw: -30, pitch: 26 },
+        handL: [-8.27, 14.95, 0.04],
+        handR: [-9.48, 14.56, 0.08],
+        footL: [-8.42, 14.47, 0.44],
+        footR: [-9.03, 14.52, 0.52],
+        grips: ['handL', 'handR'],
+        rope: null,
+        height: 0.5,
+        hair: 'elvs_grump_hair',
+        hairColour: '#4a3424',
+        beard: 'wdg_scruffy_beard',
+        top: 'toigo_basic_tucked_t-shirt',
+        topColour: '#e9e0c8',
+        trousersColour: '#7a6a4a',
+        shoes: 'shoes02',
+      },
+    ],
     tieDyes: {
       x: [-8.6, -6.1, 6.4, 8.9],
       width: 1.3,

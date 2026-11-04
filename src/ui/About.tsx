@@ -148,6 +148,10 @@ export function About({ onClose }: { onClose: () => void }) {
           . It debuted at the {wall.meta.debut.venue} on 23 March 1974 and was taken apart after the{' '}
           {wall.meta.retired.run} run at the {wall.meta.retired.venue}.
         </p>
+        <p>
+          The two crew at the top of the scaffold are generic figures, not portraits, made with MakeHuman and
+          MPFB. Their hair is by Elvaerwyn, from the MakeHuman community's assets (CC BY).
+        </p>
       </div>
     </div>
   );

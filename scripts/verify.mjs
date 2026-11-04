@@ -248,6 +248,22 @@ check('block bounds are never degenerate', cfg.ARRAYS.every((b) => {
   return bb && bb.size[0] > 0.01 && bb.size[1] > 0.01 && bb.size[2] > 0.01;
 }), true);
 
+console.log('\nThe crew at the top corners');
+{
+  const toTube = (p, t) => {
+    const ab = t.b.map((v, i) => v - t.a[i]);
+    const ap = p.map((v, i) => v - t.a[i]);
+    const k = Math.max(0, Math.min(1, ap.reduce((n, v, i) => n + v * ab[i], 0) / ab.reduce((n, v) => n + v * v, 0)));
+    return Math.hypot(...ap.map((v, i) => v - k * ab[i]));
+  };
+  for (const c of cfg.wall.structure.crewAloft)
+    for (const g of c.grips) {
+      const d = Math.min(...tubes.map((t) => toTube(c[g], t)));
+      check(`${c.id}: ${g} within a wrist or ankle of a tube`, d <= 0.2, true);
+    }
+  check('one crew member at each side', new Set(cfg.wall.structure.crewAloft.map((c) => Math.sign(c.hips[0]))).size, 2);
+}
+
 console.log('\nOn the deck: cables and the Bowl riser');
 {
   const dress = await load('geometry/deckdressing.js');
