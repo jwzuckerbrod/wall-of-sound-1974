@@ -82,13 +82,13 @@ width, with crew working along it. Every bay now runs to the full height again.
 | | Finding | Status |
 |---|---|---|
 | 2.1 | Tie-dye panels were four large, bright mandalas hung high in the cage — the loudest thing in frame. They are meant to be fabric glimpsed through structure. | Fixed: smaller, fewer, lower, dimmer |
-| 2.2 | The stage deck reads as a vast empty brown plain. It is the right size — 82 × 41 ft is on the drawing — but it is bare, so it looks like a car park. | Open |
+| 2.2 | The stage deck reads as a vast empty brown plain. It is the right size — 82 × 41 ft is on the drawing — but it is bare, so it looks like a car park. | Improved in §22: cables, the Bowl's riser, a pale floor in the sun, a black skirt. Still a big open floor, as it was |
 | 2.3 | The arrays still occupy well under half the tower height. 641 drivers cannot fill a 60 ft frame (the 58% finding stands), but the current allocation makes short wide blocks where the photographs show tall narrow ones. | Partly fixed in §6: tallest stacks now 32 ft, vocal lows as single columns. Other channels' shapes are still the reconstruction's own |
 | 2.4 | The whole composition reads as a small object in a large black void. No sense of scale or occasion. | Fixed in Blender (§12); the browser is unchanged |
-| 2.5 | Bare-plywood cabinets are too orange and too uniform; they read as pine crates rather than road-worn birch. | Open |
-| 2.6 | The 5-inch panels render as dark circles with no visible cone — the small drivers catch no light at all. | Open |
-| 2.7 | The curve of the vocal centre cluster barely reads from the front. | Open |
-| 2.8 | The `front` camera now frames the rig too small, because `FitCamera` fits the full tower height including empty steel. | Open |
+| 2.5 | Bare-plywood cabinets are too orange and too uniform; they read as pine crates rather than road-worn birch. | Fixed in §22 |
+| 2.6 | The 5-inch panels render as dark circles with no visible cone — the small drivers catch no light at all. | Closed in §22: already fixed by §11 and §18 |
+| 2.7 | The curve of the vocal centre cluster barely reads from the front. | Closed in §22: it reads from any camera below it, as on the photographs; from level with it, a curve can't show |
+| 2.8 | The `front` camera now frames the rig too small, because `FitCamera` fits the full tower height including empty steel. | Fixed in §22 |
 
 ---
 
@@ -786,4 +786,84 @@ the sound plays on while exploring; its name reopens the Listen panel.
 **Not yet tried on a real phone:** the lock screen, playback with the screen off,
 and notch padding on its side. The bar can sit over the bottom-left of the
 signal diagram on its side until the reader scrolls.
+
+---
+
+## 22. The explorer's open items (4 November 2026)
+
+Rows 2.2 and 2.5 to 2.8 predate the reconciliation (§18), so each was looked at
+again in the running app. The Bowl view and the instrument viewer were decided
+on measurements.
+
+**The older rows**
+
+| Row | What the app shows now | Outcome |
+|---|---|---|
+| 2.5 Plywood | Frames measured `#93663d`: hue 29°, saturation 0.59. The grain map is warm and it multiplied a warm base colour. Sunlit ply at UC Santa Barbara, 25 May, is about hue 41°. | Fixed: `materials.plywood` paler, now `#977954` under stage light (hue 33°, saturation 0.44), with a little hue drift from board to board. Blender's bare ply has its own colour and is unaffected |
+| 2.6 5" cones | Cones, surrounds and dust caps all read close up, in strips and in cells. | Closed, no change. Fixed by §11 and §18 |
+| 2.7 Cluster's curve | Through Pechner's solved camera, the top and bottom edges arc as they do on his photograph. From a camera level with the cluster it looks flat, and it would on a photograph too. | Closed, no change. The curve is right |
+| 2.8 `front` framing | The Wall took 56% of a 4:3 frame. | Fixed: `FitCamera` projects the corners of the steel instead of fitting a sphere round them. Now 72%. The deck's empty wings may run off a narrow window, and on a phone the Wall fills the width |
+
+**2.2, the deck.** The floor really was large and open: on the Bowl band
+photograph (probably 21 July) it is mostly bare board. So nothing was added to
+fill it. What the photographs do show, and the model lacked:
+
+- **Cables.** Black cable in slack loops across the floor, from the stands
+  (Bowl band photograph; UC Santa Barbara). One from each vocal stand, each guitar
+  and the bass. That they lay there is evidence; the routes and the number are
+  invented (`src/geometry/deckdressing.ts`, `structure.deckCables`).
+- **The riser**, at the Bowl only (§14): natural wood, open frame, size scaled by
+  eye from one photograph (`band.bowlKitRiser`). The kit stands on it. Other dates
+  had red velvet (25 May; probably 16 June), not modelled.
+- **A pale floor in the sun**, at the Bowl: weathered board, close to white on the
+  photograph. Colour there is unreliable (blue cast, overexposed), so this is
+  only "pale", not a measured colour. Under stage lights it stays brown.
+- **A black skirt.** It was brown here, black on Pechner's photograph and in Blender.
+
+These are in the explorer only. **The story's renders differ:** Blender has no
+cables or riser and a brown deck at the Bowl. That is for whoever next re-renders
+the story, not changed here.
+
+Seen and not modelled: Garcia's natural-wood 2×12 behind the kit (25 May, 31 July),
+and a green strip along the stage front (Oakland; the Bowl crowd photograph), which
+may be plants.
+
+**The Bowl view.** Triangles per frame, shadow pass included, from `__cost()`:
+
+| | Before | Trees reduced |
+|---|---|---|
+| Indoors, any tier | 1,191,594 | same |
+| Bowl, high | 2,452,541 | 1,915,041 (22% fewer) |
+| Bowl, low (phones) | 2,452,541 | 1,616,741 (34% fewer) |
+
+- **Trees: done.** They were the largest cost of the venue, 320 triangles each by the
+  thousand, and read as boulders. Small ones now have 80, phones draw half, and dark
+  skirts painted into the vertices make them read as trees for no extra cost.
+- **Crowd: tried and removed.** Instanced figures (about 32 triangles each, 1,500 to
+  9,000 by tier), with a painted surface for the far rows, cost little. They looked
+  bad: the explorer's views stand in the crowd, and up close the figures were rows of
+  crayons with the painted rows a coloured grid. Keeping them only farther back would
+  leave the seats in front of the camera empty anyway. Empty seats read as a model;
+  those read as a mistake. Same reasoning as §1.1. The story has the real crowd.
+
+No frame rate was measured on a real phone: these are triangle counts from headless
+desktop Chrome, and the Bowl at low still draws 36% more than indoors.
+
+**The instrument viewer: scoped, not built.** A trial export at `--size 4096`, in a
+scratch folder (repo's models untouched):
+
+| | 2K, today | 4K |
+|---|---|---|
+| All eight models | 1.7 MB | 2.6 MB |
+| One guitar | 0.35 MB | 0.5 MB |
+
+Compared on the Wolf at about 750 px tall, 4K is barely different: slightly crisper
+pickups. Its limits at that size are the shapes and the flat baked materials, not
+texture size. Not compared closer in. Fetched only when a viewer opens, this adds nothing
+to first load: about 0.5 MB per instrument opened, 2.6 MB more hosted.
+
+**Tools.** A hidden browser pane stops animation frames, so the app never finishes
+loading in it. These captures used headless Chrome over its debugging port. The console
+message "Attempted to synchronously unmount a root" appears on the unchanged
+main checkout too; not investigated.
 

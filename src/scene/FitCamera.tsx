@@ -32,7 +32,7 @@ export function FitCamera({ view, margin = 1.04 }: { view: View; margin?: number
     // What has to be in frame: the steel, top rail to ground, from the back of
     // the tower to the stage's front edge. The deck's wings, 9 ft past the steel
     // each side, may run off a narrow window: they are empty, and fitting them
-    // left a phone with a Wall half the width of its screen (qa-findings §21).
+    // left a phone with a Wall half the width of its screen (qa-findings §22).
     const L = scaffoldLayout();
     const halfW = L.footprint.width / 2;
     const top = L.yLevels[L.yLevels.length - 1];

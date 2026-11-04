@@ -11,7 +11,7 @@ import { bowlFrame, crownPanels, seatHeight, shellArc, sonotubes, terrainHeight,
  * crown, from the same layout Blender builds (src/geometry/bowl.ts). No
  * crowd: the renders' (blender/make_people.py) is far too heavy for a browser,
  * and instanced stand-ins were tried and looked worse than empty seats
- * (docs/qa-findings.md §21). The trees are simple shapes where Blender plants
+ * (docs/qa-findings.md §22). The trees are simple shapes where Blender plants
  * Poly Haven's.
  */
 
