@@ -12,9 +12,10 @@ import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
 import type { CompareId } from './scene/ScaleObjects';
+import { PLANE_POSITIONS, type PlaneAt } from './geometry/scale';
 import type { Pose } from './scene/TourCamera';
 import { TOUR, instrumentPose } from './scene/tour';
-import { COMPARE_PLANE_VIEW, COMPARE_PLANE_VIEW_PORTRAIT, COMPARE_VIEW, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
+import { COMPARE_VIEW, PLANE_VIEWS, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
 import { InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 
@@ -62,6 +63,12 @@ function compareFromSearch(search: string): CompareId {
   return v === null ? null : v === '737' ? 'b737' : 'bus';
 }
 
+/** ?at=behind or ?at=front moves the 737. */
+function planeAtFromSearch(search: string): PlaneAt {
+  const v = new URLSearchParams(search).get('at') as PlaneAt | null;
+  return v && PLANE_POSITIONS.includes(v) ? v : 'beside';
+}
+
 export default function App() {
   const initial = useMemo(() => viewFromSearch(window.location.search), []);
   const viewId = initial.id;
@@ -77,6 +84,7 @@ export default function App() {
     ...sceneDefaults,
     venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
     compare: compareFromSearch(window.location.search),
+    planeAt: planeAtFromSearch(window.location.search),
   }));
   const setOptions = useCallback((next: SceneOptions | ((o: SceneOptions) => SceneOptions)) => {
     setOptionsState((o) => {
@@ -171,13 +179,13 @@ export default function App() {
 
   /** Stand where the comparison shows. */
   const goToCompare = useCallback(
-    (id: CompareId) => {
+    (id: CompareId, at: PlaneAt = 'beside') => {
       setStop(null);
       setSelectedState(null);
       setInstrument(null);
       // Upright on a phone, stand back until it fits the narrow frame.
       const portrait = window.innerHeight > window.innerWidth;
-      if (id === 'b737') setPose(portrait ? COMPARE_PLANE_VIEW_PORTRAIT : COMPARE_PLANE_VIEW);
+      if (id === 'b737') setPose(portrait ? PLANE_VIEWS[at].tall : PLANE_VIEWS[at].wide);
       else setPose(standIn(portrait ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, options.venue));
       setNavMode('tour');
     },

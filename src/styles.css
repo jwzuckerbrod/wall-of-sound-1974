@@ -809,3 +809,17 @@ button, .pill { font: inherit; color: inherit; }
 }
 .menu-list button[aria-pressed='true'] { color: var(--accent); }
 .menu-list button:disabled { opacity: 0.45; cursor: default; }
+.compare-note p { margin: 0; }
+.compare-at { display: flex; justify-content: center; gap: 4px; margin-top: 8px; }
+.compare-at button {
+  height: 30px;
+  padding: 0 12px;
+  background: transparent;
+  border: 1px solid var(--glass-line);
+  border-radius: 999px;
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.compare-at button:hover { background: rgba(255, 255, 255, 0.07); }
+.compare-at button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.18); border-color: rgba(233, 184, 90, 0.45); }
+@media (hover: none) { .compare-at button { height: 36px; } }

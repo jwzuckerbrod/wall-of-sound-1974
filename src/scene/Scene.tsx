@@ -9,6 +9,7 @@ import { BandGear } from './BandGear';
 import { Instruments } from './Instruments';
 import { RoadGear } from './RoadGear';
 import { ScaleObjects, type CompareId } from './ScaleObjects';
+import type { PlaneAt } from '../geometry/scale';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Bowl } from './Bowl';
@@ -35,6 +36,8 @@ export interface SceneOptions {
   showBand: boolean;
   /** Something of known size beside the Wall. */
   compare: CompareId;
+  /** Where the 737 stands, when it does. */
+  planeAt: PlaneAt;
 }
 
 /** Applies the tier's renderer-level settings, which are not props on <Canvas>. */
@@ -104,6 +107,7 @@ export function Scene({
   showAmps,
   showBand,
   compare,
+  planeAt,
   view,
   tier,
   navMode,
@@ -132,6 +136,8 @@ export function Scene({
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
   const outdoor = wall.venues[venue].outdoor;
+  // The 737's views stand far back: the hall's fog would dim the Wall, and the dots would float over the plane.
+  const plane = compare === 'b737' && !outdoor;
 
   return (
     <>
@@ -146,7 +152,7 @@ export function Scene({
       ) : (
         <>
           <color attach="background" args={['#0a0c0f']} />
-          <fog attach="fog" args={['#0a0c0f', 55, 240]} />
+          <fog key={plane ? 'far' : 'near'} attach="fog" args={['#0a0c0f', plane ? 150 : 55, plane ? 400 : 240]} />
           <Lighting tier={tier} />
         </>
       )}
@@ -173,7 +179,7 @@ export function Scene({
         </>
       )}
 
-      <ScaleObjects compare={compare} venue={venue} shadows={shadows} />
+      <ScaleObjects compare={compare} planeAt={planeAt} venue={venue} shadows={shadows} />
 
       {/* Clicking past everything clears the selection. */}
       <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)} userData={{ pickable: true }}>
@@ -195,7 +201,7 @@ export function Scene({
       {navMode === 'tour' && <TourCamera stop={pose} active />}
       {/* At a tour stop the camera is in close and the dots would float over
           the shot; they come back on the overview, or when the card closes. */}
-      <Hotspots active={activeStop} onPick={onPickStop} hidden={!dots || interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
+      <Hotspots active={activeStop} onPick={onPickStop} hidden={!dots || plane || interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
       <ViewOffset room={offset.room} up={offset.up} />
     </>
   );
@@ -211,6 +217,7 @@ export const sceneDefaults: SceneOptions = {
   showAmps: true,
   showBand: true,
   compare: null,
+  planeAt: 'beside',
 };
 
 export const deckHeight = wall.dimensions.stageDeckHeight;

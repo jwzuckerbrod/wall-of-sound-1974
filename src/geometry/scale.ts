@@ -25,13 +25,18 @@ export function busRow(ground: number, L = scaffoldLayout()): BusPlace[] {
   }));
 }
 
+/** Where the 737 stands. Only beside it do the two heights compare fairly. */
+export type PlaneAt = 'beside' | 'behind' | 'front';
+export const PLANE_POSITIONS: PlaneAt[] = ['beside', 'behind', 'front'];
+
 /**
- * The 737, on the ground beside the stage at the audience's left, side-on, nose
- * pointing away and its tail nearest the Wall, at the depth of the speakers'
- * face, so the two heights compare fairly. Its centre and how far to turn it.
+ * The 737, on the ground, side-on. Beside the stage at the audience's left, at the
+ * depth of the speakers' face, nose pointing away and its tail nearest the Wall.
+ * Or centred behind the stage, or in front of it, its near wing clear of the stage.
  */
-export function planePlace(L = scaffoldLayout()): { pos: [number, number, number]; turn: number; tailX: number } {
+export function planePlace(at: PlaneAt = 'beside', L = scaffoldLayout()): { pos: [number, number, number]; turn: number } {
   const P = wall.scale.b737;
-  const tailX = L.deck.minX - P.setback;
-  return { pos: [tailX - P.length / 2, 0, 0], turn: Math.PI, tailX };
+  if (at === 'behind') return { pos: [0, 0, L.deck.minZ - P.span / 2 - P.setback], turn: 0 };
+  if (at === 'front') return { pos: [0, 0, L.deck.maxZ + P.span / 2 + P.setback], turn: 0 };
+  return { pos: [L.deck.minX - P.setback - P.length / 2, 0, 0], turn: Math.PI };
 }

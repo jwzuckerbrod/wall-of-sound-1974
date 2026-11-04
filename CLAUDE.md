@@ -34,7 +34,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   them, not the Python. The explorer has `?venue=bowl`.
 - `blender/scale/vwbus.py` and `b737.py` script the bus and the airliner to
   `public/models/` (after `npm run export:scene`). They appear under the explorer's
-  "Compare size" menu, or with `?compare` and `?compare=737`.
+  "Compare size" menu, or with `?compare` and `?compare=737` (`&at=behind` or `&at=front`).
 - The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
   (each stop's camera, text, dot anchor and system), viewpoints in
   `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and

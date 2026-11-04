@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import { wall } from '../data/wall.config';
-import { busRow, planePlace } from '../geometry/scale';
+import { busRow, planePlace, type PlaneAt } from '../geometry/scale';
 import { bowlFrame } from '../geometry/bowl';
 import { gltfLoader } from './Instruments';
 import type { Venue } from './Scene';
@@ -73,12 +73,12 @@ function Buses({ venue, shadows }: { venue: Venue; shadows: boolean }) {
   );
 }
 
-function Plane({ shadows }: { shadows: boolean }) {
+function Plane({ at, shadows }: { at: PlaneAt; shadows: boolean }) {
   const model = useModel('b737');
   const placed = useMemo(() => {
     if (!model) return null;
     const o = model.clone(true);
-    const p = planePlace();
+    const p = planePlace(at);
     o.traverse((n) => {
       const mesh = n as THREE.Mesh;
       if (mesh.isMesh) {
@@ -89,15 +89,15 @@ function Plane({ shadows }: { shadows: boolean }) {
     o.position.set(...p.pos);
     o.rotation.y = p.turn;
     return o;
-  }, [model, shadows]);
+  }, [model, at, shadows]);
   return placed && <primitive object={placed} />;
 }
 
-export function ScaleObjects({ compare, venue, shadows }: { compare: CompareId; venue: Venue; shadows: boolean }) {
+export function ScaleObjects({ compare, planeAt, venue, shadows }: { compare: CompareId; planeAt: PlaneAt; venue: Venue; shadows: boolean }) {
   return (
     <group name="scale-objects">
       {compare === 'bus' && <Buses venue={venue} shadows={shadows} />}
-      {compare === 'b737' && !wall.venues[venue].outdoor && <Plane shadows={shadows} />}
+      {compare === 'b737' && !wall.venues[venue].outdoor && <Plane at={planeAt} shadows={shadows} />}
     </group>
   );
 }

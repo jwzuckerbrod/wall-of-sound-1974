@@ -940,6 +940,14 @@ the plane would be about 20 m farther from the camera and perspective would exag
 difference. Beside the stage at the speakers' depth, seen square-on from far back on a long
 lens, the two heights compare fairly. The nose points away and the tail is nearest the Wall.
 
+**Three positions, the visitor's choice.** Under the note, a switch moves the plane: Beside
+(the default), Behind or In front, each with its own camera, or `?compare=737&at=behind`. The
+numbers don't change. On the two others the note adds that perspective distorts the view: from
+in front the plane looks about as tall as the Wall, from behind far smaller. Only Beside is a
+fair comparison, and showing the other two makes that visible rather than hiding it. In front
+hides the stage and the band. The tour's dots are off while the plane shows, and the hall's fog
+is pushed back, since these views stand far from the Wall.
+
 **Indoors only.** At the Bowl the shell and the hill are in its way, so the menu greys it out.
 
 **Compare size is now a menu,** one object at a time, each with its own view and note, and

@@ -278,8 +278,11 @@ console.log('\nThe buses and the 737, for scale');
   check('737 span, Boeing (ft)', P.span / FT, 93, 0.05);
   check('737 tail, Boeing (ft)', P.tailHeight / FT, 36 + 10 / 12, 0.05);
   check('the Wall stands 12 ft above the 737\'s tail (ft)', (L.yLevels.at(-1) - P.tailHeight) / FT, 12, 0.1);
-  const plane = scale.planePlace(L);
-  check('the 737 stands clear of the stage', plane.pos[0] + P.length / 2 < L.deck.minX, true);
+  check('three positions for the 737', scale.PLANE_POSITIONS.length, 3);
+  check('beside: the 737 clear of the stage\'s end', scale.planePlace('beside', L).pos[0] + P.length / 2 < L.deck.minX, true);
+  check('beside: at the depth of the speakers\' face', scale.planePlace('beside', L).pos[2], 0, 1e-9);
+  check('behind: its near wing clear of the stage', scale.planePlace('behind', L).pos[2] + P.span / 2 < L.deck.minZ, true);
+  check('in front: its near wing clear of the stage', scale.planePlace('front', L).pos[2] - P.span / 2 > L.deck.maxZ, true);
 }
 
 console.log('\nProvenance, for the About page');

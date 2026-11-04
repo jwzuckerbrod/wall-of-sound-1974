@@ -3,7 +3,8 @@ import { CHANNELS, wall, type ChannelId } from '../data/wall.config';
 import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { SceneOptions } from '../scene/Scene';
 import type { CompareId } from '../scene/ScaleObjects';
-import { VIEWPOINTS, type ViewpointId } from '../scene/views';
+import { PLANE_POSITIONS, type PlaneAt } from '../geometry/scale';
+import { PLANE_VIEWS, VIEWPOINTS, type ViewpointId } from '../scene/views';
 import { UNIT_LABEL, type UnitSystem } from './units';
 
 /** A touch screen with no mouse: hints talk about pinching, not scrolling or keys. */
@@ -76,7 +77,7 @@ export function BottomBar({
   setIsolated: (c: ChannelId | null) => void;
   onViewpoint: (id: ViewpointId) => void;
   /** Stand where the comparison shows. */
-  onCompare: (id: CompareId) => void;
+  onCompare: (id: CompareId, at?: PlaneAt) => void;
 }) {
   const colour = options.colorMode === 'channel';
   // The 737 doesn't stand at the Bowl.
@@ -105,10 +106,27 @@ export function BottomBar({
         </p>
       )}
       {shown === 'b737' && (
-        <p className="compare-note">
-          <strong>The Wall stands 12 ft taller than a 737&rsquo;s tail:</strong> 48 ft 10 in to its top, 36 ft 10 in to the
-          tail of the airliner of 1974. For scale; it wasn&rsquo;t there.
-        </p>
+        <div className="compare-note">
+          <p>
+            <strong>The Wall stands 12 ft taller than a 737&rsquo;s tail:</strong> 48 ft 10 in to its top, 36 ft 10 in to the
+            tail of the airliner of 1974. For scale; it wasn&rsquo;t there.
+            {options.planeAt !== 'beside' && ' Perspective distorts this view; the real heights don\u2019t change.'}
+          </p>
+          <div className="compare-at" role="group" aria-label="Where the 737 stands">
+            {PLANE_POSITIONS.map((at) => (
+              <button
+                key={at}
+                aria-pressed={options.planeAt === at}
+                onClick={() => {
+                  setOptions({ ...options, planeAt: at });
+                  onCompare('b737', at);
+                }}
+              >
+                {PLANE_VIEWS[at].wide.label}
+              </button>
+            ))}
+          </div>
+        </div>
       )}
       <div className="bar" role="toolbar" aria-label="The Wall">
         <label className="explode">
@@ -154,7 +172,7 @@ export function BottomBar({
                       aria-pressed={shown === c.id}
                       onClick={() => {
                         setOptions({ ...options, compare: c.id });
-                        if (c.id) onCompare(c.id);
+                        if (c.id) onCompare(c.id, options.planeAt);
                         close();
                       }}
                     >
