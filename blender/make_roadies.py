@@ -9,7 +9,7 @@ structure.crewAloft, the evidence in PROVENANCE['structure.crewAloft'].
     /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/make_roadies.py
 
 Needs MPFB and its packs, as make_people.py does. Hair keeps its own texture,
-tinted and drawn opaque: its alpha, exported, cuts away the scalp. The packs have no vest,
+tinted, and the explorer cuts it out (src/scene/Instruments.tsx). The packs have no vest,
 plaid shirt or sunglasses, so those are made here: a vest is a T-shirt with its
 sleeves and front taken out, puffed outward, quilted for a down vest.
 """
@@ -123,17 +123,17 @@ def make_vest(shirt, kind):
     for p, nor, sh in zip(me.vertices, normals, shade.data):
         # Sewn channels about 7.5 cm deep across a down vest; leather lies flat.
         k = abs(math.sin(p.co.z * math.pi / 0.075)) if down else 1.0
-        p.co += nor * ((0.009 + 0.011 * k) if down else 0.011)
-        d = 0.55 + 0.45 * k if down else 1.0
+        p.co += nor * ((0.011 + 0.016 * k) if down else 0.011)
+        d = 0.35 + 0.65 * k if down else 1.0
         sh.color = (d, d, d, 1)
-    m, b = flat(v, '#2a221c' if down else '#17120e', 0.55, f'{v.name} surface')
+    m, b = flat(v, '#4a3a2c' if down else '#17120e', 0.5, f'{v.name} surface')
     c = m.node_tree.nodes.new('ShaderNodeVertexColor')
     c.layer_name = 'quilt'
     mix = m.node_tree.nodes.new('ShaderNodeMix')
     mix.data_type = 'RGBA'
     mix.blend_type = 'MULTIPLY'
     mix.inputs['Factor'].default_value = 1
-    mix.inputs['A'].default_value = P['srgb']('#2a221c' if down else '#17120e')
+    mix.inputs['A'].default_value = P['srgb']('#4a3a2c' if down else '#17120e')
     m.node_tree.links.new(c.outputs['Color'], mix.inputs['B'])
     m.node_tree.links.new(mix.outputs['Result'], b.inputs['Base Color'])
     return v

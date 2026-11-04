@@ -899,7 +899,7 @@ main checkout too; not investigated.
 The explorer now has two of the crew at the top of the scaffold, one at each
 corner: they give the Wall a person's size, and they are where the photographs
 put people. Built by `blender/make_roadies.py` from `structure.crewAloft`, written
-to `public/models/crew.glb` (0.9 MB, fetched after the Wall is up, no shadows).
+to `public/models/crew.glb` (0.95 MB, fetched after the Wall is up, no shadows).
 
 **Where they work: the 1974 evidence**
 
@@ -949,7 +949,7 @@ tube. Licences, from each asset's file: curly hair (punkduck, in the CC-BY pack)
 (Rehman Polanski) CC0. These shapes are now published inside `crew.glb`; that licence's
 terms for exported characters still need reading before this goes live.
 
-**Cost.** About 57,000 more triangles a frame indoors: 1,191,594 to 1,248,600.
+**Cost.** About 57,000 more triangles a frame indoors: 1,191,594 to about 1,249,000.
 
 **Explorer only.** Blender's renders and the story don't have them.
 
