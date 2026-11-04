@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §20) and gear in `docs/surviving-gear.md`.
+  §21) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
@@ -23,7 +23,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - After config changes: `npm run export:scene` (writes `blender/scene.json`).
 - Blender: `/Applications/Blender.app/Contents/MacOS/Blender -b -P <script> -- <args>`
   - `blender/build_scene.py --shot pechner|gear|rack|cluster [--venue arena|outdoor|hollywood]`
-  - `blender/stage_review.py --venue hollywood --shot bowl|bowl-hero|garcia|cluster-up|amps|bowl-tower --sun 30,-50 --exposure 0.3 [--samples N --scale % --name X --no-crowd]`
+  - `blender/stage_review.py --venue hollywood --shot bowl|bowl-hero|title|garcia-mark|cluster-up|amps-close --sun 30,-50 --exposure 0.3 [--samples N --scale % --name X --no-crowd --tint systems|evidence --meters out.json]`
   - `blender/crowd_mask.py mask|composite|tiles|place|grade ...`
   - `blender/make_people.py --count 144` regenerates the crowd library.
   - `blender/export_instruments.py` bakes the instruments to `public/models/*.glb`

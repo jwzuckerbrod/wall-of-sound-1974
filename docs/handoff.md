@@ -1,4 +1,4 @@
-# Handoff: where things stand (7 October 2026)
+# Handoff: where things stand (4 November 2026)
 
 ## Done recently
 
@@ -24,22 +24,25 @@
   Credit generously: photographer and source on every photo shown, sources
   linked, and a full credits page on the site.
 
+## Decided (4 November 2026)
+
+- **The story and the explorer are separate products, closely linked.** Neither
+  is the other's front page: `story.html` and `index.html` keep their addresses.
+
 ## Other open items
 
-- **Story page**: first version built (`story.html`, `src/story/`; see
-  `docs/story.md` for what's left). Stage 6 (performance on a phone) and
-  stage 7 (deploy) not started. Photographs shown on it are copied into
-  `public/story/` by `npm run story:images`, credited in `src/story/images.ts`.
-- Red kit at the Bowl: recoloured, but still the Hartford concert-tom model.
-- A second, smaller curved cluster low right at the Bowl, not modelled.
+- **Story:** built, on the phone layout (§20) and with its last pictures (§21).
+  Left: the red kit (still the Hartford concert-tom model, recoloured), and two
+  questions in `docs/story.md` (tone, the name). Not yet tried on a real phone:
+  the new title and the needles.
+- A second, smaller curved cluster low right at the Bowl, not modelled, and the
+  right-hand bank's short front row of tubes (§19).
+- The Bowl photograph shows no sign of a 10 ft deck (§19); the model keeps it.
 - Where the bass-drum column really stood (guess, `arrays.kickPosition`).
-- Browser app: now matches Blender (qa-findings §18): cabinets, road gear,
-  lamps, tie-dyes, the Bowl (`?venue=bowl`) and the instruments as glTF.
-  Still bare deck (QA 2.2); the Bowl has simple trees and no crowd.
-- **Live** at https://jwzuckerbrod.github.io/wall-of-sound-1974/ (GitHub
-  Pages, deployed on every push to master). Redesigned after a UX audit
-  (2 November 2026): an overview card on arrival, dots on the model for the
-  tour stops, one card on the right (a sheet on phones), a bottom bar with
-  "Take it apart", "Colour by system" and viewpoints, settings in a menu.
-- Not yet: a full-screen instrument viewer (needs higher-resolution exports),
-  the story page as the front door.
+- Stack heights against Pechner's photograph, the cluster's row pitch (§6).
+- No photograph from July to October shows the whole band (§7, §9).
+- **Explorer:** the Bowl has simple trees and no crowd; bare deck (QA 2.2); QA
+  2.5 to 2.8 need re-checking since §18; a full-screen instrument viewer (needs
+  higher-resolution exports).
+- **Live** at https://jwzuckerbrod.github.io/wall-of-sound-1974/ (GitHub Pages,
+  deployed on every push to master).
