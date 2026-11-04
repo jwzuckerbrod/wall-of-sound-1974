@@ -65,7 +65,7 @@ scaffold · 82 ft stage · 48 ft 10 in to the top**.
 |---|---|---|---|
 | 1 | A 1974 Volkswagen bus (Type 2, "Bay Window") | 14 ft 9 in × 5 ft 8 in × about 6 ft 5 in–6 ft 8 in (4,505 × 1,720 × 1,955–2,040 mm; the height still to settle) | Four end to end make the 60 ft run of speakers. The Deadhead's vehicle, and the right year |
 | 2 | A blue whale | up to about 90 ft long in the Northern Hemisphere (NOAA; up to about 110 ft in the Antarctic), about 15 ft through the body | One spans the 82 ft stage |
-| 3 | A Boeing 737-200, the airliner of 1974 | 100 ft 2 in long, 93 ft span, 36 ft 10 in to the tail (confirmed: Boeing, D6-58325-6 Rev E, §2.2.2 and §2.3.1) | Its tail stands level with the tower's 38 ft 10 in above the stage: the punchline |
+| 3 | A Boeing 737-200, the airliner of 1974 | 100 ft 2 in long, 93 ft span, 36 ft 10 in to the tail (confirmed: Boeing, D6-58325-6 Rev E, §2.2.2 and §2.3.1) | On the same ground, the Wall stands 12 ft taller than its tail (48 ft 10 in against 36 ft 10 in): the punchline |
 
 The figures go into the config with sources before they go on screen. The
 737's are confirmed against Boeing's airport-planning manual and the whale's
@@ -77,8 +77,9 @@ figure. References are in `.shots/reference/scale/` (local), with
 **Staging.** The bus parks in front of the stage, then three more roll in
 behind it. The whale doesn't lie on the floor (a whale out of water reads as
 a stranding): it hangs in the studio's dark like the life-size model in a
-natural-history museum, level with the stage. The 737 sits behind the Wall,
-side on, its tail rising beside the tower.
+natural-history museum, level with the stage. The 737 sits beside the Wall at
+the same depth, side on, its tail nearest the tower, so perspective doesn't
+flatter either height (as in the explorer; qa-findings §23).
 
 **Realism.** Photographic, like the Wall: each modelled in Blender from
 dimensioned drawings and photographs, scaled exactly, with real paint,

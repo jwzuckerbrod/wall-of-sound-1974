@@ -11,9 +11,10 @@ import { ArrayPanel } from './ui/ArrayPanel';
 import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
+import type { CompareId } from './scene/ScaleObjects';
 import type { Pose } from './scene/TourCamera';
 import { TOUR, instrumentPose } from './scene/tour';
-import { COMPARE_VIEW, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
+import { COMPARE_PLANE_VIEW, COMPARE_PLANE_VIEW_PORTRAIT, COMPARE_VIEW, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
 import { InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 
@@ -55,6 +56,12 @@ function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
   return null;
 }
 
+/** ?compare shows the buses, ?compare=737 the airliner. */
+function compareFromSearch(search: string): CompareId {
+  const v = new URLSearchParams(search).get('compare');
+  return v === null ? null : v === '737' ? 'b737' : 'bus';
+}
+
 export default function App() {
   const initial = useMemo(() => viewFromSearch(window.location.search), []);
   const viewId = initial.id;
@@ -69,7 +76,7 @@ export default function App() {
   const [options, setOptionsState] = useState<SceneOptions>(() => ({
     ...sceneDefaults,
     venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
-    showCompare: new URLSearchParams(window.location.search).has('compare'),
+    compare: compareFromSearch(window.location.search),
   }));
   const setOptions = useCallback((next: SceneOptions | ((o: SceneOptions) => SceneOptions)) => {
     setOptionsState((o) => {
@@ -162,16 +169,20 @@ export default function App() {
   }, []);
   const offset = cardOpen ? (wide ? { room: 300, up: 0 } : { room: 0, up: Math.round(window.innerHeight * 0.2) }) : { room: 0, up: 0 };
 
-  /** Far enough back to see the whole row of buses and the Wall above them. */
-  const goToCompare = useCallback(() => {
-    setStop(null);
-    setSelectedState(null);
-    setInstrument(null);
-    // Upright on a phone, stand back until the whole row fits the narrow frame.
-    const portrait = window.innerHeight > window.innerWidth;
-    setPose(standIn(portrait ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, options.venue));
-    setNavMode('tour');
-  }, [options.venue]);
+  /** Stand where the comparison shows. */
+  const goToCompare = useCallback(
+    (id: CompareId) => {
+      setStop(null);
+      setSelectedState(null);
+      setInstrument(null);
+      // Upright on a phone, stand back until it fits the narrow frame.
+      const portrait = window.innerHeight > window.innerWidth;
+      if (id === 'b737') setPose(portrait ? COMPARE_PLANE_VIEW_PORTRAIT : COMPARE_PLANE_VIEW);
+      else setPose(standIn(portrait ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, options.venue));
+      setNavMode('tour');
+    },
+    [options.venue],
+  );
 
   /**
    * Global shortcuts. Deliberately skipped while focus is in a control, so

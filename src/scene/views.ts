@@ -132,6 +132,14 @@ export type ViewpointId = keyof typeof VIEWPOINTS;
 /** Where to stand for the size comparison: back far enough for the row of buses and the Wall above them. */
 export const COMPARE_VIEW: View = { label: 'With the buses', position: [-6, 2.4, 31], target: [0, 6.2, 4], fov: 46 };
 
+/**
+ * For the 737: square-on from far back on a long lens, so the two heights
+ * compare without perspective taking sides. Upright on a phone it stands closer
+ * in on the tail and the Wall, and lets the nose run out of the frame.
+ */
+export const COMPARE_PLANE_VIEW: View = { label: 'With the 737', position: [-16, 6, 92], target: [-16, 7, 0], fov: 24 };
+export const COMPARE_PLANE_VIEW_PORTRAIT: View = { label: 'With the 737', position: [-4, 6, 115], target: [-4, 7, 0], fov: 36 };
+
 /** A viewpoint as it stands at a venue (see viewIn). */
 export function viewpointIn(id: ViewpointId, venue: 'arena' | 'hollywoodBowl'): View {
   return standIn(VIEWPOINTS[id], venue);

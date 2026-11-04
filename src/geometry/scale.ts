@@ -24,3 +24,14 @@ export function busRow(ground: number, L = scaffoldLayout()): BusPlace[] {
     colour,
   }));
 }
+
+/**
+ * The 737, on the ground beside the stage at the audience's left, side-on, nose
+ * pointing away and its tail nearest the Wall, at the depth of the speakers'
+ * face, so the two heights compare fairly. Its centre and how far to turn it.
+ */
+export function planePlace(L = scaffoldLayout()): { pos: [number, number, number]; turn: number; tailX: number } {
+  const P = wall.scale.b737;
+  const tailX = L.deck.minX - P.setback;
+  return { pos: [tailX - P.length / 2, 0, 0], turn: Math.PI, tailX };
+}

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { CHANNELS, wall, type ChannelId } from '../data/wall.config';
 import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { SceneOptions } from '../scene/Scene';
+import type { CompareId } from '../scene/ScaleObjects';
 import { VIEWPOINTS, type ViewpointId } from '../scene/views';
 import { UNIT_LABEL, type UnitSystem } from './units';
 
@@ -9,7 +10,7 @@ import { UNIT_LABEL, type UnitSystem } from './units';
 export const TOUCH = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
 /** A button that opens a small menu above or below it, closed by Escape or a click elsewhere. */
-function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; up?: boolean; children: (close: () => void) => ReactNode }) {
+function Menu({ label, icon, up, active, children }: { label: ReactNode; icon?: ReactNode; up?: boolean; active?: boolean; children: (close: () => void) => ReactNode }) {
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -25,7 +26,7 @@ function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; 
   }, [open]);
   return (
     <div className={`menu${up ? ' up' : ''}`} ref={box}>
-      <button className="pill" aria-expanded={open} aria-haspopup="true" onClick={() => setOpen(!open)}>
+      <button className="pill" aria-expanded={open} aria-haspopup="true" aria-pressed={active} onClick={() => setOpen(!open)}>
         {icon}
         {label}
       </button>
@@ -33,6 +34,15 @@ function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; 
     </div>
   );
 }
+
+const FOOT = 0.3048;
+
+/** What to set beside the Wall: one at a time. */
+const COMPARE_ITEMS: { id: CompareId; label: string }[] = [
+  { id: 'bus', label: 'Four VW buses' },
+  { id: 'b737', label: 'A Boeing 737-200' },
+  { id: null, label: 'Nothing' },
+];
 
 /** The six systems, grouped as the colour view groups them. */
 const SYSTEMS: { label: string; channel: ChannelId }[] = [
@@ -66,9 +76,11 @@ export function BottomBar({
   setIsolated: (c: ChannelId | null) => void;
   onViewpoint: (id: ViewpointId) => void;
   /** Stand where the comparison shows. */
-  onCompare: () => void;
+  onCompare: (id: CompareId) => void;
 }) {
   const colour = options.colorMode === 'channel';
+  // The 737 doesn't stand at the Bowl.
+  const shown = options.compare === 'b737' && wall.venues[options.venue].outdoor ? null : options.compare;
   return (
     <div className="bottom">
       {colour && (
@@ -86,10 +98,16 @@ export function BottomBar({
           })}
         </ul>
       )}
-      {options.showCompare && (
+      {shown === 'bus' && (
         <p className="compare-note">
-          <strong>Four 1974 VW buses, end to end: {(4 * wall.scale.vwBus.length / 0.3048).toFixed(0)} ft.</strong> The speakers
-          above them run 60 ft. The buses are for scale; they weren&rsquo;t there.
+          <strong>Four 1974 VW buses, end to end: {(4 * wall.scale.vwBus.length / FOOT).toFixed(0)} ft.</strong> The speakers
+          above them run 60 ft. For scale; they weren&rsquo;t there.
+        </p>
+      )}
+      {shown === 'b737' && (
+        <p className="compare-note">
+          <strong>The Wall stands 12 ft taller than a 737&rsquo;s tail:</strong> 48 ft 10 in to its top, 36 ft 10 in to the
+          tail of the airliner of 1974. For scale; it wasn&rsquo;t there.
         </p>
       )}
       <div className="bar" role="toolbar" aria-label="The Wall">
@@ -120,17 +138,35 @@ export function BottomBar({
           </span>
           <span>Colour<span className="wide-only"> by system</span></span>
         </button>
-        <button
-          className="pill"
-          aria-pressed={options.showCompare}
-          title="Four 1974 Volkswagen buses, end to end along the stage. For comparing sizes: they were not there."
-          onClick={() => {
-            setOptions({ ...options, showCompare: !options.showCompare });
-            if (!options.showCompare) onCompare();
-          }}
+        <Menu
+          label={<span>Compare<span className="wide-only"> size</span></span>}
+          up
+          active={!!shown}
         >
-          <span>Compare<span className="wide-only"> size</span></span>
-        </button>
+          {(close) => (
+            <ul className="menu-list" aria-label="Compare the Wall's size">
+              {COMPARE_ITEMS.map((c) => {
+                const off = c.id === 'b737' && wall.venues[options.venue].outdoor;
+                return (
+                  <li key={c.label}>
+                    <button
+                      disabled={off}
+                      aria-pressed={shown === c.id}
+                      onClick={() => {
+                        setOptions({ ...options, compare: c.id });
+                        if (c.id) onCompare(c.id);
+                        close();
+                      }}
+                    >
+                      {c.label}
+                      {off && <kbd>indoors only</kbd>}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Menu>
         <Menu label="View" up>
           {(close) => (
             <ul className="menu-list" aria-label="Where to stand">

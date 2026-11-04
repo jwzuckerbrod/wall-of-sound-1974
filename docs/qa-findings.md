@@ -922,7 +922,26 @@ script.
 bus: 1.19 million per frame indoors becomes 1.44 million while on (shadow pass
 included), and nothing while off. Not tried on a real phone.
 
-**Not done:** the whale and the 737. The 737's punchline also needs changing: its
-36 ft 10 in tail on the ground falls 12 ft short of the top of the Wall, because the
-tower's 38 ft 10 in stands on a 10 ft stage.
+**The 737-200** (`scale.b737`, `blender/scale/b737.py`). The second comparison, because
+the buses show the Wall's width and nothing showed its height. Length, span, tail height,
+clearances and gear are Boeing's own figures (D6-58325-6 Rev E, §2.2.2 and §2.3.1), and
+`verify.mjs` holds them; the outlines between them are read off Boeing's three-view. Plain
+paint, no airline's. Windows, doors and no interior: at this distance it reads as a real
+aircraft, and up close as a clean model. 27 KB and about 7,000 triangles, so it costs far
+less than the buses (1.19 million becomes 1.20 million per frame).
+
+**The film's punchline was wrong.** Shot 2b said the tail stands level with the tower.
+That compares the tower's 38 ft 10 in above the stage with a tail measured from the ground.
+On the same ground the Wall is 48 ft 10 in and the tail 36 ft 10 in: **the Wall stands
+12 ft taller**. The explorer says that, and `docs/video-brief.md` is corrected.
+
+**It stands beside the Wall, not behind it,** which changes what the brief proposed. Behind,
+the plane would be about 20 m farther from the camera and perspective would exaggerate the
+difference. Beside the stage at the speakers' depth, seen square-on from far back on a long
+lens, the two heights compare fairly. The nose points away and the tail is nearest the Wall.
+
+**Indoors only.** At the Bowl the shell and the hill are in its way, so the menu greys it out.
+
+**Compare size is now a menu,** one object at a time, each with its own view and note, and
+`?compare=737` opens on the airliner. **Not done:** the whale, left to the film.
 

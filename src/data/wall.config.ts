@@ -422,6 +422,11 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos'],
     note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
+  'scale.b737': {
+    confidence: 'confirmed',
+    sources: ['derived'],
+    note: 'For comparing sizes, not part of the 1974 stage. The Boeing 737-200, the airliner of 1974, from Boeing\'s "737 Airplane Characteristics for Airport Planning", D6-58325-6 Rev E, sections 2.2.2 and 2.3.1: 100 ft 2 in long, 93 ft span, 36 ft 10 in to the tail when empty, 37 ft 3 in loaded. The figures are Boeing\'s; the outlines between them are read off its three-view drawing, so the model\'s shape is close, not surveyed. Plain paint, no airline\'s. It stands beside the Wall at the same depth, so the two heights compare fairly; behind it, perspective would flatter the Wall.',
+  },
   'scale.vwBus': {
     confidence: 'estimated',
     sources: ['derived'],
@@ -1301,6 +1306,25 @@ export const wall = {
       setback: 1.5,
       /** One lower-body colour for each bus. */
       colours: ['#2a6ba3', '#c9652b', '#5f7a4f', '#b8a06a'],
+    },
+    /** All Boeing's figures. See PROVENANCE['scale.b737']. */
+    b737: {
+      length: 30.53,
+      span: 28.35,
+      /** To the top of the fin: 36 ft 10 in, at its highest (empty). */
+      tailHeight: 11.23,
+      fuselageTop: 5.11,
+      fuselageBottom: 1.07,
+      fuselageWidth: 3.76,
+      stabiliserSpan: 10.97,
+      stabiliserHeight: 5.08,
+      wingtipHeight: 3.09,
+      engineClearance: 0.58,
+      noseToNoseGear: 3.96,
+      wheelbase: 11.38,
+      mainGearTrack: 5.23,
+      /** Ground gap from the stage's end to the tail. */
+      setback: 1.5,
     },
   },
 

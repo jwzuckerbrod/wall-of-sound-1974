@@ -32,8 +32,9 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
   them, not the Python. The explorer has `?venue=bowl`.
-- `blender/scale/vwbus.py` scripts the VW bus to `public/models/vwbus.glb` (after
-  `npm run export:scene`). The explorer's "Compare size" shows four: `?compare`.
+- `blender/scale/vwbus.py` and `b737.py` script the bus and the airliner to
+  `public/models/` (after `npm run export:scene`). They appear under the explorer's
+  "Compare size" menu, or with `?compare` and `?compare=737`.
 - The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
   (each stop's camera, text, dot anchor and system), viewpoints in
   `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and

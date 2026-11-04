@@ -262,7 +262,7 @@ console.log('\nOn the deck: cables and the Bowl riser');
   console.log(`        cables: ${cables.length}`);
 }
 
-console.log('\nThe buses, for scale');
+console.log('\nThe buses and the 737, for scale');
 {
   const row = (await load('geometry/scale.js')).busRow(0, L);
   const B = cfg.wall.scale.vwBus;
@@ -271,6 +271,15 @@ console.log('\nThe buses, for scale');
   check('their length matches the 60 ft run within 1 ft (ft)', span / 0.3048, 60, 1);
   check('the row is centred on the stage', row.reduce((a, b) => a + b.pos[0], 0), 0, 1e-9);
   check('the row stands clear of the stage front', row.every((b) => b.pos[2] - B.width / 2 > L.deck.maxZ), true);
+  const scale = await load('geometry/scale.js');
+  const P = cfg.wall.scale.b737;
+  const FT = 0.3048;
+  check('737 length, Boeing (ft)', P.length / FT, 100 + 2 / 12, 0.05);
+  check('737 span, Boeing (ft)', P.span / FT, 93, 0.05);
+  check('737 tail, Boeing (ft)', P.tailHeight / FT, 36 + 10 / 12, 0.05);
+  check('the Wall stands 12 ft above the 737\'s tail (ft)', (L.yLevels.at(-1) - P.tailHeight) / FT, 12, 0.1);
+  const plane = scale.planePlace(L);
+  check('the 737 stands clear of the stage', plane.pos[0] + P.length / 2 < L.deck.minX, true);
 }
 
 console.log('\nProvenance, for the About page');

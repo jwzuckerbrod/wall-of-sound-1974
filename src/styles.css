@@ -807,3 +807,5 @@ button, .pill { font: inherit; color: inherit; }
   .explode input { min-width: 56px; }
   .bar .pill { padding: 0 8px; }
 }
+.menu-list button[aria-pressed='true'] { color: var(--accent); }
+.menu-list button:disabled { opacity: 0.45; cursor: default; }
