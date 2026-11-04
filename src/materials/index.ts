@@ -141,11 +141,12 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
    * The 5/8" plywood skirt: 82 ft wide and 10 ft tall, square-on to the key
    * light and the single largest unbroken surface in the scene. Left at any
    * ordinary "dark wood" value it blows out into a pale slab that swallows the
-   * bottom third of every frame, so it is nearly black and textured.
+   * bottom third of every frame, so it is nearly black and textured. Black is also what it was: the skirt on
+   * Pechner's 17 May photograph, and Blender's ('Stage skirt, black').
    */
   const facing = new THREE.MeshStandardMaterial({
     map: tune(deckMap().clone(), 14),
-    color: 0x413a30,
+    color: 0x171614,
     roughness: 0.98,
     metalness: 0,
     envMapIntensity: 0.7,
@@ -186,6 +187,8 @@ export function shellColor(index: number, out: THREE.Color, finish: Finish): THR
   out.set(painted ? m.plywoodBlack.baseColor : m.plywood.baseColor);
   // Road wear: every cabinet a little different, none of them clean.
   const wear = (((index * 40503) % 211) / 211 - 0.5) * (painted ? 0.1 : 0.22);
-  out.offsetHSL(0, painted ? 0 : -0.02, wear);
+  // Bare ply also drifts in hue: sun, spills and age, some boards yellower than others.
+  const drift = painted ? 0 : (((index * 7919) % 101) / 101 - 0.5) * 0.03;
+  out.offsetHSL(drift, 0, wear);
   return out;
 }
