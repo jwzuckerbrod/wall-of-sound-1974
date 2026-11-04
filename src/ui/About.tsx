@@ -149,8 +149,9 @@ export function About({ onClose }: { onClose: () => void }) {
           {wall.meta.retired.run} run at the {wall.meta.retired.venue}.
         </p>
         <p>
-          The two crew at the top of the scaffold are generic figures, not portraits, made with MakeHuman and
-          MPFB. Their hair is by Elvaerwyn, from the MakeHuman community's assets (CC BY).
+          The two crew at the top of the scaffold are composites of a look, not portraits, made with MakeHuman
+          and MPFB. Curly hair adapted by punkduck, beard by WDG, moustache by Rehman Polanski, from the MakeHuman
+          community's assets.
         </p>
       </div>
     </div>

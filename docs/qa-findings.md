@@ -899,44 +899,57 @@ main checkout too; not investigated.
 The explorer now has two of the crew at the top of the scaffold, one at each
 corner: they give the Wall a person's size, and they are where the photographs
 put people. Built by `blender/make_roadies.py` from `structure.crewAloft`, written
-to `public/models/crew.glb` (0.7 MB, fetched after the Wall is up, no shadows).
+to `public/models/crew.glb` (0.9 MB, fetched after the Wall is up, no shadows).
 
-**What the photographs show**
+**Where they work: the 1974 evidence**
 
 | Source | Shows |
 |---|---|
-| Pechner, 17 May 1974 (`.shots/reference/`) | Two men at the top right corner: one at the top rail in a pale T-shirt and dark trousers, hair over the collar, arm along the tube; one on the ladder below him, pale shirt. A rope hangs at the rail |
-| Undated 1974 outdoor photo of a printed page (`unsourced-rigging-1974-undated.webp`) | A man climbing a stack in a white T-shirt and dark jeans, one arm up; a man sitting high on a stack in a pale shirt and tan trousers, arm raised. On the deck, long hair, jeans, an orange vest |
+| Pechner, 17 May 1974 (`.shots/reference/`) | Two men at the top right corner: one at the top rail, arm along the tube; one on the ladder below him. A rope hangs at the rail |
+| Undated 1974 outdoor photo of a printed page (`unsourced-rigging-1974-undated.webp`) | A man climbing a stack, one arm up; a man sitting high on a stack, arm raised |
 | [IATSE Local 205, 2014](https://newsletter.iatse205.org/?p=815) | Over 20 crew; speakers tied on with rope and hoisted by block-and-falls; local labour too |
 | [InsideHook on *Loud and Clear*](https://www.insidehook.com/books/grateful-dead-accidental-future-sound) | The crew climbed the tower mid-set to fix a channel |
 
-**How that became the two figures**
+**How they look: three photographs from the project owner.** Copied to
+`.shots/reference/crew/`. None is dated to summer 1974, so the look is the period's and
+this circle's, not a record of that day. Nobody in them was identified or copied.
 
-- **Hauling**, right corner: back to the audience, a boot on the end of a ledger and
-  one braced on the corner standard, one hand on the standard and one on a hand line
-  that runs over the top ledger and down to the deck. White T-shirt, dark jeans, hair
-  over the collar.
-- **Astride**, left corner: sitting on the top rail facing out, one hand on the rail,
-  one at the corner standard. Pale T-shirt, tan work trousers, longer hair, a beard.
+| Photograph | Date | The look taken from it |
+|---|---|---|
+| Group portrait against a plywood wall | Undated | Big curly hair, moustache, quilted down vest over a dark T-shirt, dark jeans, big belt buckle |
+| Backstage by the amp racks | Undated (a credit is partly legible; not read reliably) | Ponytail, beard, plaid shirt under a dark vest, jeans. The man beside him wears a Hell's Angels vest; that patch is not used |
+| Ed Perlstein | 1978 | Curly hair, moustache, dark glasses, a vest |
+
+**The two figures**
+
+- **Hauling**, right corner: back to the audience, a boot on the end of a ledger and one
+  braced on the corner standard, one hand on the standard and one on a hand line that
+  runs over the top ledger and down to the deck. Ponytail, beard, plaid shirt, dark vest,
+  jeans.
+- **Astride**, left corner: sitting on the top rail facing out, one hand on the rail, one
+  at the corner standard. Curly hair to the shoulders, moustache, dark glasses, quilted
+  vest over a dark T-shirt, dark jeans, belt buckle.
 - **No harness or helmet.** None shows in any photograph, though they are small.
-- **No gloves or tool belts.** None can be made out either way, so none is added.
 
-**What is invented, or not known.** The poses, the second man's beard, and the exact
-colours. They are generic men, not portraits: no photograph found names anyone aloft.
-Searches found nothing written on what the crew wore, so the clothes rest on these two
-photographs alone. The best source not checked is the setup footage in *The Grateful
-Dead Movie* (Winterland, October 1974), a few months after our date. A Relix auction
-photo said to show Ram Rod building the Wall could not be read (the site refused).
+**What is invented, or not known.** The poses and the exact colours. They are composites
+of a look, not portraits: no photograph names anyone aloft, and the faces are the
+generator's. The packs have no vest, plaid shirt or sunglasses, so those are made in
+the script: a vest is a T-shirt with sleeves and front removed, puffed outward.
+Searches found nothing written on what the crew wore. The best source not checked is
+the setup footage in *The Grateful Dead Movie* (Winterland, October 1974). A Relix
+auction photo said to show Ram Rod building the Wall could not be read (the site refused).
 
 **Limits.** MakeHuman people read as people at this distance, and as game characters up
 close (§16). The ledger at the end of the tower doesn't run between the front and back
 frames in the model, so the hauling figure's feet are at the front corner. Their boots
-are the pack's nearest shoes, recoloured. The hauling figure's trousers show small
-orange-brown patches at the shin; hiding the legs beneath didn't remove them, so they
-look to come from the trouser texture, and they stay. verify.mjs keeps each grip within 0.2 m of a
-tube. Hair by Elvaerwyn (CC BY), credited in the About panel.
+are the pack's nearest shoes, recoloured. The vest's neckline is stepped close up.
+verify.mjs keeps each grip within 0.2 m of a
+tube. Licences, from each asset's file: curly hair (punkduck, in the CC-BY pack) and beard
+(WDG) say AGPL3 with a pointer to MakeHuman's external-tools licence, the moustache
+(Rehman Polanski) CC0. These shapes are now published inside `crew.glb`; that licence's
+terms for exported characters still need reading before this goes live.
 
-**Cost.** About 50,000 more triangles a frame indoors: 1,191,594 to 1,241,431.
+**Cost.** About 57,000 more triangles a frame indoors: 1,191,594 to 1,248,600.
 
 **Explorer only.** Blender's renders and the story don't have them.
 
