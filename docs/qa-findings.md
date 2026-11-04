@@ -780,7 +780,8 @@ starts it. The page went from 36 to about 22 screens upright, and from about
 
 **Sound:** one audio element for the page (`src/ui/player.ts`), with the song
 rows and a now-playing bar (`src/ui/NowPlaying.tsx`) as remotes, plus lock-screen
-controls. The explorer has no bar: closing its Listen panel stops the sound.
+controls. In the explorer the same control floats over the scene as a pill, so
+the sound plays on while exploring; its name reopens the Listen panel.
 
 **Not yet tried on a real phone:** the lock screen, playback with the screen off,
 and notch padding on its side. The bar can sit over the bottom-left of the

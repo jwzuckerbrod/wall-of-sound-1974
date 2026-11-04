@@ -69,6 +69,17 @@
   }
   .np-progress { top: 0; bottom: auto; height: 3px; }
 }
+/* In the explorer: a pill over the scene at the left, under the title, where
+   the card, the bottom bar and the Settings menu aren't. */
+.np.np-floating { top: 110px; bottom: auto; left: 16px; right: auto; width: 330px; height: 52px; padding: 0 4px; border-width: 1px; border-radius: 26px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45); z-index: 9; }
+.np-floating .np-progress { top: auto; bottom: 0; height: 2px; }
+@media (max-width: 720px) {
+  .np.np-floating { top: 98px; left: 10px; width: min(330px, calc(100vw - 20px)); }
+}
+/* A phone on its side: the card docks right (styles.css), the pill keeps the left. */
+@media (max-width: 720px) and (orientation: landscape) {
+  .np.np-floating { width: min(330px, calc(100vw - 370px)); }
+}
 @media (prefers-reduced-motion: reduce) {
   .ls-play[data-loading], .np-toggle[data-loading] span { animation: none; }
 }

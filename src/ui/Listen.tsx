@@ -143,10 +143,13 @@ export function ListenCompare() {
 /** The explorer's Listen panel: both players in a dialog over the scene. */
 export function ListenPanel({ onClose }: { onClose: () => void }) {
   const dialog = useRef<HTMLDivElement>(null);
+  const { item: current } = usePlayer();
   useEffect(() => {
     dialog.current?.focus();
-    // The explorer has no now-playing bar: closing the panel stops the sound.
-    return () => player.close();
+    // Opened from the now-playing pill: start at the song that's playing.
+    const row = Array.from(dialog.current?.querySelectorAll<HTMLElement>('[data-track]') ?? []).find((r) => r.dataset.track === current?.id);
+    row?.scrollIntoView({ block: 'center' });
+    // Only on opening: the rows below can change what's playing.
   }, []);
   return (
     <div className="about-backdrop" onClick={onClose}>

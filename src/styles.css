@@ -773,6 +773,10 @@ button, .pill { font: inherit; color: inherit; }
 .legend { position: relative; z-index: 1; max-width: min(760px, calc(100vw - 32px)); }
 .bottom { width: max-content; max-width: calc(100vw - 32px); }
 @media (max-width: 720px) { .bottom { width: auto; max-width: none; } }
+/* A phone on its side: the card docks right, leaving the scene and the now-playing pill on the left. */
+@media (max-width: 720px) and (orientation: landscape) {
+  .card, .array-panel { left: auto; width: 340px; max-height: calc(100dvh - 76px - 98px); }
+}
 /* Back / Next stay in reach at the foot of the card, however long the text. */
 .card-nav {
   position: sticky;

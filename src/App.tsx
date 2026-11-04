@@ -6,6 +6,7 @@ import { detectTier, downgrade, tierSettings, type Tier } from './quality';
 import type { ArrayInteraction } from './scene/Arrays';
 import { About } from './ui/About';
 import { ListenPanel } from './ui/Listen';
+import { NowPlaying } from './ui/NowPlaying';
 import { ArrayPanel } from './ui/ArrayPanel';
 import type { UnitSystem } from './ui/units';
 import { Post } from './scene/Post';
@@ -308,6 +309,8 @@ export default function App() {
 
       {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
       {listenOpen && <ListenPanel onClose={() => setListenOpen(false)} />}
+      {/* Over the scene while the sound plays on; the panels have their own place for it. */}
+      {!listenOpen && !aboutOpen && <NowPlaying onOpen={() => setListenOpen(true)} />}
     </>
   );
 }
