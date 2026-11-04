@@ -789,6 +789,31 @@ signal diagram on its side until the reader scrolls.
 
 ---
 
+## 21. The story's last pictures (4 November 2026)
+
+- **Beat 7, evidence.** `bowl-tower` looked only at the crowd, with none of the
+  Wall in frame, so a tint could show nothing. The beat now crossfades `bowl` to
+  `bowl-evidence` (`stage_review.py --tint evidence`). Colours come from
+  `PROVENANCE` through `scene.json`, so the picture can't claim more than the
+  config. The stage takes the Bowl's confidence (estimated), not the drawing's
+  (confirmed), because §19 sees no 10 ft deck there.
+- **Beat 4.** The `garcia` frame showed no instrument. `garcia-mark` shows his
+  guitar at his mark with the columns behind. Instruments in hands was dropped:
+  it would need a likeness of Garcia close to the lens, which the crowd's
+  figures can't carry. The caption says the render has no band.
+- **Beat 6.** A rack close up (`amps-close`), so the meters read on a phone. An
+  MC 2300's meter lamp is steady and its needle moves, so the planned flicker
+  became needles (`Needles.tsx`, placed by `stage_review.py --meters`). What the
+  meters read is not recorded; the caption calls the movement illustrative.
+- **Beat 2's clip.** Not made. The scroll-driven push in already does the job,
+  with no video to download on a phone.
+- **Title.** The cluster's cones through a long lens, dimmed behind the words.
+
+Checked at desktop and phone sizes in the browser's device emulation. Still not
+tried on a real phone: the new title and needles.
+
+---
+
 ## 22. The explorer's open items (4 November 2026)
 
 Rows 2.2 and 2.5 to 2.8 predate the reconciliation (§18), so each was looked at

@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { wall, CHANNELS, type SourceId } from '../data/wall.config';
+import { wall, CHANNELS, CONFIDENCE_COLOURS, type SourceId } from '../data/wall.config';
 import { IMAGES, type StoryImage } from './images';
 import { ListenCompare, ListenWall } from '../ui/Listen';
 import { MicDiagram } from './MicDiagram';
@@ -214,7 +214,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'monitor',
-    images: [IMAGES.garcia],
+    images: [IMAGES.garciaMark],
     motion: 'hold',
     sources: ['wiki', 'deadsources74'],
     cards: [
@@ -254,7 +254,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'power',
-    images: [IMAGES.amps],
+    images: [IMAGES.ampsClose],
     motion: 'hold',
     sources: ['mc2300', 'sothebys'],
     cards: [
@@ -276,8 +276,8 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'evidence',
-    images: [IMAGES.bowlTower],
-    motion: 'hold',
+    images: [IMAGES.bowl, IMAGES.bowlEvidence],
+    motion: 'crossfade',
     sources: ['blueprints', 'deadsources74', 'sothebys', 'juliens', 'anderson', 'pechner', 'schneider'],
     cards: [
       <>
@@ -288,8 +288,14 @@ export const BEATS: Beat[] = [
         </p>
       </>,
       <>
+        <ul className="key key-single">
+          <li><span className="key-dots"><i style={{ background: CONFIDENCE_COLOURS.confirmed }} /></span><span>Confirmed: the scaffold, from its drawings</span></li>
+          <li><span className="key-dots"><i style={{ background: CONFIDENCE_COLOURS.estimated }} /></span><span>Estimated: where each stack stood, the stage at the Bowl</span></li>
+          <li><span className="key-dots"><i style={{ background: CONFIDENCE_COLOURS.guessed }} /></span><span>Guessed: where the bass-drum column stood</span></li>
+        </ul>
         <p>
-          Where we're sure, it's solid. Where we've had to estimate, the explorer says so, and shows its sources.
+          The counts are firm: {wall.inventory.total} speakers, from an itemised list. Their arrangement is the
+          reconstruction's biggest invention, and the explorer says so, part by part, with its sources.
         </p>
         <p className="links">
           <a href="https://github.com/jwzuckerbrod/wall-of-sound-1974/blob/master/docs/qa-findings.md">

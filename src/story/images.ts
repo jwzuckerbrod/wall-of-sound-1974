@@ -20,6 +20,8 @@ export interface StoryImage {
   widths?: [number, number];
   /** Where to keep the subject when a phone crops the frame (object-position). */
   focus?: string;
+  /** Something drawn over the still. */
+  overlay?: 'needles';
 }
 
 const RENDER_CREDIT = 'Rendered in Blender Cycles.';
@@ -77,14 +79,15 @@ export const IMAGES = {
     widths: [960, 1920],
     focus: '45% 55%',
   },
-  garcia: {
-    id: 'garcia',
+  /** Beat 4. The renders show the stage without the band, so the guitar stands at his mark. */
+  garciaMark: {
+    id: 'garcia-mark',
     kind: 'render',
-    alt: 'Looking up from the stage at the speaker columns behind Jerry Garcia\'s position, under the scaffold and the tie-dyes.',
-    caption: 'From the stage, looking up at the guitar columns.',
+    alt: 'A guitar on a stand at Jerry Garcia\'s mark on the empty stage, with the speaker columns rising behind it through the scaffold.',
+    caption: 'Garcia\'s mark, and the columns behind it. No band in the render, so the guitar is on a stand.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
-    focus: '55% 50%',
+    focus: '35% 60%',
   },
   clusterUp: {
     id: 'cluster-up',
@@ -95,20 +98,33 @@ export const IMAGES = {
     widths: [960, 1920],
     focus: '50% 40%',
   },
-  amps: {
-    id: 'amps',
+  /** Beat 6, with the needles drawn over it (Needles.tsx). */
+  ampsClose: {
+    id: 'amps-close',
     kind: 'render',
-    alt: 'Racks of McIntosh MC 2300 amplifiers under the stage cluster, their blue meters lit.',
-    caption: 'The McIntosh racks.',
+    alt: 'A road case of McIntosh MC 2300 amplifiers seen close up, their gold panels and blue meters lit, the needles moving.',
+    caption: 'MC 2300s in their rack. The needles\' movement is illustrative.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
     focus: '50% 50%',
+    overlay: 'needles',
   },
-  bowlTower: {
-    id: 'bowl-tower',
+  /** The title's backdrop: the cluster's cones through a long lens. */
+  title: {
+    id: 'title',
     kind: 'render',
-    alt: 'From the top of the Wall, looking out over the crowd filling the Hollywood Bowl.',
-    caption: 'From the top of the tower, out over the Bowl.',
+    alt: '',
+    caption: 'The vocal cluster, from the seats. A reconstruction.',
+    credit: RENDER_CREDIT,
+    widths: [960, 1920],
+    focus: '50% 60%',
+  },
+  /** The same frame as `bowl`, the Wall's parts coloured by how sure we are of them (PROVENANCE). */
+  bowlEvidence: {
+    id: 'bowl-evidence',
+    kind: 'render',
+    alt: 'The same view of the reconstructed Wall coloured by evidence: the scaffold green for confirmed, the speakers and stage amber for estimated, and one column of speakers red for guessed.',
+    caption: 'The same view, coloured by how sure we are.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
     focus: '50% 50%',

@@ -40,10 +40,10 @@ beats, with the copy on cards over the image.
 | 1 | It was real | A photograph of the Wall at the Bowl, then our render from the same seat | Crossfade, photo to render |
 | 2 | The whole thing | `bowl-hero` | Slow push in |
 | 3 | Six systems, not one | `bowl`, from the seats, with each channel tinted in turn | The tint moves channel by channel |
-| 4 | Each player's own wall | `garcia` | Hold |
+| 4 | Each player's own wall | `garcia-mark`, the guitar at his mark, the columns behind | Hold |
 | 5 | The singing problem | `cluster-up`, then a diagram of the paired mics | Diagram draws itself |
-| 6 | The power | `amps` | Hold; the meters flicker |
-| 7 | What we know, and how well | `bowl-tower`, from the top of the Wall over the crowd, with the evidence tint | Tint fades in |
+| 6 | The power | `amps-close`, one rack up close | Hold; the needles swing (`Needles.tsx`) |
+| 7 | What we know, and how well | `bowl`, then `bowl-evidence`, the same frame by confidence | Crossfade |
 | 8 | Step inside | The live 3D view, already loaded | Tap to explore |
 
 ---
@@ -115,8 +115,9 @@ never went through the Wall.
 > half throwing to the crowd. Jerry Garcia's guitar came out of the column
 > behind him.
 
-Image: `garcia`, on stage looking up at his column. Reads best once the
-instruments are in hands, not on stands.
+Image: `garcia-mark`, from the lip of the stage: his guitar on its stand at his
+mark, the columns behind it. No renders show the band, so the guitar stands
+alone, and the caption says so (qa-findings §21).
 
 ### 5. The singing problem
 
@@ -136,7 +137,7 @@ demonstration of the cancellation.
 > Forty-eight McIntosh MC 2300s, 600 watts each, 128 pounds each. The crew
 > named them. Garcia's favourite was called Budman.
 
-Image: `amps`, the racks under the cluster with the meters lit. The count
+Image: `amps-close`, one rack with the meters lit and the needles swinging; the caption says the movement is illustrative. The count
 (48, or Parish's "over 70") is shown as a range in the explorer.
 
 ### 7. What we know, and how well
@@ -146,8 +147,8 @@ Image: `amps`, the racks under the cluster with the meters lit. The count
 > survive, and every photograph we could date. Where we're sure, it's solid.
 > Where we've had to estimate, it's marked.
 
-Image: `bowl-tower`, from the top of the Wall out over the crowd to the hills,
-with the evidence tint fading in (confirmed, estimated, guessed). Links to the photograph record
+Image: `bowl`, crossfading to `bowl-evidence`, the same frame coloured by
+confidence from `PROVENANCE` (confirmed, estimated, guessed). Links to the photograph record
 and the register of surviving equipment.
 
 ### 8. Step inside
@@ -163,23 +164,18 @@ curated viewpoint.
 
 1. **Tone.** The copy above is plain and factual. Warmer and more personal, or
    keep it like a museum label?
-2. **Sound.** A silent story, or our own audio for the microphone beat?
+2. ~~**Sound.**~~ Settled in practice: the Listen players and the now-playing bar.
 3. ~~**Photographs.**~~ Decided: photographs stay, credited generously (§17).
 4. **The name.** The page uses "the Grateful Dead", a trademark, in a factual
    way. Any plan for the project's own title?
 
 ## To make
 
-- Make the story the front page (`index.html`) and move the explorer to its
-  own page, at deploy. Beat 8 then loads the explorer in the background.
-- A title image: the title screen is plain type on black.
-
-- The channel-tint pass for beat 3, and the evidence tint for beat 7.
-- The paired microphones in Blender, and their diagram.
-- Instruments in hands rather than on stands, for beat 4.
-- A short clip for beat 2 (a slow push in), and the meter flicker for beat 6.
-- The camera for beat 1, solved from the Bowl photograph.
 - The red kit, modelled (the Bowl show had the wine-red kit, not the butcher block).
+
+The story and the explorer are separate products, closely linked (decided 4
+November 2026): `story.html` stays the story's own address, and `index.html`
+stays the explorer's. Neither is the other's front page.
 
 ## The crowd and the hills
 

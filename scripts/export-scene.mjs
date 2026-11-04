@@ -43,7 +43,7 @@ const bowl = await load('geometry/bowl.js');
 const scaf = await load('geometry/scaffold.js');
 const logo = await load('geometry/logo.js');
 
-const { wall, DRIVERS, CABINETS, ARRAYS, CHANNELS, cabinetSize, IN } = cfg;
+const { wall, DRIVERS, CABINETS, ARRAYS, CHANNELS, PROVENANCE, CONFIDENCE_COLOURS, cabinetSize, IN } = cfg;
 const L = scaf.scaffoldLayout();
 const deckY = L.deck.y;
 const r4 = (v) => Math.round(v * 1e4) / 1e4;
@@ -166,6 +166,20 @@ const scene = {
   })(),
   // Each channel's system and overlay colour (CHANNELS): the story's colour-by-system render.
   channels: Object.fromEntries(Object.values(CHANNELS).map((c) => [c.id, { system: c.system, color: c.color }])),
+  // How sure we are of each part of the Wall (PROVENANCE): the story's evidence render.
+  // The deck takes the Bowl's confidence, not the drawing's: the 10 April drawing is
+  // firm, but the Bowl photograph shows no sign of a 10 ft deck there (qa-findings §19).
+  evidence: {
+    colours: CONFIDENCE_COLOURS,
+    parts: {
+      scaffold: PROVENANCE['structure.scaffold'].confidence,
+      deck: PROVENANCE['venues.hollywoodBowl'].confidence,
+      speakers: PROVENANCE['arrays.positions'].confidence,
+      kick: PROVENANCE['arrays.kickPosition'].confidence,
+      lights: PROVENANCE['structure.lightBars'].confidence,
+      tieDyes: PROVENANCE['structure.tieDyes'].confidence,
+    },
+  },
   // The players' marks (scene frame, metres): blender/stage_review.py stands the instruments on them.
   band: Object.fromEntries(wall.band.members.map((m) => [m.id, [r4(wall.band.mirrored ? -m.x : m.x), r4(m.z)]])),
 };
