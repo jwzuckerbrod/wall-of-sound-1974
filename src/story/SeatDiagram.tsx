@@ -99,7 +99,7 @@ export function SeatDiagram() {
         : `From this seat everything seems to come from the nearer stack. The far one arrives ${Math.round(gap)} milliseconds later${gap >= ECHO_MS ? ', late enough to hear as an echo on the voices' : ''}.`;
 
   return (
-    <>
+    <div className="seat-figure">
       <div className="dg-switch" role="group" aria-label="Which system to show">
         <button aria-pressed={side === 'pa'} onClick={() => setSide('pa')}>
           A typical PA, early 1970s
@@ -183,6 +183,6 @@ export function SeatDiagram() {
           </li>
         ))}
       </ul>
-    </>
+    </div>
   );
 }

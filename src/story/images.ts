@@ -13,6 +13,8 @@ export interface StoryImage {
   /** Shown under the image. */
   caption: string;
   credit: string;
+  /** The credit where a phone's caption has two lines; the full one stays in Credits. */
+  creditShort?: string;
   creditUrl?: string;
   /** Renders come in two widths; photographs at their own size. */
   widths?: [number, number];
@@ -20,7 +22,7 @@ export interface StoryImage {
   focus?: string;
 }
 
-const RENDER_CREDIT = 'Reconstruction, rendered in Blender Cycles';
+const RENDER_CREDIT = 'Rendered in Blender Cycles.';
 
 export const IMAGES = {
   photoBowl: {
@@ -29,6 +31,7 @@ export const IMAGES = {
     alt: 'The Wall of Sound in daylight in front of the white shell of the Hollywood Bowl, with the crowd in the foreground.',
     caption: 'The Hollywood Bowl, 21 July 1974.',
     credit: 'Photographer unknown. If this is your photograph, please get in touch so we can credit you properly.',
+    creditShort: 'Photographer unknown. Yours? Tell us.',
     creditUrl: 'https://github.com/jwzuckerbrod/wall-of-sound-1974/issues',
     focus: '50% 45%',
   },
