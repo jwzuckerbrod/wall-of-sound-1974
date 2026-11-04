@@ -788,3 +788,22 @@ button, .pill { font: inherit; color: inherit; }
 @media (max-width: 720px) {
   .card-nav { bottom: -16px; margin: 14px -16px -16px; padding: 10px 16px 12px; }
 }
+
+/* The note over the bottom bar while the size comparison is on. */
+.compare-note {
+  max-width: 34rem;
+  margin: 0 auto 8px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(10, 12, 15, 0.82);
+  color: inherit;
+  font-size: 13px;
+  line-height: 1.35;
+  text-align: center;
+}
+/* On a phone the bar's labels shorten, so all its controls still fit. */
+@media (max-width: 720px) {
+  .wide-only { display: none; }
+  .explode input { min-width: 56px; }
+  .bar .pill { padding: 0 8px; }
+}

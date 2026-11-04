@@ -13,7 +13,7 @@ import { Post } from './scene/Post';
 import { Scene, sceneDefaults, type NavMode, type SceneOptions } from './scene/Scene';
 import type { Pose } from './scene/TourCamera';
 import { TOUR, instrumentPose } from './scene/tour';
-import { VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
+import { COMPARE_VIEW, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
 import { InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 
@@ -69,6 +69,7 @@ export default function App() {
   const [options, setOptionsState] = useState<SceneOptions>(() => ({
     ...sceneDefaults,
     venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
+    showCompare: new URLSearchParams(window.location.search).has('compare'),
   }));
   const setOptions = useCallback((next: SceneOptions | ((o: SceneOptions) => SceneOptions)) => {
     setOptionsState((o) => {
@@ -160,6 +161,17 @@ export default function App() {
     return () => window.removeEventListener('resize', on);
   }, []);
   const offset = cardOpen ? (wide ? { room: 300, up: 0 } : { room: 0, up: Math.round(window.innerHeight * 0.2) }) : { room: 0, up: 0 };
+
+  /** Far enough back to see the whole row of buses and the Wall above them. */
+  const goToCompare = useCallback(() => {
+    setStop(null);
+    setSelectedState(null);
+    setInstrument(null);
+    // Upright on a phone, stand back until the whole row fits the narrow frame.
+    const portrait = window.innerHeight > window.innerWidth;
+    setPose(standIn(portrait ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, options.venue));
+    setNavMode('tour');
+  }, [options.venue]);
 
   /**
    * Global shortcuts. Deliberately skipped while focus is in a control, so
@@ -295,6 +307,7 @@ export default function App() {
             isolated={isolated}
             setIsolated={setIsolated}
             onViewpoint={goToViewpoint}
+            onCompare={goToCompare}
           />
           <Hint />
           {stop !== null && (

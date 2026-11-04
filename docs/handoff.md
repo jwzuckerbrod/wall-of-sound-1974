@@ -45,5 +45,8 @@
   Bowl's riser and pale floor are in the explorer only, so the story's renders
   don't have them yet. The Bowl has simple trees and, by decision, no crowd. A
   full-screen instrument viewer is scoped (§22) and parked: not now, by decision.
+- **Scale:** a "Compare size" option in the explorer shows four VW buses along the
+  stage (§23). The whale and the 737 (`docs/video-brief.md`, shot 2b) wait on how
+  the buses go down.
 - **Live** at https://jwzuckerbrod.github.io/wall-of-sound-1974/ (GitHub Pages,
   deployed on every push to master).

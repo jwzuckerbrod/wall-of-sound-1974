@@ -422,6 +422,11 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos'],
     note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
+  'scale.vwBus': {
+    confidence: 'estimated',
+    sources: ['derived'],
+    note: 'For comparing sizes, not part of the 1974 stage: nothing says a bus stood there. 4,505 mm long, 1,720 mm wide, 2,400 mm wheelbase agree across secondary sources (motor-car.net, dimensionsguide.com). Height is less settled (1,955 to 2,040 mm by source and roof); 2,040 mm is the figure those two give. No Volkswagen document found yet. The model is scripted from these numbers and photographs (blender/scale/vwbus.py); the paint colours are the reconstruction\'s choice.',
+  },
   'structure.tieDyes': {
     confidence: 'estimated',
     sources: ['photos'],
@@ -1282,6 +1287,20 @@ export const wall = {
       /** About 5:15 pm: 30° up, from behind the crowd's left. The show time isn't recorded. */
       sun: { elevation: DEG(30), azimuth: DEG(-50) },
       colours: { shell: '#E8E6DF', shellInside: '#D9D8D2', sonotube: '#DCDDE0', panel: '#EFEFEA', concrete: '#A49C8C', bench: '#5D5446', paving: '#8F8A80', stage: '#6D6A63' },
+    },
+  },
+
+  /** Objects of known size to set beside the Wall: off by default. See PROVENANCE['scale.vwBus']. */
+  scale: {
+    vwBus: {
+      length: 4.505,
+      width: 1.72,
+      height: 2.04,
+      wheelbase: 2.4,
+      /** Ground gap between the bus and the stage skirt. */
+      setback: 1.5,
+      /** One lower-body colour for each bus. */
+      colours: ['#2a6ba3', '#c9652b', '#5f7a4f', '#b8a06a'],
     },
   },
 

@@ -56,6 +56,7 @@ export function BottomBar({
   isolated,
   setIsolated,
   onViewpoint,
+  onCompare,
 }: {
   explode: number;
   setExplode: (v: number) => void;
@@ -64,6 +65,8 @@ export function BottomBar({
   isolated: ChannelId | null;
   setIsolated: (c: ChannelId | null) => void;
   onViewpoint: (id: ViewpointId) => void;
+  /** Stand where the comparison shows. */
+  onCompare: () => void;
 }) {
   const colour = options.colorMode === 'channel';
   return (
@@ -82,6 +85,12 @@ export function BottomBar({
             );
           })}
         </ul>
+      )}
+      {options.showCompare && (
+        <p className="compare-note">
+          <strong>Four 1974 VW buses, end to end: {(4 * wall.scale.vwBus.length / 0.3048).toFixed(0)} ft.</strong> The speakers
+          above them run 60 ft. The buses are for scale; they weren&rsquo;t there.
+        </p>
       )}
       <div className="bar" role="toolbar" aria-label="The Wall">
         <label className="explode">
@@ -109,7 +118,18 @@ export function BottomBar({
               <i key={s.label} style={{ background: CHANNELS[s.channel].color }} />
             ))}
           </span>
-          Colour by system
+          <span>Colour<span className="wide-only"> by system</span></span>
+        </button>
+        <button
+          className="pill"
+          aria-pressed={options.showCompare}
+          title="Four 1974 Volkswagen buses, end to end along the stage. For comparing sizes: they were not there."
+          onClick={() => {
+            setOptions({ ...options, showCompare: !options.showCompare });
+            if (!options.showCompare) onCompare();
+          }}
+        >
+          <span>Compare<span className="wide-only"> size</span></span>
         </button>
         <Menu label="View" up>
           {(close) => (

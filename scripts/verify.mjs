@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
+   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -260,6 +260,17 @@ console.log('\nOn the deck: cables and the Bowl riser');
   check('no vocal stand on the riser', scaf.vocalMics(L).filter(([x, , z]) => inRiser([x, z])).length, 0);
   check('riser downstage of the wall', R.pos[2] - R.size.d / 2 > 0, true);
   console.log(`        cables: ${cables.length}`);
+}
+
+console.log('\nThe buses, for scale');
+{
+  const row = (await load('geometry/scale.js')).busRow(0, L);
+  const B = cfg.wall.scale.vwBus;
+  const span = row.length * B.length;
+  check('four buses', row.length, 4);
+  check('their length matches the 60 ft run within 1 ft (ft)', span / 0.3048, 60, 1);
+  check('the row is centred on the stage', row.reduce((a, b) => a + b.pos[0], 0), 0, 1e-9);
+  check('the row stands clear of the stage front', row.every((b) => b.pos[2] - B.width / 2 > L.deck.maxZ), true);
 }
 
 console.log('\nProvenance, for the About page');

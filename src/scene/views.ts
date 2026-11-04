@@ -129,9 +129,15 @@ export const VIEWPOINTS = {
 
 export type ViewpointId = keyof typeof VIEWPOINTS;
 
+/** Where to stand for the size comparison: back far enough for the row of buses and the Wall above them. */
+export const COMPARE_VIEW: View = { label: 'With the buses', position: [-6, 2.4, 31], target: [0, 6.2, 4], fov: 46 };
+
 /** A viewpoint as it stands at a venue (see viewIn). */
 export function viewpointIn(id: ViewpointId, venue: 'arena' | 'hollywoodBowl'): View {
-  const v: View = VIEWPOINTS[id];
+  return standIn(VIEWPOINTS[id], venue);
+}
+
+export function standIn(v: View, venue: 'arena' | 'hollywoodBowl'): View {
   if (venue !== 'hollywoodBowl' || v.position[1] > 3) return v;
   const f = bowlFrame();
   const back = v.position[2] - f.front;

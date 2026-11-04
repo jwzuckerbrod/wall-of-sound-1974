@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §22) and gear in `docs/surviving-gear.md`.
+  §23) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
@@ -32,6 +32,8 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
   them, not the Python. The explorer has `?venue=bowl`.
+- `blender/scale/vwbus.py` scripts the VW bus to `public/models/vwbus.glb` (after
+  `npm run export:scene`). The explorer's "Compare size" shows four: `?compare`.
 - The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
   (each stop's camera, text, dot anchor and system), viewpoints in
   `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and

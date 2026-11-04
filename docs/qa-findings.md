@@ -892,3 +892,37 @@ loading in it. These captures used headless Chrome over its debugging port. The 
 message "Attempted to synchronously unmount a root" appears on the unchanged
 main checkout too; not investigated.
 
+---
+
+## 23. A sense of scale: four buses (4 November 2026)
+
+The explorer sits in a black void, with little to judge its size by. This tries
+the first object from the film's scale shot (`docs/video-brief.md`, shot 2b) as an
+option in the explorer: a "Compare size" button, off by default, or `?compare`.
+
+**What it shows.** Four 1974 Volkswagen Type 2 buses end to end on the ground along
+the stage front, 59 ft against the 60 ft run of speakers above them. Each stands
+well under the 10 ft stage, so the deck alone is taller than the bus. A note on
+screen says the buses are for scale and weren't there. It works at both venues.
+
+**The numbers** (`scale.vwBus`). 4,505 × 1,720 mm and a 2,400 mm wheelbase agree across
+secondary sources. Height is the weak one: 2,040 mm is what motor-car.net and
+dimensionsguide.com give, other figures run down to 1,955 mm. No Volkswagen document
+yet. At this scale the difference is about 3 in.
+
+**The model** (`blender/scale/vwbus.py`). Scripted, from those numbers and the
+photographs in `.shots/reference/scale/bus/`, so its proportions are by eye: not a
+survey. It carries the VW roundel, a trademark. The four paint colours are invented. It
+reads as a Bay Window bus at every distance tried, but up close it looks like a good
+die-cast toy, not a photograph: flat black glass, no interior, plain surfaces. Good enough
+for scale in the explorer; the film's "photographic" bus would need more work on the same
+script.
+
+**Cost.** 71 KB, fetched only when the button is pressed. About 31,000 triangles a
+bus: 1.19 million per frame indoors becomes 1.44 million while on (shadow pass
+included), and nothing while off. Not tried on a real phone.
+
+**Not done:** the whale and the 737. The 737's punchline also needs changing: its
+36 ft 10 in tail on the ground falls 12 ft short of the top of the Wall, because the
+tower's 38 ft 10 in stands on a 10 ft stage.
+

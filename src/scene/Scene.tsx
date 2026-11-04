@@ -8,6 +8,7 @@ import { Arrays, type ArrayInteraction, type ColorMode } from './Arrays';
 import { BandGear } from './BandGear';
 import { Instruments } from './Instruments';
 import { RoadGear } from './RoadGear';
+import { ScaleObjects } from './ScaleObjects';
 import { BlockOutline } from './BlockOutline';
 import { FitCamera } from './FitCamera';
 import { Bowl } from './Bowl';
@@ -32,6 +33,8 @@ export interface SceneOptions {
   showFigures: boolean;
   showAmps: boolean;
   showBand: boolean;
+  /** Things of known size beside the Wall. */
+  showCompare: boolean;
 }
 
 /** Applies the tier's renderer-level settings, which are not props on <Canvas>. */
@@ -100,6 +103,7 @@ export function Scene({
   showFigures,
   showAmps,
   showBand,
+  showCompare,
   view,
   tier,
   navMode,
@@ -169,6 +173,8 @@ export function Scene({
         </>
       )}
 
+      {showCompare && <ScaleObjects venue={venue} shadows={shadows} />}
+
       {/* Clicking past everything clears the selection. */}
       <mesh position={[0, -0.5, 0]} rotation={[-Math.PI / 2, 0, 0]} onClick={() => interaction.onSelect(null)} userData={{ pickable: true }}>
         <planeGeometry args={[400, 400]} />
@@ -204,6 +210,7 @@ export const sceneDefaults: SceneOptions = {
   showFigures: false,
   showAmps: true,
   showBand: true,
+  showCompare: false,
 };
 
 export const deckHeight = wall.dimensions.stageDeckHeight;
