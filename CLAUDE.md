@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §22) and gear in `docs/surviving-gear.md`.
+  §23) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
@@ -28,6 +28,8 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   - `blender/make_people.py --count 144` regenerates the crowd library.
   - `blender/export_instruments.py` bakes the instruments to `public/models/*.glb`
     for the explorer (after `npm run export:scene`; about a minute).
+  - `blender/make_roadies.py` poses the crew on the scaffold, `public/models/crew.glb`
+    (from `structure.crewAloft`; needs MPFB).
 - Shared layout code feeds both renderers: `src/geometry/arrays.ts` (each
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
