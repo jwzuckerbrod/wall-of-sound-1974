@@ -109,6 +109,86 @@ def tint_systems(S):
             o.material_slots[k].material = m
 
 
+def tint_evidence(S):
+    """
+    The story's how-sure-are-we pass (beat 7): the Wall's parts in the colour of
+    their PROVENANCE confidence, read from scene.json, so the picture can't
+    claim more than the config does. Like tint_systems, cones and horns keep
+    their colour, and the venue and crowd stay as they are.
+    """
+    E = S['evidence']
+    mats = {}
+    for level, colour in E['colours'].items():
+        m = bpy.data.materials.new(f'Evidence {level}')
+        m.use_nodes = True
+        b = m.node_tree.nodes['Principled BSDF']
+        col = W_srgb(colour)
+        b.inputs['Base Color'].default_value = col
+        b.inputs['Roughness'].default_value = 0.6
+        b.inputs['Emission Color'].default_value = col
+        b.inputs['Emission Strength'].default_value = 0.35
+        mats[level] = m
+
+    def paint(o, part, slots=None):
+        for k, slot in enumerate(o.material_slots):
+            if slots is None or k in slots:
+                slot.link = 'OBJECT'
+                slot.material = mats[E['parts'][part]]
+
+    for o in bpy.data.collections['Speakers'].objects:
+        c = S['cells'][int(o.name.rsplit('.', 1)[1])]
+        paint(o, 'kick' if c['block'] == 'kick' else 'speakers', (0, 1))  # ply, baffle
+    for o in bpy.data.objects:
+        n = o.name
+        if n.startswith('tube.'):
+            paint(o, 'scaffold')
+        elif n.startswith(('stage.', 'floor.')):
+            paint(o, 'deck')
+        elif n.startswith('light.'):
+            paint(o, 'lights')
+        elif n.lower().startswith(('tiedye', 'tie-dye', 'tie dye')):
+            paint(o, 'tieDyes')
+
+
+def write_meters(path):
+    """
+    Where each MC 2300's two needles land in the frame, so the story can swing
+    them over the still (beat 6). Their pointers are made invisible in the
+    render. For each needle in view and not hidden by something nearer: its
+    pivot in frame pixels, and the screen vectors of one metre along the
+    panel's x and z, so the page can draw it at any angle.
+    """
+    from bpy_extras.object_utils import world_to_camera_view
+    from roadgear import METER_XS, METER_Z, METER_PIVOT_DROP, METER_POINTER_LENGTH, METER_POINTER_Y
+    bpy.data.materials['Meter pointer'].node_tree.nodes['Principled BSDF'].inputs['Alpha'].default_value = 0.0
+    sc = bpy.context.scene
+    bpy.context.view_layer.update()
+    cam = sc.camera
+    W, H = sc.render.resolution_x, sc.render.resolution_y
+    dg = bpy.context.evaluated_depsgraph_get()
+    px = lambda v: (lambda c: Vector((c.x * W, (1 - c.y) * H, c.z)))(world_to_camera_view(sc, cam, v))
+    out = []
+    for o in sorted((o for o in bpy.data.objects if '.amp.' in o.name and o.name.startswith('rack.') and 'labels' not in o.name), key=lambda o: o.name):
+        for mx in METER_XS:
+            m = o.matrix_world
+            local = Vector((mx, METER_POINTER_Y, METER_Z - METER_PIVOT_DROP))
+            pivot = m @ local
+            p = px(pivot)
+            if p.z <= 0 or not (0 <= p.x <= W and 0 <= p.y <= H):
+                continue
+            face = m @ (local + Vector((0, 0, METER_POINTER_LENGTH / 2)))
+            to = face - cam.location
+            hit, at, *_ = sc.ray_cast(dg, cam.location, to.normalized(), distance=to.length - 0.02)
+            if hit:
+                continue
+            step = 0.05
+            ux, uz = px(m @ (local + Vector((step, 0, 0)))) - p, px(m @ (local + Vector((0, 0, step)))) - p
+            out.append([round(v, 2) for v in (p.x, p.y, ux.x / step, ux.y / step, uz.x / step, uz.y / step)])
+    with open(path, 'w') as f:
+        json.dump({'frame': [W, H], 'length': METER_POINTER_LENGTH, 'needles': out}, f)
+    print('METERS', len(out), path)
+
+
 def holder(name, x, y, z, rz=0.0):
     e = bpy.data.objects.new(name, None)
     bpy.context.scene.collection.objects.link(e)
@@ -227,6 +307,12 @@ SHOTS = {
     # a long lens and haze give a photograph from high in the seats.
     'bowl-hero': dict(loc=(-38.0, -60.0, 14.2), target=(0.0, 0.0, 8.5), lens=42, fstop=0.6),
     'bowl-tower': dict(loc=(3.0, -0.4, 15.35), target=(-3.0, -60.0, 9.0), lens=20),
+    # The story's title: from the same seats as 'bowl', a long lens filling the frame with the cluster's cones.
+    'title': dict(loc=(-3.0, -46.7, 6.72), target=(0.0, 0.0, 8.7), lens=300),
+    # Beat 4: from the lip of the stage, Garcia's guitar at his mark and his columns behind it.
+    'garcia-mark': dict(loc=(-3.5, -8.0, 3.6), target=(-5.2, -3.0, 4.75), lens=24),
+    # Beat 6: close on two racks, near enough to read the meters.
+    'amps-close': dict(loc=(0.3, 1.2, 3.82), target=(0.62, 2.0, 3.68), lens=24),
 }
 
 
@@ -297,7 +383,8 @@ def main():
     p.add_argument('--exposure', type=float, default=0.0)
     p.add_argument('--no-crowd', action='store_true', help='hollywood: leave the crowd out (for a crowd mask)')
     p.add_argument('--scale', type=int, default=100, help='resolution percentage')
-    p.add_argument('--tint', choices=['systems'], default=None, help='colour each cabinet by its system (story beat 3)')
+    p.add_argument('--tint', choices=['systems', 'evidence'], default=None, help='colour the Wall by system (story beat 3) or by how sure we are of it (beat 7)')
+    p.add_argument('--meters', default=None, help='hide the meters\' pointers and write where they land in the frame to this JSON (story beat 6)')
     p.add_argument('--camera', default=None, help='a camera solved from a photo (blender/cameras/*.json), in place of --shot')
     a = p.parse_args(argv)
 
@@ -321,6 +408,8 @@ def main():
     place(deck, red_kit=a.venue == 'hollywood')
     if a.tint == 'systems':
         tint_systems(S)
+    elif a.tint == 'evidence':
+        tint_evidence(S)
     if a.camera:
         solved_camera(a.camera)
     else:
@@ -329,6 +418,8 @@ def main():
         for o in bpy.data.objects:
             if o.name.startswith('crowd'):
                 o.hide_render = True
+    if a.meters:
+        write_meters(a.meters)
     W['render_settings'](a.samples)
     bpy.context.scene.view_settings.exposure = a.exposure
     bpy.context.scene.render.resolution_percentage = a.scale

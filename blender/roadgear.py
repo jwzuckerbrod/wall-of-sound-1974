@@ -354,6 +354,7 @@ def materials():
         'print': plain('Panel legend', '#1d1a14', 0.6),
         'badge': plain('Badge lettering', '#e9e2cf', 0.4),
         'needle': plain('Meter needle', '#050505', 0.5),
+        'pointer': plain('Meter pointer', '#050505', 0.5),
         'dark': plain('Case recess', '#0a0909', 0.7),
         'interior': plain('Case interior', '#1c1814', 0.9),
         'v_white': vinyl('Sticker, white', '#ece6d6'),
@@ -493,6 +494,15 @@ def text_mesh(body, font, size, align):
     return me
 
 
+# Where a meter's pointer sits on the panel: blender/stage_review.py writes them
+# into the frame for the story's needles.
+METER_XS = (-4.37 * IN, 1.2 * IN)
+METER_Z = 2.7 * IN
+METER_PIVOT_DROP = 1.05 * IN
+METER_POINTER_LENGTH = 2.1 * IN
+METER_POINTER_Y = -0.006 - 0.0058
+
+
 def mc2300(G, size):
     """
     One MC 2300, origin at the middle of its front panel, facing -y. Parts are
@@ -532,7 +542,7 @@ def mc2300(G, size):
         P.text('print', 'POWER LEVEL', SANS, 0.17 * IN, (mx, mz - 0.25 * IN), -t - 0.0052)
         P.text('print', 'DECIBELS', SANS, 0.11 * IN, (mx, mz - 0.5 * IN), -t - 0.0052)
         a = math.radians(-40)
-        P.box('needle', (0.035 * IN, 0.0008, 2.1 * IN),
+        P.box('pointer', (0.035 * IN, 0.0008, 2.1 * IN),
               (mx + math.sin(a) * 1.05 * IN, -t - 0.0058, mz - 1.05 * IN + math.cos(a) * 1.05 * IN),
               rot=Matrix.Rotation(-a, 3, 'Y'))
         P.box('glass', (4.5 * IN, 0.0015, 2.0 * IN), (mx, -t - 0.0072, mz))

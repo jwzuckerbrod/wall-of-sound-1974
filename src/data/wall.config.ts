@@ -30,6 +30,13 @@ export const DEG = (n: number) => (n * Math.PI) / 180;
 
 export type Confidence = 'confirmed' | 'estimated' | 'guessed';
 
+/** The colour of each confidence level in the story's evidence render and its key (the same hues as the explorer's chips in styles.css). */
+export const CONFIDENCE_COLOURS: Record<Confidence, string> = {
+  confirmed: '#6fcf97',
+  estimated: '#f4c95d',
+  guessed: '#e8695a',
+};
+
 export type SourceId =
   | 'wiki'
   | 'mcintosh'
