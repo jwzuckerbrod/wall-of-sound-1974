@@ -55,6 +55,12 @@ function RendererSettings({ tier }: { tier: Tier }) {
     w.__renderNow = () => {
       gl.render(scene, camera);
     };
+    // What the last frame cost: triangles and draw calls. For comparing venues and tiers.
+    w.__cost = () => {
+      gl.render(scene, camera);
+      const { triangles, calls } = gl.info.render;
+      return { triangles, calls, geometries: gl.info.memory.geometries, textures: gl.info.memory.textures };
+    };
     // Points the camera at an exact spot, for close-up captures:
     // __look([x, y, z], [tx, ty, tz], fov).
     w.__look = (p: [number, number, number], t: [number, number, number], fov?: number) => {
@@ -131,7 +137,7 @@ export function Scene({
           {/* Afternoon haze down the canyon. */}
           <fog attach="fog" args={['#c9cdc8', 120, 900]} />
           <DaylightLighting tier={tier} />
-          <Bowl shadows={shadows} />
+          <Bowl shadows={shadows} tier={tier} />
         </>
       ) : (
         <>

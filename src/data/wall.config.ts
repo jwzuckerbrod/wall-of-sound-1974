@@ -1285,9 +1285,10 @@ export const wall = {
    */
   render: {
     tiers: {
-      high:   {  pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: false,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
-      medium: { pixelRatioCap: 1.5, shadowMapSize: 1024, softShadows: false, ssao: false, bloom: true,  bloomStrength: 0.14, anisotropy: 4, maxLights: 4, instanceLod: true },
-      low:    { pixelRatioCap: 1.0, shadowMapSize: 512,  softShadows: false, ssao: false, bloom: false, bloomStrength: 0,    anisotropy: 1, maxLights: 2, instanceLod: true },
+      // bowlTrees: the share of the Bowl's trees drawn.
+      high:   { bowlTrees: 1,  pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: false,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
+      medium: { bowlTrees: 1, pixelRatioCap: 1.5, shadowMapSize: 1024, softShadows: false, ssao: false, bloom: true,  bloomStrength: 0.14, anisotropy: 4, maxLights: 4, instanceLod: true },
+      low:    { bowlTrees: 0.5, pixelRatioCap: 1.0, shadowMapSize: 512,  softShadows: false, ssao: false, bloom: false, bloomStrength: 0,    anisotropy: 1, maxLights: 2, instanceLod: true },
     },
     targetFps: 60,
     initialDownloadBudgetMb: 5,

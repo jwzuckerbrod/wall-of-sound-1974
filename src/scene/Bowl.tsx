@@ -2,14 +2,17 @@ import { useLayoutEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { mergeGeometries, mergeVertices } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { wall } from '../data/wall.config';
+import { tierSettings, type Tier } from '../quality';
 import { bowlFrame, crownPanels, seatHeight, shellArc, sonotubes, terrainHeight, treePoints, type BowlFrame } from '../geometry/bowl';
 
 /**
  * The Hollywood Bowl, 21 July 1974, around the Wall: the canyon, the seating,
  * the 1929 shell, Frank Gehry's Sonotubes and the panels in the shell's
  * crown, from the same layout Blender builds (src/geometry/bowl.ts). No
- * crowd: that is the renders' (blender/make_people.py), and far too heavy for
- * a browser. The trees are simple shapes where Blender plants Poly Haven's.
+ * crowd: the renders' (blender/make_people.py) is far too heavy for a browser,
+ * and instanced stand-ins were tried and looked worse than empty seats
+ * (docs/qa-findings.md §21). The trees are simple shapes where Blender plants
+ * Poly Haven's.
  */
 
 const V = wall.venues.hollywoodBowl;
@@ -133,30 +136,45 @@ function panelsGeometry(f: BowlFrame) {
   return mergeGeometries(crownPanels(f).map(([x, y, z]) => new THREE.BoxGeometry(P.width, P.height, 0.06).translate(x, y, z)), false)!;
 }
 
-/** Oaks and chaparral, as squashed lumpy spheres, coloured each its own shade of green. */
-function Trees({ f }: { f: BowlFrame }) {
-  const pts = useMemo(() => treePoints(f), [f]);
+/**
+ * Oaks and chaparral, as lumpy crowns. The small ones, most of the thousands,
+ * are 80 triangles and not 320: at their distance the extra ones showed nothing,
+ * and the trees were the largest single cost of the venue. Dark at the skirt and
+ * lit on top, painted into the vertices, so they read as trees rather than
+ * boulders at no cost. Each its own shade of green.
+ */
+function Trees({ f, keep }: { f: BowlFrame; keep: number }) {
+  const pts = useMemo(() => {
+    const all = treePoints(f);
+    const thin = <T,>(a: T[]) => a.filter((_, i) => (i * 0.618034) % 1 < keep);
+    return { small: thin(all.small), large: thin(all.large) };
+  }, [f, keep]);
   const small = useRef<THREE.InstancedMesh>(null);
   const large = useRef<THREE.InstancedMesh>(null);
   const geo = useMemo(() => {
-    const make = (rad: number, squash: number) => {
-      const g = mergeVertices(new THREE.IcosahedronGeometry(rad, 2).deleteAttribute('normal').deleteAttribute('uv'));
+    const make = (rad: number, squash: number, detail: number) => {
+      const g = mergeVertices(new THREE.IcosahedronGeometry(rad, detail).deleteAttribute('normal').deleteAttribute('uv'));
       const p = g.getAttribute('position');
+      const col = new Float32Array(p.count * 3);
       for (let i = 0; i < p.count; i++) {
-        const k = 0.82 + 0.3 * (0.5 + 0.5 * Math.sin(i * 12.9898));
+        const k = 0.78 + 0.34 * (0.5 + 0.5 * Math.sin(i * 12.9898));
+        const up = p.getY(i) / rad; // -1 at the skirt, 1 at the crown
         p.setXYZ(i, p.getX(i) * k, p.getY(i) * k * squash + rad * squash * 0.6, p.getZ(i) * k);
+        const shade = 0.34 + 0.66 * Math.min(1, Math.max(0, (up + 1) / 1.5));
+        col.set([shade, shade, shade], i * 3);
       }
+      g.setAttribute('color', new THREE.BufferAttribute(col, 3));
       g.computeVertexNormals();
       return g;
     };
-    return { small: make(0.9, 0.75), large: make(2.6, 0.8) };
+    return { small: make(0.9, 0.85, 1), large: make(2.6, 0.95, 2) };
   }, []);
-  const material = useMemo(() => mat('#ffffff', 0.9), []);
+  const material = useMemo(() => mat('#ffffff', 0.95, { vertexColors: true }), []);
   useLayoutEffect(() => {
     const m = new THREE.Matrix4();
     const c = new THREE.Color();
-    const a = new THREE.Color('#26361c');
-    const b = new THREE.Color('#5d6234');
+    const a = new THREE.Color('#2b3d20');
+    const b = new THREE.Color('#566032');
     for (const [ref, list] of [[small, pts.small], [large, pts.large]] as const) {
       const mesh = ref.current;
       if (!mesh) continue;
@@ -179,8 +197,9 @@ function Trees({ f }: { f: BowlFrame }) {
   );
 }
 
-export function Bowl({ shadows }: { shadows: boolean }) {
+export function Bowl({ shadows, tier }: { shadows: boolean; tier: Tier }) {
   const f = useMemo(() => bowlFrame(), []);
+  const q = tierSettings(tier);
   const g = useMemo(
     () => ({ shell: shellGeometry(f), terrain: terrainGeometry(f), seating: seatingGeometry(f), tubes: tubesGeometry(f), panels: panelsGeometry(f) }),
     [f],
@@ -217,7 +236,7 @@ export function Bowl({ shadows }: { shadows: boolean }) {
       <mesh position={[V.shell.centreX, f.deck - 0.15, -(backWall + 5.6) / 2]} material={m.stage} receiveShadow={shadows}>
         <boxGeometry args={[2 * R0 + 2, 0.3, backWall - 5.6]} />
       </mesh>
-      <Trees f={f} />
+      <Trees f={f} keep={q.bowlTrees} />
     </group>
   );
 }
