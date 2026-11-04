@@ -2,6 +2,7 @@ import { Fragment, useEffect, useRef, useState } from 'react';
 import { SOURCES, type SourceId } from '../data/wall.config';
 import { BEATS, type Beat } from './beats';
 import { Credits } from './Credits';
+import { Needles } from './Needles';
 import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, srcOf, type StoryImage } from './images';
 import { shortSource } from './sources';
@@ -98,6 +99,7 @@ function Pin({ images, first }: { images: StoryImage[]; first?: boolean }) {
     <div className="pin">
       <div className="pin-image">
         <Picture img={a} eager={first} sizes={sizes} />
+        {a.overlay === 'needles' && <Needles />}
         {b && <Picture img={b} className="pin-b" eager={first} sizes={sizes} />}
       </div>
       <div className="pin-caption">
@@ -199,6 +201,7 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
         <figure className="layer">
           <Picture img={a} className="ambient" ambient eager={first} />
           <Picture img={a} className="main" eager={first} />
+          {a.overlay === 'needles' && <Needles />}
           <Caption img={a} />
         </figure>
         {b && (
@@ -242,6 +245,7 @@ export function Story() {
   return (
     <main ref={root} className={compact ? 'compact' : undefined}>
       <header className="title">
+        <Picture img={IMAGES.title} className="title-image" eager sizes="max(100vw, 178svh)" />
         <p className="eyebrow">A reconstruction</p>
         <h1>The Wall of Sound</h1>
         <p className="dek">The Grateful Dead's sound system, summer 1974</p>
