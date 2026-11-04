@@ -56,6 +56,7 @@ export type SourceId =
   | 'pell'
   | 'coules2021'
   | 'kennedy2025'
+  | 'precedence'
   | 'derived';
 
 export interface SourceRef {
@@ -193,6 +194,11 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     url: 'https://fohonline.com/?p=381315',
     kind: 'trade',
   },
+  precedence: {
+    title: 'Wikipedia — Precedence effect (summing under about 2 ms; echoes above about 50 ms for speech)',
+    url: 'https://en.wikipedia.org/wiki/Precedence_effect',
+    kind: 'encyclopedia',
+  },
   derived: {
     title: 'Derived in docs/reconstruction-spec.md from confirmed facts',
     kind: 'derivation',
@@ -210,6 +216,12 @@ export interface Provenance {
  * from here, so nothing can be shown to a visitor without its confidence level.
  */
 export const PROVENANCE: Record<string, Provenance> = {
+  'comparison.localization': {
+    confidence: 'estimated',
+    sources: ['deadsources74', 'precedence', 'derived'],
+    note:
+      'The story\'s seat diagram, computed in src/geometry/localize.ts. A rule of thumb in a plan view, not an acoustic simulation: arrival times only, at 343 m/s, with no level, height, reflections, or sound off the stage itself. The typical PA\'s stacks are placed at the stage\'s front corners (the 1974 report), carrying one mix. The Wall\'s positions are the model\'s, and its left-to-right order is the largest invention in the model (see the arrays entry); what the spec sheet documents is the centre vocal cluster, identical drum columns left and right, a column for each guitar, and Garcia\'s extension behind Kreutzmann.',
+  },
   'comparison.signalPath': {
     confidence: 'estimated',
     sources: ['deadsources74', 'wiki', 'duncan1982', 'pell', 'coules2021', 'kennedy2025'],

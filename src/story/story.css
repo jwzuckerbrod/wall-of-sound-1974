@@ -294,6 +294,26 @@ figcaption a { color: inherit; }
 .dg-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.2); color: var(--ink); }
 .dg-pause:focus-visible, .dg-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+/* The seat diagram (SeatDiagram.tsx). */
+.seat-diagram { cursor: pointer; touch-action: manipulation; }
+.seat-fan { fill: rgba(236, 230, 218, 0.07); stroke: var(--rule); }
+.seat-stage { fill: rgba(236, 230, 218, 0.16); stroke: var(--faint); }
+.seat-wall { stroke: var(--dim); stroke-width: 2; }
+.seat-stack { fill: var(--ink); }
+.seat-ray { stroke-width: 1.5; opacity: 0.8; }
+.seat-you { fill: var(--accent); stroke: #1a1408; stroke-width: 2; }
+.seat-dot { transition: transform 0.45s ease; }
+.seat-rail { stroke: var(--faint); stroke-width: 2; }
+.seat-presets { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 6px; font-family: var(--sans); font-size: 13px; }
+.seat-presets button { border: 1px solid var(--rule); background: transparent; color: var(--dim); font: inherit; padding: 5px 10px; border-radius: 999px; cursor: pointer; }
+.seat-presets button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.2); color: var(--ink); }
+.seat-presets button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.seat-note { margin: 4px 0 8px !important; font-size: 0.8em; line-height: 1.35; min-height: 2.7em; }
+.seat-key { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 3px 12px; font-family: var(--sans); font-size: 12px; color: var(--dim); }
+.seat-key li { display: flex; align-items: center; gap: 5px; }
+.seat-key i { width: 9px; height: 9px; border-radius: 50%; }
+@media (prefers-reduced-motion: reduce) { .seat-dot { transition: none; } }
+
 /* Phones: the figure takes the width, and the diagram's words grow to stay readable. */
 @media (max-width: 600px) {
   .card-slot.slot-figure { padding-left: 8px; padding-right: 8px; }

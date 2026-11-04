@@ -115,7 +115,11 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
             {beat.diagram?.after === i && (
               <div className="card-slot slot-figure">
                 <figure className="card card-figure">
-                  <DiagramFigure label={beat.diagram.label}>{beat.diagram.node}</DiagramFigure>
+                  {beat.diagram.animated === false ? (
+                    beat.diagram.node
+                  ) : (
+                    <DiagramFigure label={beat.diagram.label}>{beat.diagram.node}</DiagramFigure>
+                  )}
                 </figure>
               </div>
             )}

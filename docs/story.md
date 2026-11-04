@@ -84,6 +84,15 @@ Image: `bowl`, from the seats, straight on, with each channel tinted in turn. Th
 render pass per channel (to make). The quadraphonic bass is contested in the
 sources; the explorer says so.
 
+### 3¼. One mix, or none, and where the sound comes from
+
+Two figures after Six systems. `src/story/PathDiagram.tsx`: the signal path, a
+typical early-1970s PA (a sourced composite) against the Wall. `SeatDiagram.tsx`
+and `src/geometry/localize.ts`: pick a seat in the Bowl and see where each sound
+seems to come from, by the precedence effect (arrival times only: a rule of
+thumb, and labelled so). Sources in PROVENANCE `comparison.signalPath` and
+`comparison.localization`.
+
 ### 3½. Listen
 
 Real recordings, streamed from the Internet Archive (never copied here), in

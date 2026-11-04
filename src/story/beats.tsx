@@ -4,6 +4,7 @@ import { IMAGES, type StoryImage } from './images';
 import { ListenCompare, ListenWall } from '../ui/Listen';
 import { MicDiagram } from './MicDiagram';
 import { PathDiagram } from './PathDiagram';
+import { SeatDiagram } from './SeatDiagram';
 
 /**
  * The story's eight beats (docs/story.md). Every figure is read from the
@@ -27,7 +28,7 @@ export interface Beat {
   cards: ReactNode[];
   sources: SourceId[];
   /** A diagram, as a figure of its own between the cards: after card `after`. */
-  diagram?: { node: ReactNode; after: number; label: string };
+  diagram?: { node: ReactNode; after: number; label: string; animated?: boolean };
 }
 
 const S = wall.system;
@@ -157,6 +158,35 @@ export const BEATS: Beat[] = [
         <p className="aside">
           The typical PA here is a composite: practice varied from band to band and changed fast. One exception on
           the Wall: Ned Lagin's keyboard shared the vocal system.
+        </p>
+      </>,
+    ],
+  },
+  {
+    id: 'seats',
+    images: [IMAGES.bowlHero],
+    motion: 'hold',
+    diagram: { node: <SeatDiagram />, after: 0, label: 'seat', animated: false },
+    sources: ['deadsources74', 'precedence'],
+    cards: [
+      <>
+        <p className="figure">Where the sound comes from.</p>
+        <p>
+          On a typical PA, every instrument left the same two stacks. Sit in the middle and the whole band seems to
+          hang between them. Sit to one side and it all comes from the nearer stack, with the far one arriving late.
+        </p>
+        <p>Pick a seat, and switch between the two.</p>
+      </>,
+      <>
+        <p>
+          The Wall spread its six systems across the stage, each from its own speakers, so from most seats the band
+          had a width to it, with the voices in the middle.
+        </p>
+        <p className="aside">
+          This is a rule of thumb, not a simulation: when one sound arrives from two places, you hear it between them
+          if the gap is under about 2 milliseconds, and from the first beyond that; beyond about 50, the second is an
+          echo. It counts arrival times only. The Wall's left-to-right order is our best reading of the photographs,
+          not a documented plan.
         </p>
       </>,
     ],

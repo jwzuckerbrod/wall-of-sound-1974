@@ -27,6 +27,7 @@ const SHORT: Record<SourceId, string> = {
   pell: 'Becky Pell',
   coules2021: 'Andy Coules, 2021',
   kennedy2025: 'David K. Kennedy, 2025',
+  precedence: 'Wikipedia, precedence effect',
   derived: 'our derivations',
 };
 
