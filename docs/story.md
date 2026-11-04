@@ -15,8 +15,8 @@ its sources, every image says whether it's a photograph or a render, and the
 page ends in full credits (qa-findings §17). Images: `npm run story:images`
 copies the graded renders from `.shots/story/v2/` (made by
 `.shots/story/v2/render.sh`) and the Bowl photograph into `public/story/`.
-On a portrait phone each frame shows whole across the width, over a blurred
-copy of itself, rather than cropped to its middle third.
+On a phone the picture is pinned and the words scroll beside or below it, never
+over it (qa-findings §20). Larger windows keep cards over a full-screen picture.
 
 **The place: the Hollywood Bowl, Sunday 21 July 1974.** One real show gives the
 story a sense of place: the white shell, the hills, seventeen thousand people.
@@ -31,9 +31,9 @@ plus `build_scene.py --shot pechner` for the opening.
 
 ## The shape
 
-Eight beats, one idea each. On a phone, each is about one screen: an image that
-holds while a line or two of copy scrolls past, then the next image takes over.
-On desktop the same beats, wider.
+Eight beats, one idea each. On a phone, an image holds while its copy scrolls
+past in its own space, then the next image takes over. On desktop the same
+beats, with the copy on cards over the image.
 
 | # | Beat | Image | Motion |
 |---|---|---|---|

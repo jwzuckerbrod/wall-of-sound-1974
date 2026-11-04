@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §19) and gear in `docs/surviving-gear.md`.
+  §20) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things

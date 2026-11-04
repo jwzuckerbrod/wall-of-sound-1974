@@ -758,3 +758,31 @@ from the arena configuration the model's deck follows. Not changed yet.
 `stage_review.py --camera blender/cameras/bowl-1974-07-21.json` renders
 through the solved camera at twice the photo's size; `compare.py --color`
 overlays it.
+
+## 20. The story on a phone (4 November 2026)
+
+A QA pass on the story at phone sizes, against screenshots from an iPhone in
+Chrome (about 390x664 upright, 717x330 on its side). Cards scrolling over a
+pinned picture did not survive long copy, diagrams and players:
+
+- Each card had a slot one screen tall. Taller cards spilled out and collided:
+  on its side, 7 of 23 were taller than the screen, the seat diagram 215%.
+- At 390x664, no whole card was on screen for 53% of the scroll, and the picture
+  was at least half covered for 38% of it.
+- A pinned stage sized in `svh` left a black band when the toolbar collapsed.
+- Two captions showed at once in a crossfade; tap targets were 18 to 34px.
+
+**Now:** below 900px wide or 600px tall, `Story.tsx` uses a compact layout. The
+picture is pinned (above the words upright, left of them on its side), blocks
+are as tall as their content, and a crossfade follows the paragraph that
+starts it. The page went from 36 to about 22 screens upright, and from about
+39 to 33 on its side. Larger windows keep the cards.
+
+**Sound:** one audio element for the page (`src/ui/player.ts`), with the song
+rows and a now-playing bar (`src/ui/NowPlaying.tsx`) as remotes, plus lock-screen
+controls. The explorer has no bar: closing its Listen panel stops the sound.
+
+**Not yet tried on a real phone:** the lock screen, playback with the screen off,
+and notch padding on its side. The bar can sit over the bottom-left of the
+signal diagram on its side until the reader scrolls.
+
