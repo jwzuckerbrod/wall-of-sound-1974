@@ -1,99 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import { COMPARISON_CAVEATS, PAIRS, TAPES, WALL_TRACKS, tapeUrl, trackUrl, type Track } from '../data/recordings';
+import { NO_PLACE, PLAY_ICON, clock, player, usePlayer, type PlayerItem } from './player';
 import './listen.css';
 
 /**
  * The listening players, shared by the story's Listen beat and the explorer's
- * Listen panel. Every track streams from archive.org (src/data/recordings.ts);
- * nothing is fetched until someone presses play, and only one plays at a time.
+ * Listen panel. Every track streams from archive.org (src/data/recordings.ts).
+ * The sound itself lives in ./player, so it carries on when a row scrolls away.
  */
 
-const ONLY_ONE = 'wos-listen-play';
-
-const clock = (s: number) => (Number.isFinite(s) ? `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}` : '–:––');
-
-function useAudio(src: string) {
-  const ref = useRef<HTMLAudioElement | null>(null);
-  const [playing, setPlaying] = useState(false);
-  const [time, setTime] = useState(0);
-  const [length, setLength] = useState(NaN);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const a = new Audio();
-    a.preload = 'none';
-    ref.current = a;
-    const on = (e: string, f: () => void) => a.addEventListener(e, f);
-    on('play', () => {
-      setPlaying(true);
-      window.dispatchEvent(new CustomEvent(ONLY_ONE, { detail: a }));
-    });
-    on('pause', () => setPlaying(false));
-    on('ended', () => setPlaying(false));
-    on('timeupdate', () => setTime(a.currentTime));
-    on('durationchange', () => setLength(a.duration));
-    on('waiting', () => setLoading(true));
-    on('playing', () => setLoading(false));
-    on('canplay', () => setLoading(false));
-    const others = (e: Event) => {
-      if ((e as CustomEvent).detail !== a) a.pause();
-    };
-    window.addEventListener(ONLY_ONE, others);
-    return () => {
-      a.pause();
-      a.removeAttribute('src');
-      window.removeEventListener(ONLY_ONE, others);
-    };
-  }, []);
-
-  // A new source keeps the place and carries on playing: the A/B switch.
-  useEffect(() => {
-    const a = ref.current;
-    if (!a) return;
-    if (!a.src) {
-      a.src = src;
-      return;
-    }
-    const at = a.currentTime;
-    const resume = !a.paused;
-    a.src = src;
-    a.addEventListener(
-      'loadedmetadata',
-      () => {
-        a.currentTime = Math.min(at, Math.max(0, a.duration - 1));
-        if (resume) void a.play();
-      },
-      { once: true },
-    );
-    a.load();
-  }, [src]);
-
-  const toggle = () => {
-    const a = ref.current;
-    if (!a) return;
-    if (a.paused) {
-      setLoading(true);
-      void a.play().catch(() => setLoading(false));
-    } else a.pause();
-  };
-  const seek = (f: number) => {
-    const a = ref.current;
-    if (a && Number.isFinite(a.duration)) a.currentTime = f * a.duration;
-  };
-  return { playing, time, length, loading, toggle, seek };
+export function PlayIcon({ playing }: { playing: boolean }) {
+  return playing ? (
+    <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="0.6" /><rect x="9.5" y="2.5" width="3" height="11" rx="0.6" /></svg>
+  ) : (
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d={PLAY_ICON} /></svg>
+  );
 }
 
-function Transport({ audio, label }: { audio: ReturnType<typeof useAudio>; label: string }) {
-  const { playing, time, length, loading, toggle, seek } = audio;
+function Transport({ item, label }: { item: PlayerItem; label: string }) {
+  const { item: current, playing: on, loading: busy, places } = usePlayer();
+  const active = current?.id === item.id;
+  const playing = active && on;
+  const loading = active && busy;
+  const { time, length } = places[item.id] ?? NO_PLACE;
   const f = Number.isFinite(length) && length > 0 ? time / length : 0;
   return (
     <div className="ls-transport">
-      <button className="ls-play" onClick={toggle} aria-label={`${playing ? 'Pause' : 'Play'} ${label}`} data-loading={loading || undefined}>
-        {playing ? (
-          <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="0.6" /><rect x="9.5" y="2.5" width="3" height="11" rx="0.6" /></svg>
-        ) : (
-          <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 2.6v10.8a.6.6 0 0 0 .9.5l8.6-5.4a.6.6 0 0 0 0-1L5.4 2.1a.6.6 0 0 0-.9.5z" /></svg>
-        )}
+      <button className="ls-play" onClick={() => player.toggle(item)} aria-label={`${playing ? 'Pause' : 'Play'} ${label}`} data-loading={loading || undefined}>
+        <PlayIcon playing={playing} />
       </button>
       <input
         className="ls-bar"
@@ -101,7 +35,7 @@ function Transport({ audio, label }: { audio: ReturnType<typeof useAudio>; label
         min={0}
         max={1000}
         value={Math.round(f * 1000)}
-        onChange={(e) => seek(Number(e.target.value) / 1000)}
+        onChange={(e) => player.seek(item.id, Number(e.target.value) / 1000)}
         aria-label={`Position in ${label}`}
         style={{ ['--f' as string]: f }}
       />
@@ -112,31 +46,53 @@ function Transport({ audio, label }: { audio: ReturnType<typeof useAudio>; label
   );
 }
 
+const year = (t: Track) => TAPES[t.tape].date.slice(-4);
+
 function TrackRow({ track }: { track: Track }) {
-  const audio = useAudio(trackUrl(track));
+  const item: PlayerItem = {
+    id: track.file,
+    src: trackUrl(track),
+    title: track.title,
+    detail: `${TAPES[track.tape].venue}, ${year(track)}`,
+  };
   return (
-    <li className="ls-row">
+    <li className="ls-row" data-track={item.id}>
       <span className="ls-title">{track.title}</span>
-      <Transport audio={audio} label={track.title} />
+      <Transport item={item} label={track.title} />
     </li>
   );
 }
 
+const SIDE_LABEL = { before: '1971 · before', after: '1974 · the Wall' };
+
 function PairRow({ pair }: { pair: (typeof PAIRS)[number] }) {
-  const [side, setSide] = useState<'before' | 'after'>('after');
-  const audio = useAudio(trackUrl(pair[side]));
+  // Whichever recording is loaded wins, so the switch is right after a layout change remounts this row.
+  const { item: current } = usePlayer();
+  const loaded = current?.id === pair.title ? (current.detail === SIDE_LABEL.before ? 'before' : 'after') : null;
+  const [chosen, setChosen] = useState<'before' | 'after'>('after');
+  const side = loaded ?? chosen;
+  const itemFor = (s: 'before' | 'after'): PlayerItem => ({
+    id: pair.title,
+    src: trackUrl(pair[s]),
+    title: pair.title,
+    detail: SIDE_LABEL[s],
+  });
+  const choose = (s: 'before' | 'after') => {
+    setChosen(s);
+    player.swap(itemFor(s));
+  };
   return (
-    <li className="ls-row">
+    <li className="ls-row" data-track={pair.title}>
       <span className="ls-title">{pair.title}</span>
       <div className="ls-switch" role="group" aria-label={`Which recording of ${pair.title}`}>
-        <button aria-pressed={side === 'before'} onClick={() => setSide('before')}>
-          1971 · before
+        <button aria-pressed={side === 'before'} onClick={() => choose('before')}>
+          {SIDE_LABEL.before}
         </button>
-        <button aria-pressed={side === 'after'} onClick={() => setSide('after')}>
-          1974 · the Wall
+        <button aria-pressed={side === 'after'} onClick={() => choose('after')}>
+          {SIDE_LABEL.after}
         </button>
       </div>
-      <Transport audio={audio} label={`${pair.title}, ${side === 'before' ? '1971' : '1974'}`} />
+      <Transport item={itemFor(side)} label={`${pair.title}, ${side === 'before' ? '1971' : '1974'}`} />
     </li>
   );
 }
@@ -189,6 +145,8 @@ export function ListenPanel({ onClose }: { onClose: () => void }) {
   const dialog = useRef<HTMLDivElement>(null);
   useEffect(() => {
     dialog.current?.focus();
+    // The explorer has no now-playing bar: closing the panel stops the sound.
+    return () => player.close();
   }, []);
   return (
     <div className="about-backdrop" onClick={onClose}>

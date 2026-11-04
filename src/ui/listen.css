@@ -3,17 +3,17 @@
 .ls-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .ls-row { display: grid; gap: 6px; }
 .ls-title { font-weight: 600; }
-.ls-transport { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 10px; }
+.ls-transport { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 10px; }
 .ls-play {
-  width: 34px; height: 34px; border-radius: 50%; border: 0; padding: 0;
+  width: 44px; height: 44px; border-radius: 50%; border: 0; padding: 0;
   display: grid; place-items: center; cursor: pointer;
   background: var(--ls-accent); color: #1a1408;
 }
-.ls-play svg { width: 14px; height: 14px; fill: currentColor; }
+.ls-play svg { width: 16px; height: 16px; fill: currentColor; }
 .ls-play[data-loading] { animation: ls-pulse 1s ease-in-out infinite; }
 @keyframes ls-pulse { 50% { opacity: 0.55; } }
-.ls-play:focus-visible, .ls-switch button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.ls-bar { width: 100%; margin: 0; height: 18px; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
+.ls-play:focus-visible, .ls-switch button:focus-visible, .np button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.ls-bar { width: 100%; margin: 0; height: 44px; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
 .ls-bar::-webkit-slider-runnable-track {
   height: 4px; border-radius: 2px;
   background: linear-gradient(to right, var(--ls-accent) calc(var(--f, 0) * 100%), rgba(255, 255, 255, 0.18) 0);
@@ -26,9 +26,49 @@
 .ls-switch { display: inline-flex; width: max-content; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px; padding: 2px; }
 .ls-switch button {
   border: 0; background: transparent; color: inherit; font: inherit; font-size: 0.92em;
-  padding: 4px 12px; border-radius: 999px; cursor: pointer; opacity: 0.75;
+  padding: 4px 14px; min-height: 40px; border-radius: 999px; cursor: pointer; opacity: 0.75;
 }
 .ls-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.22); opacity: 1; }
 .ls-credit { font-size: 0.86em; opacity: 0.72; margin: 12px 0 0 !important; }
 .ls-credit a { color: inherit; margin-right: 10px; }
 .ls-caveats { margin: 8px 0 0; padding-left: 1.1em; font-size: 0.82em; opacity: 0.72; display: grid; gap: 3px; }
+
+/* The now-playing bar (NowPlaying.tsx): a bar across a portrait phone, a pill anywhere else. */
+.np {
+  position: fixed; z-index: 20;
+  left: max(10px, env(safe-area-inset-left));
+  bottom: max(10px, env(safe-area-inset-bottom));
+  width: min(310px, calc(100vw - 20px));
+  height: 52px;
+  display: flex; align-items: center; gap: 4px; padding: 0 4px;
+  background: #211d16; color: #ece6da;
+  border: 1px solid #3f392e; border-radius: 26px; overflow: hidden;
+  font-family: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
+}
+.np button { border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0; }
+.np-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255, 255, 255, 0.14); }
+.np-progress i { display: block; height: 100%; width: calc(var(--f, 0) * 100%); background: #e9b85a; }
+.np-toggle, .np-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; }
+.np-toggle span { width: 36px; height: 36px; border-radius: 50%; background: #e9b85a; color: #1a1408; display: grid; place-items: center; }
+.np-toggle[data-loading] span { animation: ls-pulse 1s ease-in-out infinite; }
+.np-toggle svg { width: 14px; height: 14px; fill: currentColor; }
+.np-close svg { width: 14px; height: 14px; fill: none; stroke: #b4ab9b; stroke-width: 2; stroke-linecap: round; }
+.np-info { flex: 1 1 auto; min-width: 0; min-height: 44px; text-align: left; display: grid; align-content: center; gap: 1px; }
+.np-info b, .np-info span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.np-info b { font-size: 14px; font-weight: 600; }
+.np-info span { font-size: 12px; color: #b4ab9b; font-variant-numeric: tabular-nums; }
+/* Keeps the end of the page clear of the bar. */
+.np-room { height: 72px; }
+@media (orientation: portrait) and (max-width: 899px) {
+  .np {
+    left: 0; right: 0; bottom: 0; width: auto;
+    height: calc(60px + env(safe-area-inset-bottom));
+    padding: 0 6px env(safe-area-inset-bottom);
+    border-width: 1px 0 0; border-radius: 0; box-shadow: none;
+  }
+  .np-progress { top: 0; bottom: auto; height: 3px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ls-play[data-loading], .np-toggle[data-loading] span { animation: none; }
+}
