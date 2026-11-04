@@ -435,6 +435,16 @@ export const PROVENANCE: Record<string, Provenance> = {
     sources: ['photos', 'anderson', 'derived'],
     note: 'Every colour, roughness and metalness value is an interpretation of black-and-white and faded colour film, lit by a stage rig that is itself a reconstruction. The materials are plausible, not measured. The one hard fact underneath them is that the cabinets were 14-ply Finnish birch and the surviving one is painted matte black.',
   },
+  'band.bowlKitRiser': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'A low natural-wood riser under the kit at the Hollywood Bowl (the band photograph, probably 21 July 1974; docs/qa-findings.md §14): an open frame of pale timber, a little wider than the kit. Size scaled by eye from that one photograph; its construction under the top rails isn\'t visible. Other dates differ: red velvet on 25 May and (probably) 16 June, so it is drawn at the Bowl only. Explorer only so far: Blender stands the kit on the deck.',
+  },
+  'structure.deckCables': {
+    confidence: 'estimated',
+    sources: ['photos'],
+    note: 'Black cable lying loose across the deck, from the stands toward the racks: long slack loops on the Hollywood Bowl band photograph, cords at the stands at UC Santa Barbara, 25 May 1974. That they were there is evidence; the routes and how many are invented, one from each vocal stand and each guitar or bass. Explorer only so far.',
+  },
   'band.instruments': {
     confidence: 'estimated',
     sources: ['derived'],
@@ -1168,6 +1178,8 @@ export const wall = {
       kitBack: 0.5,
       /** At the Bowl on 21 July the kit was the wine-red one (qa-findings §14); its drums are still the Hartford toms. */
       bowlKitShell: '#812730',
+      /** The kit's riser at the Bowl: an open timber frame. See PROVENANCE['band.bowlKitRiser']. */
+      bowlKitRiser: { w: 2.2, d: 2.2, h: 0.3 },
     },
     /** The 1969 lightning-bolt equipment mark — no skull. Cases only. */
     logo: { id: 'lightningBolt', diameter: IN(5.5), boltPoints: 13, appliedTo: ['roadCases', 'flightCases'] },
@@ -1273,7 +1285,7 @@ export const wall = {
    */
   render: {
     tiers: {
-      high:   { pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: false,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
+      high:   {  pixelRatioCap: 2.0, shadowMapSize: 2048, softShadows: true,  ssao: false,  bloom: true,  bloomStrength: 0.22, anisotropy: 8, maxLights: 6, instanceLod: false },
       medium: { pixelRatioCap: 1.5, shadowMapSize: 1024, softShadows: false, ssao: false, bloom: true,  bloomStrength: 0.14, anisotropy: 4, maxLights: 4, instanceLod: true },
       low:    { pixelRatioCap: 1.0, shadowMapSize: 512,  softShadows: false, ssao: false, bloom: false, bloomStrength: 0,    anisotropy: 1, maxLights: 2, instanceLod: true },
     },

@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/footprints.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
+   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -247,6 +247,20 @@ check('block bounds are never degenerate', cfg.ARRAYS.every((b) => {
   const bb = arrays.blockBounds(b.id);
   return bb && bb.size[0] > 0.01 && bb.size[1] > 0.01 && bb.size[2] > 0.01;
 }), true);
+
+console.log('\nOn the deck: cables and the Bowl riser');
+{
+  const dress = await load('geometry/deckdressing.js');
+  const R = dress.kitRiser(L);
+  const cables = dress.deckCables(L);
+  const pts = cables.flat();
+  check('every cable point on the deck', pts.every(([x, z]) => x > L.deck.minX && x < L.deck.maxX && z > L.deck.minZ && z < L.deck.maxZ), true);
+  const inRiser = ([x, z]) => Math.abs(x - R.pos[0]) < R.size.w / 2 && Math.abs(z - R.pos[2]) < R.size.d / 2;
+  check('no cable runs through the riser', pts.filter(inRiser).length, 0);
+  check('no vocal stand on the riser', scaf.vocalMics(L).filter(([x, , z]) => inRiser([x, z])).length, 0);
+  check('riser downstage of the wall', R.pos[2] - R.size.d / 2 > 0, true);
+  console.log(`        cables: ${cables.length}`);
+}
 
 console.log('\nProvenance, for the About page');
 const provValues = Object.values(cfg.PROVENANCE);

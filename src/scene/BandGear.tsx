@@ -1,5 +1,8 @@
 import { useMemo } from 'react';
-import { MIC, vocalMics } from '../geometry/scaffold';
+import * as THREE from 'three';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
+import { deckCables, kitRiser } from '../geometry/deckdressing';
+import { MIC, scaffoldLayout, vocalMics } from '../geometry/scaffold';
 import { wallMaterials } from '../materials';
 
 /**
@@ -11,8 +14,8 @@ import { wallMaterials } from '../materials';
  * subject; an honest empty stage reads better than bad instruments, and
  * docs/qa-findings.md records the decision.
  *
- * What stays here is the paired vocal microphones. The road cases and the
- * amps are in RoadGear.tsx.
+ * What stays here is the paired vocal microphones, the cables on the floor and
+ * the riser at the Bowl. The road cases and the amps are in RoadGear.tsx.
  */
 
 /**
@@ -40,7 +43,54 @@ function VocalMic() {
   );
 }
 
-export function BandGear({ shadows }: { shadows: boolean }) {
+const CABLE_RADIUS = 0.008;
+
+/** All the floor cables as one mesh: about 400 triangles each, one draw call. */
+function DeckCables() {
+  const m = wallMaterials();
+  const geometry = useMemo(() => {
+    const L = scaffoldLayout();
+    const y = L.deck.y + CABLE_RADIUS;
+    const parts = deckCables(L).map((pts) => {
+      const curve = new THREE.CatmullRomCurve3(pts.map(([x, z]) => new THREE.Vector3(x, y, z)));
+      return new THREE.TubeGeometry(curve, 48, CABLE_RADIUS, 4, false);
+    });
+    return mergeGeometries(parts, false);
+  }, []);
+  return <mesh geometry={geometry} material={m.cable} />;
+}
+
+/**
+ * The kit's riser at the Bowl: pale timber rails round an open frame, boards on
+ * top. Only the rails and top show on the photograph; the posts are assumed.
+ */
+function KitRiser() {
+  const { geometry, material } = useMemo(() => {
+    const { pos, size } = kitRiser();
+    const { w, d, h } = size;
+    const rail = 0.14;
+    const top = 0.04;
+    const box = (sx: number, sy: number, sz: number, x: number, y: number, z: number) =>
+      new THREE.BoxGeometry(sx, sy, sz).translate(pos[0] + x, pos[1] + y, pos[2] + z);
+    const parts = [
+      box(w, top, d, 0, h - top / 2, 0),
+      // Rails, front and back, then the ends.
+      box(w, rail, 0.05, 0, h - top - rail / 2, d / 2 - 0.025),
+      box(w, rail, 0.05, 0, h - top - rail / 2, -d / 2 + 0.025),
+      box(0.05, rail, d, -w / 2 + 0.025, h - top - rail / 2, 0),
+      box(0.05, rail, d, w / 2 - 0.025, h - top - rail / 2, 0),
+    ];
+    for (const sx of [-1, 0, 1])
+      for (const sz of [-1, 1]) parts.push(box(0.09, h - top, 0.09, sx * (w / 2 - 0.05), (h - top) / 2, sz * (d / 2 - 0.05)));
+    return {
+      geometry: mergeGeometries(parts, false),
+      material: new THREE.MeshStandardMaterial({ color: '#b39b78', roughness: 0.85 }),
+    };
+  }, []);
+  return <mesh geometry={geometry} material={material} castShadow receiveShadow />;
+}
+
+export function BandGear({ outdoor }: { outdoor: boolean }) {
   const mics = useMemo(() => vocalMics(), []);
   return (
     <group name="stage-furniture">
@@ -49,7 +99,8 @@ export function BandGear({ shadows }: { shadows: boolean }) {
           <VocalMic />
         </group>
       ))}
-      {shadows ? null : null}
+      <DeckCables />
+      {outdoor && <KitRiser />}
     </group>
   );
 }

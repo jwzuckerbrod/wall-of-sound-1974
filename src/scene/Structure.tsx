@@ -262,8 +262,16 @@ export function ScaffoldFloors({ shadows }: { shadows: boolean }) {
   );
 }
 
-export function Stage({ shadows }: { shadows: boolean }) {
+export function Stage({ shadows, outdoor }: { shadows: boolean; outdoor: boolean }) {
   const materials = wallMaterials();
+  // In full sun the floor is pale, weathered board on the Bowl's band photograph,
+  // not the brown it is under stage light. The grain map is dark, so white here.
+  const deck = useMemo(() => {
+    if (!outdoor) return materials.deck;
+    const m = materials.deck.clone();
+    m.color.set('#ffffff');
+    return m;
+  }, [outdoor, materials.deck]);
   const slabs = useMemo(() => stageSlabs(), []);
   return (
     <group name="stage">
@@ -273,7 +281,7 @@ export function Stage({ shadows }: { shadows: boolean }) {
           position={s.centre}
           castShadow={shadows}
           receiveShadow={shadows}
-          material={s.kind === 'deck' ? materials.deck : materials.facing}
+          material={s.kind === 'deck' ? deck : materials.facing}
         >
           <boxGeometry args={s.size} />
         </mesh>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { wall } from '../data/wall.config';
 import type { Venue } from './Scene';
 
 /**
@@ -80,7 +81,7 @@ export function Instruments({ venue, onPick }: { venue: Venue; onPick: (id: stri
                     }
               }
             >
-              <primitive object={loaded[n]} />
+              <primitive object={loaded[n]} position={[0, n === 'drums-bowl' ? wall.band.instruments.bowlKitRiser.h : 0, 0]} />
             </group>
           ),
       )}

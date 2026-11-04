@@ -154,11 +154,11 @@ export function Scene({
         </>
       )}
       {showAmps && <RoadGear shadows={shadows} />}
-      {showStage && <Stage shadows={shadows} />}
+      {showStage && <Stage shadows={shadows} outdoor={outdoor} />}
       {showFigures && <ScaleFigures shadows={shadows} />}
       {showBand && (
         <>
-          <BandGear shadows={shadows} />
+          <BandGear outdoor={outdoor} />
           <Instruments venue={venue} onPick={onPickInstrument} />
         </>
       )}
