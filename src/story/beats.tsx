@@ -4,7 +4,7 @@ import { IMAGES, type StoryImage } from './images';
 import { ListenCompare, ListenWall } from '../ui/Listen';
 import { MicDiagram } from './MicDiagram';
 import { PathDiagram } from './PathDiagram';
-import { SeatDiagram } from './SeatDiagram';
+import { SeatDiagram, SeatLink } from './SeatDiagram';
 
 /**
  * The story's eight beats (docs/story.md). Every figure is read from the
@@ -23,6 +23,8 @@ export interface Beat {
   id: string;
   /** One or two images; two only for a crossfade. */
   images: StoryImage[];
+  /** A crossfade's two ends, as named on the slider that lets the reader hold it anywhere. */
+  compare?: [string, string];
   motion: Motion;
   /** Each entry is one card that scrolls past over the image. */
   cards: ReactNode[];
@@ -53,6 +55,7 @@ export const BEATS: Beat[] = [
   {
     id: 'real',
     images: [IMAGES.photoBowl, IMAGES.bowlPhotoMatch],
+    compare: ['Photograph', 'Reconstruction'],
     motion: 'crossfade',
     sources: ['photos'],
     cards: [
@@ -99,6 +102,7 @@ export const BEATS: Beat[] = [
   {
     id: 'systems',
     images: [IMAGES.bowl, IMAGES.bowlSystems],
+    compare: ['The stage', 'Each system'],
     motion: 'crossfade',
     sources: ['wiki', 'mcintosh', 'deadsources74'],
     cards: [
@@ -172,14 +176,15 @@ export const BEATS: Beat[] = [
       <>
         <p className="figure">Where the sound comes from.</p>
         <p>
-          On a typical PA, every instrument left the same two stacks. Sit in the middle and the whole band seems to
-          hang between them. Sit to one side and it all comes from the nearer stack, with the far one arriving late.
+          On a typical PA, every instrument left the same two stacks. <SeatLink preset="front" side="pa">Sit in the
+          middle</SeatLink> and the whole band seems to hang between them. <SeatLink preset="side" side="pa">Sit to one
+          side</SeatLink> and it all comes from the nearer stack, with the far one arriving late.
         </p>
-        <p>Pick a seat, and switch between the two.</p>
+        <p>Drag your seat around the Bowl, and switch between the two.</p>
       </>,
       <>
         <p>
-          The Wall spread its six systems across the stage, each from its own speakers, so from most seats the band
+          <SeatLink side="wall">The Wall</SeatLink> spread its six systems across the stage, each from its own speakers, so from most seats the band
           had a width to it, with the voices in the middle.
         </p>
         <p className="aside">
@@ -277,6 +282,7 @@ export const BEATS: Beat[] = [
   {
     id: 'evidence',
     images: [IMAGES.bowl, IMAGES.bowlEvidence],
+    compare: ['The stage', 'How sure we are'],
     motion: 'crossfade',
     sources: ['blueprints', 'deadsources74', 'sothebys', 'juliens', 'anderson', 'pechner', 'schneider'],
     cards: [

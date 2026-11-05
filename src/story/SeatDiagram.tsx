@@ -1,4 +1,5 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import '../ui/range.css';
 import { CHANNELS } from '../data/wall.config';
 import {
   ECHO_MS,
@@ -18,8 +19,10 @@ import {
 /**
  * Where the sound comes from (the story's seat diagram). Above, the stage's
  * width as seen from a seat, with a dot where each sound seems to come from.
- * Below, the Bowl in plan, to the geometry's scale: tap a seat. All the numbers
- * come from src/geometry/localize.ts; see PROVENANCE['comparison.localization'].
+ * Below, the Bowl in plan, to the geometry's scale: drag "you", tap a seat, or
+ * use the two sliders (they don't compete with scrolling on a phone, and they
+ * work from a keyboard). The story's words can move the seat too: SeatLink. All
+ * the numbers come from src/geometry/localize.ts; see PROVENANCE['comparison.localization'].
  */
 
 const DEG = Math.PI / 180;
@@ -45,7 +48,7 @@ const RAIL = { left: 70, right: 570, y: 92 };
 const PLAN_TOP = 122;
 const S = 2.95;
 const px = (p: Point) => ({ x: W / 2 + p.x * S, y: PLAN_TOP + (p.z - STAGE.minZ) * S });
-const H = PLAN_TOP + (STAGE.front + SEATING.lastRow - STAGE.minZ) * S + 30;
+const H = PLAN_TOP + (STAGE.front + SEATING.lastRow - STAGE.minZ) * S + 44;
 
 function fanPath() {
   const a = SEATING.halfAngle;
@@ -67,11 +70,64 @@ function stackDots(dots: { id: string; color: string; x: number }[]) {
   return placed;
 }
 
+/**
+ * The seat lives outside the diagram so the words around it can move it.
+ * `live`: the reader's finger is on it, so the dots follow without easing.
+ */
+type Side = 'pa' | 'wall';
+interface SeatState { side: Side; seat: Seat; preset: string | null; live: boolean }
+let seatState: SeatState = { side: 'pa', seat: PRESETS[1].seat, preset: 'side', live: false };
+const seatListeners = new Set<() => void>();
+const setSeatState = (patch: Partial<SeatState>) => {
+  seatState = { ...seatState, ...patch };
+  seatListeners.forEach((l) => l());
+};
+const subscribeSeat = (l: () => void) => {
+  seatListeners.add(l);
+  return () => void seatListeners.delete(l);
+};
+const useSeat = () => useSyncExternalStore(subscribeSeat, () => seatState);
+
+/** Words in the story that move the seat, or switch the system, and bring the diagram into view. */
+export function SeatLink({ preset, side, children }: { preset?: string; side?: Side; children: ReactNode }) {
+  const state = useSeat();
+  const on = (!preset || state.preset === preset) && (!side || state.side === side);
+  const go = () => {
+    const p = PRESETS.find((x) => x.id === preset);
+    setSeatState({ ...(p ? { seat: p.seat, preset: p.id } : {}), ...(side ? { side } : {}), live: false });
+    const figure = document.querySelector('.seat-figure');
+    if (!figure) return;
+    const r = figure.getBoundingClientRect();
+    if (r.top < 0 || r.bottom > window.innerHeight) {
+      figure.scrollIntoView({ block: r.height < window.innerHeight ? 'center' : 'start' });
+    }
+  };
+  return (
+    <button type="button" className="seat-link" aria-pressed={on} onClick={go}>
+      {children}
+    </button>
+  );
+}
+
+const fromStage = (s: Seat) => ({ r: Math.hypot(s.x, s.z - STAGE.front), angle: Math.atan2(s.x, s.z - STAGE.front) });
+const share = (v: number, lo: number, hi: number) => ((v - lo) / (hi - lo)).toFixed(3);
+
 export function SeatDiagram() {
-  const [side, setSide] = useState<'pa' | 'wall'>('pa');
-  const [seat, setSeat] = useState<Seat>(PRESETS[1].seat);
-  const [preset, setPreset] = useState<string | null>('side');
+  const { side, seat, preset, live } = useSeat();
+  const [dragging, setDragging] = useState(false);
   const svg = useRef<SVGSVGElement>(null);
+  const handle = useRef<SVGGElement>(null);
+  const dragEnded = useRef(0);
+
+  // A finger on the handle moves the seat, never the page. Safari needs this as
+  // well as the CSS touch-action, and React can't add a non-passive listener.
+  useEffect(() => {
+    const el = handle.current;
+    if (!el) return;
+    const hold = (e: TouchEvent) => e.preventDefault();
+    el.addEventListener('touchstart', hold, { passive: false });
+    return () => el.removeEventListener('touchstart', hold);
+  }, []);
 
   const sounds = useMemo(() => (side === 'pa' ? paSounds() : wallSounds()), [side]);
   const heard = sounds.map((s) => ({ sound: s, h: heardFrom(seat, s) }));
@@ -80,14 +136,35 @@ export function SeatDiagram() {
     heard.map(({ sound, h }) => ({ id: sound.id, color: sound.color, x: RAIL.left + h.across * (RAIL.right - RAIL.left) })),
   );
 
-  const pick = (e: React.MouseEvent<SVGSVGElement>) => {
+  const inDrawing = (e: { clientX: number; clientY: number }) => {
     const m = svg.current?.getScreenCTM();
-    if (!m) return;
-    const p = new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse());
-    if (p.y < PLAN_TOP) return;
-    setSeat(clampSeat({ x: (p.x - W / 2) / S, z: (p.y - PLAN_TOP) / S + STAGE.minZ }));
-    setPreset(null);
+    return m ? new DOMPoint(e.clientX, e.clientY).matrixTransform(m.inverse()) : null;
   };
+  const seatFrom = (p: DOMPoint) => clampSeat({ x: (p.x - W / 2) / S, z: (p.y - PLAN_TOP) / S + STAGE.minZ });
+
+  const pick = (e: React.MouseEvent<SVGSVGElement>) => {
+    // The click that ends a drag isn't a new choice of seat.
+    if (performance.now() - dragEnded.current < 300) return;
+    const p = inDrawing(e);
+    if (!p || p.y < PLAN_TOP) return;
+    setSeatState({ seat: seatFrom(p), preset: null, live: false });
+  };
+
+  const drag = (e: React.PointerEvent<SVGGElement>) => {
+    if (!dragging) return;
+    const p = inDrawing(e);
+    if (p) setSeatState({ seat: seatFrom(p), preset: null, live: true });
+  };
+  const endDrag = () => {
+    setDragging(false);
+    dragEnded.current = performance.now();
+  };
+
+  const { r, angle } = fromStage(seat);
+  const degrees = Math.round(angle / DEG);
+  const halfAngle = Math.round(SEATING.halfAngle / DEG);
+  const slide = (next: { r?: number; angle?: number }) =>
+    setSeatState({ seat: clampSeat(seatAt(next.r ?? r, next.angle ?? angle)), preset: null, live: true });
 
   const you = px(seat);
   const span = `The stage fills ${Math.round(stageSpanDeg(seat))}° of your view.`;
@@ -99,12 +176,12 @@ export function SeatDiagram() {
         : `From this seat everything seems to come from the nearer stack. The far one arrives ${Math.round(gap)} milliseconds later${gap >= ECHO_MS ? ', late enough to hear as an echo on the voices' : ''}.`;
 
   return (
-    <div className="seat-figure">
+    <div className={`seat-figure${live ? ' live' : ''}`}>
       <div className="dg-switch" role="group" aria-label="Which system to show">
-        <button aria-pressed={side === 'pa'} onClick={() => setSide('pa')}>
+        <button aria-pressed={side === 'pa'} onClick={() => setSeatState({ side: 'pa', live: false })}>
           A typical PA, early 1970s
         </button>
-        <button aria-pressed={side === 'wall'} onClick={() => setSide('wall')}>
+        <button aria-pressed={side === 'wall'} onClick={() => setSeatState({ side: 'wall', live: false })}>
           The Wall, 1974
         </button>
       </div>
@@ -113,16 +190,13 @@ export function SeatDiagram() {
           <button
             key={p.id}
             aria-pressed={preset === p.id}
-            onClick={() => {
-              setSeat(p.seat);
-              setPreset(p.id);
-            }}
+            onClick={() => setSeatState({ seat: p.seat, preset: p.id, live: false })}
           >
             {p.label}
           </button>
         ))}
       </div>
-      <p className="seat-note" aria-live="polite">{note} {span}</p>
+      <p className="seat-note" aria-live={dragging ? 'off' : 'polite'}>{note} {span}</p>
       <svg
         ref={svg}
         className="diagram seat-diagram"
@@ -172,9 +246,55 @@ export function SeatDiagram() {
           const end = px({ x: seat.x + Math.tan(h.angle) * (seat.z - z), z });
           return <line key={sound.id} x1={you.x} y1={you.y} x2={end.x} y2={end.y} className="seat-ray" style={{ stroke: sound.color }} />;
         })}
-        <circle cx={you.x} cy={you.y} r="7" className="seat-you" />
-        <text x={you.x} y={you.y + 24} className="d-tiny" textAnchor="middle">you</text>
+        <g
+          ref={handle}
+          className="seat-handle"
+          data-dragging={dragging || undefined}
+          onPointerDown={(e) => {
+            e.currentTarget.setPointerCapture(e.pointerId);
+            setDragging(true);
+          }}
+          onPointerMove={drag}
+          onPointerUp={endDrag}
+          onPointerCancel={endDrag}
+        >
+          {/* About 50 px across on a phone, wider than the dot you can see. */}
+          <circle cx={you.x} cy={you.y} r="44" className="seat-grab" />
+          <circle cx={you.x} cy={you.y} r="24" className="seat-halo" />
+          <circle cx={you.x} cy={you.y} r="15" className="seat-you" />
+        </g>
+        <text x={you.x} y={you.y + 42} className="d-tiny seat-you-label" textAnchor="middle">you</text>
       </svg>
+      <div className="seat-sliders">
+        <label>
+          <span className="seat-ends"><span>Left</span><span>Right</span></span>
+          <input
+            className="range"
+            type="range"
+            min={-halfAngle}
+            max={halfAngle}
+            value={degrees}
+            aria-label="Your seat, left to right"
+            aria-valuetext={degrees === 0 ? 'centre' : `${Math.abs(degrees)} degrees ${degrees < 0 ? 'left' : 'right'}`}
+            style={{ ['--f' as string]: share(degrees, -halfAngle, halfAngle) }}
+            onChange={(e) => slide({ angle: Number(e.target.value) * DEG })}
+          />
+        </label>
+        <label>
+          <span className="seat-ends"><span>Front</span><span>Back</span></span>
+          <input
+            className="range"
+            type="range"
+            min={SEATING.firstRow}
+            max={SEATING.lastRow}
+            value={Math.round(r)}
+            aria-label="Your seat, front to back"
+            aria-valuetext={`${Math.round(r)} metres from the stage`}
+            style={{ ['--f' as string]: share(r, SEATING.firstRow, SEATING.lastRow) }}
+            onChange={(e) => slide({ r: Number(e.target.value) })}
+          />
+        </label>
+      </div>
       <ul className="seat-key">
         {KEY.map(([label, c]) => (
           <li key={label}>

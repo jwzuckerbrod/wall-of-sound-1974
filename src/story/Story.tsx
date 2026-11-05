@@ -7,6 +7,7 @@ import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, srcOf, type StoryImage } from './images';
 import { shortSource } from './sources';
 import { NowPlaying } from '../ui/NowPlaying';
+import '../ui/range.css';
 
 /**
  * Phones, and any window too short for a card to sit over a picture, get the
@@ -30,8 +31,10 @@ function useCompact() {
 /**
  * Sets --p (0 to 1) on each beat as the reader scrolls through it, and in the
  * compact layout --f (0 to 1) as the block that starts its crossfade comes up.
- * CSS does the rest: crossfades and the push in (diagrams run themselves:
- * DiagramFigure). One listener, one write per beat per frame.
+ * In the wide layout --f follows --p. CSS does the rest: crossfades and the push
+ * in (diagrams run themselves: DiagramFigure). One listener, one write per beat
+ * per frame. Once the reader takes a crossfade's slider, the picture stays where
+ * they put it until the beat leaves the screen (data-held; Compare).
  */
 function useScrollProgress(root: React.RefObject<HTMLElement | null>, layout: boolean) {
   useEffect(() => {
@@ -47,15 +50,22 @@ function useScrollProgress(root: React.RefObject<HTMLElement | null>, layout: bo
         const run = Math.max(1, r.height - vh);
         const p = Math.min(1, Math.max(0, -r.top / run));
         b.style.setProperty('--p', p.toFixed(4));
+        const range = b.querySelector<HTMLInputElement>('.compare input');
+        if (!range) continue;
+        if (r.bottom <= 0 || r.top >= vh) delete b.dataset.held;
+        if (b.dataset.held) continue;
         const fade = b.querySelector<HTMLElement>('[data-fade]');
+        let f = (p - 0.28) * 4;
         if (fade) {
           // The new picture is in by the time its paragraph reaches the reading area.
           const landscape = window.innerWidth > vh;
           const from = (landscape ? 0.95 : 0.9) * vh;
           const to = (landscape ? 0.3 : 0.55) * vh;
-          const f = Math.min(1, Math.max(0, (from - fade.getBoundingClientRect().top) / (from - to)));
-          b.style.setProperty('--f', f.toFixed(3));
+          f = (from - fade.getBoundingClientRect().top) / (from - to);
         }
+        f = Math.min(1, Math.max(0, f));
+        b.style.setProperty('--f', f.toFixed(3));
+        range.value = String(Math.round(f * 100));
       }
     };
     const onScroll = () => {
@@ -91,8 +101,36 @@ function Picture({ img, className, eager, ambient, sizes }: { img: StoryImage; c
   );
 }
 
+/**
+ * A crossfade's slider. Scrolling moves it, and it can also be dragged, to hold
+ * the two pictures at any mix and compare them. Under the picture on a phone,
+ * so the thumb covers nothing and a sideways drag doesn't fight the scroll.
+ */
+function Compare({ ends }: { ends: [string, string] }) {
+  return (
+    <label className="compare">
+      <span className="compare-a">{ends[0]}</span>
+      <input
+        className="range"
+        type="range"
+        min={0}
+        max={100}
+        defaultValue={0}
+        aria-label={`Fade from ${ends[0]} to ${ends[1]}`}
+        onChange={(e) => {
+          const beat = e.currentTarget.closest<HTMLElement>('[data-beat]');
+          if (!beat) return;
+          beat.dataset.held = 'true';
+          beat.style.setProperty('--f', String(Number(e.currentTarget.value) / 100));
+        }}
+      />
+      <span className="compare-b">{ends[1]}</span>
+    </label>
+  );
+}
+
 /** The picture of the compact layout: pinned, with one caption under it. */
-function Pin({ images, first }: { images: StoryImage[]; first?: boolean }) {
+function Pin({ images, first, compare }: { images: StoryImage[]; first?: boolean; compare?: [string, string] }) {
   const [a, b] = images;
   const sizes = '(orientation: portrait) 100vw, 46vw';
   return (
@@ -102,6 +140,7 @@ function Pin({ images, first }: { images: StoryImage[]; first?: boolean }) {
         {a.overlay === 'needles' && <Needles />}
         {b && <Picture img={b} className="pin-b" eager={first} sizes={sizes} />}
       </div>
+      {compare && <Compare ends={compare} />}
       <div className="pin-caption">
         <span className="pin-cap-a"><CaptionText img={a} short /></span>
         {b && <span className="pin-cap-b"><CaptionText img={b} short /></span>}
@@ -183,7 +222,7 @@ function CompactBeat({ beat, first }: { beat: Beat; first: boolean }) {
   }
   return (
     <section className={`c-beat c-pinned motion-${beat.motion}`} data-beat={beat.id} id={beat.id}>
-      <Pin images={beat.images} first={first} />
+      <Pin images={beat.images} first={first} compare={beat.compare} />
       <div className="c-copy">
         {beat.cards.map((c, i) => (
           <Fragment key={i}>{text(c, i)}</Fragment>
@@ -211,6 +250,7 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
             <Caption img={b} />
           </figure>
         )}
+        {beat.compare && <Compare ends={beat.compare} />}
       </div>
       <div className="cards">
         {beat.cards.map((c, i) => (
