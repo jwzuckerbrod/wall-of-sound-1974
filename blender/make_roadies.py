@@ -5,8 +5,8 @@ from FLUX.1 schnell (text prompt only), turned into a textured mesh by
 TRELLIS.2, both on their free Hugging Face demos. The prompts are in
 docs/qa-findings.md; the raw meshes are in the ignored blender/assets/crew-ai/.
 This script does the rest, from structure.crewAloft: removes the pipe or rope
-the picture came with, calms the skin colour, scales and places each on the
-real tubes, and reduces it for a browser.
+the picture came with, calms the skin colour, adds surface detail, scales and
+places each on the real tubes, and reduces it for a browser.
 
     npm run export:scene
     /Applications/Blender.app/Contents/MacOS/Blender -b -P blender/make_roadies.py -- [--src DIR]
@@ -71,13 +71,57 @@ def calm_skin(o, c):
     mask = (((hue < hi) | (hue > lo)) & (sat > c['skinSat']) & (mx > 0.25))
     t = np.clip((sat - c['skinSat']) / 0.12, 0, 1) * mask
     lum = 0.3 * R + 0.59 * G + 0.11 * Bl
-    target = np.stack([lum * 1.16, lum * 0.97, lum * 0.82], 2)
+    target = np.stack([lum * 0.98, lum * 0.88, lum * 0.8], 2)
     srgb = np.clip(srgb * (1 - t[..., None]) + target * t[..., None], 0, 1)
     px[..., :3] = np.where(srgb <= 0.04045, srgb / 12.92, ((srgb + 0.055) / 1.055) ** 2.4)
-    img.pixels.foreach_set(px.ravel())
-    img.update()
-    img.pack()
+    # A new image: the exporter writes an imported image's original bytes, ignoring edits.
+    new = bpy.data.images.new(f"{c['id']} colour", w, h, alpha=False)
+    new.colorspace_settings.name = 'sRGB'
+    new.pixels.foreach_set(px.ravel())
+    new.pack()
+    tex.image = new
     print(c['id'], 'skin share', float(mask.mean()))
+
+
+def add_surface_detail(o, c):
+    """A normal map from the colour texture's fine detail: quilting, denim, boot creases catch the light."""
+    mat = o.data.materials[0]
+    nt = mat.node_tree
+    tex = next(n for n in nt.nodes if n.type == 'TEX_IMAGE'
+               and any(l.to_socket.name == 'Base Color' for out in n.outputs for l in out.links))
+    src = tex.image
+    w, h = src.size
+    px = np.empty(w * h * 4, dtype=np.float32)
+    src.pixels.foreach_get(px)
+    lum = px.reshape(h, w, 4)[..., :3].mean(axis=2) ** 0.5
+    n = 1024
+    if w != n:
+        step = w // n
+        lum = lum[::step, ::step][:n, :n]
+    # High-pass: only the fine detail; the mesh has the large forms.
+    blur = lum
+    for _ in range(6):
+        blur = (blur + np.roll(blur, 1, 0) + np.roll(blur, -1, 0) + np.roll(blur, 1, 1) + np.roll(blur, -1, 1)) / 5
+    d = (lum - blur) * c['detail']
+    dx = (np.roll(d, -1, 1) - np.roll(d, 1, 1))
+    dy = (np.roll(d, -1, 0) - np.roll(d, 1, 0))
+    nz = np.ones_like(d)
+    length = np.sqrt(dx * dx + dy * dy + 1)
+    out = np.stack([(-dx / length + 1) / 2, (-dy / length + 1) / 2, (nz / length + 1) / 2, np.ones_like(d)], 2)
+    img = bpy.data.images.new(f"{o.name} detail", n, n, alpha=False)
+    img.colorspace_settings.name = 'Non-Color'
+    img.pixels.foreach_set(out.astype(np.float32).ravel())
+    img.pack()
+    t = nt.nodes.new('ShaderNodeTexImage')
+    t.image = img
+    m = nt.nodes.new('ShaderNodeNormalMap')
+    m.inputs['Strength'].default_value = 1.0
+    uv = next((l.from_socket for l in tex.inputs['Vector'].links), None)
+    if uv:
+        nt.links.new(uv, t.inputs['Vector'])
+    nt.links.new(t.outputs['Color'], m.inputs['Color'])
+    bsdf = next(x for x in nt.nodes if x.type == 'BSDF_PRINCIPLED')
+    nt.links.new(m.outputs['Normal'], bsdf.inputs['Normal'])
 
 
 def remove_faces(o, test):
@@ -157,7 +201,7 @@ def rope(c):
     pts = [B(p) for p in c['rope']]
     cu = bpy.data.curves.new(f"{c['id']} rope", 'CURVE')
     cu.dimensions = '3D'
-    cu.bevel_depth = 0.009
+    cu.bevel_depth = 0.007
     cu.bevel_resolution = 1
     sp = cu.splines.new('POLY')
     sp.points.add(len(pts) - 1)
@@ -189,6 +233,7 @@ def main():
         o = load(os.path.join(a.src, c['mesh']))
         o.name = c['id']
         calm_skin(o, c)
+        add_surface_detail(o, c)
         {'astride': place_astride, 'hauling': place_hauling}[c['id']](o, c)
         for poly in o.data.polygons:
             poly.use_smooth = True
@@ -200,9 +245,18 @@ def main():
         bpy.ops.object.modifier_apply(modifier=d.name)
         print(o.name, 'faces', len(o.data.polygons))
         for n in o.data.materials[0].node_tree.nodes:
-            if n.type == 'TEX_IMAGE' and n.image and n.image.size[0] > 1024:
-                n.image.scale(1024, 1024)
-                n.image.pack()
+            if n.type == 'TEX_IMAGE' and n.image and 'detail' not in n.image.name:
+                # Colour stays at the demo's full 2K; the shine map doesn't need it.
+                base = any(l.to_socket.name == 'Base Color' for out in n.outputs for l in out.links)
+                if not base and n.image.size[0] > 256:
+                    n.image.scale(256, 256)
+                    px = np.empty(256 * 256 * 4, dtype=np.float32)
+                    n.image.pixels.foreach_get(px)
+                    small = bpy.data.images.new(f'{o.name} shine', 256, 256, alpha=False)
+                    small.colorspace_settings.name = 'Non-Color'
+                    small.pixels.foreach_set(px)
+                    small.pack()
+                    n.image = small
         out.append(o)
         if c.get('rope'):
             out.append(rope(c))
@@ -212,7 +266,7 @@ def main():
     bpy.ops.export_scene.gltf(
         filepath=OUT, export_format='GLB', use_selection=True, export_yup=True,
         export_apply=True, export_texcoords=True, export_normals=True, export_materials='EXPORT',
-        export_image_format='WEBP', export_image_quality=82,
+        export_image_format='WEBP', export_image_quality=84,
         export_draco_mesh_compression_enable=True, export_draco_mesh_compression_level=7,
     )
     print('EXPORTED', OUT, f'{os.path.getsize(OUT) / 1e6:.2f} MB')

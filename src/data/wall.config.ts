@@ -1058,18 +1058,19 @@ export const wall = {
         /** Turned so the picture's view, his back, faces the audience. */
         turn: 180,
         /** Fist on the top rail. */
-        hand: [9.2, 14.8844, 0],
-        /** The lower boot on the ledger below. */
-        foot: [9.11, 12.9, 0],
-        footY: 12.89,
+        hand: [9.48, 14.8844, 0],
+        /** The lower boot on the diagonal brace below. */
+        foot: [9.39, 12.73, 0],
+        footY: 12.73,
         ropeStub: 0.045,
         fistDepth: 0.06,
         /** Tied off at the rail, past his hand, and down to the deck. */
-        rope: [[9.42, 14.92, 0.01], [9.44, 14.6, 0.07], [9.5, 3.06, 0.2]],
+        rope: [[9.2, 14.915, 0.01], [9.21, 14.6, 0.055], [9.26, 11.5, 0.16], [9.2, 8, 0.2], [9.27, 5, 0.17], [9.23, 3.06, 0.3]],
         grips: ['hand', 'foot'],
-        skinHue: [345, 22],
-        skinSat: 0.45,
-        keepFaces: 0.32,
+        skinHue: [345, 21],
+        skinSat: 0.4,
+        keepFaces: 0.45,
+        detail: 5,
       },
       {
         id: 'astride',
@@ -1081,9 +1082,10 @@ export const wall = {
         seatedHeight: 1.42,
         rope: null,
         grips: ['seat'],
-        skinHue: [345, 22],
-        skinSat: 0.38,
-        keepFaces: 0.36,
+        skinHue: [345, 21],
+        skinSat: 0.33,
+        keepFaces: 0.5,
+        detail: 5,
       },
     ],
     tieDyes: {
