@@ -949,22 +949,27 @@ rock concert road crew member, plain light grey background, realistic 35mm film.
 
 **The two figures**
 
-- **Hauling**, right corner: back to the audience, one fist on the top rail, boots on the
-  ledger below, leaning out. A rope tied at the rail hangs beside him to the deck. He is
-  scaled so fist and boot meet the steel: about 5 ft 6 in, a little short.
+- **Hauling**, right corner: back to the audience, one fist on the top rail, his lower boot
+  on the diagonal brace, leaning out. A slack rope tied at the rail hangs beside him to
+  the deck. Scaled so fist and boot meet the steel: about 5 ft 11 in.
 - **Astride**, left corner: sitting on the top rail facing out.
 - **No harness or helmet.** None shows in any photograph, though they are small.
 
-**Known flaws.** Astride's forearms stay too warm in tone, especially indoors, and he has a
+**Known flaws.** Astride's forearms stay too warm in tone even after correction, especially indoors, partly from the warm stage light, and he has a
 short beard and a modern-looking wristwatch the prompt didn't ask for; he rests rather than
 works. A moustache-only picture (`sit2.png`) is ready, its mesh stopped by the quota.
 Hauling's face was invented by the generator and is weak, but he faces the Wall; his
-free hand is out of sight and his rope is a stiff line. The backs of the figures are less
+free hand is out of sight and a brace crosses his leg from the front. The backs of the figures are less
 sharp than their fronts, since the generator sees one side. Nobody is identifiable, but
 faces are the generator's invention, not evidence.
 
-**Cost.** `public/models/crew.glb` is 0.94 MB, fetched after the Wall is up. About 60,000
-more triangles a frame indoors: 1,191,594 to 1,252,057. No shadows cast. No frame rate
+**Photorealism, as far as the current meshes go.** 2K colour textures kept in full, a normal
+map derived from each texture's fine detail so quilting and denim catch the light, and about
+42,000 faces each. The limit is now the source: one generated view, lit into its texture, in
+a real-time renderer.
+
+**Cost.** `public/models/crew.glb` is 1.70 MB, fetched after the Wall is up. About 85,000
+more triangles a frame indoors: 1,191,594 to 1,276,118. No shadows cast. No frame rate
 measured on a real phone.
 
 **Explorer only.** Blender's renders and the story don't have them.
