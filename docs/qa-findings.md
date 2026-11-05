@@ -968,6 +968,13 @@ map derived from each texture's fine detail so quilting and denim catch the ligh
 42,000 faces each. The limit is now the source: one generated view, lit into its texture, in
 a real-time renderer.
 
+**Tried and dropped: painting the sharp picture back onto the mesh.** The camera was fitted
+automatically, first on colour, then on outline. Neither lined up: 30% (sitter) and 45%
+(hauler) of the outline still missed. The generated mesh's shape differs from the picture's,
+so the projection smeared the face and painted background onto the clothes. Far worse than
+the mesh's own texture, so it isn't in the build. The experiment is kept in the ignored
+`blender/assets/crew-ai/`.
+
 **Cost.** `public/models/crew.glb` is 1.70 MB, fetched after the Wall is up. About 85,000
 more triangles a frame indoors: 1,191,594 to 1,276,118. No shadows cast. No frame rate
 measured on a real phone.
