@@ -13,12 +13,14 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §23) and gear in `docs/surviving-gear.md`.
+  §24) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
 
 - Browser app: `npm run dev` (port 5174; `.claude/launch.json` "wall-of-sound").
+- Phone review: `npm run phone [path]` opens real Safari on a simulated iPhone if
+  Xcode is installed; if not, `phone.html`, a dev-only device frame for sizes.
   Story page at `/story.html`; its images via `npm run story:images`.
 - After config changes: `npm run export:scene` (writes `blender/scene.json`).
 - Blender: `/Applications/Blender.app/Contents/MacOS/Blender -b -P <script> -- <args>`
@@ -59,4 +61,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - **Kling (AI image edits) costs credits: state the exact price before every
   job.** Kling O1 = 1 credit; Nano Banana Pro = 20. Balance was 19 on 2026-10-07.
   AI edits may only touch masked crowd pixels, never the Wall.
+- **Build mobile-first, for every site.** Design and test each change at phone
+  size first (thumb-sized targets, nothing that fights scrolling, portrait and
+  sideways), then widen. Review it with `npm run phone`.
 - Commit in logical pieces with clear messages; push when asked.

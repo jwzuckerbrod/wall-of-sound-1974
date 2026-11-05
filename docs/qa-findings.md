@@ -953,3 +953,33 @@ is pushed back, since these views stand far from the Wall.
 **Compare size is now a menu,** one object at a time, each with its own view and note, and
 `?compare=737` opens on the airliner. **Not done:** the whale, left to the film.
 
+
+## 24. Sliders, after Ciechanowski's "Sound", and phone review (5 November 2026)
+
+Four ideas taken from <https://ciechanow.ski/sound/>: a control sits next to the sentence
+that introduces it, changes one thing, and shows the result at once.
+
+**The seat can be dragged** (`SeatDiagram.tsx`): the "you" marker, or two sliders, Left to
+Right and Front to Back. Only the marker takes a finger from the page. The rest of the plan
+still scrolls, and a tap still moves the seat. The note's height is reserved on a phone so the
+plan doesn't jump under a dragging finger. The sliders only set a position: every result still
+comes from `localize.ts`.
+
+**Each crossfade has a slider** (`Compare` in `Story.tsx`): photograph to reconstruction, the
+stage to each system, the stage to how sure we are. Scrolling moves it. Once the reader takes
+it, the picture stays put until the beat leaves the screen. On a phone it sits under the picture.
+
+**The words move the seat:** "Sit in the middle", "Sit to one side" and "The Wall" (`SeatLink`).
+
+**One slider style** (`src/ui/range.css`): a 28 px handle for a finger and 20 px for a mouse, on
+real inputs, where the Listen bar's handle was 12 px. His sliders are drawn on canvas with no
+slider role; ours stay native for keyboards and screen readers. "Take it apart" keeps its label
+on a phone. Over a picture, `.cards` now passes the pointer through except on the cards.
+
+**Not borrowed:** sliders for volume or power. Nothing records those, so they would be invented.
+
+**Phone review:** `npm run phone`. The real check is Safari in Xcode's iOS Simulator (Xcode wasn't
+installed on 5 November). `phone.html` is a dev-only device frame: right sizes, no touch.
+
+**Tested** at 402 x 681 in Chromium with a mouse: the seat drag, both kinds of slider, the links,
+holding and releasing a crossfade. **Not yet tested:** touch, on the Simulator or a real iPhone.
