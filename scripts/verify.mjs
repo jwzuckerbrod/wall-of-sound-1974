@@ -261,7 +261,7 @@ console.log('\nThe crew at the top corners');
       const d = Math.min(...tubes.map((t) => toTube(c[g], t)));
       check(`${c.id}: ${g} within a wrist or ankle of a tube`, d <= 0.2, true);
     }
-  check('one crew member at each side', new Set(cfg.wall.structure.crewAloft.map((c) => Math.sign(c.hips[0]))).size, 2);
+  check('one crew member at each side', new Set(cfg.wall.structure.crewAloft.map((c) => Math.sign(c[c.grips[0]][0]))).size, 2);
 }
 
 console.log('\nOn the deck: cables and the Bowl riser');

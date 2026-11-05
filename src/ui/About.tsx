@@ -149,9 +149,8 @@ export function About({ onClose }: { onClose: () => void }) {
           {wall.meta.retired.run} run at the {wall.meta.retired.venue}.
         </p>
         <p>
-          The two crew at the top of the scaffold are composites of a look, not portraits, made with MakeHuman
-          and MPFB. Curly hair adapted by punkduck, beard by WDG, moustache by Rehman Polanski, from the MakeHuman
-          community's assets.
+          The two crew at the top of the scaffold are AI-generated figures, not photographs or portraits of anyone:
+          pictures from FLUX.1 schnell turned into 3D with TRELLIS.2, placed where 1974 photographs show men working.
         </p>
       </div>
     </div>

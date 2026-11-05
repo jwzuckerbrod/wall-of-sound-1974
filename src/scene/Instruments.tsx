@@ -40,14 +40,6 @@ function model(name: string) {
           if ((o as THREE.Mesh).isMesh) {
             o.castShadow = true;
             o.receiveShadow = true;
-            // The crew's hair cuts out against its texture, which keeps the curls. The
-            // alpha is soft, so the threshold is low; 0.5 loses most of the hair.
-            const m = (o as THREE.Mesh).material as THREE.MeshStandardMaterial;
-            if (m.name?.startsWith('hair ')) {
-              m.transparent = false;
-              m.alphaTest = 0.22;
-              m.side = THREE.DoubleSide;
-            }
           }
         });
         return g.scene;
