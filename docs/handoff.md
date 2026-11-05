@@ -45,5 +45,10 @@
   Bowl's riser and pale floor are in the explorer only, so the story's renders
   don't have them yet. The Bowl has simple trees and, by decision, no crowd. A
   full-screen instrument viewer is scoped (§22) and parked: not now, by decision.
+- **Crew figures, to improve as the project goes** (§23): a moustache-only sitter
+  (`sit2.png` needs its mesh) and the top-right man tightening a clamp (prompt in
+  `blender/assets/crew-ai/gen.py`), both waiting on the free Hugging Face quota; warm
+  forearms; then, if wanted, a Cycles test for pre-rendered views. Painting the picture
+  back onto the mesh was tried and failed.
 - **Live** at https://jwzuckerbrod.github.io/wall-of-sound-1974/ (GitHub Pages,
   deployed on every push to master).
