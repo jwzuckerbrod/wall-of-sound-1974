@@ -13,15 +13,6 @@
 .ls-play[data-loading] { animation: ls-pulse 1s ease-in-out infinite; }
 @keyframes ls-pulse { 50% { opacity: 0.55; } }
 .ls-play:focus-visible, .ls-switch button:focus-visible, .np button:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.ls-bar { width: 100%; margin: 0; height: 44px; background: transparent; -webkit-appearance: none; appearance: none; cursor: pointer; }
-.ls-bar::-webkit-slider-runnable-track {
-  height: 4px; border-radius: 2px;
-  background: linear-gradient(to right, var(--ls-accent) calc(var(--f, 0) * 100%), rgba(255, 255, 255, 0.18) 0);
-}
-.ls-bar::-moz-range-track { height: 4px; border-radius: 2px; background: rgba(255, 255, 255, 0.18); }
-.ls-bar::-moz-range-progress { height: 4px; border-radius: 2px; background: var(--ls-accent); }
-.ls-bar::-webkit-slider-thumb { -webkit-appearance: none; width: 12px; height: 12px; margin-top: -4px; border-radius: 50%; background: #fff; border: 0; }
-.ls-bar::-moz-range-thumb { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 0; }
 .ls-time { font-variant-numeric: tabular-nums; font-size: 0.85em; opacity: 0.7; white-space: nowrap; }
 .ls-switch { display: inline-flex; width: max-content; border: 1px solid rgba(255, 255, 255, 0.22); border-radius: 999px; padding: 2px; }
 .ls-switch button {

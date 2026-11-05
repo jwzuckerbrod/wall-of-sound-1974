@@ -6,6 +6,7 @@ import type { CompareId } from '../scene/ScaleObjects';
 import { PLANE_POSITIONS, type PlaneAt } from '../geometry/scale';
 import { PLANE_VIEWS, VIEWPOINTS, type ViewpointId } from '../scene/views';
 import { UNIT_LABEL, type UnitSystem } from './units';
+import './range.css';
 
 /** A touch screen with no mouse: hints talk about pinching, not scrolling or keys. */
 export const TOUCH = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
@@ -132,11 +133,13 @@ export function BottomBar({
         <label className="explode">
           <span>Take it apart</span>
           <input
+            className="range"
             type="range"
             min={0}
             max={1}
             step={0.01}
             value={explode}
+            style={{ ['--f' as string]: explode }}
             onChange={(e) => setExplode(Number(e.target.value))}
             aria-valuetext={explode < 0.02 ? 'assembled' : explode > 0.98 ? 'fully apart' : `${Math.round(explode * 100)}% apart`}
           />
