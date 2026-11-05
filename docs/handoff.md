@@ -41,7 +41,7 @@
 - Where the bass-drum column really stood (guess, `arrays.kickPosition`).
 - Stack heights against Pechner's photograph, the cluster's row pitch (§6).
 - No photograph from July to October shows the whole band (§7, §9).
-- **Explorer:** two of the crew at the scaffold's top corners (§23). QA 2.2 and 2.5 to 2.8 are closed (§22). The deck's cables, the
+- **Explorer:** two AI-generated crew figures at the scaffold's top corners, labelled so (§23). QA 2.2 and 2.5 to 2.8 are closed (§22). The deck's cables, the
   Bowl's riser and pale floor are in the explorer only, so the story's renders
   don't have them yet. The Bowl has simple trees and, by decision, no crowd. A
   full-screen instrument viewer is scoped (§22) and parked: not now, by decision.

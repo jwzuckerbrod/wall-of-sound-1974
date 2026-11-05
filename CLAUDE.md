@@ -28,8 +28,8 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   - `blender/make_people.py --count 144` regenerates the crowd library.
   - `blender/export_instruments.py` bakes the instruments to `public/models/*.glb`
     for the explorer (after `npm run export:scene`; about a minute).
-  - `blender/make_roadies.py` poses the crew on the scaffold, `public/models/crew.glb`
-    (from `structure.crewAloft`; needs MPFB).
+  - `blender/make_roadies.py -- --src <dir>` cleans and places the crew's AI meshes on the
+    scaffold, `public/models/crew.glb` (from `structure.crewAloft`; qa-findings §23).
 - Shared layout code feeds both renderers: `src/geometry/arrays.ts` (each
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
@@ -46,6 +46,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 ## Ignored local assets (not in git; needed for full renders)
 
 - `blender/assets/polyhaven/`: Poly Haven CC0 plants, ground, sky (147 MB).
+- `blender/assets/crew-ai/`: the crew's AI pictures, raw meshes and helper scripts.
 - `blender/assets/makehuman/zips/`: MPFB add-on + MakeHuman packs (912 MB);
   `people.blend` (144 people, 386 MB). MPFB is installed in Blender's user
   extensions. Hair 02/03 are **CC-BY: credit the MakeHuman community** if

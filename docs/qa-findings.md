@@ -894,12 +894,39 @@ main checkout too; not investigated.
 
 ---
 
-## 23. Two of the crew at the top corners (4 November 2026)
+## 23. Two of the crew at the top corners (4–5 November 2026)
 
-The explorer now has two of the crew at the top of the scaffold, one at each
-corner: they give the Wall a person's size, and they are where the photographs
-put people. Built by `blender/make_roadies.py` from `structure.crewAloft`, written
-to `public/models/crew.glb` (0.95 MB, fetched after the Wall is up, no shadows).
+The explorer has two of the crew at the top of the scaffold, one at each corner: they
+give the Wall a person's size, and they are where the photographs put people.
+
+**They are AI-generated, and labelled so** (About panel, `structure.crewAloft`). Two
+earlier versions, posed MakeHuman figures, were rejected by the project owner as not good
+enough for the site: skin-tight clothes and game-character bodies, which better light
+didn't fix. Free add-ons, scans and character tools were compared; none solved the
+clothes within its licence (Renderpeople's terms bar easily downloadable meshes; MetaHuman
+is reportedly Unreal-only). So, as a deliberate choice by the owner:
+
+1. **Picture:** FLUX.1 schnell (Apache 2.0), free Hugging Face demo, text prompt only.
+   No photograph of anyone went in.
+2. **Mesh:** TRELLIS.2 (MIT), free Hugging Face demo, one picture to a textured mesh.
+3. **Placing:** `blender/make_roadies.py`, from `structure.crewAloft`: cuts away the
+   pipe or rope stub, calms the skin colour, scales and places on the tubes, reduces
+   to about 30,000 faces and 1K textures. Raw meshes are in the ignored
+   `blender/assets/crew-ai/` with their pictures and helper scripts.
+
+The free demo's GPU quota allows only a few runs a day for a free account.
+
+**The prompts.** Shared: full-body documentary photograph of one man about 30, a 1970s
+rock concert road crew member, plain light grey background, realistic 35mm film.
+
+- *Astride:* dark curly shoulder-length hair, thick moustache, dark aviator sunglasses,
+  bulky brown quilted down vest open over a dark T-shirt, loose worn baggy dark denim
+  jeans, big belt buckle, scuffed brown work boots; sitting on a horizontal steel pipe,
+  legs dangling, facing the camera. Seed 721.
+- *Hauling:* brown hair in a long ponytail, full beard, red and black plaid flannel shirt
+  with sleeves rolled, dark worn leather vest, loose faded baggy blue jeans, scuffed
+  brown work boots; back three-quarter view, feet apart, leaning back, pulling on a rope.
+  Seed 44.
 
 **Where they work: the 1974 evidence**
 
@@ -910,46 +937,34 @@ to `public/models/crew.glb` (0.95 MB, fetched after the Wall is up, no shadows).
 | [IATSE Local 205, 2014](https://newsletter.iatse205.org/?p=815) | Over 20 crew; speakers tied on with rope and hoisted by block-and-falls; local labour too |
 | [InsideHook on *Loud and Clear*](https://www.insidehook.com/books/grateful-dead-accidental-future-sound) | The crew climbed the tower mid-set to fix a channel |
 
-**How they look: three photographs from the project owner.** Copied to
-`.shots/reference/crew/`. None is dated to summer 1974, so the look is the period's and
-this circle's, not a record of that day. Nobody in them was identified or copied.
+**How they look: three photographs from the project owner.** In
+`.shots/reference/crew/`. They informed the prompts' wording only. None is dated to summer
+1974, so the look is the period's and this circle's, not a record of that day.
 
 | Photograph | Date | The look taken from it |
 |---|---|---|
 | Group portrait against a plywood wall | Undated | Big curly hair, moustache, quilted down vest over a dark T-shirt, dark jeans, big belt buckle |
-| Backstage by the amp racks | Undated (a credit is partly legible; not read reliably) | Ponytail, beard, plaid shirt under a dark vest, jeans. The man beside him wears a Hell's Angels vest; that patch is not used |
+| Backstage by the amp racks | Undated | Ponytail, beard, plaid shirt under a dark vest, jeans. The Hell's Angels patch beside him is not used |
 | Ed Perlstein | 1978 | Curly hair, moustache, dark glasses, a vest |
 
 **The two figures**
 
-- **Hauling**, right corner: back to the audience, a boot on the end of a ledger and one
-  braced on the corner standard, one hand on the standard and one on a hand line that
-  runs over the top ledger and down to the deck. Ponytail, beard, plaid shirt, dark vest,
-  jeans.
-- **Astride**, left corner: sitting on the top rail facing out, one hand on the rail, one
-  at the corner standard. Curly hair to the shoulders, moustache, dark glasses, quilted
-  vest over a dark T-shirt, dark jeans, belt buckle.
+- **Hauling**, right corner: back to the audience, one fist on the top rail, boots on the
+  ledger below, leaning out. A rope tied at the rail hangs beside him to the deck. He is
+  scaled so fist and boot meet the steel: about 5 ft 6 in, a little short.
+- **Astride**, left corner: sitting on the top rail facing out.
 - **No harness or helmet.** None shows in any photograph, though they are small.
 
-**What is invented, or not known.** The poses and the exact colours. They are composites
-of a look, not portraits: no photograph names anyone aloft, and the faces are the
-generator's. The packs have no vest, plaid shirt or sunglasses, so those are made in
-the script: a vest is a T-shirt with sleeves and front removed, puffed outward.
-Searches found nothing written on what the crew wore. The best source not checked is
-the setup footage in *The Grateful Dead Movie* (Winterland, October 1974). A Relix
-auction photo said to show Ram Rod building the Wall could not be read (the site refused).
+**Known flaws.** Astride's forearms stay too warm in tone, especially indoors, and he has a
+short beard and a modern-looking wristwatch the prompt didn't ask for; he rests rather than
+works. A moustache-only picture (`sit2.png`) is ready, its mesh stopped by the quota.
+Hauling's face was invented by the generator and is weak, but he faces the Wall; his
+free hand is out of sight and his rope is a stiff line. The backs of the figures are less
+sharp than their fronts, since the generator sees one side. Nobody is identifiable, but
+faces are the generator's invention, not evidence.
 
-**Limits.** MakeHuman people read as people at this distance, and as game characters up
-close (§16). The ledger at the end of the tower doesn't run between the front and back
-frames in the model, so the hauling figure's feet are at the front corner. Their boots
-are the pack's nearest shoes, recoloured. The vest's neckline is stepped close up.
-verify.mjs keeps each grip within 0.2 m of a
-tube. Licences, from each asset's file: curly hair (punkduck, in the CC-BY pack) and beard
-(WDG) say AGPL3 with a pointer to MakeHuman's external-tools licence, the moustache
-(Rehman Polanski) CC0. These shapes are now published inside `crew.glb`; that licence's
-terms for exported characters still need reading before this goes live.
-
-**Cost.** About 57,000 more triangles a frame indoors: 1,191,594 to about 1,249,000.
+**Cost.** `public/models/crew.glb` is 0.94 MB, fetched after the Wall is up. About 60,000
+more triangles a frame indoors: 1,191,594 to 1,252,057. No shadows cast. No frame rate
+measured on a real phone.
 
 **Explorer only.** Blender's renders and the story don't have them.
-
