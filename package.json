@@ -6,6 +6,7 @@
   "description": "An explorable 3D reconstruction of the Grateful Dead's Wall of Sound, 1974.",
   "scripts": {
     "dev": "vite",
+    "phone": "zsh scripts/phone.sh",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "check": "tsc --noEmit",

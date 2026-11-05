@@ -1,0 +1,131 @@
+<!doctype html>
+<!--
+  A dev-only iPhone frame: `npm run phone` opens it when Xcode's Simulator isn't
+  there. Not in vite.config's inputs, so it is never built or published. It gets
+  the sizes right, and the engine right if opened in Safari, but it has no touch,
+  no real Safari bars and no safe areas: the Simulator is the real check.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>iPhone review</title>
+    <style>
+      :root { color-scheme: dark; font: 13px -apple-system, 'Segoe UI', sans-serif; }
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin: 0; background: #17181b; color: #d8d8dc; overflow: hidden; }
+      header { height: 52px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; padding: 8px; }
+      select, button { font: inherit; color: inherit; background: #2a2b30; border: 1px solid #3c3d44; border-radius: 7px; padding: 6px 10px; cursor: pointer; }
+      button[aria-pressed='true'] { background: #4a4b55; }
+      #size { color: #8d8e96; font-variant-numeric: tabular-nums; min-width: 8em; text-align: center; }
+      main { position: absolute; inset: 52px 0 26px; display: grid; place-items: center; overflow: hidden; }
+      #fit { flex: none; transform-origin: center; }
+      #phone { display: flex; flex-direction: column; background: #000; border-radius: 54px; padding: 11px; box-shadow: 0 0 0 2px #55565c, 0 24px 70px #000; }
+      #phone.landscape { flex-direction: row; }
+      #screen { position: relative; display: flex; flex-direction: column; background: #0e0d0b; border-radius: 44px; overflow: hidden; }
+      #status { flex: none; position: relative; display: flex; justify-content: space-between; align-items: center; padding: 0 30px; font-weight: 600; font-size: 15px; }
+      #island { position: absolute; top: 11px; left: 50%; width: 122px; height: 35px; margin-left: -61px; background: #000; border-radius: 20px; }
+      iframe { flex: none; display: block; border: 0; background: #0e0d0b; }
+      #bar { flex: none; display: flex; align-items: flex-start; justify-content: center; padding-top: 10px; }
+      #url { width: 84%; height: 44px; border-radius: 22px; background: #2c2c2e; display: grid; place-items: center; font-size: 14px; color: #c7c7cc; }
+      .landscape-screen #status, .landscape-screen #island { display: none; }
+      .landscape-screen #bar { display: none; }
+      .home #bar { display: none; }
+      footer { position: absolute; inset: auto 0 0; height: 26px; text-align: center; color: #75767e; font-size: 11.5px; line-height: 26px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <select id="page" aria-label="Page">
+        <option value="/story.html">The story</option>
+        <option value="/index.html">The explorer</option>
+        <option value="/index.html?venue=bowl">The explorer, at the Bowl</option>
+      </select>
+      <select id="device" aria-label="iPhone"></select>
+      <button id="turn" aria-pressed="false">Turn sideways</button>
+      <button id="reload">Reload</button>
+      <span id="size"></span>
+    </header>
+    <main>
+      <div id="fit">
+        <div id="phone">
+          <div id="screen">
+            <div id="status"><span>9:41</span><span id="island"></span><span>5G</span></div>
+            <iframe id="view" title="The page, at the phone's size"></iframe>
+            <div id="bar"><div id="url"></div></div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>Sizes only: no touch, and the bars are drawn on. Sizes approximate Safari's. The Simulator is the real check.</footer>
+    <script>
+      // Screen size, and the height Safari's own bars take from it (approximate).
+      const DEVICES = {
+        se: { name: 'iPhone SE', w: 375, h: 667, top: 20, bars: 94, island: false },
+        std: { name: 'iPhone 17', w: 402, h: 874, top: 62, bars: 131, island: true },
+        max: { name: 'iPhone 17 Pro Max', w: 440, h: 956, top: 62, bars: 131, island: true },
+      };
+      const $ = (id) => document.getElementById(id);
+      const saved = new URLSearchParams(location.search);
+      const state = {
+        page: saved.get('page') || '/story.html',
+        device: DEVICES[saved.get('device')] ? saved.get('device') : 'std',
+        sideways: saved.get('sideways') === '1',
+      };
+      for (const [id, d] of Object.entries(DEVICES)) $('device').add(new Option(d.name, id));
+
+      function layout() {
+        const d = DEVICES[state.device];
+        const [view, screen, status, bar] = [$('view'), $('screen'), $('status'), $('bar')];
+        screen.classList.toggle('landscape-screen', state.sideways);
+        $('island').style.display = d.island && !state.sideways ? '' : 'none';
+        let w, h;
+        if (state.sideways) {
+          // Upright's width becomes the height; the sensor housing and Safari's bar take their share.
+          w = d.h - (d.island ? 118 : 0);
+          h = d.w - 42;
+          screen.style.cssText = `width:${d.h}px;height:${d.w}px;align-items:center;padding-top:42px`;
+        } else {
+          w = d.w;
+          h = d.h - d.top - d.bars;
+          screen.style.cssText = `width:${d.w}px;height:${d.h}px`;
+          status.style.height = `${d.top}px`;
+          bar.style.height = `${d.bars}px`;
+        }
+        view.style.width = `${w}px`;
+        view.style.height = `${h}px`;
+        $('size').textContent = `${w} × ${h} viewport`;
+        $('turn').setAttribute('aria-pressed', state.sideways);
+        $('url').textContent = location.hostname;
+        fit();
+      }
+      function fit() {
+        const f = $('fit');
+        const m = document.querySelector('main').getBoundingClientRect();
+        f.style.transform = 'none';
+        const s = Math.min(1, (m.height - 16) / f.offsetHeight, (m.width - 16) / f.offsetWidth);
+        f.style.transform = `scale(${s})`;
+      }
+      function show() {
+        $('view').src = state.page;
+        const q = new URLSearchParams({ page: state.page, device: state.device });
+        if (state.sideways) q.set('sideways', '1');
+        history.replaceState(null, '', `?${q}`);
+      }
+      $('page').value = state.page;
+      $('device').value = state.device;
+      $('page').onchange = (e) => { state.page = e.target.value; show(); };
+      $('device').onchange = (e) => { state.device = e.target.value; layout(); show(); };
+      $('turn').onclick = () => { state.sideways = !state.sideways; layout(); show(); };
+      $('reload').onclick = () => $('view').contentWindow.location.reload();
+      // A phone's scrollbar floats over the page; a desktop Chrome's would narrow it.
+      $('view').onload = () => {
+        const style = $('view').contentDocument.createElement('style');
+        style.textContent = 'html::-webkit-scrollbar { display: none; } html { scrollbar-width: none; }';
+        $('view').contentDocument.head.append(style);
+      };
+      addEventListener('resize', fit);
+      layout();
+      show();
+    </script>
+  </body>
+</html>
