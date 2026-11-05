@@ -13,12 +13,14 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §23) and gear in `docs/surviving-gear.md`.
+  §25) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
 
 - Browser app: `npm run dev` (port 5174; `.claude/launch.json` "wall-of-sound").
+- Phone review: `npm run phone [path]` opens real Safari on a simulated iPhone if
+  Xcode is installed; if not, `phone.html`, a dev-only device frame for sizes.
   Story page at `/story.html`; its images via `npm run story:images`.
 - After config changes: `npm run export:scene` (writes `blender/scene.json`).
 - Blender: `/Applications/Blender.app/Contents/MacOS/Blender -b -P <script> -- <args>`
@@ -29,11 +31,14 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   - `blender/export_instruments.py` bakes the instruments to `public/models/*.glb`
     for the explorer (after `npm run export:scene`; about a minute).
   - `blender/make_roadies.py -- --src <dir>` cleans and places the crew's AI meshes on the
-    scaffold, `public/models/crew.glb` (from `structure.crewAloft`; qa-findings §23).
+    scaffold, `public/models/crew.glb` (from `structure.crewAloft`; qa-findings §25).
 - Shared layout code feeds both renderers: `src/geometry/arrays.ts` (each
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
   them, not the Python. The explorer has `?venue=bowl`.
+- `blender/scale/vwbus.py` and `b737.py` script the bus and the airliner to
+  `public/models/` (after `npm run export:scene`). They appear under the explorer's
+  "Compare size" menu, or with `?compare` and `?compare=737` (`&at=behind` or `&at=front`).
 - The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
   (each stop's camera, text, dot anchor and system), viewpoints in
   `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and
@@ -59,4 +64,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - **Kling (AI image edits) costs credits: state the exact price before every
   job.** Kling O1 = 1 credit; Nano Banana Pro = 20. Balance was 19 on 2026-10-07.
   AI edits may only touch masked crowd pixels, never the Wall.
+- **Build mobile-first, for every site.** Design and test each change at phone
+  size first (thumb-sized targets, nothing that fights scrolling, portrait and
+  sideways), then widen. Review it with `npm run phone`.
 - Commit in logical pieces with clear messages; push when asked.

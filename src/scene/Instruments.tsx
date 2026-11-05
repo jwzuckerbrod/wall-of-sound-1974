@@ -21,7 +21,7 @@ const BASE = `${import.meta.env.BASE_URL}models/`;
 const COMMON = ['garcia', 'weir', 'lesh', 'piano', 'rhodes', 'stands'];
 
 let loader: GLTFLoader | null = null;
-function gltfLoader() {
+export function gltfLoader() {
   if (!loader) {
     const draco = new DRACOLoader().setDecoderPath(`${import.meta.env.BASE_URL}draco/`).setDecoderConfig({ type: 'wasm' });
     loader = new GLTFLoader().setDRACOLoader(draco);

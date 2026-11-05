@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
+   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -276,6 +276,29 @@ console.log('\nOn the deck: cables and the Bowl riser');
   check('no vocal stand on the riser', scaf.vocalMics(L).filter(([x, , z]) => inRiser([x, z])).length, 0);
   check('riser downstage of the wall', R.pos[2] - R.size.d / 2 > 0, true);
   console.log(`        cables: ${cables.length}`);
+}
+
+console.log('\nThe buses and the 737, for scale');
+{
+  const row = (await load('geometry/scale.js')).busRow(0, L);
+  const B = cfg.wall.scale.vwBus;
+  const span = row.length * B.length;
+  check('four buses', row.length, 4);
+  check('their length matches the 60 ft run within 1 ft (ft)', span / 0.3048, 60, 1);
+  check('the row is centred on the stage', row.reduce((a, b) => a + b.pos[0], 0), 0, 1e-9);
+  check('the row stands clear of the stage front', row.every((b) => b.pos[2] - B.width / 2 > L.deck.maxZ), true);
+  const scale = await load('geometry/scale.js');
+  const P = cfg.wall.scale.b737;
+  const FT = 0.3048;
+  check('737 length, Boeing (ft)', P.length / FT, 100 + 2 / 12, 0.05);
+  check('737 span, Boeing (ft)', P.span / FT, 93, 0.05);
+  check('737 tail, Boeing (ft)', P.tailHeight / FT, 36 + 10 / 12, 0.05);
+  check('the Wall stands 12 ft above the 737\'s tail (ft)', (L.yLevels.at(-1) - P.tailHeight) / FT, 12, 0.1);
+  check('three positions for the 737', scale.PLANE_POSITIONS.length, 3);
+  check('beside: the 737 clear of the stage\'s end', scale.planePlace('beside', L).pos[0] + P.length / 2 < L.deck.minX, true);
+  check('beside: at the depth of the speakers\' face', scale.planePlace('beside', L).pos[2], 0, 1e-9);
+  check('behind: its near wing clear of the stage', scale.planePlace('behind', L).pos[2] + P.span / 2 < L.deck.minZ, true);
+  check('in front: its near wing clear of the stage', scale.planePlace('front', L).pos[2] - P.span / 2 > L.deck.maxZ, true);
 }
 
 console.log('\nProvenance, for the About page');

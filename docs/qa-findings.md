@@ -894,7 +894,99 @@ main checkout too; not investigated.
 
 ---
 
-## 23. Two of the crew at the top corners (4–5 November 2026)
+## 23. A sense of scale: four buses (4 November 2026)
+
+The explorer sits in a black void, with little to judge its size by. This tries
+the first object from the film's scale shot (`docs/video-brief.md`, shot 2b) as an
+option in the explorer: a "Compare size" button, off by default, or `?compare`.
+
+**What it shows.** Four 1974 Volkswagen Type 2 buses end to end on the ground along
+the stage front, 59 ft against the 60 ft run of speakers above them. Each stands
+well under the 10 ft stage, so the deck alone is taller than the bus. A note on
+screen says the buses are for scale and weren't there. It works at both venues.
+
+**The numbers** (`scale.vwBus`). 4,505 × 1,720 mm and a 2,400 mm wheelbase agree across
+secondary sources. Height is the weak one: 2,040 mm is what motor-car.net and
+dimensionsguide.com give, other figures run down to 1,955 mm. No Volkswagen document
+yet. At this scale the difference is about 3 in.
+
+**The model** (`blender/scale/vwbus.py`). Scripted, from those numbers and the
+photographs in `.shots/reference/scale/bus/`, so its proportions are by eye: not a
+survey. It carries the VW roundel, a trademark. The four paint colours are invented. It
+reads as a Bay Window bus at every distance tried, but up close it looks like a good
+die-cast toy, not a photograph: flat black glass, no interior, plain surfaces. Good enough
+for scale in the explorer; the film's "photographic" bus would need more work on the same
+script.
+
+**Cost.** 71 KB, fetched only when the button is pressed. About 31,000 triangles a
+bus: 1.19 million per frame indoors becomes 1.44 million while on (shadow pass
+included), and nothing while off. Not tried on a real phone.
+
+**The 737-200** (`scale.b737`, `blender/scale/b737.py`). The second comparison, because
+the buses show the Wall's width and nothing showed its height. Length, span, tail height,
+clearances and gear are Boeing's own figures (D6-58325-6 Rev E, §2.2.2 and §2.3.1), and
+`verify.mjs` holds them; the outlines between them are read off Boeing's three-view. Plain
+paint, no airline's. Windows, doors and no interior: at this distance it reads as a real
+aircraft, and up close as a clean model. 27 KB and about 7,000 triangles, so it costs far
+less than the buses (1.19 million becomes 1.20 million per frame).
+
+**The film's punchline was wrong.** Shot 2b said the tail stands level with the tower.
+That compares the tower's 38 ft 10 in above the stage with a tail measured from the ground.
+On the same ground the Wall is 48 ft 10 in and the tail 36 ft 10 in: **the Wall stands
+12 ft taller**. The explorer says that, and `docs/video-brief.md` is corrected.
+
+**It stands beside the Wall, not behind it,** which changes what the brief proposed. Behind,
+the plane would be about 20 m farther from the camera and perspective would exaggerate the
+difference. Beside the stage at the speakers' depth, seen square-on from far back on a long
+lens, the two heights compare fairly. The nose points away and the tail is nearest the Wall.
+
+**Three positions, the visitor's choice.** Under the note, a switch moves the plane: Beside
+(the default), Behind or In front, each with its own camera, or `?compare=737&at=behind`. The
+numbers don't change. On the two others the note adds that perspective distorts the view: from
+in front the plane looks about as tall as the Wall, from behind far smaller. Only Beside is a
+fair comparison, and showing the other two makes that visible rather than hiding it. In front
+hides the stage and the band. The tour's dots are off while the plane shows, and the hall's fog
+is pushed back, since these views stand far from the Wall.
+
+**Indoors only.** At the Bowl the shell and the hill are in its way, so the menu greys it out.
+
+**Compare size is now a menu,** one object at a time, each with its own view and note, and
+`?compare=737` opens on the airliner. **Not done:** the whale, left to the film.
+
+
+## 24. Sliders, after Ciechanowski's "Sound", and phone review (5 November 2026)
+
+Four ideas taken from <https://ciechanow.ski/sound/>: a control sits next to the sentence
+that introduces it, changes one thing, and shows the result at once.
+
+**The seat can be dragged** (`SeatDiagram.tsx`): the "you" marker, or two sliders, Left to
+Right and Front to Back. Only the marker takes a finger from the page. The rest of the plan
+still scrolls, and a tap still moves the seat. The note's height is reserved on a phone so the
+plan doesn't jump under a dragging finger. The sliders only set a position: every result still
+comes from `localize.ts`.
+
+**Each crossfade has a slider** (`Compare` in `Story.tsx`): photograph to reconstruction, the
+stage to each system, the stage to how sure we are. Scrolling moves it. Once the reader takes
+it, the picture stays put until the beat leaves the screen. On a phone it sits under the picture.
+
+**The words move the seat:** "Sit in the middle", "Sit to one side" and "The Wall" (`SeatLink`).
+
+**One slider style** (`src/ui/range.css`): a 28 px handle for a finger and 20 px for a mouse, on
+real inputs, where the Listen bar's handle was 12 px. His sliders are drawn on canvas with no
+slider role; ours stay native for keyboards and screen readers. "Take it apart" keeps its label
+on a phone. Over a picture, `.cards` now passes the pointer through except on the cards.
+
+**Not borrowed:** sliders for volume or power. Nothing records those, so they would be invented.
+
+**Phone review:** `npm run phone`. The real check is Safari in Xcode's iOS Simulator (Xcode wasn't
+installed on 5 November). `phone.html` is a dev-only device frame: right sizes, no touch.
+
+**Tested** at 402 x 681 in Chromium with a mouse: the seat drag, both kinds of slider, the links,
+holding and releasing a crossfade. **Not yet tested:** touch, on the Simulator or a real iPhone.
+
+---
+
+## 25. Two of the crew at the top corners (4–5 November 2026)
 
 The explorer has two of the crew at the top of the scaffold, one at each corner: they
 give the Wall a person's size, and they are where the photographs put people.

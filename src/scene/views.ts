@@ -1,5 +1,6 @@
 import { wall } from '../data/wall.config';
 import { bowlFrame, seatEye } from '../geometry/bowl';
+import type { PlaneAt } from '../geometry/scale';
 import { TOUR } from './tour';
 /**
  * Named camera positions, so a screenshot can be reproduced exactly rather
@@ -129,9 +130,37 @@ export const VIEWPOINTS = {
 
 export type ViewpointId = keyof typeof VIEWPOINTS;
 
+/** Where to stand for the size comparison: back far enough for the row of buses and the Wall above them. */
+export const COMPARE_VIEW: View = { label: 'With the buses', position: [-6, 2.4, 31], target: [0, 6.2, 4], fov: 46 };
+
+/**
+ * Where to stand for each of the 737's positions, in a wide window and upright on
+ * a phone. Beside: square-on from far back on a long lens, so the two heights
+ * compare without perspective taking sides; on a phone it stands closer in on the
+ * tail and the Wall and lets the nose run out of the frame. The other two are
+ * meant to show what perspective does.
+ */
+export const PLANE_VIEWS: Record<PlaneAt, { wide: View; tall: View }> = {
+  beside: {
+    wide: { label: 'Beside', position: [-16, 6, 92], target: [-16, 7, 0], fov: 24 },
+    tall: { label: 'Beside', position: [-4, 6, 115], target: [-4, 7, 0], fov: 36 },
+  },
+  behind: {
+    wide: { label: 'Behind', position: [-42, 16, 42], target: [-3, 6, -8], fov: 36 },
+    tall: { label: 'Behind', position: [-62, 26, 108], target: [-2, 6, -8], fov: 36 },
+  },
+  front: {
+    wide: { label: 'In front', position: [-16, 7, 72], target: [0, 7, 10], fov: 34 },
+    tall: { label: 'In front', position: [-6, 7, 150], target: [0, 7, 10], fov: 36 },
+  },
+};
+
 /** A viewpoint as it stands at a venue (see viewIn). */
 export function viewpointIn(id: ViewpointId, venue: 'arena' | 'hollywoodBowl'): View {
-  const v: View = VIEWPOINTS[id];
+  return standIn(VIEWPOINTS[id], venue);
+}
+
+export function standIn(v: View, venue: 'arena' | 'hollywoodBowl'): View {
   if (venue !== 'hollywoodBowl' || v.position[1] > 3) return v;
   const f = bowlFrame();
   const back = v.position[2] - f.front;

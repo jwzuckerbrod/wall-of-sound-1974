@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { COMPARISON_CAVEATS, PAIRS, TAPES, WALL_TRACKS, tapeUrl, trackUrl, type Track } from '../data/recordings';
 import { NO_PLACE, PLAY_ICON, clock, player, usePlayer, type PlayerItem } from './player';
+import './range.css';
 import './listen.css';
 
 /**
@@ -30,7 +31,7 @@ function Transport({ item, label }: { item: PlayerItem; label: string }) {
         <PlayIcon playing={playing} />
       </button>
       <input
-        className="ls-bar"
+        className="range"
         type="range"
         min={0}
         max={1000}

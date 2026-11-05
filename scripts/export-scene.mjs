@@ -154,6 +154,8 @@ const scene = {
   crewAloft: wall.structure.crewAloft,
   // Courtenay Pollock's tie-dyes (structure.tieDyes): top centre of each, outdoors only.
   tieDyes: scaf.tieDyePanels(L).map((t) => ({ top: v3(t.top), w: t.width, h: t.height, palette: wall.structure.tieDyes.palettes[t.palette] })),
+  // Objects of known size (scale, blender/scale/).
+  scale: wall.scale,
   // The Hollywood Bowl (venues.hollywoodBowl, src/geometry/bowl.ts).
   bowl: (() => {
     const V = wall.venues.hollywoodBowl;

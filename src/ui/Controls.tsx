@@ -2,14 +2,17 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { CHANNELS, wall, type ChannelId } from '../data/wall.config';
 import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { SceneOptions } from '../scene/Scene';
-import { VIEWPOINTS, type ViewpointId } from '../scene/views';
+import type { CompareId } from '../scene/ScaleObjects';
+import { PLANE_POSITIONS, type PlaneAt } from '../geometry/scale';
+import { PLANE_VIEWS, VIEWPOINTS, type ViewpointId } from '../scene/views';
 import { UNIT_LABEL, type UnitSystem } from './units';
+import './range.css';
 
 /** A touch screen with no mouse: hints talk about pinching, not scrolling or keys. */
 export const TOUCH = typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches;
 
 /** A button that opens a small menu above or below it, closed by Escape or a click elsewhere. */
-function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; up?: boolean; children: (close: () => void) => ReactNode }) {
+function Menu({ label, icon, up, active, children }: { label: ReactNode; icon?: ReactNode; up?: boolean; active?: boolean; children: (close: () => void) => ReactNode }) {
   const [open, setOpen] = useState(false);
   const box = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -25,7 +28,7 @@ function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; 
   }, [open]);
   return (
     <div className={`menu${up ? ' up' : ''}`} ref={box}>
-      <button className="pill" aria-expanded={open} aria-haspopup="true" onClick={() => setOpen(!open)}>
+      <button className="pill" aria-expanded={open} aria-haspopup="true" aria-pressed={active} onClick={() => setOpen(!open)}>
         {icon}
         {label}
       </button>
@@ -33,6 +36,15 @@ function Menu({ label, icon, up, children }: { label: string; icon?: ReactNode; 
     </div>
   );
 }
+
+const FOOT = 0.3048;
+
+/** What to set beside the Wall: one at a time. */
+const COMPARE_ITEMS: { id: CompareId; label: string }[] = [
+  { id: 'bus', label: 'Four VW buses' },
+  { id: 'b737', label: 'A Boeing 737-200' },
+  { id: null, label: 'Nothing' },
+];
 
 /** The six systems, grouped as the colour view groups them. */
 const SYSTEMS: { label: string; channel: ChannelId }[] = [
@@ -56,6 +68,7 @@ export function BottomBar({
   isolated,
   setIsolated,
   onViewpoint,
+  onCompare,
 }: {
   explode: number;
   setExplode: (v: number) => void;
@@ -64,8 +77,12 @@ export function BottomBar({
   isolated: ChannelId | null;
   setIsolated: (c: ChannelId | null) => void;
   onViewpoint: (id: ViewpointId) => void;
+  /** Stand where the comparison shows. */
+  onCompare: (id: CompareId, at?: PlaneAt) => void;
 }) {
   const colour = options.colorMode === 'channel';
+  // The 737 doesn't stand at the Bowl.
+  const shown = options.compare === 'b737' && wall.venues[options.venue].outdoor ? null : options.compare;
   return (
     <div className="bottom">
       {colour && (
@@ -83,15 +100,46 @@ export function BottomBar({
           })}
         </ul>
       )}
+      {shown === 'bus' && (
+        <p className="compare-note">
+          <strong>Four 1974 VW buses, end to end: {(4 * wall.scale.vwBus.length / FOOT).toFixed(0)} ft.</strong> The speakers
+          above them run 60 ft. For scale; they weren&rsquo;t there.
+        </p>
+      )}
+      {shown === 'b737' && (
+        <div className="compare-note">
+          <p>
+            <strong>The Wall stands 12 ft taller than a 737&rsquo;s tail:</strong> 48 ft 10 in to its top, 36 ft 10 in to the
+            tail of the airliner of 1974. For scale; it wasn&rsquo;t there.
+            {options.planeAt !== 'beside' && ' Perspective distorts this view; the real heights don\u2019t change.'}
+          </p>
+          <div className="compare-at" role="group" aria-label="Where the 737 stands">
+            {PLANE_POSITIONS.map((at) => (
+              <button
+                key={at}
+                aria-pressed={options.planeAt === at}
+                onClick={() => {
+                  setOptions({ ...options, planeAt: at });
+                  onCompare('b737', at);
+                }}
+              >
+                {PLANE_VIEWS[at].wide.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
       <div className="bar" role="toolbar" aria-label="The Wall">
         <label className="explode">
           <span>Take it apart</span>
           <input
+            className="range"
             type="range"
             min={0}
             max={1}
             step={0.01}
             value={explode}
+            style={{ ['--f' as string]: explode }}
             onChange={(e) => setExplode(Number(e.target.value))}
             aria-valuetext={explode < 0.02 ? 'assembled' : explode > 0.98 ? 'fully apart' : `${Math.round(explode * 100)}% apart`}
           />
@@ -109,8 +157,37 @@ export function BottomBar({
               <i key={s.label} style={{ background: CHANNELS[s.channel].color }} />
             ))}
           </span>
-          Colour by system
+          <span>Colour<span className="wide-only"> by system</span></span>
         </button>
+        <Menu
+          label={<span>Compare<span className="wide-only"> size</span></span>}
+          up
+          active={!!shown}
+        >
+          {(close) => (
+            <ul className="menu-list" aria-label="Compare the Wall's size">
+              {COMPARE_ITEMS.map((c) => {
+                const off = c.id === 'b737' && wall.venues[options.venue].outdoor;
+                return (
+                  <li key={c.label}>
+                    <button
+                      disabled={off}
+                      aria-pressed={shown === c.id}
+                      onClick={() => {
+                        setOptions({ ...options, compare: c.id });
+                        if (c.id) onCompare(c.id, options.planeAt);
+                        close();
+                      }}
+                    >
+                      {c.label}
+                      {off && <kbd>indoors only</kbd>}
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </Menu>
         <Menu label="View" up>
           {(close) => (
             <ul className="menu-list" aria-label="Where to stand">
