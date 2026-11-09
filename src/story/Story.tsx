@@ -8,6 +8,7 @@ import { IMAGES, srcOf, type StoryImage } from './images';
 import { shortSource } from './sources';
 import { NowPlaying } from '../ui/NowPlaying';
 import '../ui/range.css';
+import { track } from '../analytics';
 
 /**
  * Phones, and any window too short for a card to sit over a picture, get the
@@ -276,10 +277,35 @@ function BeatView({ beat, first }: { beat: Beat; first: boolean }) {
   );
 }
 
+/** Reports each section once, the first time it's half on screen, so the dashboard shows where readers stop. */
+function useBeatsReached(root: React.RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el || !('IntersectionObserver' in window)) return;
+    const seen = new Set<string>();
+    let order = 0;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          const id = (e.target as HTMLElement).id;
+          if (!e.isIntersecting || !id || seen.has(id)) continue;
+          seen.add(id);
+          track('beat', id, { order: ++order });
+          io.unobserve(e.target);
+        }
+      },
+      { threshold: 0, rootMargin: '-50% 0px -49% 0px' },
+    );
+    el.querySelectorAll('section[id]').forEach((s) => io.observe(s));
+    return () => io.disconnect();
+  }, [root]);
+}
+
 export function Story() {
   const root = useRef<HTMLElement>(null);
   const compact = useCompact();
   useScrollProgress(root, compact);
+  useBeatsReached(root);
   const explorer = `${import.meta.env.BASE_URL}`;
 
   return (

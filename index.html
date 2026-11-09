@@ -59,6 +59,9 @@
       @keyframes boot { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
       @media (prefers-reduced-motion: reduce) { #boot .bar::after { animation: none; width: 100%; opacity: 0.5; } }
     </style>
+    <!-- Privacy-friendly visit counter (no cookies; see src/analytics.ts). Calls made before it loads queue up. -->
+    <script>window.jzt = window.jzt || function () { (window.jzt.q = window.jzt.q || []).push(arguments); };</script>
+    <script defer src="https://jzuckerbrod.com/s.js" data-site="explorer"></script>
   </head>
   <body>
     <div id="boot" role="status" aria-live="polite">

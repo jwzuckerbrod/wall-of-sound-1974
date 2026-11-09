@@ -18,6 +18,7 @@ import { TOUR, instrumentPose } from './scene/tour';
 import { COMPARE_VIEW, PLANE_VIEWS, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
 import { InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
+import { track } from './analytics';
 
 /** Whether a mesh, or something it sits in, is marked as clickable (userData.pickable). */
 function isPickable(o: THREE.Object3D | null): boolean {
@@ -80,6 +81,17 @@ function compareFromSearch(search: string): CompareId {
 function planeAtFromSearch(search: string): PlaneAt {
   const v = new URLSearchParams(search).get('at') as PlaneAt | null;
   return v && PLANE_POSITIONS.includes(v) ? v : 'beside';
+}
+
+/** Calls `report` whenever `value` changes after the first render (what the page opened with isn't something anyone did). */
+function useOnChange<T>(value: T, report: (v: T) => void) {
+  const last = useRef(value);
+  useEffect(() => {
+    if (Object.is(last.current, value)) return;
+    last.current = value;
+    report(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
 }
 
 export default function App() {
@@ -157,6 +169,7 @@ export default function App() {
 
   const goToViewpoint = useCallback(
     (id: ViewpointId) => {
+      track('view', id);
       setPose(viewpointIn(id, options.venue));
       setNavMode('tour');
     },
@@ -177,6 +190,17 @@ export default function App() {
     setInstrument(null);
   }, []);
 
+  // What people do, for the private dashboard (src/analytics.ts). Watching the state, not the buttons,
+  // so a keyboard shortcut counts the same as a click.
+  useOnChange(stop, (n) => n !== null && track('tour', TOUR[n].id));
+  useOnChange(selected, (id) => id && track('block', id));
+  useOnChange(instrument, (id) => id && track('instrument', id));
+  useOnChange(isolated, (id) => id && track('isolate', id));
+  useOnChange(options.venue, (v) => track('venue', v));
+  useOnChange(aboutOpen, (open) => open && track('about'));
+  useOnChange(listenOpen, (open) => open && track('listen'));
+  useOnChange(units, (u) => track('units', u));
+
   const cardOpen = hud && (stop !== null || !!selected || !!instrument);
 
   // Make room for the card: the 360px card and its margins on a wide screen;
@@ -192,6 +216,7 @@ export default function App() {
   /** Stand where the comparison shows. */
   const goToCompare = useCallback(
     (id: CompareId, at: PlaneAt = 'beside') => {
+      track('compare', id, { at });
       setStop(null);
       setSelectedState(null);
       setInstrument(null);
