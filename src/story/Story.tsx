@@ -290,7 +290,10 @@ function useBeatsReached(root: React.RefObject<HTMLElement | null>) {
           const id = (e.target as HTMLElement).id;
           if (!e.isIntersecting || !id || seen.has(id)) continue;
           seen.add(id);
-          track('beat', id, { order: ++order });
+          // Its name on the dashboard: the beat's own name, else the section's heading ("Step inside")
+          const heading = e.target.querySelector('h1, h2, h3')?.textContent?.trim();
+          const label = BEATS.find((b) => b.id === id)?.name ?? heading?.slice(0, 80) ?? id;
+          track('beat', id, { order: ++order, label });
           io.unobserve(e.target);
         }
       },

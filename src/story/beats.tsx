@@ -21,6 +21,8 @@ export type Motion =
 
 export interface Beat {
   id: string;
+  /** A short name for the section, shown on the analytics dashboard (jzuckerbrod.com/stats). */
+  name: string;
   /** One or two images; two only for a crossfade. */
   images: StoryImage[];
   /** A crossfade's two ends, as named on the slider that lets the reader hold it anywhere. */
@@ -54,6 +56,7 @@ const KEY: [string, string[]][] = [
 export const BEATS: Beat[] = [
   {
     id: 'real',
+    name: 'The photograph',
     images: [IMAGES.photoBowl, IMAGES.bowlPhotoMatch],
     compare: ['Photograph', 'Reconstruction'],
     motion: 'crossfade',
@@ -78,6 +81,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'whole',
+    name: 'The whole Wall',
     images: [IMAGES.bowlHero],
     motion: 'push',
     sources: ['wiki', 'deadsources22', 'blueprints', 'anderson'],
@@ -109,6 +113,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'systems',
+    name: 'The separate systems',
     images: [IMAGES.bowl, IMAGES.bowlSystems],
     compare: ['The stage', 'Each system'],
     motion: 'crossfade',
@@ -144,6 +149,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'paths',
+    name: 'One mix, or none',
     images: [IMAGES.bowlSystems],
     motion: 'hold',
     diagram: { node: <PathDiagram />, after: 0, label: 'signal-path' },
@@ -176,6 +182,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'seats',
+    name: 'Where the sound comes from',
     images: [IMAGES.bowlHero],
     motion: 'hold',
     diagram: { node: <SeatDiagram />, after: 0, label: 'seat', animated: false },
@@ -206,6 +213,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'listen',
+    name: 'Listen',
     images: [IMAGES.photoBowl],
     motion: 'hold',
     sources: ['tapes'],
@@ -227,6 +235,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'monitor',
+    name: "Garcia's mark",
     images: [IMAGES.garciaMark],
     motion: 'hold',
     sources: ['wiki', 'deadsources74'],
@@ -245,6 +254,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'singing',
+    name: 'The singing problem',
     images: [IMAGES.clusterUp],
     motion: 'hold',
     diagram: {
@@ -279,6 +289,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'power',
+    name: 'The power: 48 McIntoshes',
     images: [IMAGES.ampsClose],
     motion: 'hold',
     sources: ['mc2300', 'sothebys'],
@@ -301,6 +312,7 @@ export const BEATS: Beat[] = [
   },
   {
     id: 'evidence',
+    name: 'The evidence',
     images: [IMAGES.bowl, IMAGES.bowlEvidence],
     compare: ['The stage', 'How sure we are'],
     motion: 'crossfade',

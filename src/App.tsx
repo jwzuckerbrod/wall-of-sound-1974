@@ -1,7 +1,7 @@
 import { Canvas, events as pointerEvents, useFrame } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { wall, type ChannelId } from './data/wall.config';
+import { ARRAYS, CHANNELS, wall, type ChannelId } from './data/wall.config';
 import { detectTier, downgrade, tierSettings, type Tier } from './quality';
 import type { ArrayInteraction } from './scene/Arrays';
 import { About } from './ui/About';
@@ -16,7 +16,7 @@ import { PLANE_POSITIONS, type PlaneAt } from './geometry/scale';
 import type { Pose } from './scene/TourCamera';
 import { TOUR, instrumentPose } from './scene/tour';
 import { COMPARE_VIEW, PLANE_VIEWS, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
-import { InstrumentCard, SpotCard } from './ui/Cards';
+import { INSTRUMENTS, InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 import { track } from './analytics';
 
@@ -169,7 +169,7 @@ export default function App() {
 
   const goToViewpoint = useCallback(
     (id: ViewpointId) => {
-      track('view', id);
+      track('view', id, { label: VIEWPOINTS[id].label });
       setPose(viewpointIn(id, options.venue));
       setNavMode('tour');
     },
@@ -192,14 +192,21 @@ export default function App() {
 
   // What people do, for the private dashboard (src/analytics.ts). Watching the state, not the buttons,
   // so a keyboard shortcut counts the same as a click.
-  useOnChange(stop, (n) => n !== null && track('tour', TOUR[n].id));
-  useOnChange(selected, (id) => id && track('block', id));
-  useOnChange(instrument, (id) => id && track('instrument', id));
-  useOnChange(isolated, (id) => id && track('isolate', id));
-  useOnChange(options.venue, (v) => track('venue', v));
-  useOnChange(aboutOpen, (open) => open && track('about'));
-  useOnChange(listenOpen, (open) => open && track('listen'));
-  useOnChange(units, (u) => track('units', u));
+  // Each sends a stable id and the name people see on screen (the label), which the dashboard shows.
+  useOnChange(stop, (n) => n !== null && track('tour', TOUR[n].id, { label: TOUR[n].title }));
+  useOnChange(selected, (id) => {
+    const b = id ? ARRAYS.find((a) => a.id === id) : undefined;
+    if (id) track('block', id, { label: b ? `${CHANNELS[b.channel].label}: ${b.label}` : id });
+  });
+  useOnChange(instrument, (id) => {
+    const i = id ? INSTRUMENTS[id] : undefined;
+    if (id) track('instrument', id, { label: i ? `${i.title} (${i.player})` : id });
+  });
+  useOnChange(isolated, (id) => id && track('isolate', id, { label: CHANNELS[id].label }));
+  useOnChange(options.venue, (v) => track('venue', v, { label: wall.venues[v].label }));
+  useOnChange(aboutOpen, (open) => open && track('about', null, { label: 'About' }));
+  useOnChange(listenOpen, (open) => open && track('listen', null, { label: 'Listen' }));
+  useOnChange(units, (u) => track('units', u, { label: u === 'metric' ? 'Metric' : 'Feet and inches' }));
 
   const cardOpen = hud && (stop !== null || !!selected || !!instrument);
 
@@ -216,7 +223,7 @@ export default function App() {
   /** Stand where the comparison shows. */
   const goToCompare = useCallback(
     (id: CompareId, at: PlaneAt = 'beside') => {
-      track('compare', id, { at });
+      if (id) track('compare', id, { at, label: id === 'b737' ? 'A Boeing 737-200' : 'Four VW buses' });
       setStop(null);
       setSelectedState(null);
       setInstrument(null);

@@ -78,7 +78,7 @@ export function SpotCard({
 }
 
 /** What each instrument is, who played it, and which system it fed. */
-const INSTRUMENTS: Record<string, { title: string; player: string; text: string; channel: ChannelId }> = {
+export const INSTRUMENTS: Record<string, { title: string; player: string; text: string; channel: ChannelId }> = {
   garcia: {
     title: 'The Wolf',
     player: 'Jerry Garcia',
