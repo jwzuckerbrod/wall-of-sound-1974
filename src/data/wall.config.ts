@@ -501,7 +501,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'materials.steel': {
     confidence: 'estimated',
     sources: ['photos', 'pechner'],
-    note: 'Bright galvanised steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one.',
+    note: 'Bright galvanised steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one: since 9 November 2026 the explorer returns less light from it (render.explorerLook, docs/qa-findings.md §26).',
   },
   'cabinets.panelCells': {
     confidence: 'estimated',
@@ -1397,6 +1397,16 @@ export const wall = {
      * surfaces and turns the stage deck into the brightest thing in the frame.
      */
     hdri: { intensity: 0.55, rotation: DEG(15) },
+    /**
+     * How the explorer lights two things visitors said were too bright to see
+     * the speakers past (qa-findings §26). Display choices, not evidence: the
+     * paint stays as photographed (materials.steel, materials.roadCases), and
+     * Blender's renders are unchanged. steelReflection scales what the
+     * galvanised tube reflects of the room around it, and steelLight and
+     * caseLight how much of the stage lights the steel and the road cases send
+     * back (a multiplier on the lit colour, 1 = as painted).
+     */
+    explorerLook: { steelReflection: 0.5, steelLight: 0.55, caseLight: 0.6 },
   },
 } as const;
 

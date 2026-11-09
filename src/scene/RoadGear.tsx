@@ -131,7 +131,14 @@ function gearMaterials(): Record<GearRole, THREE.Material> {
   const panel = mc2300Panel();
   const std = (color: string, roughness: number, metalness = 0) => new THREE.MeshStandardMaterial({ color, roughness, metalness });
   return {
-    paint: new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.62, metalness: 0.05 }),
+    // The case colours are per vertex, as photographed; the material's colour
+    // only sets how much light they return (render.explorerLook.caseLight).
+    paint: new THREE.MeshStandardMaterial({
+      vertexColors: true,
+      color: new THREE.Color().setScalar(wall.render.explorerLook.caseLight),
+      roughness: 0.62,
+      metalness: 0.05,
+    }),
     alu: std('#a6aaad', 0.4, 0.85),
     steel: std('#7c7e80', 0.5, 0.7),
     rubber: std('#161515', 0.85),

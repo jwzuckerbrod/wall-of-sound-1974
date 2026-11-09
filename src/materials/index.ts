@@ -112,10 +112,13 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   });
 
   const steel = new THREE.MeshStandardMaterial({
-    color: m.steel.baseColor,
+    // As painted, returning less of the stage lights (render.explorerLook).
+    color: new THREE.Color(m.steel.baseColor).multiplyScalar(wall.render.explorerLook.steelLight),
     roughnessMap: linear(steelRoughness().clone(), 3),
     roughness: m.steel.roughness,
     metalness: m.steel.metalness,
+    // Bright paint, quieter reflections, so the speakers read past it.
+    envMapIntensity: wall.render.explorerLook.steelReflection,
   });
 
   /**
