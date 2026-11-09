@@ -57,6 +57,19 @@ function FpsProbe({ onSample }: { onSample: (fps: number) => void }) {
   return null;
 }
 
+/**
+ * Opens at the Hollywood Bowl, where the story is set; ?venue=indoors (or
+ * ?venue=arena) opens indoors, as on Pechner's photograph. The airliner stands
+ * indoors only, so ?compare=737 without a venue opens indoors too.
+ */
+function venueFromSearch(search: string): SceneOptions['venue'] {
+  const q = new URLSearchParams(search);
+  const v = q.get('venue');
+  if (v === 'indoors' || v === 'arena') return 'arena';
+  if (v === null && q.get('compare') === '737') return 'arena';
+  return 'hollywoodBowl';
+}
+
 /** ?compare shows the buses, ?compare=737 the airliner. */
 function compareFromSearch(search: string): CompareId {
   const v = new URLSearchParams(search).get('compare');
@@ -79,10 +92,9 @@ export default function App() {
     return forced && forced in wall.render.tiers ? (forced as Tier) : detectTier();
   });
   const [autoTier, setAutoTier] = useState(true);
-  // Opens indoors; ?venue=bowl opens at the Hollywood Bowl.
   const [options, setOptionsState] = useState<SceneOptions>(() => ({
     ...sceneDefaults,
-    venue: new URLSearchParams(window.location.search).get('venue') === 'bowl' ? 'hollywoodBowl' : 'arena',
+    venue: venueFromSearch(window.location.search),
     compare: compareFromSearch(window.location.search),
     planeAt: planeAtFromSearch(window.location.search),
   }));
@@ -91,7 +103,7 @@ export default function App() {
       const n = typeof next === 'function' ? next(o) : next;
       if (n.venue !== o.venue) {
         const url = new URL(window.location.href);
-        if (n.venue === 'hollywoodBowl') url.searchParams.set('venue', 'bowl');
+        if (n.venue === 'arena') url.searchParams.set('venue', 'indoors');
         else url.searchParams.delete('venue');
         window.history.replaceState(null, '', url);
       }
