@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §25) and gear in `docs/surviving-gear.md`.
+  §26) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
@@ -35,7 +35,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - Shared layout code feeds both renderers: `src/geometry/arrays.ts` (each
   cabinet's finish and build), `roadgear.ts` (every case and label), `bowl.ts`
   (the Hollywood Bowl), `scaffold.ts` (`tieDyePanels`, `vocalMics`). Change
-  them, not the Python. The explorer has `?venue=bowl`.
+  them, not the Python. The explorer opens at the Bowl; `?venue=indoors` opens indoors.
 - `blender/scale/vwbus.py` and `b737.py` script the bus and the airliner to
   `public/models/` (after `npm run export:scene`). They appear under the explorer's
   "Compare size" menu, or with `?compare` and `?compare=737` (`&at=behind` or `&at=front`).

@@ -1072,3 +1072,36 @@ more triangles a frame indoors: 1,191,594 to 1,276,118. No shadows cast. No fram
 measured on a real phone.
 
 **Explorer only.** Blender's renders and the story don't have them.
+
+## 26. First visitors' feedback, answered (9 November 2026)
+
+Six notes from people who tried the two pages.
+
+**Story.**
+1. *"It took me a second to figure out I could use the toggle."* Every two-part switch (the
+   signal path, the seat, the Listen pairs) now has a line over it, "Tap to switch" ("Click"
+   with a mouse). The half you can switch to is underlined, and the chosen half is outlined.
+2. *"Whose idea was the Wall?"* A new card in beat 2: Owsley "Bear" Stanley conceived it and
+   led its design, with the sound crew and Alembic, from `meta.designers` (Wikipedia, Grateful
+   Dead Sources).
+3. *"Some of the audio visualisations were confusing."* The signal-path and microphone diagrams
+   each get one line on how to read them: what the coloured pulses, arcs and lines are.
+
+**Explorer.**
+1. *"Make the scaffolding less bright."* The steel stays as photographed, `#A9ADB1` (§18,
+   ruling 6). Its own note said that if it swamped the speakers that would be a lighting
+   problem, so the explorer now returns less light from it: `render.explorerLook`, 0.55 of the
+   stage light and half the room's reflection. Blender's renders are unchanged. At the Bowl the
+   steel now reads darker than the pale silver in the daylight photographs: the trade-off.
+2. *"Don't make the orange boxes so bright."* The same for the road cases: their photographed
+   colours, returning 0.6 of the light. That dims the white and black cases too.
+3. *"How do I use this page?"* The card it opens on lists what you can do, before the history:
+   the tour, the dots, turning and zooming, Take it apart and Colour, Listen.
+
+**Checked** at 402 x 681 and on a desktop in Chromium, indoors and at the Bowl. **Not checked**
+on a real phone or the Simulator.
+
+**The explorer now opens at the Hollywood Bowl** (the project owner's decision, 9 November),
+where the story is set. `?venue=indoors` (or `?venue=arena`) opens indoors, as on Pechner's
+photograph. `?venue=bowl` still works. `?compare=737` without a venue opens indoors, since the
+airliner stands indoors only.
