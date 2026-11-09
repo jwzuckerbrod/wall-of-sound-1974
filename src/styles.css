@@ -638,6 +638,9 @@ button, .pill { font: inherit; color: inherit; }
 }
 .card h2 { margin: 6px 0 10px; font-size: 21px; font-weight: 600; letter-spacing: -0.015em; line-height: 1.2; }
 .card-body { margin: 0; color: #c3c7cc; font-size: 14.5px; line-height: 1.6; }
+/* The overview's "what you can do" (Cards.tsx): before the history, set apart. */
+.can-do { list-style: none; margin: 0 0 14px; padding: 10px 12px; display: grid; gap: 6px; border: 1px solid rgba(233, 184, 90, 0.3); border-radius: 8px; background: rgba(233, 184, 90, 0.06); font-size: 14px; line-height: 1.4; color: #d6d9dd; }
+.can-do strong { color: #fff; font-weight: 600; }
 .card-action {
   display: inline-flex;
   align-items: center;

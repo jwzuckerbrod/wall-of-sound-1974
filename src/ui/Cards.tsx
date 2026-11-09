@@ -1,5 +1,23 @@
 import { CHANNELS, PROVENANCE, wall, type ChannelId } from '../data/wall.config';
 import { TOUR } from '../scene/tour';
+import { TOUCH } from './Controls';
+
+/**
+ * What the explorer lets you do, on the card it opens with: visitors asked.
+ * Short, in the order a first visit needs it, with the words the controls use.
+ */
+function WhatYouCanDo({ stops }: { stops: number }) {
+  const tap = TOUCH ? 'Tap' : 'Click';
+  return (
+    <ul className="can-do" aria-label="What you can do here">
+      <li><strong>Take the tour:</strong> {stops} stops, with Next and Back.</li>
+      <li><strong>{tap} a dot</strong>{TOUCH ? '' : ', or any speaker'} to read about that part.</li>
+      <li><strong>{TOUCH ? 'Drag to turn, pinch to zoom.' : 'Drag to turn, scroll to zoom.'}</strong></li>
+      <li><strong>Take it apart</strong> with the slider below, or {TOUCH ? 'tap' : 'click'} <strong>Colour</strong> to see its six systems.</li>
+      <li><strong>Listen</strong> to it, on tapes from 1974.</li>
+    </ul>
+  );
+}
 
 /**
  * The card on the right (a sheet from the bottom on a phone): one tour stop,
@@ -31,6 +49,7 @@ export function SpotCard({
         </button>
       </div>
       <h2 id="card-title">{s.title}</h2>
+      {index === 0 && <WhatYouCanDo stops={last} />}
       <p className="card-body">{s.body}</p>
       {s.channel && (
         <button className="card-action" aria-pressed={!!showing} onClick={() => onIsolate(showing ? null : s.channel!)}>
