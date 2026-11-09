@@ -125,6 +125,7 @@ export function PathDiagram() {
   const [side, setSide] = useState<'pa' | 'wall'>('pa');
   return (
     <>
+<p className="switch-hint" aria-hidden="true"><span className="on-touch">Tap</span><span className="on-mouse">Click</span> to switch</p>
       <div className="dg-switch" role="group" aria-label="Which system to show">
         <button aria-pressed={side === 'pa'} onClick={() => setSide('pa')}>
           A typical PA, early 1970s
@@ -133,6 +134,11 @@ export function PathDiagram() {
           The Wall, 1974
         </button>
       </div>
+      <p className="dg-read">
+        {side === 'pa'
+          ? 'Each coloured pulse is one sound on its way. In the desk they are mixed into one grey pulse, and that is what everyone hears.'
+          : 'Each coloured pulse is one sound on its way. Nothing mixes them: each keeps its colour to its own speakers.'}
+      </p>
       {/* Keyed, so a switch draws the other half in afresh. */}
       <svg key={side} className="diagram" viewBox="0 0 640 296" role="img" aria-labelledby="path-title path-desc">
         <title id="path-title">{side === 'pa' ? 'A typical early-1970s PA: one mix' : 'The Wall: no mix'}</title>

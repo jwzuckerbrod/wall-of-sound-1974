@@ -321,7 +321,12 @@ figcaption a { color: inherit; }
 .dg-pause:hover { color: var(--ink); }
 .dg-switch { display: flex; flex-wrap: wrap; gap: 4px; margin: 0 0 10px; padding: 3px; width: max-content; max-width: 100%; border: 1px solid var(--rule); border-radius: 999px; font-family: var(--sans); font-size: 13px; }
 .dg-switch button { border: 0; background: transparent; color: var(--dim); font: inherit; padding: 6px 12px; border-radius: 999px; cursor: pointer; }
-.dg-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.2); color: var(--ink); }
+.dg-switch button[aria-pressed='true'] { background: rgba(233, 184, 90, 0.28); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(233, 184, 90, 0.6); }
+/* The half you can switch to: a button, not a caption. */
+.dg-switch button[aria-pressed='false'] { color: var(--ink); text-decoration: underline dotted; text-underline-offset: 3px; }
+.dg-switch button[aria-pressed='false']:hover { background: rgba(236, 230, 218, 0.08); }
+/* One line on how to read a diagram, above it. */
+.dg-read { margin: 0 0 10px !important; font-family: var(--sans); font-size: 13px; line-height: 1.45; color: var(--dim); max-width: 40rem; }
 .dg-pause:focus-visible, .dg-switch button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* The seat diagram (SeatDiagram.tsx). */
@@ -449,3 +454,6 @@ figcaption a { color: inherit; }
 .needles { pointer-events: none; }
 .layer .needles, .pin-image .needles { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .needles line { stroke: #0a0a0a; stroke-width: 1.2px; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+/* A reading line at the very top of a diagram clears its pause button. */
+.dg > .dg-read:first-child { padding-right: 52px; }

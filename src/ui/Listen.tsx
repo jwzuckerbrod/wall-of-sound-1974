@@ -85,6 +85,7 @@ function PairRow({ pair }: { pair: (typeof PAIRS)[number] }) {
   return (
     <li className="ls-row" data-track={pair.title}>
       <span className="ls-title">{pair.title}</span>
+      <p className="switch-hint" aria-hidden="true"><span className="on-touch">Tap</span><span className="on-mouse">Click</span> a year to switch, as it plays</p>
       <div className="ls-switch" role="group" aria-label={`Which recording of ${pair.title}`}>
         <button aria-pressed={side === 'before'} onClick={() => choose('before')}>
           {SIDE_LABEL.before}

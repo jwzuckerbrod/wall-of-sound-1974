@@ -97,6 +97,14 @@ export const BEATS: Beat[] = [
           1974, and then never again.
         </p>
       </>,
+      <>
+        <p className="figure">Whose idea was it?</p>
+        <p>
+          Owsley “Bear” Stanley's. He conceived the Wall and led its design, with the band's sound crew, Dan Healy,
+          Mark “Sparky” Raizene and Bob Matthews, and the engineers of Alembic: Ron Wickersham and John Curl on the
+          electronics, Rick Turner on the instruments.
+        </p>
+      </>,
     ],
   },
   {
@@ -239,7 +247,19 @@ export const BEATS: Beat[] = [
     id: 'singing',
     images: [IMAGES.clusterUp],
     motion: 'hold',
-    diagram: { node: <MicDiagram />, after: 0, label: 'paired-microphone' },
+    diagram: {
+      node: (
+        <>
+          <p className="dg-read">
+            The coloured arcs are the singer's voice, reaching the near microphone. The grey-blue lines are the Wall's
+            sound, reaching both microphones at once.
+          </p>
+          <MicDiagram />
+        </>
+      ),
+      after: 0,
+      label: 'paired-microphone',
+    },
     sources: ['wiki', 'mcintosh', 'deadsources74'],
     cards: [
       <>

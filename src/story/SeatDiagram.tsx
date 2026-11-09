@@ -177,6 +177,7 @@ export function SeatDiagram() {
 
   return (
     <div className={`seat-figure${live ? ' live' : ''}`}>
+<p className="switch-hint" aria-hidden="true"><span className="on-touch">Tap</span><span className="on-mouse">Click</span> to switch</p>
       <div className="dg-switch" role="group" aria-label="Which system to show">
         <button aria-pressed={side === 'pa'} onClick={() => setSeatState({ side: 'pa', live: false })}>
           A typical PA, early 1970s
