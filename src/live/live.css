@@ -7,7 +7,9 @@
   --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
 }
 html, body, #root { height: auto; min-height: 100%; overflow: visible; }
-html { overflow-y: auto; }
+html { overflow-y: auto; scroll-behavior: auto; }
+html.live-locked { overflow: hidden; }
+.live.free .live-flow { visibility: hidden; }
 body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.5; }
 
 .live-canvas, .live-still { position: fixed; inset: 0; height: 100lvh; }
@@ -40,7 +42,8 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--s
   border: 1px solid rgba(236, 230, 218, 0.08); opacity: 0.35; transition: opacity 0.4s ease;
 }
 .live-card[data-on] { opacity: 1; }
-.live-card p { margin: 0 0 0.7em; }
+.live-card > p { margin: 0 0 0.7em; }
+.live-card .dg, .live-card .seat-figure { margin-top: 12px; }
 .live-card p:last-child { margin-bottom: 0; }
 .live-card .figure, .live-card .kicker { font-size: 1.28em; line-height: 1.25; }
 .live-card .kicker { color: var(--accent); }
@@ -64,5 +67,6 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--s
   .live-title { padding: 0 6vw 40px; }
   .live-beat { justify-content: flex-end; padding: 0 4vw 34svh; }
   .live-card { max-width: 400px; }
+  .live-card:has(.dg, .seat-figure) { max-width: 560px; }
 }
 @media (prefers-reduced-motion: reduce) { .live-still, .live-card { transition: none; } }

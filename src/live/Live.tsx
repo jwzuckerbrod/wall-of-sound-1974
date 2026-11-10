@@ -11,6 +11,10 @@ import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
 import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
 import { IMAGES, srcOf, type StoryImage } from '../story/images';
+import { DiagramFigure } from '../story/DiagramFigure';
+import { MicDiagram } from '../story/MicDiagram';
+import { PathDiagram } from '../story/PathDiagram';
+import { SeatDiagram, SeatLink } from '../story/SeatDiagram';
 import { ListenCompare } from '../ui/Listen';
 
 /**
@@ -72,6 +76,9 @@ const BEATS: LiveBeat[] = [
           Every microphone ran to one mixing desk in the crowd and came back as one mix, out of two stacks at the
           corners of the stage. The players, the band's own report said, “don't really know how they sound.”
         </p>
+        <DiagramFigure label="signal-path">
+          <PathDiagram />
+        </DiagramFigure>
       </>
     ),
   },
@@ -146,6 +153,25 @@ const BEATS: LiveBeat[] = [
           A microphone in front of {Math.round(S.wattsQuoted1974 / 1000)} kilowatts should howl. Each singer sang into
           two, wired in opposite polarity. The voice reached one; the Wall reached both, and cancelled itself out.
         </p>
+        <DiagramFigure label="paired-microphone">
+          <MicDiagram />
+        </DiagramFigure>
+      </>
+    ),
+  },
+  {
+    id: 'seats',
+    act: 'Act 2 · The machine',
+    pose: () => SEATS,
+    colorMode: 'channel',
+    body: (
+      <>
+        <p className="figure">What it did for the crowd.</p>
+        <p>
+          On a typical PA the whole band came from two stacks. <SeatLink side="wall">The Wall</SeatLink> spread its six
+          systems across the stage, so from most seats the band had a width to it. Drag your seat around the Bowl.
+        </p>
+        <SeatDiagram />
       </>
     ),
   },
@@ -247,14 +273,11 @@ export function Live() {
     let frame = 0;
     const update = () => {
       frame = 0;
-      const line = window.innerHeight * 0.72;
+      // The last card whose top has come up past the line: a tall card (a diagram) keeps the picture while it's read.
+      const line = window.innerHeight * 0.85;
       let best = 0;
-      let bestD = Infinity;
       cards.current.forEach((c, i) => {
-        if (!c) return;
-        const r = c.getBoundingClientRect();
-        const d = Math.abs((r.top + r.bottom) / 2 - line);
-        if (d < bestD) [best, bestD] = [i, d];
+        if (c && c.getBoundingClientRect().top < line) best = i;
       });
       setActive(best);
       setPortrait(window.innerHeight > window.innerWidth);
@@ -271,6 +294,18 @@ export function Live() {
       cancelAnimationFrame(frame);
     };
   }, []);
+
+  // Exploring: the page stops scrolling, so the wheel and a finger only turn and zoom the model,
+  // and the story is still where it was left on the way back.
+  useEffect(() => {
+    if (!free) return;
+    const at = window.scrollY;
+    document.documentElement.classList.add('live-locked');
+    return () => {
+      document.documentElement.classList.remove('live-locked');
+      window.scrollTo(0, at);
+    };
+  }, [free]);
 
   const beat = BEATS[active];
   // A still keeps the camera where the last live beat left it, or sends it ahead to the next one.
@@ -314,6 +349,7 @@ export function Live() {
             onPickStop={noop}
             onPickInstrument={noop}
             offset={offset}
+            maxDistance={110}
           />
           <Post tier={tier} />
           <Fps />
@@ -333,12 +369,13 @@ export function Live() {
       <span id="live-fps" className="live-fps" />
       <p className="live-tag">Mockup · working copy</p>
 
-      {free ? (
+      {free && (
         <button className="live-back" onClick={() => setFree(false)}>
           Back to the story
         </button>
-      ) : (
-        <main className="live-flow">
+      )}
+      {
+        <main className="live-flow" inert={free}>
           <header className="live-title">
             <p className="eyebrow">A reconstruction</p>
             <h1>The Wall of Sound</h1>
@@ -360,7 +397,7 @@ export function Live() {
             </section>
           ))}
         </main>
-      )}
+      }
     </div>
   );
 }

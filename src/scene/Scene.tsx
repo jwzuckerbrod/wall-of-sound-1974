@@ -119,6 +119,7 @@ export function Scene({
   onPickStop,
   onPickInstrument,
   offset,
+  maxDistance,
 }: SceneOptions & {
   view: View;
   tier: Tier;
@@ -133,6 +134,8 @@ export function Scene({
   onPickInstrument: (id: string) => void;
   /** Room to make for an open card, in pixels: beside it, or above it on a phone. */
   offset: { room: number; up: number };
+  /** How far back the visitor can pull the camera, in metres. Default: the venue's. */
+  maxDistance?: number;
 }) {
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
@@ -194,7 +197,7 @@ export function Scene({
         target={view.target}
         maxPolarAngle={Math.PI / 2 - 0.02}
         minDistance={2.5}
-        maxDistance={outdoor ? 400 : 200}
+        maxDistance={maxDistance ?? (outdoor ? 400 : 200)}
         enableDamping
         dampingFactor={0.06}
       />
