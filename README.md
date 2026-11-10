@@ -1,7 +1,7 @@
 # The Wall of Sound, 1974
 
 An explorable 3D reconstruction of the Grateful Dead's touring PA system, as it
-stood between 23 March and 20 October 1974.
+stood between March 23 and October 20, 1974.
 
 Every cabinet, tube, driver and scaffold bay is generated procedurally from a
 single configuration file. There are no model files and no downloaded textures:
@@ -43,7 +43,7 @@ editing geometry.
 
 `npm run verify` compiles the geometry modules and checks them without a
 browser: the driver counts against the 1974 inventory, every scaffold dimension
-against the drawing dated 10 April 1974, stage footprints, clearances, and
+against the drawing dated April 10, 1974, stage footprints, clearances, and
 provenance integrity. Run it before committing. It has caught more real defects
 than looking at the screen has.
 

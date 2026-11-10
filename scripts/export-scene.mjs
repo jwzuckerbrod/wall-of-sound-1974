@@ -170,7 +170,7 @@ const scene = {
   // Each channel's system and overlay color (CHANNELS): the story's color-by-system render.
   channels: Object.fromEntries(Object.values(CHANNELS).map((c) => [c.id, { system: c.system, color: c.color }])),
   // How sure we are of each part of the Wall (PROVENANCE): the story's evidence render.
-  // The deck takes the Bowl's confidence, not the drawing's: the 10 April drawing is
+  // The deck takes the Bowl's confidence, not the drawing's: the April 10 drawing is
   // firm, but the Bowl photograph shows no sign of a 10 ft deck there (qa-findings §19).
   evidence: {
     colours: CONFIDENCE_COLOURS,

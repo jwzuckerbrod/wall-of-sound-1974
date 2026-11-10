@@ -10,12 +10,12 @@ const REPO = 'https://github.com/jwzuckerbrod/wall-of-sound-1974';
 
 /** Photographers whose pictures the reconstruction was measured or checked against. */
 const PHOTOGRAPHERS: { name: string; what: string; url?: string }[] = [
-  { name: 'Richard Pechner', what: 'sound check, P.N.E. Coliseum, Vancouver, 17 May 1974: the straight-on view the model is matched to', url: 'https://www.rpechner.com/Music/Grateful-Dead' },
-  { name: 'Steve Schneider', what: 'Campus Stadium, UC Santa Barbara, 25 May 1974, published by Paul Dorpat', url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/' },
-  { name: 'Kirk West', what: 'a wide view of the stage, probably Iowa State Fairgrounds, Des Moines, 16 June 1974' },
-  { name: 'Jim Anderson', what: 'Dillon Stadium, Hartford, 31 July 1974: the drum kit before the show, and the band' },
+  { name: 'Richard Pechner', what: 'sound check, P.N.E. Coliseum, Vancouver, May 17, 1974: the straight-on view the model is matched to', url: 'https://www.rpechner.com/Music/Grateful-Dead' },
+  { name: 'Steve Schneider', what: 'Campus Stadium, UC Santa Barbara, May 25, 1974, published by Paul Dorpat', url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/' },
+  { name: 'Kirk West', what: 'a wide view of the stage, probably Iowa State Fairgrounds, Des Moines, June 16, 1974' },
+  { name: 'Jim Anderson', what: 'Dillon Stadium, Hartford, July 31, 1974: the drum kit before the show, and the band' },
   { name: 'dead.net', what: 'the Grateful Dead archive photographs, Winterland, October 1974', url: 'https://www.dead.net' },
-  { name: 'Photographers unknown', what: 'the Hollywood Bowl, 21 July 1974, and other summer 1974 shows found online. If one of these is yours, please tell us.', url: `${REPO}/issues` },
+  { name: 'Photographers unknown', what: 'the Hollywood Bowl, July 21, 1974, and other summer 1974 shows found online. If one of these is yours, please tell us.', url: `${REPO}/issues` },
 ];
 
 const MODELLING: { name: string; what: string; licence: string; url: string }[] = [

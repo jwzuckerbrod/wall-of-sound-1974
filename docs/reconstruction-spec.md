@@ -1,6 +1,6 @@
 # Wall of Sound (1974) — Reconstruction Spec
 
-**Subject:** the Grateful Dead's touring PA system, in service 23 March – 20 October 1974.
+**Subject:** the Grateful Dead's touring PA system, in service March 23 – October 20, 1974.
 **Purpose:** define every dimension, count, material and placement used by the 3D reconstruction, with a source and a confidence level for each, so that the model can be corrected as better evidence appears.
 
 **Status:** Stage 1 (research + spec). No geometry code written yet.
@@ -39,7 +39,7 @@ The brief supplied nine starting facts. Checked against sources:
 | # | Starting claim | Verdict | Correction / nuance |
 |---|---|---|---|
 | 1 | Designed by Owsley "Bear" Stanley and Dan Healy, with Alembic (Ron Wickersham, Rick Turner, John Curl) and Mark Raizene | **Correct** | Add **Bob Matthews** (sound crew) and **Courtenay Pollock** (the tie-dyed fabric panels that hung on the structure). Raizene is usually credited as "Sparky" Raizene and ran the vocal system. |
-| 2 | Debuted 23 March 1974 at the Cow Palace; retired after the October 1974 Winterland run | **Correct, but incomplete** | A prototype of the framework was tested **9 February 1973 at Stanford's Maples Pavilion**, where the tweeters failed during the first number. The 3/23/74 Cow Palace show is the debut of the full touring system. Retirement: the **16–20 October 1974 Winterland** run, filmed for *The Grateful Dead Movie*. The system ran **37 shows** in total. |
+| 2 | Debuted March 23, 1974, at the Cow Palace; retired after the October 1974 Winterland run | **Correct, but incomplete** | A prototype of the framework was tested **February 9, 1973, at Stanford's Maples Pavilion**, where the tweeters failed during the first number. The 3/23/74 Cow Palace show is the debut of the full touring system. Retirement: the **October 16–20, 1974 Winterland** run, filmed for *The Grateful Dead Movie*. The system ran **37 shows** in total. |
 | 3 | Roughly 586–604 speakers, mostly JBL, driven by ~48–55 McIntosh MC-2300s, ~26,400 W | **Mostly correct; the amp range and wattage need fixing** | The best-supported figure is **48 McIntosh MC-2300 amplifiers**. The "55" end of the range is not supported anywhere found. Wikipedia carries a second, garbled configuration ("89 300-watt solid-state and three 350-watt vacuum tube amplifiers") — the **89** there is almost certainly the count of **15-inch speakers**, not amplifiers, which matches the itemized 1974 inventory exactly. **Power: both 26,400 W and 28,800 W are widely published.** 48 × 600 W = 28,800 W, which is the *installed* rating; 26,400 W (= 44 × 600) is the figure in the 1974 press spec sheet and is probably the *driven* total, with some amplifiers held as spares or bridged differently. The reconstruction quotes both. |
 | 4 | Sat behind the band, so the musicians heard what the audience heard | **Correct** | This is the defining idea. No front-of-house mix position, no wedge monitors; the band mixed itself from the stage. Onstage SPL was reportedly *lower* than in the hall — normal conversation was possible on stage. |
 | 5 | Separate subsystems for vocals, Garcia, Weir, bass, piano and drums | **Correct** | Precisely: **six electrically independent systems carried on eleven channels.** See §4. |
@@ -145,12 +145,12 @@ Every "nearly 100 feet" figure in circulation is the outdoor *staging footprint*
 
 Four lots of **original scaffolding and stage drawings from Steve Parish's collection** came up at Julien's Auctions in April 2026. Three are duplicate prints of the same sheet — *"Detail: Grateful Dead P.A. Tower, 1973-74 Winter Season, scale 3/8" = 1'"* — an isometric of a three-level tower with the annotations *"floor in back only, 2nd level"* and *"omit floor in 5' bay, 3rd level"*, dimensioned **30'** tall on standard **6' frames, 5' X-braces, 5' bays**.
 
-The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summer Tour, dated 10 April 1974**, at **¼" = 1'-0"** — a **top view**, a **stage left view**, and written **tower** and **stage requirements**. This is the mature Wall, drawn three weeks after it debuted. It is now the top of the source hierarchy for anything structural.
+The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summer Tour, dated April 10, 1974**, at **¼" = 1'-0"** — a **top view**, a **stage left view**, and written **tower** and **stage requirements**. This is the mature Wall, drawn three weeks after it debuted. It is now the top of the source hierarchy for anything structural.
 
 | Quantity | Value | Confidence | Note |
 |---|---|---|---|
 | **Scaffold footprint** | **19.51 × 12.19 m (64'-0" × 40'-0")** | **confirmed — drawing** | Dimensioned on the top view. Width chain: 9" + 5'-0" + 7'-0" bays + a 3'-6" closer at the centerline, mirrored. Depth chain: 5, 4, 5, 5, 5, 5, 5, 5, 1 = 40'-0". |
-| **Tower height above the deck** | **11.84 m (38'-10")** | **confirmed — drawing and photo** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". The drawing does not say where the chain starts; Pechner's 17 May 1974 photograph measures 38.8 ft of scaffold **above the deck** (`docs/qa-findings.md` §6). Ground to top is therefore 14.88 m (48'-10"). |
+| **Tower height above the deck** | **11.84 m (38'-10")** | **confirmed — drawing and photo** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". The drawing does not say where the chain starts; Pechner's May 17, 1974, photograph measures 38.8 ft of scaffold **above the deck** (`docs/qa-findings.md` §6). Ground to top is therefore 14.88 m (48'-10"). |
 | Speaker array width | 18.29 m (60 ft) documented; **18.96 m (62.2 ft)** as packed | confirmed / packed within 4% | **The check that landed:** the layout was built to Anderson's 60 ft before these drawings surfaced, and 62.2 ft drops inside a 64 ft tower footprint with room for the end frames. Two independent sources, derived separately, agree. |
 | Tallest stacks above the deck | 9.75 m (32 ft) as modeled | photo: ~35 ft | Sixteen 24" cabinets. The earlier figure, 28'-10" of tower, came from reading the lift chain from the ground. |
 | **Stage deck height** | **3.05 m (10 ft)** | **confirmed** | Bolted and tied into the scaffolding, because sound pressure could bounce the rig a foot. Anderson says one-inch plywood; the drawing specifies **1⅛" T&G over 2×10 planks on 4×6 beams**, so the drawing wins. Previously guessed at 5 ft. |
@@ -187,7 +187,7 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 | +6.94 / +7.55 | Bass quad **ch.3 / ch.4** (15″ × 8 each) | P1 | 2.13 → 7.31 |
 | +8.42 | Drums stereo **RIGHT** | P2 | 3.91 → 7.33 |
 
-Heights were checked against Pechner's 17 May 1974 photograph (`docs/qa-findings.md` §6, §8). Channel positions were not, except that each player's own stacks now stand on their side of the stage (§9): Garcia's on the left, the piano's on the right, Garcia's extension behind the kit beside Keith, as the 1974 spec sheet says. Heights in this table are for the cabinet sizes of §8.
+Heights were checked against Pechner's May 17, 1974, photograph (`docs/qa-findings.md` §6, §8). Channel positions were not, except that each player's own stacks now stand on their side of the stage (§9): Garcia's on the left, the piano's on the right, Garcia's extension behind the kit beside Keith, as the 1974 spec sheet says. Heights in this table are for the cabinet sizes of §8.
 
 The skyline that falls out of this — tall flanks either side of a lower, raised, curved center cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
 
@@ -259,7 +259,7 @@ This matters, because one common assumption is wrong.
 
 ## 10. Structure
 
-Everything in this section except the last two rows is now transcribed from the 10 April 1974 sheet rather than inferred.
+Everything in this section except the last two rows is now transcribed from the April 10, 1974, sheet rather than inferred.
 
 **Tower requirements, as written:**
 
@@ -303,10 +303,10 @@ Modeled to give the PA a place to stand, deliberately understated so it never co
 - **Band gear, 1974-correct, for the record:**
   - **Jerry Garcia** — "Wolf", the Doug Irwin custom (in use from late 1973; the wolf was a sticker in 1974, inlaid later).
   - **Bob Weir** — Gibson ES-335, with an Alembic parametric EQ and an Eventide digital delay in his rack.
-  - **Phil Lesh** — Alembic quadraphonic bass. Lesh had two in 1974; the second, "Mission Control" (serial 74 00008, built by Rick Turner), from 16 June 1974. The earlier one is the right choice for a March–May scene, the later for the Winterland scene.
+  - **Phil Lesh** — Alembic quadraphonic bass. Lesh had two in 1974; the second, "Mission Control" (serial 74 00008, built by Rick Turner), from June 16, 1974. The earlier one is the right choice for a March–May scene, the later for the Winterland scene.
   - **Keith Godchaux** — grand piano with five Countryman pickups, one per frame division.
   - **Bill Kreutzmann** — drum kit, center, upstage.
-- **Band positions**, audience view left → right: **Garcia · Weir · Kreutzmann (upstage center) · Lesh · Godchaux at a grand lying across the stage, keyboard at the right.** Measured on Pechner's 17 May 1974 photograph through its solved camera; every other photograph found to mid-June agrees on Garcia far left and Keith to the right (`docs/qa-findings.md` §7, §9). Marked **estimated**: Weir and Lesh changed places now and then, and nothing yet shows the whole band between July and October.
+- **Band positions**, audience view left → right: **Garcia · Weir · Kreutzmann (upstage center) · Lesh · Godchaux at a grand lying across the stage, keyboard at the right.** Measured on Pechner's May 17, 1974, photograph through its solved camera; every other photograph found to mid-June agrees on Garcia far left and Keith to the right (`docs/qa-findings.md` §7, §9). Marked **estimated**: Weir and Lesh changed places now and then, and nothing yet shows the whole band between July and October.
 - **Logos.** The mark sprayed on the band's gear was the **lightning bolt alone** — a 5½" white circle, red half and blue half, split by a jagged white bolt. **No skull.** Owsley Stanley's own account (`bear`) says Ernie Fischbach cut it as a single half-circle stencil with a jagged edge, sprayed red, turned over and sprayed blue, and that "we put it on to all our gear" in 1969; his page shows a toolbox still carrying it. The bolt outline in the model is traced from Bob Thomas's drawing of it, red above and blue below as Stanley describes. The skull-and-bolt was a later design by Bob Thomas, and no source found puts it on the equipment, so it is not used as a 1974 mark. **Exception, by the project owner's choice:** the Blender scene puts a skull-and-bolt sticker and a "GRATEFUL DEAD" lettering sticker on some cases and amplifiers, copied from a surviving Wall amplifier and its case (Sotheby's 2021, lot 43). Nothing dates those stickers to 1974; see `materials.stickers` in the config. Applied only to the road cases, at its true 5½" size. It is **not** placed as a backdrop banner or on the speaker cabinets, for which no evidence was found. The evidence is from 1969; nothing found says the mark had changed by 1974.
 - **Arena:** suggested only — a dark bowl of raked seating and a hint of roof structure, unlit, low detail, fading into black. Enough to give scale, not enough to draw the eye.
 
@@ -340,7 +340,7 @@ Modeled to give the PA a place to stand, deliberately understated so it never co
 
 | id | Source |
 |---|---|
-| `blueprints` | **Original Grateful Dead scaffolding and stage drawings**, from the collection of "Big Steve" Parish — Julien's Auctions, *Treasures From The Golden Road*, 22 April 2026. Lots 53 / 57 / 60: *Detail: Grateful Dead P.A. Tower, 1973-74 Winter Season*, 3/8"=1'. Lot 71: **1974 Summer Tour, dated 10 April 1974**, ¼"=1'-0" — top view, stage left view, and written tower and stage requirements. **Primary engineering documents. Top of the hierarchy for anything structural.** https://www.juliensauctions.com/en/items/2208457/grateful-dead-1974-summer-tour-wall-of-sound-scaffolding-blueprints |
+| `blueprints` | **Original Grateful Dead scaffolding and stage drawings**, from the collection of "Big Steve" Parish — Julien's Auctions, *Treasures From The Golden Road*, April 22, 2026. Lots 53 / 57 / 60: *Detail: Grateful Dead P.A. Tower, 1973-74 Winter Season*, 3/8"=1'. Lot 71: **1974 Summer Tour, dated April 10, 1974**, ¼"=1'-0" — top view, stage left view, and written tower and stage requirements. **Primary engineering documents. Top of the hierarchy for anything structural.** https://www.juliensauctions.com/en/items/2208457/grateful-dead-1974-summer-tour-wall-of-sound-scaffolding-blueprints |
 | `juliens` | **Surviving hardware** from the same sale: lot 72, *Wall of Sound 1974 Electro-Voice T350 tweeter*; lots 276/277, Hard Truckers small plywood enclosures with 4.5-inch speaker and tie-dye grille cloth; lots 58/62/69/70, McIntosh MC2300s and their named road cases. |
 | `anderson` | **Brian Anderson, *Loud and Clear* (2025), ch. 1 "The Artifact"** — supplied by the project owner. The highest-quality dimensional source found: it is the only one that separates the speaker array from the staging, the only one that gives the stage deck height, and the only one describing a surviving cabinet measured in hand. Where it disagrees with a trade-press figure, it wins. |
 | `wiki` | Wikipedia, *Wall of Sound (Grateful Dead)* — https://en.wikipedia.org/wiki/Wall_of_Sound_(Grateful_Dead) |
@@ -366,7 +366,7 @@ Modeled to give the PA a place to stand, deliberately understated so it never co
 
 | Stage | Deliverable | Gate |
 |---|---|---|
-| 2 | Gray-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
+| 2 | Gray-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the April 10, 1974, drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
 | 3 | Materials and lighting — PBR, HDRI, worn birch, black baffles, specular dust caps, steel, glowing McIntosh meters. Soft shadows, AO, subtle bloom, all tier-switchable. | Screenshots |
 | 4 ✔ | Navigation — orbit and an eight-stop guided tour (first-person walk was built, then removed). Mouse, touch and full keyboard; `prefers-reduced-motion` respected; tour text in a live region and complete without the picture. | Live build |
 | 5 ✔ | Hover or pick any array for a panel giving what it carried, its speaker count, its confidence and its sources; a keyboard-reachable list of all 28 arrays; exploded view; channel overlay with isolation; the band's gear at true size; an About page generated from `PROVENANCE` so it cannot drift from the model. | Live build |

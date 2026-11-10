@@ -45,7 +45,7 @@ export const TOUR: TourStop[] = [
     id: 'whole',
     title: 'The Wall of Sound',
     body:
-      "In 1974 the Grateful Dead toured the largest sound system anyone had built: 641 speakers and 48 McIntosh amplifiers on a scaffold tower 38 feet 10 inches above the stage. It was six independent systems, not one PA, each carrying a single voice or instrument, so nothing was mixed together until it reached the air. It stood behind the band rather than in front of it, with no monitor speakers at all, and its singers sang into paired microphones that canceled the Wall's own sound. It played 37 shows between 23 March and 20 October 1974, and then it was taken apart. This is a reconstruction of it, built from photographs, the scaffolding drawings and the equipment that survives.",
+      "In 1974 the Grateful Dead toured the largest sound system anyone had built: 641 speakers and 48 McIntosh amplifiers on a scaffold tower 38 feet 10 inches above the stage. It was six independent systems, not one PA, each carrying a single voice or instrument, so nothing was mixed together until it reached the air. It stood behind the band rather than in front of it, with no monitor speakers at all, and its singers sang into paired microphones that canceled the Wall's own sound. It played 37 shows between March 23 and October 20, 1974, and then it was taken apart. This is a reconstruction of it, built from photographs, the scaffolding drawings and the equipment that survives.",
     position: [0, DECK + 12, 52],
     target: [0, DECK + 6.5, -1],
     fov: 42,
@@ -142,7 +142,7 @@ export const TOUR: TourStop[] = [
     id: 'cost',
     title: 'Seventy-five tons',
     body:
-      'Seventy-five tons complete, four semi-trailers, a crew of twenty-one, and about four hours to build the sound system on top of four for the stage. It cost over 350,000 dollars in 1974, plus 100,000 a month to move and staff. It played thirty-seven shows between the twenty-third of March and the twentieth of October 1974, and then it was taken apart.',
+      'Seventy-five tons complete, four semi-trailers, a crew of twenty-one, and about four hours to build the sound system on top of four for the stage. It cost over 350,000 dollars in 1974, plus 100,000 a month to move and staff. It played thirty-seven shows between March twenty-third and October twentieth, 1974, and then it was taken apart.',
     position: [0, 1.7, 58],
     target: [0, DECK + 5, 0],
     fov: 46,

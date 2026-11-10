@@ -6,7 +6,7 @@ import { tierSettings, type Tier } from '../quality';
 import { bowlFrame, crownPanels, seatHeight, shellArc, sonotubes, terrainHeight, treePoints, type BowlFrame } from '../geometry/bowl';
 
 /**
- * The Hollywood Bowl, 21 July 1974, around the Wall: the canyon, the seating,
+ * The Hollywood Bowl, July 21, 1974, around the Wall: the canyon, the seating,
  * the 1929 shell, Frank Gehry's Sonotubes and the panels in the shell's
  * crown, from the same layout Blender builds (src/geometry/bowl.ts). No
  * crowd: the renders' (blender/make_people.py) is far too heavy for a browser,

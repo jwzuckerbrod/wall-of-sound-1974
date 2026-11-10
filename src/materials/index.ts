@@ -145,7 +145,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
    * light and the single largest unbroken surface in the scene. Left at any
    * ordinary "dark wood" value it blows out into a pale slab that swallows the
    * bottom third of every frame, so it is nearly black and textured. Black is also what it was: the skirt on
-   * Pechner's 17 May photograph, and Blender's ('Stage skirt, black').
+   * Pechner's May 17 photograph, and Blender's ('Stage skirt, black').
    */
   const facing = new THREE.MeshStandardMaterial({
     map: tune(deckMap().clone(), 14),

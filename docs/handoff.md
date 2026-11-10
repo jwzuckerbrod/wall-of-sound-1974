@@ -1,4 +1,4 @@
-# Handoff: where things stand (10 November 2026)
+# Handoff: where things stand (November 10, 2026)
 
 ## Done recently
 
@@ -9,13 +9,13 @@
   (§8, `docs/surviving-gear.md`).
 - **Road gear** in Blender: MC 2300s, Anvil and ZERO cases, traced
   skull-and-bolt and GRATEFUL DEAD stencil (`blender/roadgear.py`).
-- **Story page outline** (`docs/story.md`), set at the Hollywood Bowl, 21 July
+- **Story page outline** (`docs/story.md`), set at the Hollywood Bowl, July 21
   1974 (`blender/hollywood_bowl.py`, §14): shell, Sonotubes, canyon, Poly Haven
   scenery, haze, 1974 print grade.
 - **Crowd**: 144 MakeHuman people (`blender/make_people.py`, §16), facing the
   stage (facing bug fixed in `0b2443a`), jeans, natural hair.
 
-## Decided (7 October 2026, qa-findings §17)
+## Decided (October 7, 2026, qa-findings §17)
 
 - **Crowd: accepted as it is.** Lean on haze and grade; frame detail shots
   without crowd close to the camera. No scanned-people pack.
@@ -24,11 +24,11 @@
   Credit generously: photographer and source on every photo shown, sources
   linked, and a full credits page on the site.
 
-## Decided (10 November 2026, qa-findings §27)
+## Decided (November 10, 2026, qa-findings §27)
 
 - **The story and the explorer are one page.** `index.html` opens on the story,
   told in eighteen steps over the live model (`src/story/`); putting the story
-  away leaves the explorer. This reverses 4 November's "separate products".
+  away leaves the explorer. This reverses November 4's "separate products".
   `story.html` only redirects.
 
 ## Other open items

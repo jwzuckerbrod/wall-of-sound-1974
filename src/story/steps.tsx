@@ -24,7 +24,7 @@ const VENUE = 'hollywoodBowl' as const;
 const S = wall.system;
 const stop = (id: string): Pose => TOUR.find((t) => t.id === id)!;
 const usd = (n: number) => `$${n.toLocaleString('en-US')}`;
-const day = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString('en-GB', { day: 'numeric', month: 'long' });
+const day = (iso: string) => new Date(`${iso}T12:00:00`).toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
 export interface Step {
   id: string;
@@ -82,7 +82,7 @@ export const STEPS: Step[] = [
     still: IMAGES.photoBowl,
     body: (
       <>
-        <p className="kicker">Sunday, 21 July 1974. The Hollywood Bowl.</p>
+        <p className="kicker">Sunday, July 21, 1974. The Hollywood Bowl.</p>
         <p>
           For {wall.meta.showCount} shows in 1974 the Grateful Dead carried {S.weightTonsComplete} tons of sound system
           from city to city. Nothing had sounded like it. By October it was gone.
@@ -364,7 +364,7 @@ export const STEPS: Step[] = [
       <>
         <p className="figure">What we know, and how well.</p>
         <p>
-          Nobody drew a plan of the Wall. This reconstruction is built from scaffolding drawings dated 10 April 1974, a
+          Nobody drew a plan of the Wall. This reconstruction is built from scaffolding drawings dated April 10, 1974, a
           press sheet from that year, the equipment that survives, and every photograph we could date.
         </p>
         <ul className="key key-single">

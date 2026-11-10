@@ -8,16 +8,16 @@ instantly on any device, and it ends by inviting people into the 3D explorer.
 A draft to react to. The copy is working copy; every figure is from the config
 and carries its source.
 
-**Built (10 November 2026): the story is told in steps, over the live 3D model,
+**Built (November 10, 2026): the story is told in steps, over the live 3D model,
 on the front page.** `index.html` opens on it; `src/story/steps.tsx` holds the
 eighteen steps, `src/story/StoryLayer.tsx` the card, stills and controls, and
 `src/App.tsx` applies each step to the explorer's own state. See "Proposed: the
 story in three acts" below for the order, and qa-findings §27 for how it got
 here. `story.html` now only sends old links to the front page. The sections
 "The shape" and "The beats" below describe the scrolling page it replaced
-(7 October to 9 November 2026) and are kept as its record.
+(October 7 to November 9, 2026) and are kept as its record.
 
-**The place: the Hollywood Bowl, Sunday 21 July 1974.** One real show gives the
+**The place: the Hollywood Bowl, Sunday, July 21, 1974.** One real show gives the
 story a sense of place: the white shell, the hills, seventeen thousand people.
 It's inside the Wall's summer, and it's the show with the best photographs of
 the Wall. What we know of the Bowl in 1974 is in `qa-findings` §14.
@@ -51,7 +51,7 @@ beats, with the copy on cards over the image.
 
 ### 1. It was real
 
-> Sunday, 21 July 1974. The Hollywood Bowl.
+> Sunday, July 21, 1974. The Hollywood Bowl.
 >
 > The Grateful Dead have brought the largest sound system anyone had built: a
 > wall of speakers four stories high, standing in front of the Bowl's shell.
@@ -68,7 +68,7 @@ fallback, set indoors in Vancouver.
 
 > 641 speakers. 48 McIntosh amplifiers. 38 feet of steel. 75 tons on the road,
 > 28 of them the sound system alone. It went up and came down at every show
-> from 23 March to 20 October 1974, and then never again.
+> from March 23 to October 20, 1974, and then never again.
 
 Image: `bowl-hero`, from high in the seats, the shell and the crowd around it.
 
@@ -99,10 +99,10 @@ Real recordings, streamed from the Internet Archive (never copied here), in
 Listen button). Audience tapes only: a soundboard tape is the desk's feed and
 never went through the Wall.
 
-- The Wall on its own: Rob Bertrando's tape of the Bowl, 21 July 1974,
+- The Wall on its own: Rob Bertrando's tape of the Bowl, July 21, 1974,
   front of the desk, Sony ECM-22Ps on cassette (*Scarlet Begonias*, *U.S. Blues*).
 - Before and after: the same songs (*Sugar Magnolia*, *Me and My Uncle*) from
-  Bertrando's tape of the Hollywood Palladium, 6 August 1971, same microphones,
+  Bertrando's tape of the Hollywood Palladium, August 6, 1971, same microphones,
   40–50 ft back, on reel-to-reel. One switch flips between them and keeps the
   place. The page says what isn't held steady: indoors v. outdoors, the better
   recorder on the older show, three years of the band.
@@ -142,7 +142,7 @@ Image: `amps-close`, one rack with the meters lit and the needles swinging; the 
 ### 7. What we know, and how well
 
 > Nobody drew a plan of the Wall. This reconstruction is built from scaffolding
-> drawings dated 10 April 1974, a press sheet from that year, the cabinets that
+> drawings dated April 10, 1974, a press sheet from that year, the cabinets that
 > survive, and every photograph we could date. Where we're sure, it's solid.
 > Where we've had to estimate, it's marked.
 
@@ -159,7 +159,7 @@ curated viewpoint.
 
 ---
 
-## Proposed: the story in three acts (draft, 10 November 2026)
+## Proposed: the story in three acts (draft, November 10, 2026)
 
 A draft to react to. Nothing on the page has changed. The beats above are the
 page as built: a tour of features. This reorders them into a narrative with a
@@ -186,7 +186,7 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 |---|---|---|---|
 | 1 | The hook | The photograph, then one sentence of stakes: for 37 shows in 1974 the Grateful Dead carried 75 tons of sound system from city to city. Nothing had sounded like it. By October it was gone. **(config:** `meta.showCount`, `system.weightTonsComplete`, `meta.retired`**)** | The Bowl photograph, crossfading to the render from the same seat (as now) |
 | 2 | What a concert sounded like | Every microphone to one desk, one mix out of two stacks, monitors so the band could guess. The 1974 report's line: musicians "don't really know how they sound." The signal-path diagram's first half lives here. **(config:** `comparison.signalPath`**)** | A new still or diagram of a typical early-1970s stage; today's page has none |
-| 3 | Bear's answer | Owsley "Bear" Stanley's idea: no mix at all. Give every instrument its own speakers and stand them behind the band. The people who built it. The first try, at Stanford on 9 February 1973: the tweeters failed during the first number. **(config:** `meta.designers`, `meta.prototypeTest`**)** | A portrait or period photograph **(needs finding, and a credit)**; failing that, the `title` cones |
+| 3 | Bear's answer | Owsley "Bear" Stanley's idea: no mix at all. Give every instrument its own speakers and stand them behind the band. The people who built it. The first try, at Stanford on February 9, 1973: the tweeters failed during the first number. **(config:** `meta.designers`, `meta.prototypeTest`**)** | A portrait or period photograph **(needs finding, and a credit)**; failing that, the `title` cones |
 
 ### Act 2. The machine
 
@@ -204,7 +204,7 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 | # | Beat | What it says | Picture |
 |---|---|---|---|
 | 10 | What it took | $350,000 to build. Two identical scaffolds leapfrogging from city to city so one was always standing when the speakers arrived. 21 people to load it; four hours for the stage, four for the sound. $100,000 a month to move. 120 decibels on stage. **(config:** `system.buildCostUsd1974`, `stagingSets`, `crew`, `setupHours`, `transportLabourUsdPerMonth`, `onstageSplDb`**)** | `amps-close` with the needles; or the crew on the scaffold (`crew.glb`) as a new render |
-| 11 | The last night | Winterland, San Francisco, 16 to 20 October 1974. Seven months after its first show, the Wall came down for the last time. **(config:** `meta.retired`, `meta.debut`**)** Why it ended, and what the band did next: **(needs a source)**. | A new render: the Wall half-struck, or the empty stage at dusk |
+| 11 | The last night | Winterland, San Francisco, 16 to October 20, 1974. Seven months after its first show, the Wall came down for the last time. **(config:** `meta.retired`, `meta.debut`**)** Why it ended, and what the band did next: **(needs a source)**. | A new render: the Wall half-struck, or the empty stage at dusk |
 | 12 | What's left | Budman, the amplifier that drove Garcia's guitar, sold at Sotheby's in 2021, still in its road case. Six cabinets. A handful of photographs. **(config:** `docs/surviving-gear.md`**)** What it left behind in how concerts sound: **(needs a source)**. | A photograph of a surviving piece **(needs a credit)**, or `amps-close` if beat 10 takes the crew |
 
 ### Coda
@@ -262,8 +262,8 @@ next; what concert sound took from it; what it was like to play through.
 
 - The red kit, modeled (the Bowl show had the wine-red kit, not the butcher block).
 
-The story and the explorer are one page (decided 10 November 2026, reversing
-4 November): it opens on the story, and the explorer is what's left when the
+The story and the explorer are one page (decided November 10, 2026, reversing
+November 4): it opens on the story, and the explorer is what's left when the
 story is put away.
 
 ## The crowd and the hills

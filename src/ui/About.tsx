@@ -145,7 +145,7 @@ export function About({ onClose }: { onClose: () => void }) {
               {d.name} <span className="role">({d.role})</span>
             </span>
           ))}
-          . It debuted at the {wall.meta.debut.venue} on 23 March 1974 and was taken apart after the{' '}
+          . It debuted at the {wall.meta.debut.venue} on March 23, 1974, and was taken apart after the{' '}
           {wall.meta.retired.run} run at the {wall.meta.retired.venue}.
         </p>
         <p>

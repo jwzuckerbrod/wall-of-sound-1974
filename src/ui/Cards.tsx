@@ -94,7 +94,7 @@ export const INSTRUMENTS: Record<string, { title: string; player: string; text: 
   lesh: {
     title: 'Mission Control',
     player: 'Phil Lesh',
-    text: "Phil Lesh's Alembic quadraphonic bass, in use from 16 June 1974, which fed the Wall's four independent bass channels.",
+    text: "Phil Lesh's Alembic quadraphonic bass, in use from June 16, 1974, which fed the Wall's four independent bass channels.",
     channel: 'bass1',
   },
   piano: {
@@ -106,13 +106,13 @@ export const INSTRUMENTS: Record<string, { title: string; player: string; text: 
   rhodes: {
     title: 'Fender Rhodes',
     player: 'Keith Godchaux',
-    text: "Keith's electric piano. Where it stood on stage isn't known: here, upstage of him at his right hand, as at Oakland on 8 June 1974.",
+    text: "Keith's electric piano. Where it stood on stage isn't known: here, upstage of him at his right hand, as at Oakland on June 8, 1974.",
     channel: 'piano',
   },
   drums: {
     title: 'The drum kit',
     player: 'Bill Kreutzmann',
-    text: "Bill Kreutzmann's kit. Its bass drum had a column of sixteen fifteen-inch speakers to itself; the rest of the kit ran in stereo through the drum stacks either side. At the Hollywood Bowl on 21 July it was the wine-red kit.",
+    text: "Bill Kreutzmann's kit. Its bass drum had a column of sixteen fifteen-inch speakers to itself; the rest of the kit ran in stereo through the drum stacks either side. At the Hollywood Bowl on July 21 it was the wine-red kit.",
     channel: 'kick',
   },
 };

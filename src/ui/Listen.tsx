@@ -168,7 +168,7 @@ export function ListenPanel({ onClose }: { onClose: () => void }) {
           ×
         </button>
         <h1>Listen</h1>
-        <p className="lede">The Wall from the crowd at the Hollywood Bowl, on a cassette recorder, 21 July 1974.</p>
+        <p className="lede">The Wall from the crowd at the Hollywood Bowl, on a cassette recorder, July 21, 1974.</p>
         <ListenWall />
         <h2>The same songs, three years apart</h2>
         <p>

@@ -72,7 +72,7 @@ opposite: towers stepping up and down with the stacks, only the tallest bays rea
 **Fixed:** each bay now rises one lift above whatever stands in it. Tube count fell from 1,066 to 991 and
 the silhouette now follows the wall.
 
-**Superseded by §6.** Pechner's 17 May 1974 photograph shows the opposite: a continuous top rail across the whole
+**Superseded by §6.** Pechner's May 17, 1974, photograph shows the opposite: a continuous top rail across the whole
 width, with crew working along it. Every bay now runs to the full height again.
 
 ---
@@ -100,7 +100,7 @@ width, with crew working along it. Every bay now runs to the full height again.
 - every stack that starts on a platform has a plank floor beneath it
 - players have at least 4 m of stage downstage of the wall
 
-Everything else still passes: 641 drivers matching the 1974 inventory, the scaffold against the 10 April
+Everything else still passes: 641 drivers matching the 1974 inventory, the scaffold against the April 10
 1974 drawing, block intersections, the walkable world, tour integrity, and provenance completeness.
 
 ---
@@ -143,7 +143,7 @@ cases carrying the 1969 equipment stencil, which is the correct and only use of 
 
 ## 6. Checked against a 1974 photograph
 
-**Photo:** Richard Pechner, sound check, P.N.E. Coliseum, Vancouver, **17 May 1974** — a straight-on
+**Photo:** Richard Pechner, sound check, P.N.E. Coliseum, Vancouver, **May 17, 1974** — a straight-on
 full-stage view (source `pechner`). Not in the repo; the measurements below are what the verifier uses.
 
 **Method.** The camera was solved from the photo rather than guessed, which is what fSpy would do, but using
@@ -168,7 +168,7 @@ photo's to within about 10 px, so the camera is right; everything that disagreed
 | Center cluster | 12"s at ~11.6–17.9 ft, a band of 5"s above to ~20.8 ft | 12"s 9.3–21.3 ft, 5"s to 25.1 ft | Medium | 12"s 7–19 ft, 5"s to 22.7 ft |
 | Under the cluster | Mostly open: the kit and one small box | A 4 × 4 block of 15"s, 8 ft tall | Medium | Unchanged — see below |
 
-**The cause.** The 10 April 1974 drawing gives the tower as a lift chain — 7'-0" + 5'-10" + four lifts of
+**The cause.** The April 10, 1974, drawing gives the tower as a lift chain — 7'-0" + 5'-10" + four lifts of
 6'-6" = 38'-10" — but not where the chain starts. It was read from the ground, with the 10 ft deck inside it,
 which left 28'-10" of tower above the stage. The photograph shows the whole 38'-10" standing above the deck.
 Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" above the deck.
@@ -196,7 +196,7 @@ Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" abo
 - (Closed in §10: the block is gone.) The photo shows little under the cluster besides the kit. The 4 × 4 bass-drum block was still in the model,
   behind the cluster, because the 16 × 15" count is confirmed and nothing yet says where else they went.
 - Channel-by-channel placement is still the reconstruction's own. Only the heights are photo-checked.
-- The Cow Palace debut (23 March 1974) had a flat center cluster, not the cylinder. The model shows the
+- The Cow Palace debut (March 23, 1974) had a flat center cluster, not the cylinder. The model shows the
   Wall as it stood from May, and is checked against May.
 
 ---
@@ -211,45 +211,45 @@ Seven more photographs of the band in front of the Wall, read against the ones a
 
 | File in `.shots/reference/` | Date and place | Source | Shows |
 |---|---|---|---|
-| `schneider-ucsb-1974-05-25-band.webp` | 25 May 1974, Campus Stadium, UC Santa Barbara | Steve Schneider, via [Paul Dorpat, "Seattle Now & Then"](https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/) | Garcia, the kit, Weir, Lesh, close |
+| `schneider-ucsb-1974-05-25-band.webp` | May 25, 1974, Campus Stadium, UC Santa Barbara | Steve Schneider, via [Paul Dorpat, "Seattle Now & Then"](https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/) | Garcia, the kit, Weir, Lesh, close |
 | `schneider-ucsb-1974-05-25-wide.webp` | The same show | The same | The whole stage. Only 768 px wide |
-| `esrigging-oakland-1974-06-08-wide.webp` | 8 June 1974, Oakland Coliseum Stadium ("Day on the Green") | Posted to the Everything Stage Rigging Facebook group, whose post is titled "Grateful Dead - 'Day On The Green'"; photographer unknown | The whole Wall from the crowd, with the tie-dyes and tarps. The band is small |
-| `unsourced-band-1974-06-16-desmoines-probable.webp` | **Probably** 16 June 1974, Iowa State Fairgrounds, Des Moines | Google Images; photographer unknown | Garcia, Weir, the kit, Lesh |
+| `esrigging-oakland-1974-06-08-wide.webp` | June 8, 1974, Oakland Coliseum Stadium ("Day on the Green") | Posted to the Everything Stage Rigging Facebook group, whose post is titled "Grateful Dead - 'Day On The Green'"; photographer unknown | The whole Wall from the crowd, with the tie-dyes and tarps. The band is small |
+| `unsourced-band-1974-06-16-desmoines-probable.webp` | **Probably** June 16, 1974, Iowa State Fairgrounds, Des Moines | Google Images; photographer unknown | Garcia, Weir, the kit, Lesh |
 | `kirkwest-1974-06-16-desmoines-probable-wide.webp` | **Probably** the same show as the one above, from farther back | Kirk West (credit on the image), via a [Reddit post](https://www.reddit.com/r/interestingasfuck/comments/wwr9zf/the_grateful_dead_and_their_wall_of_sound_in_1974/) that gives no show | The whole band and the Wall, straight on |
 | `unsourced-rigging-1974-undated.webp` | Undated; outdoors, before the show, golden hills behind | Google Images, a photograph of a printed page | Crew climbing the stacks; the space under the cluster |
-| Not saved yet | Undated summer 1974, outdoors | Posted to a Facebook group beside a 28 June 1974 Boston Garden memory. The post says the photo is from "another summer 1974" show. Boston Garden is indoors and this photo is in daylight | Garcia, Lesh, Weir, the kit |
+| Not saved yet | Undated summer 1974, outdoors | Posted to a Facebook group beside a June 28, 1974 Boston Garden memory. The post says the photo is from "another summer 1974" show. Boston Garden is indoors and this photo is in daylight | Garcia, Lesh, Weir, the kit |
 
 **Dating the Des Moines photos.** In both, Garcia wears a red "MARIN ACADEMY" sweatshirt and plays the Wolf,
 Weir wears a plaid shirt, and Lesh a pale green shirt. Garcia's and Weir's clothes match
-`garcia-1974-06-16-desmoines.jpg` and `weir-1974-06-16-desmoines.jpg`, which are already dated 16 June, and
+`garcia-1974-06-16-desmoines.jpg` and `weir-1974-06-16-desmoines.jpg`, which are already dated June 16, and
 the Iowa State Fairgrounds show was outdoors. A match of clothes, not a credit.
 
 **Reading positions across the stage.** Weir stands downstage of the kit, so whether he appears left or right
-of it depends on where the photographer stood. The close photo from 16 June puts him left of the kit, and
+of it depends on where the photographer stood. The close photo from June 16 puts him left of the kit, and
 Kirk West's straight-on view of the same show puts him a little right of its center. So only the straight-on
-views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for order across the stage.
+views (Kirk West, the May 25 and June 8 wide shots, Pechner) are trusted for order across the stage.
 
 **Findings**
 
 | | What the photographs show | The model now | Confidence |
 |---|---|---|---|
-| Garcia's side | **Far left** in every photograph that shows him: 17 May (`pechner`, a guitarist far left; too small to name), 25 May, 8 June (a guitarist in blue, far left), 16 June (probable, two photographs), and the undated summer photo | Far right, `x = 7.0` | High for May–June. No photo from July to October yet shows him |
-| Weir | Just downstage of the kit, a little right of its center, in the straight-on views (25 May, 16 June) | Far left, `x = -5.6` | Medium-high |
-| Lesh | Right of Weir on 25 May, 16 June and 31 July. The undated summer photo, and probably 8 June (a figure in white between Garcia and the kit; no bass visible at this size), have him **left** of the kit, so it varied | Left of the kit, `x = -2.6` | Medium. Right of the kit in 3 of 5 |
-| Keith | At a grand to the **right**: 17 May, 25 May (far right, in line with the band; a second grand far left looks parked) 8 June (far right: the grand under a white cover, and a smaller keyboard beyond it, to the audience's right, with someone at it) and 16 June (far right, lid down) | Right, `x = 4.6` | High for May–June. Agrees with the model |
-| The kit | 25 May and 16 June (probable): **wine-red shells with chrome lugs**, on a riser draped in red velvet. Undated summer: the same red kit. 31 July: butcher-block concert toms | Butcher block | High. The kit changed between 16 June and 31 July, **inside** the target window. See `blender/instruments/drums/README.md` |
-| Under the cluster | **Open** in every photograph: sky and hills (rigging photo), trees (undated summer), a blue backdrop (25 May, 8 June and 16 June), open sky through a scrim (31 July, `bill-kit-anderson-1974-07-31-preshow.jpg`). Only the kit, Garcia's natural-wood 2×12 cabinet, and racks | A 4 × 4 block of sixteen 15"s, 8 ft tall | High. Seven photographs from five or more shows, at least one of them in the target window. The config's own note on `arrays.kickCount`, from `deadsources74`, says the sixteen 15"s were "in a column", not a block |
+| Garcia's side | **Far left** in every photograph that shows him: May 17 (`pechner`, a guitarist far left; too small to name), May 25, June 8 (a guitarist in blue, far left), June 16 (probable, two photographs), and the undated summer photo | Far right, `x = 7.0` | High for May–June. No photo from July to October yet shows him |
+| Weir | Just downstage of the kit, a little right of its center, in the straight-on views (May 25, June 16) | Far left, `x = -5.6` | Medium-high |
+| Lesh | Right of Weir on May 25, June 16 and July 31. The undated summer photo, and probably June 8 (a figure in white between Garcia and the kit; no bass visible at this size), have him **left** of the kit, so it varied | Left of the kit, `x = -2.6` | Medium. Right of the kit in 3 of 5 |
+| Keith | At a grand to the **right**: May 17, May 25 (far right, in line with the band; a second grand far left looks parked) June 8 (far right: the grand under a white cover, and a smaller keyboard beyond it, to the audience's right, with someone at it) and June 16 (far right, lid down) | Right, `x = 4.6` | High for May–June. Agrees with the model |
+| The kit | May 25 and June 16 (probable): **wine-red shells with chrome lugs**, on a riser draped in red velvet. Undated summer: the same red kit. July 31: butcher-block concert toms | Butcher block | High. The kit changed between June 16 and July 31, **inside** the target window. See `blender/instruments/drums/README.md` |
+| Under the cluster | **Open** in every photograph: sky and hills (rigging photo), trees (undated summer), a blue backdrop (May 25, June 8 and June 16), open sky through a scrim (July 31, `bill-kit-anderson-1974-07-31-preshow.jpg`). Only the kit, Garcia's natural-wood 2×12 cabinet, and racks | A 4 × 4 block of sixteen 15"s, 8 ft tall | High. Seven photographs from five or more shows, at least one of them in the target window. The config's own note on `arrays.kickCount`, from `deadsources74`, says the sixteen 15"s were "in a column", not a block |
 | Casters | The cluster's cabinets have casters on their undersides, clearest at Hartford. In color they show as red and green discs | Not modeled | High |
-| Which side is heavier | 25 May, 8 June and 16 June wide shots: the tallest, densest stacks on the left, behind Garcia; on the right, a few columns and a raised platform of 12"s, then the piano | Piano's columns left, Garcia's right (comment above `arrays` in the config) | Medium. Consistent with each player's speakers standing behind them |
-| Stage width | 25 May: the deck runs well past the Wall on the right, with the piano out in the open | The deck overhangs the scaffold 9 ft each side, from the 10 April drawing | Low. One venue's stage |
-| Scaffold color | 25 May: rusty brown pipe. 17 May and 31 July: pale | Silver | Low. Probably varied with the venue's own scaffolding |
-| Amp racks | 25 May: McIntosh racks with blue meters stand on the deck beside the players | Under the scaffold, behind the band | Medium |
-| Backdrop | Outdoors: blue tarps on the sides and back of the structure (25 May, 8 June, 16 June), or open sky |
-| Tie-dyes | 8 June: four tie-dyed panels hang high on the scaffold, two over each side, below a valance of blue tarp along the top. `materials.tieDye` already says Courtenay Pollock's tie-dyes hung on the structure | Not in the Blender render | High for 8 June | A black void (§2.4) | High for outdoor shows |
+| Which side is heavier | May 25, June 8 and June 16 wide shots: the tallest, densest stacks on the left, behind Garcia; on the right, a few columns and a raised platform of 12"s, then the piano | Piano's columns left, Garcia's right (comment above `arrays` in the config) | Medium. Consistent with each player's speakers standing behind them |
+| Stage width | May 25: the deck runs well past the Wall on the right, with the piano out in the open | The deck overhangs the scaffold 9 ft each side, from the April 10 drawing | Low. One venue's stage |
+| Scaffold color | May 25: rusty brown pipe. May 17 and July 31: pale | Silver | Low. Probably varied with the venue's own scaffolding |
+| Amp racks | May 25: McIntosh racks with blue meters stand on the deck beside the players | Under the scaffold, behind the band | Medium |
+| Backdrop | Outdoors: blue tarps on the sides and back of the structure (May 25, June 8, June 16), or open sky |
+| Tie-dyes | June 8: four tie-dyed panels hang high on the scaffold, two over each side, below a valance of blue tarp along the top. `materials.tieDye` already says Courtenay Pollock's tie-dyes hung on the structure | Not in the Blender render | High for June 8 | A black void (§2.4) | High for outdoor shows |
 
 **Two cautions**
 
-- The Wall's heights were checked against Vancouver, 17 May, and most of these photographs are from May
+- The Wall's heights were checked against Vancouver, May 17, and most of these photographs are from May
   and June. The kit change shows the stage did change during the summer. A wide shot from July to October,
   such as Winterland in October from *The Grateful Dead Movie*, would show whether the layout changed too.
 - Moving Garcia is not only moving his mark. Each player's stacks stood behind the player, so moving Garcia and
@@ -297,7 +297,7 @@ Blender scene pairs them.
 
 ## 9. The band moved to Pechner's positions
 
-The players' marks are now measured, not estimated. Pechner's 17 May 1974
+The players' marks are now measured, not estimated. Pechner's May 17, 1974
 photograph is the one the scene's camera is solved against (§6), so a figure's
 place in it gives its place on the stage. Across = (pixel − 398) × distance /
 524.6 px, with the players taken 11.5 m from the camera, 5.3 m in front of the
@@ -333,21 +333,21 @@ marks from `scene.json` instead of its own copy. It lays the grand across the
 stage with the keyboard at the right, and puts the Rhodes upstage of Keith at
 his right hand, beyond the grand as seen from the audience, as at Oakland.
 
-**Still open:** this is the band on 17 May. Weir and Lesh changed places on
-other dates, and on 25 May and 16 June a grand stood at the far right instead.
+**Still open:** this is the band on May 17. Weir and Lesh changed places on
+other dates, and on May 25 and June 16 a grand stood at the far right instead.
 Nothing from July to October shows the whole band.
 
 ---
 
-## 10. Hollywood Bowl, 21 July 1974, and the bass-drum block
+## 10. Hollywood Bowl, July 21, 1974, and the bass-drum block
 
 Two color photographs of the Hollywood Bowl show, before the show, with no
 photographer known (`.shots/reference/unsourced-hollywoodbowl-1974-07-21-a.png`,
 `-b.webp`). This is the first full view of the Wall **inside the target window**.
 
 - **Under the cluster: open.** Only the kit, Garcia's natural-wood 2 × 12"
-  cabinet and dark backing, the same as 17 May, 25 May, 8 June, 16 June and
-  31 July. That settles it.
+  cabinet and dark backing, the same as May 17, May 25, June 8, June 16 and
+  July 31. That settles it.
 - **The grand lies across the stage just right of the kit**, under a white
   cover, as on Pechner's photograph (§9). A second keyboard area is at the far
   right under two white umbrellas, with what looks like another grand.
@@ -398,7 +398,7 @@ cluster and fills was always the reconstruction's own.
 - Lot 49's strips hold about 13 holes, not 11. Three lengths of 13 would make
   a row 5.25 m long, wider than the 12" section, which the photographs don't
   show.
-- Pechner's 17 May photograph shows a taller 5" band (about 2.9 ft, against 1.8
+- Pechner's May 17 photograph shows a taller 5" band (about 2.9 ft, against 1.8
   now). That is probably the first cluster's plywood cells. The model now shows
   the cluster as it was by late July.
 - The band now tops out lower; the cluster's mid-height is 17.3 ft against the
@@ -417,15 +417,15 @@ default, since its shot is matched to an indoor photograph.
   audience's left), with a sun lamp matched to it. The sky draws no sun disc of
   its own, so the scene isn't lit twice.
 - **Ground:** a dry summer field.
-- **Tarps:** blue polythene, as at UC Santa Barbara (25 May), Oakland (8 June)
-  and Des Moines (16 June). One sheet a scaffold bay over the back of the towers,
+- **Tarps:** blue polythene, as at UC Santa Barbara (May 25), Oakland (June 8)
+  and Des Moines (June 16). One sheet a scaffold bay over the back of the towers,
   one over each end, tied at every lift and bellying between ties, slightly
   translucent with the sun behind. A strip one lift deep runs along the top of
   the front, as at Oakland. Sizes and places come from the exported scaffold.
 
 - **Tie-dyes:** four panels hang from the top front of the scaffold under the
-  tarp strip, two over each side, as at Oakland (8 June) and the Hollywood Bowl
-  (21 July). The config confirms Courtenay Pollock's tie-dyes on the structure
+  tarp strip, two over each side, as at Oakland (June 8) and the Hollywood Bowl
+  (July 21). The config confirms Courtenay Pollock's tie-dyes on the structure
   (`materials.tieDye`). About 1.3 × 2.5 m, scaled off the Oakland photograph,
   and placed so each hangs above the stacks below it. The patterns are generic
   spiral and ring dyeing made in the shader, with bled edges and pale crazing,
@@ -440,7 +440,7 @@ default, since its shot is matched to an indoor photograph.
 **The stacks.** The config had every stack 0.16 m in front of the towers'
 front plane (`dimensions.arrayStandoff`), with a note that the photographs
 "plainly show stacks in front of the steel". They show the opposite. At the
-Hollywood Bowl (21 July) and on Pechner's photograph (17 May), the uprights,
+Hollywood Bowl (July 21) and on Pechner's photograph (May 17), the uprights,
 ledgers and X-braces cross **in front of** the speaker faces on both sides.
 The model was also contradicting itself, since its stacks stand on scaffold
 floors inside the towers.
@@ -478,10 +478,10 @@ lines them up.
 
 ---
 
-## 14. The story is set at the Hollywood Bowl, 21 July 1974
+## 14. The story is set at the Hollywood Bowl, July 21, 1974
 
 The story page needs a sense of place, so its renders are set at one show: the
-Hollywood Bowl on 21 July 1974. It's inside the target window, has the best
+Hollywood Bowl on July 21, 1974. It's inside the target window, has the best
 photographic record of the Wall in the window, and is instantly recognisable.
 `blender/hollywood_bowl.py`, `--venue hollywood`.
 
@@ -510,8 +510,8 @@ photographic record of the Wall in the window, and is instantly recognisable.
 **Findings:**
 
 - **The kit at the Bowl is the wine-red one**, on a natural-wood riser, not
-  the butcher block of Hartford (31 July). So the change was between 21 and
-  31 July. For the Bowl, `stage_review.py` recolours the kit's shells, but its
+  the butcher block of Hartford (July 31). So the change was between 21 and
+  July 31. For the Bowl, `stage_review.py` recolours the kit's shells, but its
   drums are still the concert toms modeled from Hartford, which isn't right.
   The red kit needs its own model.
 - **A second, smaller curved cluster** stands low on the right of the Wall in
@@ -606,14 +606,14 @@ already look human.
 
 ---
 
-## 17. Decisions, 7 October 2026
+## 17. Decisions, October 7, 2026
 
 The project owner settled three open questions.
 
 - **The crowd stays as it is.** No scanned-people pack. The 144 MakeHuman
   people (§16) carry the wide shots with haze and the 1974 grade; detail shots
   are framed without crowd close to the camera.
-- **The band at the Hollywood Bowl, 21 July 1974: Garcia, Weir, the kit,
+- **The band at the Hollywood Bowl, July 21, 1974: Garcia, Weir, the kit,
   Lesh, the pianos**, left to right from the audience. This is the order the
   Bowl photographs show (§14) and the order already modeled (§9), so no
   marks move. The Weir/Lesh swaps seen on other dates (§7) no longer matter
@@ -628,7 +628,7 @@ The project owner settled three open questions.
 
 ---
 
-## 18. Blender and the explorer, reconciled (7 October 2026)
+## 18. Blender and the explorer, reconciled (October 7, 2026)
 
 Blender had become the more detailed model, with most of its detail
 hard-coded in the Python, and the explorer had drifted from it. The project
@@ -638,15 +638,15 @@ config that both renderers read.
 
 | # | Detail | Ruling | Evidence |
 |---|---|---|---|
-| 1 | Black or bare cabinets | A mix, at `blackFinishRatio`. Blender had every cabinet bare; it now reads the same per-cabinet finish as the explorer, decided once in `src/geometry/arrays.ts` | Pechner 17 May: both finishes in the same columns |
-| 2 | 5" and horn panels | Small plywood cells, one driver each (Blender), not one drilled black board. One finish per block | Oakland 8 June: pale framed grids. Small photos: a reading |
+| 1 | Black or bare cabinets | A mix, at `blackFinishRatio`. Blender had every cabinet bare; it now reads the same per-cabinet finish as the explorer, decided once in `src/geometry/arrays.ts` | Pechner May 17: both finishes in the same columns |
+| 2 | 5" and horn panels | Small plywood cells, one driver each (Blender), not one drilled black board. One finish per block | Oakland June 8: pale framed grids. Small photos: a reading |
 | 3 | Cluster strips | Aluminum, face and flanges (the explorer had a black face) | Bowl, Oakland; §11 |
 | 4 | Cones | Near-black, `#2A2A2C` (was mid-gray in the explorer) | Every color photo |
 | 5 | Horns | The T350 as it survives: rectangular, 7.25 × 4.5 × 3.5 in, gray cast frame, black throat. Neither renderer had it right | Julien's 2026 lot 72 |
 | 6 | Scaffold steel | Bright galvanized, `#A9ADB1` (the explorer had darkened it) | Oakland daylight; Pechner |
 | 7 | MC 2300 panel | Brushed gold, black lower strip, 3 knobs and a red rocker (the explorer had black glass and 4 knobs) | Sotheby's 2021 lot 36 |
 | 8 | Road cases | Blender's orange and black Anvils and ZERO cases, stencils, names, stickers | Oakland; Sotheby's lots 36–43 |
-| 9 | Tie-dyes | Four on the front of the scaffold near the top, outdoors only; none indoors | Bowl 21 July; Oakland 8 June |
+| 9 | Tie-dyes | Four on the front of the scaffold near the top, outdoors only; none indoors | Bowl July 21; Oakland June 8 |
 | 10 | 12"s | Paired two to a box (Blender) | Sotheby's lot 47 |
 
 **The T350.** Julien's lot 72 is the only surviving tweeter. Its frame is
@@ -695,9 +695,9 @@ bare, so the story's renders were re-made (`.shots/story/v2/render.sh`, then
 
 ---
 
-## 19. The Hollywood Bowl photograph, solved (3 November 2026)
+## 19. The Hollywood Bowl photograph, solved (November 3, 2026)
 
-The story opens by fading the 21 July 1974 photograph
+The story opens by fading the July 21, 1974, photograph
 (`unsourced-hollywoodbowl-1974-07-21-b.webp`, 1020 × 720) into a render
 from the same seat. That needs the photographer's camera, so it is now
 solved rather than placed by eye: `blender/solve_camera.py`, from points in
@@ -759,7 +759,7 @@ from the arena configuration the model's deck follows. Not changed yet.
 through the solved camera at twice the photo's size; `compare.py --color`
 overlays it.
 
-## 20. The story on a phone (4 November 2026)
+## 20. The story on a phone (November 4, 2026)
 
 A QA pass on the story at phone sizes, against screenshots from an iPhone in
 Chrome (about 390x664 upright, 717x330 on its side). Cards scrolling over a
@@ -789,7 +789,7 @@ signal diagram on its side until the reader scrolls.
 
 ---
 
-## 21. The story's last pictures (4 November 2026)
+## 21. The story's last pictures (November 4, 2026)
 
 - **Beat 7, evidence.** `bowl-tower` looked only at the crowd, with none of the
   Wall in frame, so a tint could show nothing. The beat now crossfades `bowl` to
@@ -814,7 +814,7 @@ tried on a real phone: the new title and needles.
 
 ---
 
-## 22. The explorer's open items (4 November 2026)
+## 22. The explorer's open items (November 4, 2026)
 
 Rows 2.2 and 2.5 to 2.8 predate the reconciliation (§18), so each was looked at
 again in the running app. The Bowl view and the instrument viewer were decided
@@ -824,13 +824,13 @@ on measurements.
 
 | Row | What the app shows now | Outcome |
 |---|---|---|
-| 2.5 Plywood | Frames measured `#93663d`: hue 29°, saturation 0.59. The grain map is warm and it multiplied a warm base color. Sunlit ply at UC Santa Barbara, 25 May, is about hue 41°. | Fixed: `materials.plywood` paler, now `#977954` under stage light (hue 33°, saturation 0.44), with a little hue drift from board to board. Blender's bare ply has its own color and is unaffected |
+| 2.5 Plywood | Frames measured `#93663d`: hue 29°, saturation 0.59. The grain map is warm and it multiplied a warm base color. Sunlit ply at UC Santa Barbara, May 25, is about hue 41°. | Fixed: `materials.plywood` paler, now `#977954` under stage light (hue 33°, saturation 0.44), with a little hue drift from board to board. Blender's bare ply has its own color and is unaffected |
 | 2.6 5" cones | Cones, surrounds and dust caps all read close up, in strips and in cells. | Closed, no change. Fixed by §11 and §18 |
 | 2.7 Cluster's curve | Through Pechner's solved camera, the top and bottom edges arc as they do on his photograph. From a camera level with the cluster it looks flat, and it would on a photograph too. | Closed, no change. The curve is right |
 | 2.8 `front` framing | The Wall took 56% of a 4:3 frame. | Fixed: `FitCamera` projects the corners of the steel instead of fitting a sphere round them. Now 72%. The deck's empty wings may run off a narrow window, and on a phone the Wall fills the width |
 
 **2.2, the deck.** The floor really was large and open: on the Bowl band
-photograph (probably 21 July) it is mostly bare board. So nothing was added to
+photograph (probably July 21) it is mostly bare board. So nothing was added to
 fill it. What the photographs do show, and the model lacked:
 
 - **Cables.** Black cable in slack loops across the floor, from the stands
@@ -839,7 +839,7 @@ fill it. What the photographs do show, and the model lacked:
   invented (`src/geometry/deckdressing.ts`, `structure.deckCables`).
 - **The riser**, at the Bowl only (§14): natural wood, open frame, size scaled by
   eye from one photograph (`band.bowlKitRiser`). The kit stands on it. Other dates
-  had red velvet (25 May; probably 16 June), not modeled.
+  had red velvet (May 25; probably June 16), not modeled.
 - **A pale floor in the sun**, at the Bowl: weathered board, close to white on the
   photograph. Color there is unreliable (blue cast, overexposed), so this is
   only "pale", not a measured color. Under stage lights it stays brown.
@@ -849,7 +849,7 @@ These are in the explorer only. **The story's renders differ:** Blender has no
 cables or riser and a brown deck at the Bowl. That is for whoever next re-renders
 the story, not changed here.
 
-Seen and not modeled: Garcia's natural-wood 2×12 behind the kit (25 May, 31 July),
+Seen and not modeled: Garcia's natural-wood 2×12 behind the kit (May 25, July 31),
 and a green strip along the stage front (Oakland; the Bowl crowd photograph), which
 may be plants.
 
@@ -894,7 +894,7 @@ main checkout too; not investigated.
 
 ---
 
-## 23. A sense of scale: four buses (4 November 2026)
+## 23. A sense of scale: four buses (November 4, 2026)
 
 The explorer sits in a black void, with little to judge its size by. This tries
 the first object from the film's scale shot (`docs/video-brief.md`, shot 2b) as an
@@ -954,7 +954,7 @@ is pushed back, since these views stand far from the Wall.
 `?compare=737` opens on the airliner. **Not done:** the whale, left to the film.
 
 
-## 24. Sliders, after Ciechanowski's "Sound", and phone review (5 November 2026)
+## 24. Sliders, after Ciechanowski's "Sound", and phone review (November 5, 2026)
 
 Four ideas taken from <https://ciechanow.ski/sound/>: a control sits next to the sentence
 that introduces it, changes one thing, and shows the result at once.
@@ -979,14 +979,14 @@ on a phone. Over a picture, `.cards` now passes the pointer through except on th
 **Not borrowed:** sliders for volume or power. Nothing records those, so they would be invented.
 
 **Phone review:** `npm run phone`. The real check is Safari in Xcode's iOS Simulator (Xcode wasn't
-installed on 5 November). `phone.html` is a dev-only device frame: right sizes, no touch.
+installed on November 5). `phone.html` is a dev-only device frame: right sizes, no touch.
 
 **Tested** at 402 x 681 in Chromium with a mouse: the seat drag, both kinds of slider, the links,
 holding and releasing a crossfade. **Not yet tested:** touch, on the Simulator or a real iPhone.
 
 ---
 
-## 25. Two of the crew at the top corners (4–5 November 2026)
+## 25. Two of the crew at the top corners (November 4–5, 2026)
 
 The explorer has two of the crew at the top of the scaffold, one at each corner: they
 give the Wall a person's size, and they are where the photographs put people.
@@ -1024,7 +1024,7 @@ rock concert road crew member, plain light gray background, realistic 35mm film.
 
 | Source | Shows |
 |---|---|
-| Pechner, 17 May 1974 (`.shots/reference/`) | Two men at the top right corner: one at the top rail, arm along the tube; one on the ladder below him. A rope hangs at the rail |
+| Pechner, May 17, 1974 (`.shots/reference/`) | Two men at the top right corner: one at the top rail, arm along the tube; one on the ladder below him. A rope hangs at the rail |
 | Undated 1974 outdoor photo of a printed page (`unsourced-rigging-1974-undated.webp`) | A man climbing a stack, one arm up; a man sitting high on a stack, arm raised |
 | [IATSE Local 205, 2014](https://newsletter.iatse205.org/?p=815) | Over 20 crew; speakers tied on with rope and hoisted by block-and-falls; local labor too |
 | [InsideHook on *Loud and Clear*](https://www.insidehook.com/books/grateful-dead-accidental-future-sound) | The crew climbed the tower mid-set to fix a channel |
@@ -1073,7 +1073,7 @@ measured on a real phone.
 
 **Explorer only.** Blender's renders and the story don't have them.
 
-## 26. First visitors' feedback, answered (9 November 2026)
+## 26. First visitors' feedback, answered (November 9, 2026)
 
 Six notes from people who tried the two pages.
 
@@ -1101,14 +1101,14 @@ Six notes from people who tried the two pages.
 **Checked** at 402 x 681 and on a desktop in Chromium, indoors and at the Bowl. **Not checked**
 on a real phone or the Simulator.
 
-**The explorer now opens at the Hollywood Bowl** (the project owner's decision, 9 November),
+**The explorer now opens at the Hollywood Bowl** (the project owner's decision, November 9),
 where the story is set. `?venue=indoors` (or `?venue=arena`) opens indoors, as on Pechner's
 photograph. `?venue=bowl` still works. `?compare=737` without a venue opens indoors, since the
 airliner stands indoors only.
 
 ---
 
-## 27. The story, in steps over the model (10 November 2026)
+## 27. The story, in steps over the model (November 10, 2026)
 
 **Why.** The owner's verdict on the scrolling story: it didn't "wow" like the
 explorer and didn't tell a whole narrative. Read back, it was a tour of
@@ -1123,7 +1123,7 @@ the visualizations of whose sound came from where.
    how we know. Act 3's figures were already in the config with sources.
 2. **Told over the live model, on the front page.** One page: it opens on the
    story, and the explorer is what's left when the story is put away. This
-   reverses the 4 November decision to keep them apart.
+   reverses the November 4 decision to keep them apart.
 3. **Steps, not scrolling.** A scrolling mockup put the reader in a trap: the
    page and the model both want the drag and the wheel. Now the page never
    scrolls. Back and Next (buttons, arrow keys, a swipe on the card) move

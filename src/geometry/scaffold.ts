@@ -1,5 +1,5 @@
 /**
- * The scaffold and stage, built bay by bay from the 10 April 1974 drawing
+ * The scaffold and stage, built bay by bay from the April 10, 1974, drawing
  * (Julien's lot 71: top view, stage left view, tower and stage requirements).
  *
  * Nothing here is styled — it emits tube segments and slabs. See
@@ -54,7 +54,7 @@ export const TOWER_BAND = { first: 5, last: 8 } as const;
  * Measured up from the stage deck, not the ground. The drawing gives the chain
  * but not where it starts; the first reading hung it from the ground, which
  * buried the bottom ten feet in the stage and left 28'-10" of tower above the
- * deck. Pechner's 17 May 1974 photograph, scaled off the 64 ft footprint, shows
+ * deck. Pechner's May 17, 1974, photograph, scaled off the 64 ft footprint, shows
  * 38.8 ft of scaffold above the deck — the whole chain. See
  * docs/qa-findings.md §6.
  */

@@ -5,7 +5,7 @@ the reconstruction. One row per lot. The reference photographs are in
 `.shots/reference/` (not in the repo).
 
 **Source.** Sotheby's, *From the Vault: Property from the Grateful Dead and
-Friends*, New York, closed 14 October 2021 (`sothebys` in the config). Lots
+Friends*, New York, closed October 14, 2021 (`sothebys` in the config). Lots
 34–50 are cataloged "Wall of Sound". Most lots carry a statement from "Big"
 Steve Parish, the band's crew chief, which is the closest thing to a primary
 account of what each piece did.
@@ -83,7 +83,7 @@ racks of 4). See *What to decide*.
 | 34 | Purple ZERO case, custom made for one MC 2300. Metal, two-part, rubber seal and pressure-release valve. "ca. mid-1970s" | 19 × 21 × 20 | Parish: the first cases for the 2300s were three army-surplus military cases; ZERO then built copies, "painted with bright colors to identify them … as we were building the Wall of Sound". So these were in use *during* the Wall's time, unlike the Anvils, which can't be dated. A rounded painted cube with draw latches round a seam low on the case, and handles at the ends. |
 | 35 | Orange ZERO case, as lot 34 | 19 × 21 × 20 | The same, in orange. |
 
-## Decided (6 October 2026)
+## Decided (October 6, 2026)
 
 1. **15" cabinet**: now 19.5 × 25.5 × 29.5 in, driver low. Lot 46 read
    height × width × depth: the only reading that fits Pechner's photo. Lot 50's
@@ -91,7 +91,7 @@ racks of 4). See *What to decide*.
    taller than the tower. See `docs/qa-findings.md` §8.
 2. **12" cabinet**: 16 × 13 × 22 in a driver, rows paired into 2 × 12" boxes.
 3. **Vocal cluster**: first kept as individual cells, 5.5" high; then, on the
-   Hollywood Bowl photographs of 21 July 1974 (`docs/qa-findings.md` §11),
+   Hollywood Bowl photographs of July 21, 1974 (`docs/qa-findings.md` §11),
    changed to lot 49's **aluminum strips**: 4 rows of 33 at 5.3", three lengths
    of 11 to a row, 132 drivers. The vocal fills give up 12 to keep the total.
 4. **Amp count**: 48, with Parish's "over 70" noted in the config.

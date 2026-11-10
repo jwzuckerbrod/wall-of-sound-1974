@@ -134,17 +134,17 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     kind: 'encyclopedia',
   },
   pechner: {
-    title: 'Richard Pechner, "Grateful Dead and the Wall of Sound", sound check, P.N.E. Coliseum, Vancouver, 17 May 1974 — the straight-on full-stage view',
+    title: 'Richard Pechner, "Grateful Dead and the Wall of Sound", sound check, P.N.E. Coliseum, Vancouver, May 17, 1974 — the straight-on full-stage view',
     url: 'https://www.rpechner.com/Music/Grateful-Dead',
     kind: 'photographic',
   },
   schneider: {
-    title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, 25 May 1974 — two color photographs, close and full-stage, published by Paul Dorpat',
+    title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, May 25, 1974 — two color photographs, close and full-stage, published by Paul Dorpat',
     url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/',
     kind: 'photographic',
   },
   sothebys: {
-    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends", New York, closed 14 October 2021. Lots 34–50 are Wall of Sound equipment: eight McIntosh MC 2300s with their cases, two ZERO amp cases, six speaker cabinets and the center cluster\'s aluminum 5-inch enclosures, most with a statement from Steve Parish. Cataloged lot by lot in docs/surviving-gear.md',
+    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends", New York, closed October 14, 2021. Lots 34–50 are Wall of Sound equipment: eight McIntosh MC 2300s with their cases, two ZERO amp cases, six speaker cabinets and the center cluster\'s aluminum 5-inch enclosures, most with a statement from Steve Parish. Cataloged lot by lot in docs/surviving-gear.md',
     url: 'https://www.sothebys.com/en/buy/auction/2021/from-the-vault-property-from-the-grateful-dead-and-friends',
     kind: 'primary',
   },
@@ -160,13 +160,13 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   blueprints: {
     title:
-      'Original Grateful Dead scaffolding and stage drawings, from the collection of "Big Steve" Parish — sold at Julien\'s Auctions, "Treasures From The Golden Road", 22 April 2026, lots 53/57/60 (P.A. tower, 1973-74 Winter Season, scale 3/8"=1\') and lot 71 (1974 Summer Tour, dated 10 April 1974, scale 1/4"=1\'-0", top view + stage left view + written tower and stage requirements). PRIMARY ENGINEERING DOCUMENTS. Where these disagree with anything else, they win.',
+      'Original Grateful Dead scaffolding and stage drawings, from the collection of "Big Steve" Parish — sold at Julien\'s Auctions, "Treasures From The Golden Road", April 22, 2026, lots 53/57/60 (P.A. tower, 1973-74 Winter Season, scale 3/8"=1\') and lot 71 (1974 Summer Tour, dated April 10, 1974, scale 1/4"=1\'-0", top view + stage left view + written tower and stage requirements). PRIMARY ENGINEERING DOCUMENTS. Where these disagree with anything else, they win.',
     url: 'https://www.juliensauctions.com/en/items/2208457/grateful-dead-1974-summer-tour-wall-of-sound-scaffolding-blueprints',
     kind: 'primary',
   },
   juliens: {
     title:
-      'Julien\'s Auctions, "Treasures From The Golden Road: Featuring Property From Big Steve, Ram Rod & Trixie Garcia", 22 April 2026 — lot catalog. Surviving hardware from the Dead\'s own crew: lot 72 (Wall of Sound 1974 Electro-Voice T350 tweeter), lots 276/277 (Hard Truckers small plywood enclosures, 4.5-inch speaker, tie-dye grille cloth), lots 58/62/69/70 (McIntosh MC2300s and their named road cases).',
+      'Julien\'s Auctions, "Treasures From The Golden Road: Featuring Property From Big Steve, Ram Rod & Trixie Garcia", April 22, 2026 — lot catalog. Surviving hardware from the Dead\'s own crew: lot 72 (Wall of Sound 1974 Electro-Voice T350 tweeter), lots 276/277 (Hard Truckers small plywood enclosures, 4.5-inch speaker, tie-dye grille cloth), lots 58/62/69/70 (McIntosh MC2300s and their named road cases).',
     url: 'https://www.juliensauctions.com/en/auctions/treasures-from-the-golden-road',
     kind: 'primary',
   },
@@ -177,7 +177,7 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   tapes: {
     title:
-      "Audience recordings by Rob Bertrando: Hollywood Bowl, 21 July 1974, and Hollywood Palladium, 6 August 1971 (Internet Archive, Grateful Dead collection; src/data/recordings.ts)",
+      "Audience recordings by Rob Bertrando: Hollywood Bowl, July 21, 1974, and Hollywood Palladium, August 6, 1971 (Internet Archive, Grateful Dead collection; src/data/recordings.ts)",
     url: 'https://archive.org/details/GratefulDead',
     kind: 'recording',
   },
@@ -192,12 +192,12 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     kind: 'trade',
   },
   coules2021: {
-    title: 'Andy Coules, "The History of Live Sound, Part 2", HARMAN Insights, 7 January 2021',
+    title: 'Andy Coules, "The History of Live Sound, Part 2", HARMAN Insights, January 7, 2021',
     url: 'https://pro.harman.com/insights/?p=9668',
     kind: 'trade',
   },
   kennedy2025: {
-    title: 'David K. Kennedy, "The History of P.A. Loudspeakers, Part 3", FRONT of HOUSE, 29 May 2025',
+    title: 'David K. Kennedy, "The History of P.A. Loudspeakers, Part 3", FRONT of HOUSE, May 29, 2025',
     url: 'https://fohonline.com/?p=381315',
     kind: 'trade',
   },
@@ -297,12 +297,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.totalHeight': {
     confidence: 'estimated',
     sources: ['blueprints', 'pechner'],
-    note: 'Ground to top of tower: the 10 ft deck plus the 38\'-10" tower above it = 48\'-10". The 10 April 1974 stage-left elevation gives the tower as a chain of 7\'-0" + 5\'-10" + four lifts of 6\'-6" but not where the chain starts. It was first read from the ground; Pechner\'s 17 May 1974 photograph shows the whole 38\'-10" standing above the deck.',
+    note: 'Ground to top of tower: the 10 ft deck plus the 38\'-10" tower above it = 48\'-10". The April 10, 1974, stage-left elevation gives the tower as a chain of 7\'-0" + 5\'-10" + four lifts of 6\'-6" but not where the chain starts. It was first read from the ground; Pechner\'s May 17, 1974, photograph shows the whole 38\'-10" standing above the deck.',
   },
   'dimensions.arrayHeight': {
     confidence: 'confirmed',
     sources: ['blueprints', 'pechner'],
-    note: 'Tower above the deck: 38\'-10" (11.84 m), the drawing\'s full lift chain. Measured on Pechner\'s 17 May 1974 photograph at 38.8 ft, scaled three independent ways that agree — the 64 ft footprint, a crew member standing on the top rail, and the 24" rows of the 15" cabinets. The earlier figure, 28\'-10", came from hanging the chain from the ground. See docs/qa-findings.md §6.',
+    note: 'Tower above the deck: 38\'-10" (11.84 m), the drawing\'s full lift chain. Measured on Pechner\'s May 17, 1974, photograph at 38.8 ft, scaled three independent ways that agree — the 64 ft footprint, a crew member standing on the top rail, and the 24" rows of the 15" cabinets. The earlier figure, 28\'-10", came from hanging the chain from the ground. See docs/qa-findings.md §6.',
   },
   'dimensions.stageDeckHeight': {
     confidence: 'confirmed',
@@ -312,7 +312,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.scaffoldFootprint': {
     confidence: 'confirmed',
     sources: ['blueprints'],
-    note: 'Top view, 10 April 1974: 64\'-0" wide × 40\'-0" deep. The width chain reads 9" + 5\'-0" + 7\'-0" bays + a 3\'-6" closer at the centerline, mirrored. The model\'s speaker array packs to 62.2 ft and drops inside this footprint with room for the end frames — an independent check that landed.',
+    note: 'Top view, April 10, 1974: 64\'-0" wide × 40\'-0" deep. The width chain reads 9" + 5\'-0" + 7\'-0" bays + a 3\'-6" closer at the centerline, mirrored. The model\'s speaker array packs to 62.2 ft and drops inside this footprint with room for the end frames — an independent check that landed.',
   },
   'dimensions.deckOverhang': {
     confidence: 'confirmed',
@@ -376,12 +376,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'arrays.clusterStrips': {
     confidence: 'estimated',
     sources: ['sothebys', 'photos'],
-    note: 'The cluster\'s 5"s in curved aluminum strips, as Sotheby\'s 2021 lot 49, which Steve Parish says replaced the first cluster\'s individual plywood cells. The Hollywood Bowl photographs of 21 July 1974 show strips already in use: four rows, the holes a third of the 12" cabinets\' spacing, the band as wide as the 12" section. So 4 rows of 33 at lot 49\'s 5.3 in spacing, each row three lengths of 11 (lot 49\'s hold about 13). That is 132 drivers, 12 more than the cells had, so the vocal fills give up a row of 6 each: the vocals\' 5" total and the 641 are unchanged. Pechner\'s 17 May photograph shows a taller 5" band, probably the plywood cells.',
+    note: 'The cluster\'s 5"s in curved aluminum strips, as Sotheby\'s 2021 lot 49, which Steve Parish says replaced the first cluster\'s individual plywood cells. The Hollywood Bowl photographs of July 21, 1974, show strips already in use: four rows, the holes a third of the 12" cabinets\' spacing, the band as wide as the 12" section. So 4 rows of 33 at lot 49\'s 5.3 in spacing, each row three lengths of 11 (lot 49\'s hold about 13). That is 132 drivers, 12 more than the cells had, so the vocal fills give up a row of 6 each: the vocals\' 5" total and the 641 are unchanged. Pechner\'s May 17 photograph shows a taller 5" band, probably the plywood cells.',
   },
   'arrays.kickPosition': {
     confidence: 'guessed',
     sources: ['photos', 'pechner', 'derived'],
-    note: 'Where the bass-drum column stood is not known. It is not under the cluster, where the model had a 4 × 4 block: every photograph found shows that space open, from 17 May to 31 July 1974, Hollywood Bowl on 21 July included. Stood here as the single column the spec sheet describes, in the only free slot in the run, on the deck at the audience\'s left between the bass and Garcia\'s main column. Its 16 drivers keep the inventory at 641.',
+    note: 'Where the bass-drum column stood is not known. It is not under the cluster, where the model had a 4 × 4 block: every photograph found shows that space open, from May 17 to July 31, 1974, Hollywood Bowl on July 21 included. Stood here as the single column the spec sheet describes, in the only free slot in the run, on the deck at the audience\'s left between the bass and Garcia\'s main column. Its 16 drivers keep the inventory at 641.',
   },
   'arrays.guitarCount': {
     confidence: 'confirmed',
@@ -409,23 +409,23 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.arrayStandoff': {
     confidence: 'estimated',
     sources: ['photos', 'derived'],
-    note: 'Where the stacks\' faces stand against the front plane of the towers. Negative is behind it. The photographs show the stacks BEHIND the front steel: uprights, ledgers and X-braces cross in front of the speaker faces on both sides, at the Hollywood Bowl on 21 July 1974 and on Pechner\'s 17 May photograph. So the faces sit just behind the front tubes. An earlier note claimed the opposite. The center cluster is the exception: see dimensions.clusterStandoff. See docs/qa-findings.md §13.',
+    note: 'Where the stacks\' faces stand against the front plane of the towers. Negative is behind it. The photographs show the stacks BEHIND the front steel: uprights, ledgers and X-braces cross in front of the speaker faces on both sides, at the Hollywood Bowl on July 21, 1974, and on Pechner\'s May 17 photograph. So the faces sit just behind the front tubes. An earlier note claimed the opposite. The center cluster is the exception: see dimensions.clusterStandoff. See docs/qa-findings.md §13.',
   },
   'dimensions.clusterStandoff': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'The curved center cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (21 July 1974) and on Pechner\'s 17 May photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
+    note: 'The curved center cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (July 21, 1974) and on Pechner\'s May 17 photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
   },
-  'venues.arena': { confidence: 'confirmed', sources: ['pechner'], note: 'Indoors, as on Pechner\'s 17 May 1974 photograph: the light bars\' ladders show, the tie-dyes don\'t.' },
+  'venues.arena': { confidence: 'confirmed', sources: ['pechner'], note: 'Indoors, as on Pechner\'s May 17, 1974, photograph: the light bars\' ladders show, the tie-dyes don\'t.' },
   'venues.hollywoodBowl': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide color photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
+    note: 'Sunday, July 21, 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide color photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
   'structure.crewAloft': {
     confidence: 'estimated',
     sources: ['pechner', 'photos'],
-    note: 'AI-GENERATED FIGURES, NOT PHOTOGRAPHS OR PORTRAITS. Two of the crew at the top corners of the steel: each a picture generated by FLUX.1 schnell from a text prompt, turned into a mesh by TRELLIS.2. No real person\'s photograph went in. That men worked there comes from Pechner\'s 17 May 1974 photograph (two men in this corner, a rope at the rail) and an undated 1974 outdoor photograph (one climbing, one sitting high up). Rope is from the hoists on rope in IATSE Local 205\'s 2014 article (newsletter.iatse205.org/?p=815). The look follows three photographs of crew and backstage people supplied by the project owner, NOT dated to summer 1974: curly hair, mustache, dark glasses, down vest; ponytail, plaid shirt, dark vest, jeans. The prompts asked for that look; the beard, watch, poses and colors are the generator\'s. No harness shows in any photograph. See docs/qa-findings.md §25.',
+    note: 'AI-GENERATED FIGURES, NOT PHOTOGRAPHS OR PORTRAITS. Two of the crew at the top corners of the steel: each a picture generated by FLUX.1 schnell from a text prompt, turned into a mesh by TRELLIS.2. No real person\'s photograph went in. That men worked there comes from Pechner\'s May 17, 1974, photograph (two men in this corner, a rope at the rail) and an undated 1974 outdoor photograph (one climbing, one sitting high up). Rope is from the hoists on rope in IATSE Local 205\'s 2014 article (newsletter.iatse205.org/?p=815). The look follows three photographs of crew and backstage people supplied by the project owner, NOT dated to summer 1974: curly hair, mustache, dark glasses, down vest; ponytail, plaid shirt, dark vest, jeans. The prompts asked for that look; the beard, watch, poses and colors are the generator\'s. No harness shows in any photograph. See docs/qa-findings.md §25.',
   },
   'scale.b737': {
     confidence: 'confirmed',
@@ -440,12 +440,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'structure.tieDyes': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Courtenay Pollock\'s tie-dyes: four, hung on the front of the scaffold near the top, at Oakland (8 June 1974) and the Hollywood Bowl (21 July). Scaled off the Oakland photograph, about 4.3 ft wide and 8 ft tall; each kept above the stacks below it, clear of the three 34 ft columns. Outdoors only: indoors (Pechner, 17 May) the light bars\' ladders hang there instead. Their designs are spirals and rings in the photographs\' colors, not copies of the real cloths.',
+    note: 'Courtenay Pollock\'s tie-dyes: four, hung on the front of the scaffold near the top, at Oakland (June 8, 1974) and the Hollywood Bowl (July 21). Scaled off the Oakland photograph, about 4.3 ft wide and 8 ft tall; each kept above the stacks below it, clear of the three 34 ft columns. Outdoors only: indoors (Pechner, May 17) the light bars\' ladders hang there instead. Their designs are spirals and rings in the photographs\' colors, not copies of the real cloths.',
   },
   'structure.lightBars': {
     confidence: 'estimated',
     sources: ['pechner', 'photos'],
-    note: 'Stage-lighting bars of black can lamps clamped to the scaffold at both upper outer corners, in front of the stacks: on Pechner\'s 17 May photograph, at the Hollywood Bowl on 21 July and at UC Santa Barbara on 25 May. Measured on Pechner\'s photograph through its solved camera: each side a horizontal bar of about 5 lamps, a diagonal bar of about 8 rising toward the center, and two vertical ladders of about 6. The ladders show only indoors; outdoors the tie-dyes hang in that space and only the flat and diagonal bars are seen. Lamp counts are read off small images; the lamps\' type is not known. The bar along the top front on some dates is not modeled.',
+    note: 'Stage-lighting bars of black can lamps clamped to the scaffold at both upper outer corners, in front of the stacks: on Pechner\'s May 17 photograph, at the Hollywood Bowl on July 21 and at UC Santa Barbara on May 25. Measured on Pechner\'s photograph through its solved camera: each side a horizontal bar of about 5 lamps, a diagonal bar of about 8 rising toward the center, and two vertical ladders of about 6. The ladders show only indoors; outdoors the tie-dyes hang in that space and only the flat and diagonal bars are seen. Lamp counts are read off small images; the lamps\' type is not known. The bar along the top front on some dates is not modeled.',
   },
   'structure.guyWires': {
     confidence: 'guessed',
@@ -460,12 +460,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.bowlKitRiser': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'A low natural-wood riser under the kit at the Hollywood Bowl (the band photograph, probably 21 July 1974; docs/qa-findings.md §14): an open frame of pale timber, a little wider than the kit. Size scaled by eye from that one photograph; its construction under the top rails isn\'t visible. Other dates differ: red velvet on 25 May and (probably) 16 June, so it is drawn at the Bowl only. Explorer only so far: Blender stands the kit on the deck.',
+    note: 'A low natural-wood riser under the kit at the Hollywood Bowl (the band photograph, probably July 21, 1974; docs/qa-findings.md §14): an open frame of pale timber, a little wider than the kit. Size scaled by eye from that one photograph; its construction under the top rails isn\'t visible. Other dates differ: red velvet on May 25 and (probably) June 16, so it is drawn at the Bowl only. Explorer only so far: Blender stands the kit on the deck.',
   },
   'structure.deckCables': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Black cable lying loose across the deck, from the stands toward the racks: long slack loops on the Hollywood Bowl band photograph, cords at the stands at UC Santa Barbara, 25 May 1974. That they were there is evidence; the routes and how many are invented, one from each vocal stand and each guitar or bass. Explorer only so far.',
+    note: 'Black cable lying loose across the deck, from the stands toward the racks: long slack loops on the Hollywood Bowl band photograph, cords at the stands at UC Santa Barbara, May 25, 1974. That they were there is evidence; the routes and how many are invented, one from each vocal stand and each guitar or bass. Explorer only so far.',
   },
   'band.instruments': {
     confidence: 'estimated',
@@ -475,7 +475,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'structure.scaffold': {
     confidence: 'confirmed',
     sources: ['blueprints'],
-    note: 'Tower requirements, 10 April 1974: built with 6\'-6" × 5\' end frames and 7\' X-braces; 50 ten-foot and 50 thirteen-foot tubelocks; 275 couplers in five sizes; six 22\' trusses; end frames sprocketed and pinned; forty 2"x10"x16" planks used as floors. The earlier 1973-74 Winter Season tower sheet is a smaller rig — 30 ft tall, standard 6\' frames, 5\' X-braces, 5\' bays, three levels, "floor in back only, 2nd level" and "omit floor in 5\' bay, 3rd level". The 6\'-6" lift and 7\' bay previously guessed in this config turn out to be right.',
+    note: 'Tower requirements, April 10, 1974: built with 6\'-6" × 5\' end frames and 7\' X-braces; 50 ten-foot and 50 thirteen-foot tubelocks; 275 couplers in five sizes; six 22\' trusses; end frames sprocketed and pinned; forty 2"x10"x16" planks used as floors. The earlier 1973-74 Winter Season tower sheet is a smaller rig — 30 ft tall, standard 6\' frames, 5\' X-braces, 5\' bays, three levels, "floor in back only, 2nd level" and "omit floor in 5\' bay, 3rd level". The 6\'-6" lift and 7\' bay previously guessed in this config turn out to be right.',
   },
   'structure.stageDeck': {
     confidence: 'confirmed',
@@ -496,12 +496,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'materials.cone': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Near-black. JBL cones of the period are dark gray paper, and every color photograph (Oakland 8 June, the Hollywood Bowl 21 July 1974) reads them dark against the plywood. Was mid-gray; changed on the project owner\'s ruling, docs/qa-findings.md §18.',
+    note: 'Near-black. JBL cones of the period are dark gray paper, and every color photograph (Oakland June 8, the Hollywood Bowl July 21, 1974) reads them dark against the plywood. Was mid-gray; changed on the project owner\'s ruling, docs/qa-findings.md §18.',
   },
   'materials.steel': {
     confidence: 'estimated',
     sources: ['photos', 'pechner'],
-    note: 'Bright galvanized steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one: since 9 November 2026 the explorer returns less light from it (render.explorerLook, docs/qa-findings.md §26).',
+    note: 'Bright galvanized steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one: since November 9, 2026, the explorer returns less light from it (render.explorerLook, docs/qa-findings.md §26).',
   },
   'cabinets.panelCells': {
     confidence: 'estimated',
@@ -516,19 +516,19 @@ export const PROVENANCE: Record<string, Provenance> = {
   'materials.plywood': {
     confidence: 'confirmed',
     sources: ['anderson', 'mixrebuild', 'photos'],
-    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. The bare color is set so it comes out paler and less orange through the grain map, closer to the sunlit ply at UC Santa Barbara, 25 May 1974 (hue about 41°). Under stage light a cabinet frame now measures hue 33°, saturation 0.44; it was 29°, 0.59, orange (docs/qa-findings.md §22). Both are modeled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
+    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. The bare color is set so it comes out paler and less orange through the grain map, closer to the sunlit ply at UC Santa Barbara, May 25, 1974 (hue about 41°). Under stage light a cabinet frame now measures hue 33°, saturation 0.44; it was 29°, 0.59, orange (docs/qa-findings.md §22). Both are modeled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
   },
   'materials.tieDye': { confidence: 'confirmed', sources: ['deadsources22'], note: 'Courtenay Pollock tie-dyed the fabric panels — on the structure, not over the drivers.' },
   'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, 128 lb per amplifier. The front panel is brushed, anodized gold over a black chassis, with a black strip along the bottom carrying three knobs and a red power rocker, 10.5 × 19 × 17 in, as on the Wall amplifiers Sotheby\'s sold (lots 36 and 43). Not black glass: an earlier version of the explorer had that wrong (docs/qa-findings.md §18).' },
   'materials.roadCases': {
     confidence: 'estimated',
     sources: ['sothebys', 'photos'],
-    note: 'Orange Anvil rolling cases with aluminum edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on 8 June 1974. Wear, tape and labels are modeled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
+    note: 'Orange Anvil rolling cases with aluminum edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on June 8, 1974. Wear, tape and labels are modeled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
   },
   'structure.roadCases': {
     confidence: 'estimated',
     sources: ['sothebys', 'juliens', 'photos'],
-    note: 'What the cases are comes from the survivors: orange Anvil rack cases with aluminum edging and ball corners (Sotheby\'s lot 43), a white one (lot 40), Budman\'s black one with folded rusted corners and a piano hinge (lot 36), and the amps\' empty ZERO metal cases (lots 34-35); orange-red cases stand under the piano at Oakland on 8 June 1974. Names are the crew\'s (structure.amps.caseNames). How many of each, and which carries which label, is invented for variety (structure.roadCases.odds).',
+    note: 'What the cases are comes from the survivors: orange Anvil rack cases with aluminum edging and ball corners (Sotheby\'s lot 43), a white one (lot 40), Budman\'s black one with folded rusted corners and a piano hinge (lot 36), and the amps\' empty ZERO metal cases (lots 34-35); orange-red cases stand under the piano at Oakland on June 8, 1974. Names are the crew\'s (structure.amps.caseNames). How many of each, and which carries which label, is invented for variety (structure.roadCases.odds).',
   },
   'materials.stickers': {
     confidence: 'guessed',
@@ -539,14 +539,14 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.positions': {
     confidence: 'estimated',
     sources: ['pechner', 'schneider', 'anderson', 'photos', 'deadsources74'],
-    note: 'Measured on Pechner\'s 17 May 1974 photograph through its solved camera, left to right: Garcia, Weir, the kit, Lesh, then the grand lying across the stage with Keith at its keyboard end. Every other photograph found, to (probably) 16 June, also has Garcia at the far left and Keith to the right; Weir and Lesh changed places now and then, and on some dates a grand stands at the far right instead. The spec sheet puts Garcia\'s extension stack "beside Godchaux and behind Kreutzmann", which agrees. At the Hollywood Bowl on 21 July 1974, where the story is set, the order is the same: Garcia, Weir, the kit, Lesh, the pianos (the Bowl photographs, qa-findings §14; confirmed by the project owner, §17). See docs/qa-findings.md §7, §9 and §17.',
+    note: 'Measured on Pechner\'s May 17, 1974, photograph through its solved camera, left to right: Garcia, Weir, the kit, Lesh, then the grand lying across the stage with Keith at its keyboard end. Every other photograph found, to (probably) June 16, also has Garcia at the far left and Keith to the right; Weir and Lesh changed places now and then, and on some dates a grand stands at the far right instead. The spec sheet puts Garcia\'s extension stack "beside Godchaux and behind Kreutzmann", which agrees. At the Hollywood Bowl on July 21, 1974, where the story is set, the order is the same: Garcia, Weir, the kit, Lesh, the pianos (the Bowl photographs, qa-findings §14; confirmed by the project owner, §17). See docs/qa-findings.md §7, §9 and §17.',
   },
   'band.instrumentPlacement': {
     confidence: 'guessed',
     sources: ['pechner', 'photos'],
-    note: 'The grand across the stage with its keyboard at the audience\'s right, Keith at that end, as on Pechner\'s photograph. Where the Rhodes stood isn\'t known: upstage of Keith at his right hand, beyond the grand from the audience, as at Oakland on 8 June 1974. The guitars and the bass stand upright on plain stands, which are review props; they belong in the players\' hands. The Bowl\'s kit is the wine-red one, but its drums are still modeled on the Hartford butcher-block kit.',
+    note: 'The grand across the stage with its keyboard at the audience\'s right, Keith at that end, as on Pechner\'s photograph. Where the Rhodes stood isn\'t known: upstage of Keith at his right hand, beyond the grand from the audience, as at Oakland on June 8, 1974. The guitars and the bass stand upright on plain stands, which are review props; they belong in the players\' hands. The Bowl\'s kit is the wine-red one, but its drums are still modeled on the Hartford butcher-block kit.',
   },
-  'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
+  'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from June 16, 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
     confidence: 'confirmed',
     sources: ['bear', 'syf'],
@@ -844,7 +844,7 @@ const A = (b: ArrayBlock) => b;
  * 62 ft wide — against Anderson's documented sixty feet end to end, within 4% —
  * and 32 ft of speakers above the deck.
  *
- * Heights follow Pechner's 17 May 1974 photograph (docs/qa-findings.md §6):
+ * Heights follow Pechner's May 17, 1974, photograph (docs/qa-findings.md §6):
  * tall, narrow columns under a 38'-10" tower, the vocal lows as single columns
  * of sixteen 15"s beside the cluster, and the curved cluster hung at 7 ft. Every
  * block keeps its driver count; only its shape and its floor changed.
@@ -917,7 +917,7 @@ export const wall = {
     title: 'The Wall of Sound',
     subtitle: 'Grateful Dead touring PA, 1974',
     debut: { date: '1974-03-23', venue: 'Cow Palace, Daly City, California' },
-    retired: { date: '1974-10-20', venue: 'Winterland Ballroom, San Francisco', run: '16–20 October 1974' },
+    retired: { date: '1974-10-20', venue: 'Winterland Ballroom, San Francisco', run: 'October 16–20, 1974' },
     prototypeTest: { date: '1973-02-09', venue: 'Maples Pavilion, Stanford University' },
     showCount: 37,
     designers: [
@@ -1013,7 +1013,7 @@ export const wall = {
 
   structure: {
     /**
-     * Straight off the 10 April 1974 tower requirements. Every figure here is
+     * Straight off the April 10, 1974, tower requirements. Every figure here is
      * from the drawing, not inferred.
      */
     scaffold: {
@@ -1218,7 +1218,7 @@ export const wall = {
       // speaker stacks. verify.mjs now checks every piece of gear against the
       // array footprints.
       //
-      // x is measured on Pechner's 17 May 1974 photograph through its solved
+      // x is measured on Pechner's May 17, 1974, photograph through its solved
       // camera (blender/build_scene.py, shot 'pechner'), at the players' depth.
       // Keith's mark is the center of the grand, which lay across the stage
       // with its keyboard at the audience's right; he sat at that end, about
@@ -1241,7 +1241,7 @@ export const wall = {
       rhodesFromKeys: [0.75, 1.0] as [number, number],
       /** The kit's middle, this far upstage of Kreutzmann's mark. */
       kitBack: 0.5,
-      /** At the Bowl on 21 July the kit was the wine-red one (qa-findings §14); its drums are still the Hartford toms. */
+      /** At the Bowl on July 21 the kit was the wine-red one (qa-findings §14); its drums are still the Hartford toms. */
       bowlKitShell: '#812730',
       /** The kit's riser at the Bowl: an open timber frame. See PROVENANCE['band.bowlKitRiser']. */
       bowlKitRiser: { w: 2.2, d: 2.2, h: 0.3 },
@@ -1294,16 +1294,16 @@ export const wall = {
    * ['venues.hollywoodBowl'].
    */
   venues: {
-    /** The hall of Pechner's photograph, P.N.E. Coliseum, Vancouver, 17 May 1974. */
-    arena: { label: 'Indoors: Vancouver, 17 May 1974', short: 'Indoors', outdoor: false },
+    /** The hall of Pechner's photograph, P.N.E. Coliseum, Vancouver, May 17, 1974. */
+    arena: { label: 'Indoors: Vancouver, May 17, 1974', short: 'Indoors', outdoor: false },
     /**
-     * The Hollywood Bowl, Sunday 21 July 1974, where the story is set. Sizes
+     * The Hollywood Bowl, Sunday, July 21, 1974, where the story is set. Sizes
      * measured on the wide photograph against the Wall's 64 ft scaffold
      * (docs/qa-findings.md §14). Lengths in meters; "back" is upstage of the
      * Wall's front plane, from the scene origin.
      */
     hollywoodBowl: {
-      label: 'Hollywood Bowl, 21 July 1974',
+      label: 'Hollywood Bowl, July 21, 1974',
       short: 'Outdoors',
       outdoor: true,
       /** The floor in front of the stage, below the stage deck. */
@@ -1313,7 +1313,7 @@ export const wall = {
       seating: { halfAngle: DEG(62), firstRow: 16, lastRow: 112, rowDepth: 0.95, rise: 0.12, steepen: 0.0018 },
       /**
        * The 1929 shell: concentric white rings. Measured through the camera
-       * solved from the 21 July photograph (docs/qa-findings.md §19): the
+       * solved from the July 21 photograph (docs/qa-findings.md §19): the
        * front arch 17.8 m in radius, centered 2.45 m above the stage and
        * 2.3 m to the audience's right of the Wall's center, at the depth the
        * model already had (7 m behind the Wall's face; one photo cannot fix it).

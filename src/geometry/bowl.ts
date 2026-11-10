@@ -1,5 +1,5 @@
 /**
- * The Hollywood Bowl, 21 July 1974, laid out in the scene frame (meters, +y
+ * The Hollywood Bowl, July 21, 1974, laid out in the scene frame (meters, +y
  * up, +z toward the audience): the canyon's ground, the seating, the 1929
  * shell, Gehry's Sonotubes and the crown panels. Pure: the explorer builds
  * meshes from it (src/scene/Bowl.tsx) and scripts/export-scene.mjs hands the

@@ -35,7 +35,7 @@ the reason the system exists, and the instruments only in the last shot.
 - **Color coding:** each of the six sound systems gets the color it already
   has in the explorer (vocals gold, lead guitar red, rhythm guitar violet,
   piano teal, drums blue, bass green).
-- **The ending** steps out of the studio into the Hollywood Bowl on 21 July
+- **The ending** steps out of the studio into the Hollywood Bowl on July 21
   1974, in daylight, with the crowd: the product in the field.
 
 ## The shots
@@ -50,8 +50,8 @@ the reason the system exists, and the instruments only in the last shot.
 | 5 | 0:48–0:58 | Close on the curved vocal cluster and its aluminum strips; cut to an animated diagram of the paired microphones (as on the story page) | *Two microphones, 60 mm apart, opposite polarity* · *The voice is heard. The Wall cancels.* |
 | 6 | 0:58–1:08 | A slow dolly along the amplifier racks under the stacks, the blue meters glowing; ends on Budman's black case | *48 × McIntosh MC 2300* · *600 W each, 128 lb each* |
 | 7 | 1:08–1:12 | Two component close-ups, product-page style, each on black with a spec line: a 15" JBL in its cabinet, then the T350 horn | Each with its source: *Surviving cabinet, Sotheby's 2021*; *Surviving tweeter, Julien's 2026* |
-| 8 | 1:12–1:20 | The structure: the scaffold builds itself lift by lift, then the stacks drop in | *38 ft of steel above a 10 ft stage* · *From the scaffolding drawings of 10 April 1974* |
-| 9 | 1:20–1:30 | The Hollywood Bowl, afternoon: a slow push in from the seats over the crowd to the Wall, the band's instruments on stage. End card | *Hollywood Bowl, 21 July 1974* · *A reconstruction from photographs, drawings and surviving equipment* · the explorer's link |
+| 8 | 1:12–1:20 | The structure: the scaffold builds itself lift by lift, then the stacks drop in | *38 ft of steel above a 10 ft stage* · *From the scaffolding drawings of April 10, 1974* |
+| 9 | 1:20–1:30 | The Hollywood Bowl, afternoon: a slow push in from the seats over the crowd to the Wall, the band's instruments on stage. End card | *Hollywood Bowl, July 21, 1974* · *A reconstruction from photographs, drawings and surviving equipment* · the explorer's link |
 
 The 30-second cut: shots 1, 2, 2b, 4, 6 and 9, shortened.
 

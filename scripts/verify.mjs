@@ -67,7 +67,7 @@ check('array width (m)', env.width, FTM(60), FTM(4));
 check('array width inside tower footprint', env.width < L.footprint.width, true);
 check('nothing below deck level', env.minY >= -1e-6, true);
 
-console.log('\nScaffold - the 10 April 1974 drawing');
+console.log('\nScaffold - the April 10, 1974, drawing');
 check('bay chain sums to 64 ft', scaf.BAY_CHAIN_FT.reduce((a, b) => a + b, 0), 64, 1e-9);
 check('depth chain sums to 40 ft', scaf.DEPTH_CHAIN_FT.reduce((a, b) => a + b, 0), 40, 1e-9);
 check('lift chain sums to 38\'-10"', scaf.LIFT_CHAIN_FT.reduce((a, b) => a + b, 0), 38 + 10 / 12, 1e-9);
@@ -92,12 +92,12 @@ check('tower front line at the origin plane', L.towerFrontZ, 0, 1e-9);
 }
 check('cabinets do not float off the front of the towers', env.maxZ - L.towerFrontZ < 1.5, true);
 
-// Richard Pechner, P.N.E. Coliseum, Vancouver, 17 May 1974: a straight-on
+// Richard Pechner, P.N.E. Coliseum, Vancouver, May 17, 1974: a straight-on
 // full-stage view, scaled at 9.52 px/ft on the tower face from the 64 ft
 // footprint and cross-checked against a crew member on the top rail and the 24"
 // rows of the 15" cabinets. Heights are feet above the deck. The photo is not
 // in the repo; docs/qa-findings.md section 6 has the measurements.
-console.log('\nAgainst Pechner, 17 May 1974');
+console.log('\nAgainst Pechner, May 17, 1974');
 const PHOTO = { scaffoldTop: 38.8, tallestStack: 35.2, clusterLow: 11.6, clusterHigh: 20.8 };
 const ftAbove = (m) => m / 0.3048;
 check('scaffold top above deck within 1 ft (ft)', ftAbove(L.yLevels.at(-1) - L.deck.y), PHOTO.scaffoldTop, 1);

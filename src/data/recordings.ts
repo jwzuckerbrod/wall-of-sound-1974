@@ -32,7 +32,7 @@ export const TAPES: Record<TapeId, Tape> = {
   bowl1974: {
     id: 'bowl1974',
     identifier: 'gd1974-07-21.ecm22p.bertrando.89033.flac24',
-    date: '21 July 1974',
+    date: 'July 21, 1974',
     venue: 'Hollywood Bowl',
     taper: 'Rob Bertrando',
     transfer: 'Adam Egert',
@@ -43,7 +43,7 @@ export const TAPES: Record<TapeId, Tape> = {
   palladium1971: {
     id: 'palladium1971',
     identifier: 'gd71-08-06.aud.bertrando.yerys.129.sbeok.shnf',
-    date: '6 August 1971',
+    date: 'August 6, 1971',
     venue: 'Hollywood Palladium',
     taper: 'Rob Bertrando',
     transfer: 'Ben Kasper',
