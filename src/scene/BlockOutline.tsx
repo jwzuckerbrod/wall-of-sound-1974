@@ -7,7 +7,7 @@ import { allCells, blockBounds } from '../geometry/arrays';
  * A box around the array under the cursor.
  *
  * Tinting the cabinets alone is not enough to say "this group, these ones" —
- * the wall is 641 near-identical objects and a colour shift reads as lighting.
+ * the wall is 641 near-identical objects and a color shift reads as lighting.
  * An explicit edge says where the subsystem starts and stops.
  */
 export function BlockOutline({ blockId, strong }: { blockId: string | null; strong?: boolean }) {

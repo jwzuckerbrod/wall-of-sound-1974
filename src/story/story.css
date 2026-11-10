@@ -163,7 +163,7 @@ body:has(.sty) .np-floating { bottom: auto; top: max(10px, env(safe-area-inset-t
 @keyframes flash-end { 0%, 82% { opacity: 0.8; } 88% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); } 100% { opacity: 0.8; } }
 @keyframes flash-late { 0%, 89% { opacity: 0.8; } 94% { opacity: 1; filter: drop-shadow(0 0 6px currentColor); } 100% { opacity: 0.8; } }
 
-/* The mic diagram: the voice's arcs, the Wall's travelling wavefronts, the capsules. */
+/* The mic diagram: the voice's arcs, the Wall's traveling wavefronts, the capsules. */
 .dg.drawn .d-wave { animation: wave 1.6s ease-in-out infinite; }
 @keyframes wave { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
 .d-front { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; opacity: 0; }

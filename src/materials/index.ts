@@ -1,7 +1,7 @@
 /**
  * Shared PBR materials, built once and reused across every instanced mesh.
  *
- * Colours, roughness and metalness come from wall.config.materials, so the
+ * Colors, roughness and metalness come from wall.config.materials, so the
  * look is editable in the same file as the history. What is NOT configurable
  * is which surfaces exist: there is no grille-cloth material over the 12s and
  * 15s, because there was none. See docs/reconstruction-spec.md §9.
@@ -56,7 +56,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
   };
 
   // The carcass material is shared by bare and painted cabinets; the per-instance
-  // colour decides which one a given cabinet is. Paint over 14-ply birch still
+  // color decides which one a given cabinet is. Paint over 14-ply birch still
   // shows the grain, so both use the same maps.
   const shell = new THREE.MeshStandardMaterial({
     map: tune(plywoodMap().clone()),
@@ -91,7 +91,7 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
     side: THREE.DoubleSide,
   });
 
-  // The T350 horns: grey cast frame, black throat (Julien's lot 72).
+  // The T350 horns: gray cast frame, black throat (Julien's lot 72).
   const trim = new THREE.MeshStandardMaterial({
     color: m.hornFrame.baseColor,
     roughness: m.hornFrame.roughness,
@@ -177,14 +177,14 @@ export function wallMaterials(anisotropy = 4): WallMaterials {
 }
 
 /**
- * Per-cabinet colour. The surviving cabinet is painted matte black all over;
+ * Per-cabinet color. The surviving cabinet is painted matte black all over;
  * photographs show others with the plywood left bare. Which is which is
  * decided once, in src/geometry/arrays.ts, so Blender finishes the same
  * cabinets the same way. `index` only varies the road wear.
  */
 export function shellColor(index: number, out: THREE.Color, finish: Finish): THREE.Color {
   const m = wall.materials;
-  // The strips take their colour from their own material.
+  // The strips take their color from their own material.
   if (finish === 'metal') return out.setRGB(1, 1, 1);
   const painted = finish === 'black';
   out.set(painted ? m.plywoodBlack.baseColor : m.plywood.baseColor);

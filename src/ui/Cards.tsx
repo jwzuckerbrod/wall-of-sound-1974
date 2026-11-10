@@ -13,7 +13,7 @@ function WhatYouCanDo({ stops }: { stops: number }) {
       <li><strong>Take the tour:</strong> {stops} stops, with Next and Back.</li>
       <li><strong>{tap} a dot</strong>{TOUCH ? '' : ', or any speaker'} to read about that part.</li>
       <li><strong>{TOUCH ? 'Drag to turn, pinch to zoom.' : 'Drag to turn, scroll to zoom.'}</strong></li>
-      <li><strong>Take it apart</strong> with the slider below, or {TOUCH ? 'tap' : 'click'} <strong>Colour</strong> to see its six systems.</li>
+      <li><strong>Take it apart</strong> with the slider below, or {TOUCH ? 'tap' : 'click'} <strong>Color</strong> to see its six systems.</li>
       <li><strong>Listen</strong> to it, on tapes from 1974.</li>
     </ul>
   );

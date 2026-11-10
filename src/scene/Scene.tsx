@@ -134,7 +134,7 @@ export function Scene({
   onPickInstrument: (id: string) => void;
   /** Room to make for an open card, in pixels: beside it, or above it on a phone. */
   offset: { room: number; up: number };
-  /** How far back the visitor can pull the camera, in metres. Default: the venue's. */
+  /** How far back the visitor can pull the camera, in meters. Default: the venue's. */
   maxDistance?: number;
 }) {
   const q = tierSettings(tier);

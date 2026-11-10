@@ -8,14 +8,14 @@ redistributed. Sources and dates are mostly unknown.
 | File | What it is | Useful for |
 |---|---|---|
 | `crowd-1970s-bw-field-wall.jpeg` | Black and white, an outdoor field, the Wall in the distance under a hazy sun. Probably 1974 | **The best match.** Density, haze, people walking about, scale against the Wall |
-| `crowd-1970s-colour-hillside-seated.jpeg` | Colour snapshot, people sitting on a grassy hillside, a stage far off | Seated on the ground, blankets, faded print colour |
-| `crowd-1970s-colour-closeup-jersey.jpg` | Colour, close, standing crowd, warm faded film | Clothes and hair, close up |
+| `crowd-1970s-colour-hillside-seated.jpeg` | Color snapshot, people sitting on a grassy hillside, a stage far off | Seated on the ground, blankets, faded print color |
+| `crowd-1970s-colour-closeup-jersey.jpg` | Color, close, standing crowd, warm faded film | Clothes and hair, close up |
 | `crowd-1970s-bw-meyerowitz-rockoutbooks.jpeg` | Black and white, credited on the image to Alvan Meyerowitz / Rock Out Books | Clothes: denim, hats, long skirts, sitting on grass |
-| `crowd-1970s-colour-lying-on-grass.jpg` | Colour, people lying and sitting on grass | Poses: reclining, headbands, shirts off |
+| `crowd-1970s-colour-lying-on-grass.jpg` | Color, people lying and sitting on grass | Poses: reclining, headbands, shirts off |
 | `crowd-1970s-colour-couple-portrait.webp` | A portrait, not a crowd | Faces, hair and clothes of the period |
-| `crowd-colour-faces-smiling.jpg` | Colour, faces in a crowd, undated | Hats and expressions |
-| `crowd-1980s-colour-field-tiedye.webp` | Colour, a Dead show in a field, probably late 1980s (stage design, tie-dye T-shirts) | **Wrong era:** shows what to avoid |
-| `crowd-modern-stadium-rose.jpeg` | Colour, a modern stadium Dead show | **Wrong era:** shows what to avoid |
+| `crowd-colour-faces-smiling.jpg` | Color, faces in a crowd, undated | Hats and expressions |
+| `crowd-1980s-colour-field-tiedye.webp` | Color, a Dead show in a field, probably late 1980s (stage design, tie-dye T-shirts) | **Wrong era:** shows what to avoid |
+| `crowd-modern-stadium-rose.jpeg` | Color, a modern stadium Dead show | **Wrong era:** shows what to avoid |
 
 ## What 1974 looked like, against what Kling produced
 
@@ -29,8 +29,8 @@ redistributed. Sources and dates are mostly unknown.
   peasant blouses, long skirts, headbands, cowboy and floppy hats. **No tie-dye
   T-shirts to speak of**: those belong to the 1980s crowds. Kling's crisp plain
   T-shirts and modern straw fedoras read as 2020s.
-- **Hair.** Long, centre-parted, on men and women; beards; big curly hair.
-- **Colour.** Warm, faded, low contrast: Kodachrome and Ektachrome prints, grain,
+- **Hair.** Long, center-parted, on men and women; beards; big curly hair.
+- **Color.** Warm, faded, low contrast: Kodachrome and Ektachrome prints, grain,
   a little haze. Kling's image is clean and modern.
 
 ## How to make the crowd right
@@ -45,12 +45,12 @@ redistributed. Sources and dates are mostly unknown.
 3. **Feed Kling these photographs as style references.** Kling's image editor
    takes up to 10 images. The render as image 1 and two or three of these
    (the field, the hillside, the close crowd) as images 2–4, with a prompt that
-   says to match their people, clothes and film colour but keep image 1's
+   says to match their people, clothes and film color but keep image 1's
    framing and scale.
-4. **Grade the whole frame** like a 1974 colour print (warmer, lower contrast,
+4. **Grade the whole frame** like a 1974 color print (warmer, lower contrast,
    grain) after compositing, so the crowd and the Blender render share one look.
 5. **Keep the mask.** Only crowd pixels come from the edit; the Wall stays as
-   modelled.
+   modeled.
 
 ## Not a congregation
 

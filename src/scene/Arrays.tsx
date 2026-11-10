@@ -49,7 +49,7 @@ function RoleMesh({
   const ref = useRef<THREE.InstancedMesh>(null);
   const materials = wallMaterials();
   const geometry = cabinetGeometry(cabinet, variant)[role];
-  // The cluster's strips are aluminium all over, board and face alike.
+  // The cluster's strips are aluminum all over, board and face alike.
   const material = cabinet === 'strip5' && (role === 'shell' || role === 'baffle') ? materials.strip : materials[role];
 
   // Only the outer shell is pickable. Raycasting four overlapping instanced

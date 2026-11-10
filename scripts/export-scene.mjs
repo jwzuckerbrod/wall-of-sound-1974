@@ -3,12 +3,12 @@
  *
  * Compiles the same geometry modules the app and verify.mjs use, so Blender
  * gets exactly what the browser draws: every cabinet, every scaffold tube,
- * every floor and slab. Nothing is modelled by hand on the Blender side.
+ * every floor and slab. Nothing is modeled by hand on the Blender side.
  *
  *   npm run export:scene
  *
- * Coordinates are the scene frame (metres, +Y up, +Z toward the audience,
- * origin at the centre of the deck on the wall face). The Blender script
+ * Coordinates are the scene frame (meters, +Y up, +Z toward the audience,
+ * origin at the center of the deck on the wall face). The Blender script
  * converts to Z-up.
  */
 import { execFileSync } from 'node:child_process';
@@ -103,7 +103,7 @@ const scene = {
     dustCapDia: r4(d.dustCapDia), dustCapRise: r4(d.dustCapRise), surroundWidth: r4(d.surroundWidth),
     horn: d.horn ? { w: r4(d.horn.w), h: r4(d.horn.h), depth: r4(d.horn.depth) } : null,
   }])),
-  // Colours, roughness and metalness (wall.materials), for the surfaces both renderers share.
+  // Colors, roughness and metalness (wall.materials), for the surfaces both renderers share.
   materials: Object.fromEntries(
     ['plywoodBlack', 'baffle', 'cone', 'hornFrame', 'hornThroat', 'stripAluminium', 'steel', 'cable']
       .map((k) => [k, wall.materials[k]]),
@@ -152,7 +152,7 @@ const scene = {
   // The paired vocal microphones (src/scene/BandGear.tsx): foot of each stand, and its parts.
   mics: { at: scaf.vocalMics(L).map(v3), ...scaf.MIC },
   crewAloft: wall.structure.crewAloft,
-  // Courtenay Pollock's tie-dyes (structure.tieDyes): top centre of each, outdoors only.
+  // Courtenay Pollock's tie-dyes (structure.tieDyes): top center of each, outdoors only.
   tieDyes: scaf.tieDyePanels(L).map((t) => ({ top: v3(t.top), w: t.width, h: t.height, palette: wall.structure.tieDyes.palettes[t.palette] })),
   // Objects of known size (scale, blender/scale/).
   scale: wall.scale,
@@ -167,7 +167,7 @@ const scene = {
       panels: bowl.crownPanels(bowl.bowlFrame(L)).map(v3),
     };
   })(),
-  // Each channel's system and overlay colour (CHANNELS): the story's colour-by-system render.
+  // Each channel's system and overlay color (CHANNELS): the story's color-by-system render.
   channels: Object.fromEntries(Object.values(CHANNELS).map((c) => [c.id, { system: c.system, color: c.color }])),
   // How sure we are of each part of the Wall (PROVENANCE): the story's evidence render.
   // The deck takes the Bowl's confidence, not the drawing's: the 10 April drawing is
@@ -183,7 +183,7 @@ const scene = {
       tieDyes: PROVENANCE['structure.tieDyes'].confidence,
     },
   },
-  // The players' marks (scene frame, metres): blender/stage_review.py stands the instruments on them.
+  // The players' marks (scene frame, meters): blender/stage_review.py stands the instruments on them.
   band: Object.fromEntries(wall.band.members.map((m) => [m.id, [r4(wall.band.mirrored ? -m.x : m.x), r4(m.z)]])),
 };
 

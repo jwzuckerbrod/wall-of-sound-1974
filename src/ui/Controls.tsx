@@ -46,7 +46,7 @@ const COMPARE_ITEMS: { id: CompareId; label: string }[] = [
   { id: null, label: 'Nothing' },
 ];
 
-/** The six systems, grouped as the colour view groups them. */
+/** The six systems, grouped as the color view groups them. */
 export const SYSTEMS: { label: string; channel: ChannelId }[] = [
   { label: 'Vocals', channel: 'vocals' },
   { label: 'Lead guitar', channel: 'leadGuitar' },
@@ -57,7 +57,7 @@ export const SYSTEMS: { label: string; channel: ChannelId }[] = [
 ];
 
 /**
- * Along the bottom: take it apart, colour it by system, and where to stand.
+ * Along the bottom: take it apart, color it by system, and where to stand.
  * The three things worth doing to the Wall, always within reach.
  */
 export function BottomBar({
@@ -157,7 +157,7 @@ export function BottomBar({
               <i key={s.label} style={{ background: CHANNELS[s.channel].color }} />
             ))}
           </span>
-          <span>Colour<span className="wide-only"> by system</span></span>
+          <span>Color<span className="wide-only"> by system</span></span>
         </button>
         <Menu
           label={<span>Compare<span className="wide-only"> size</span></span>}

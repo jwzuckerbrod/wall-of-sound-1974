@@ -20,7 +20,7 @@ Every factual claim carries a confidence level:
 **Source hierarchy.** When sources conflict, this is the order of precedence:
 
 1. **The 1974 engineering drawings** — dimensioned, dated, from the crew's own files.
-2. **Surviving hardware** — measured or catalogued objects.
+2. **Surviving hardware** — measured or cataloged objects.
 3. **Anderson**, *Loud and Clear* — the only book to separate the array from the staging.
 4. **The 1974 press spec sheet** — contemporary, but written for journalists.
 5. **Trade press** (Mix, Relix) and **encyclopedias**.
@@ -40,11 +40,11 @@ The brief supplied nine starting facts. Checked against sources:
 |---|---|---|---|
 | 1 | Designed by Owsley "Bear" Stanley and Dan Healy, with Alembic (Ron Wickersham, Rick Turner, John Curl) and Mark Raizene | **Correct** | Add **Bob Matthews** (sound crew) and **Courtenay Pollock** (the tie-dyed fabric panels that hung on the structure). Raizene is usually credited as "Sparky" Raizene and ran the vocal system. |
 | 2 | Debuted 23 March 1974 at the Cow Palace; retired after the October 1974 Winterland run | **Correct, but incomplete** | A prototype of the framework was tested **9 February 1973 at Stanford's Maples Pavilion**, where the tweeters failed during the first number. The 3/23/74 Cow Palace show is the debut of the full touring system. Retirement: the **16–20 October 1974 Winterland** run, filmed for *The Grateful Dead Movie*. The system ran **37 shows** in total. |
-| 3 | Roughly 586–604 speakers, mostly JBL, driven by ~48–55 McIntosh MC-2300s, ~26,400 W | **Mostly correct; the amp range and wattage need fixing** | The best-supported figure is **48 McIntosh MC-2300 amplifiers**. The "55" end of the range is not supported anywhere found. Wikipedia carries a second, garbled configuration ("89 300-watt solid-state and three 350-watt vacuum tube amplifiers") — the **89** there is almost certainly the count of **15-inch speakers**, not amplifiers, which matches the itemised 1974 inventory exactly. **Power: both 26,400 W and 28,800 W are widely published.** 48 × 600 W = 28,800 W, which is the *installed* rating; 26,400 W (= 44 × 600) is the figure in the 1974 press spec sheet and is probably the *driven* total, with some amplifiers held as spares or bridged differently. The reconstruction quotes both. |
+| 3 | Roughly 586–604 speakers, mostly JBL, driven by ~48–55 McIntosh MC-2300s, ~26,400 W | **Mostly correct; the amp range and wattage need fixing** | The best-supported figure is **48 McIntosh MC-2300 amplifiers**. The "55" end of the range is not supported anywhere found. Wikipedia carries a second, garbled configuration ("89 300-watt solid-state and three 350-watt vacuum tube amplifiers") — the **89** there is almost certainly the count of **15-inch speakers**, not amplifiers, which matches the itemized 1974 inventory exactly. **Power: both 26,400 W and 28,800 W are widely published.** 48 × 600 W = 28,800 W, which is the *installed* rating; 26,400 W (= 44 × 600) is the figure in the 1974 press spec sheet and is probably the *driven* total, with some amplifiers held as spares or bridged differently. The reconstruction quotes both. |
 | 4 | Sat behind the band, so the musicians heard what the audience heard | **Correct** | This is the defining idea. No front-of-house mix position, no wedge monitors; the band mixed itself from the stage. Onstage SPL was reportedly *lower* than in the hall — normal conversation was possible on stage. |
 | 5 | Separate subsystems for vocals, Garcia, Weir, bass, piano and drums | **Correct** | Precisely: **six electrically independent systems carried on eleven channels.** See §4. |
 | 6 | Lesh's bass ran quadraphonic, each of the four strings on its own channel | **Contested — kept, but flagged** | Wikipedia, McIntosh and most secondary sources say exactly this. The 1974 primary spec sheet describes something subtler: **three pickups**, a quadraphonic encoder, and a digital decoding circuit offering **sixteen quad spatial arrangements** (or eight stereo modes) selected by ten push-buttons. Both can be true — a per-string routing is one of the sixteen selectable arrangements. The reconstruction models **four independent bass channels** and labels them by string, with this caveat in the info panel. |
-| 7 | Vocals used paired, phase-cancelling ("differential") microphones | **Correct** | Matched **Brüel & Kjær** condenser pairs, capsules **60 mm apart**, wired in **reverse polarity**, summed by a differential amplifier. The singer's voice hits the top capsule first and survives; everything arriving equally at both — including the Wall itself, 3 m behind — cancels. This is what let the band sing directly in front of 26 kW without feedback. |
+| 7 | Vocals used paired, phase-canceling ("differential") microphones | **Correct** | Matched **Brüel & Kjær** condenser pairs, capsules **60 mm apart**, wired in **reverse polarity**, summed by a differential amplifier. The singer's voice hits the top capsule first and survives; everything arriving equally at both — including the Wall itself, 3 m behind — cancels. This is what let the band sing directly in front of 26 kW without feedback. |
 | 8 | Two complete systems leapfrogged between cities | **Half right — now resolved** | There was **one sound system and two identical scaffolding sets.** Anderson describes the mechanism: Crew B had the frame standing before Crew A arrived with the PA, then they swapped and repeated. So it was the *staging* that leapfrogged, not a second Wall — which is also why the band was often paying rent on two venues at once. This settles McNally's "two" against Stanley's "three"; Stanley was probably counting crews. |
 | 9 | Total weight ~75 tons | **Correct, with a useful split** | **75 tons** is the complete touring load (sound system + stage + scaffolding). The **sound system alone was about 28 tons.** Transport is reported both as "four semi-trailers" and, more specifically, as one 40-ft semi for the system, two flatbeds for stage and scaffolding, and a 24-ft van for lights. Crew **21**; some accounts give ~30 for the full road crew. Assembly: **~4 hours** for the sound system on top of **~4 hours** for the stage supports. Insured value **$250,000**; build cost **>$350,000** in 1974 dollars. |
 
@@ -57,26 +57,26 @@ Two inventories circulate. They nearly agree:
 **Published summary (most common):**
 > 586 JBL speakers (15″, 12″, 5″) + 54 Electro-Voice tweeters = **640 drivers**, in Hard Truckers-style birch plywood cabinets, powered by 48 McIntosh MC-2300s.
 
-**Itemised breakdown (traceable to the 1974 spec sheet):**
+**Itemized breakdown (traceable to the 1974 spec sheet):**
 > 89 × 15″ · 178 × 12″ · 320 × 5″ · 54 tweeters = **641 drivers** (587 JBL)
 
 These differ by exactly one 15″ driver. No source resolves it.
 
-**Decision:** the reconstruction builds from the **itemised** breakdown, because it is the only one that can actually be laid out, and states the one-driver discrepancy in the About page. The model's own driver count is computed by summing the arrays and asserted against 641 at build time — if someone edits an array count in the config, the check fails loudly rather than silently drifting.
+**Decision:** the reconstruction builds from the **itemized** breakdown, because it is the only one that can actually be laid out, and states the one-driver discrepancy in the About page. The model's own driver count is computed by summing the arrays and asserted against 641 at build time — if someone edits an array count in the config, the check fails loudly rather than silently drifting.
 
 | Driver class | Count | Confidence |
 |---|---|---|
-| JBL 15″ | 89 | confirmed (itemised source) |
-| JBL 12″ | 178 | confirmed (itemised source) |
-| JBL 5″ | 320 | confirmed (itemised source) |
+| JBL 15″ | 89 | confirmed (itemized source) |
+| JBL 12″ | 178 | confirmed (itemized source) |
+| JBL 5″ | 320 | confirmed (itemized source) |
 | Electro-Voice tweeters | 54 | confirmed |
 | **Total** | **641** | — |
 
 JBL model numbers (K140/D140 for 15″, K120/D120 for 12″, LE5 for 5″) are **not** documented in any source found. They are the period-correct candidates, recorded as `estimated`, and used only to drive cone and dust-cap proportions.
 
-The tweeter is no longer a guess. A surviving unit from the crew's own stock, catalogued as *Wall of Sound 1974 Electro-Voice T350*, settles it — this spec previously said T-35. **Electro-Voice T350, confirmed.**
+The tweeter is no longer a guess. A surviving unit from the crew's own stock, cataloged as *Wall of Sound 1974 Electro-Voice T350*, settles it — this spec previously said T-35. **Electro-Voice T350, confirmed.**
 
-The small cones are catalogued as **4.5-inch** on surviving enclosures, against the 1974 spec sheet's **5-inch**. Both are consistent with a nominal 5″ driver on a ~4.5″ frame, which is what is modelled.
+The small cones are cataloged as **4.5-inch** on surviving enclosures, against the 1974 spec sheet's **5-inch**. Both are consistent with a nominal 5″ driver on a ~4.5″ frame, which is what is modeled.
 
 ---
 
@@ -92,7 +92,7 @@ The small cones are catalogued as **4.5-inch** on surviving enclosures, against 
 | 6–7 | **Drums & cymbals L / R** | snare, toms, cymbals, in stereo | 3-way: high / upper-mid / lower-mid | tweeters, 5″, 12″ |
 | 8–11 | **Bass ×4** | Lesh's quadraphonic bass, four channels | none | 15″ only |
 
-**Confirmed from the 1974 spec sheet:** the four-band vocal crossover; the curved centre cluster for vocal highs and mids giving "cylindrical" dispersion of 140–180° horizontal; vocal lows in a column; the piano's three-way split with highs and mids in a cluster of 5″ and 12″ and lows in a column of 15″; the five Countryman pickups; **sixteen 15″ speakers in a column for the bass drum**; the drums' three-way stereo split with identical columns left and right; and **columns of twenty 12″ speakers for each guitar**, with Garcia's extension cabinets placed beside Godchaux and behind Kreutzmann.
+**Confirmed from the 1974 spec sheet:** the four-band vocal crossover; the curved center cluster for vocal highs and mids giving "cylindrical" dispersion of 140–180° horizontal; vocal lows in a column; the piano's three-way split with highs and mids in a cluster of 5″ and 12″ and lows in a column of 15″; the five Countryman pickups; **sixteen 15″ speakers in a column for the bass drum**; the drums' three-way stereo split with identical columns left and right; and **columns of twenty 12″ speakers for each guitar**, with Garcia's extension cabinets placed beside Godchaux and behind Kreutzmann.
 
 **Contradiction noted:** Mix reports "Garcia and Weir: 30 cabinets combined" and "Lesh: 16 cabinets a side." The 1974 spec sheet's "twenty each" (= 40 combined) is preferred as the earlier and more specific source; Mix's "16 a side" for Lesh is adopted because the spec sheet gives no bass count.
 
@@ -104,9 +104,9 @@ The published totals are firm; the split between arrays is not documented. The a
 
 | Array | Channel | Drivers | Layout | Confidence |
 |---|---|---|---|---|
-| Vocal centre cluster — high | vocals | 20 × tweeter | 20 cols × 1, curved | estimated |
-| Vocal centre cluster — upper-mid | vocals | 120 × 5″ | 20 cols × 6, curved | estimated |
-| Vocal centre cluster — lower-mid | vocals | 66 × 12″ | 11 cols × 6, curved | estimated |
+| Vocal center cluster — high | vocals | 20 × tweeter | 20 cols × 1, curved | estimated |
+| Vocal center cluster — upper-mid | vocals | 120 × 5″ | 20 cols × 6, curved | estimated |
+| Vocal center cluster — lower-mid | vocals | 66 × 12″ | 11 cols × 6, curved | estimated |
 | Vocal fill L / R — high | vocals | 14 × tweeter | 7 cols × 1 per side | estimated |
 | Vocal fill L / R — upper-mid | vocals | 84 × 5″ | 6 cols × 7 per side | estimated |
 | Vocal fill L / R — lower-mid | vocals | 36 × 12″ | 3 cols × 6 per side | estimated (**this is the role of the measured cabinet**) |
@@ -125,7 +125,7 @@ The published totals are firm; the split between arrays is not documented. The a
 
 Class totals: **15″ 32+32+16+9 = 89** · **12″ 66+36+24+12+14+6+20 = 178** · **5″ 120+84+80+36 = 320** · **tweeters 20+14+20 = 54**. ✔ Verified by running `inventoryFromArrays()`.
 
-The vocal system splits into a **curved centre cluster** plus **two flanking fill towers** — which is both what the photographs show and what gives Anderson's measured cabinet somewhere to live, since it is described as a vocal *fill*.
+The vocal system splits into a **curved center cluster** plus **two flanking fill towers** — which is both what the photographs show and what gives Anderson's measured cabinet somewhere to live, since it is described as a vocal *fill*.
 
 Vocals alone account for 372 of 641 drivers — 58% of the system. That matches every account that calls the vocal system the best and biggest part of the Wall.
 
@@ -133,7 +133,7 @@ Vocals alone account for 372 of 641 drivers — 58% of the system. That matches 
 
 ## 6. Overall dimensions and coordinate frame
 
-**Coordinate frame:** right-handed, metres, **+Y up**, **+Z toward the audience**, **+X to the audience's right**. Origin at the centre of the stage deck surface, on the plane of the wall's front face.
+**Coordinate frame:** right-handed, meters, **+Y up**, **+Z toward the audience**, **+X to the audience's right**. Origin at the center of the stage deck surface, on the plane of the wall's front face.
 
 **A correction that changed the whole layout.** Earlier drafts of this spec put the wall at 29 m (95 ft) wide, following Mix and Relix's "roughly 98 feet across" and "nearly 100 feet wide." Anderson separates two things every other source conflates:
 
@@ -149,10 +149,10 @@ The fourth, **lot 71, is the one that matters**: two sheets for the **1974 Summe
 
 | Quantity | Value | Confidence | Note |
 |---|---|---|---|
-| **Scaffold footprint** | **19.51 × 12.19 m (64'-0" × 40'-0")** | **confirmed — drawing** | Dimensioned on the top view. Width chain: 9" + 5'-0" + 7'-0" bays + a 3'-6" closer at the centreline, mirrored. Depth chain: 5, 4, 5, 5, 5, 5, 5, 5, 1 = 40'-0". |
+| **Scaffold footprint** | **19.51 × 12.19 m (64'-0" × 40'-0")** | **confirmed — drawing** | Dimensioned on the top view. Width chain: 9" + 5'-0" + 7'-0" bays + a 3'-6" closer at the centerline, mirrored. Depth chain: 5, 4, 5, 5, 5, 5, 5, 5, 1 = 40'-0". |
 | **Tower height above the deck** | **11.84 m (38'-10")** | **confirmed — drawing and photo** | Stage left view, as a chain: 7'-0" + 5'-10" + four lifts of 6'-6". The drawing does not say where the chain starts; Pechner's 17 May 1974 photograph measures 38.8 ft of scaffold **above the deck** (`docs/qa-findings.md` §6). Ground to top is therefore 14.88 m (48'-10"). |
 | Speaker array width | 18.29 m (60 ft) documented; **18.96 m (62.2 ft)** as packed | confirmed / packed within 4% | **The check that landed:** the layout was built to Anderson's 60 ft before these drawings surfaced, and 62.2 ft drops inside a 64 ft tower footprint with room for the end frames. Two independent sources, derived separately, agree. |
-| Tallest stacks above the deck | 9.75 m (32 ft) as modelled | photo: ~35 ft | Sixteen 24" cabinets. The earlier figure, 28'-10" of tower, came from reading the lift chain from the ground. |
+| Tallest stacks above the deck | 9.75 m (32 ft) as modeled | photo: ~35 ft | Sixteen 24" cabinets. The earlier figure, 28'-10" of tower, came from reading the lift chain from the ground. |
 | **Stage deck height** | **3.05 m (10 ft)** | **confirmed** | Bolted and tied into the scaffolding, because sound pressure could bounce the rig a foot. Anderson says one-inch plywood; the drawing specifies **1⅛" T&G over 2×10 planks on 4×6 beams**, so the drawing wins. Previously guessed at 5 ft. |
 | **Deck size** | **25.0 × 12.5 m (82 × 41 ft)** | **confirmed — drawing** | Stage requirements note 3: the deck overhangs the towers by **9'-0" stage left and right** and **1'-0" downstage**. |
 | Staging footprint, indoor | 23.2 × 9.1 m (76 × 30 ft) | confirmed | Anderson. A different venue configuration from the drawing. |
@@ -178,7 +178,7 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 | −5.45 | **Weir** rhythm guitar (12″ × 20) | P1 | 2.13 → 5.44 |
 | −4.44 | **Vocal low LEFT** (15″ × 16, one column) | deck | 0 → 10.36 |
 | −3.04 | **Vocal fill LEFT** — 12″ ×18, 5″ ×36, 7 horns | deck | 0 → 2.98 |
-| 0 | **Vocal centre cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×132 in aluminium strips (4 rows of 33), 20 horns | P2 | 3.91 → 6.61 |
+| 0 | **Vocal center cluster** — curved, 4.50 m wide: 12″ ×66, 5″ ×132 in aluminum strips (4 rows of 33), 20 horns | P2 | 3.91 → 6.61 |
 | +1.60 | **Garcia extension** (12″ × 6), set back 1.3 m, behind the kit beside Keith | deck | 0 → 0.99 |
 | +3.04 | **Vocal fill RIGHT** | deck | 0 → 2.98 |
 | +4.44 | **Vocal low RIGHT** (15″ × 16, one column) | deck | 0 → 10.36 |
@@ -189,13 +189,13 @@ Heights are above the stage deck, which is itself 10 ft above the ground.
 
 Heights were checked against Pechner's 17 May 1974 photograph (`docs/qa-findings.md` §6, §8). Channel positions were not, except that each player's own stacks now stand on their side of the stage (§9): Garcia's on the left, the piano's on the right, Garcia's extension behind the kit beside Keith, as the 1974 spec sheet says. Heights in this table are for the cabinet sizes of §8.
 
-The skyline that falls out of this — tall flanks either side of a lower, raised, curved centre cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
+The skyline that falls out of this — tall flanks either side of a lower, raised, curved center cluster — is the silhouette in the 1974 photographs, which is some corroboration for a layout that is otherwise the reconstruction's own.
 
-Blocks butt together with no gap. **The wall is not symmetric about the centreline**: Garcia's main column takes a slot on the left, the piano's two take the right, and they are not the same width. The real wall was asymmetric for the same reason: it was assembled from what each channel needed, not drawn on a grid.
+Blocks butt together with no gap. **The wall is not symmetric about the centerline**: Garcia's main column takes a slot on the left, the piano's two take the right, and they are not the same width. The real wall was asymmetric for the same reason: it was assembled from what each channel needed, not drawn on a grid.
 
 All array x-positions are **estimated**; the 60 ft envelope they pack into is **confirmed**. No plan drawing of the Wall has been found, and the arrangement varied between venues.
 
-**Vocal centre cluster geometry:** convex arc, radius 5.5 m, opening toward the audience, spanning 4.50 m of arc (≈47°). This is the documented "curved... for cylindrical dispersion, 140–180° horizontal" element and the single most recognisable feature of the Wall. Its underside sits at 2.13 m, on the 7 ft floor, clearing the band; the bass-drum block stands behind it.
+**Vocal center cluster geometry:** convex arc, radius 5.5 m, opening toward the audience, spanning 4.50 m of arc (≈47°). This is the documented "curved... for cylindrical dispersion, 140–180° horizontal" element and the single most recognisable feature of the Wall. Its underside sits at 2.13 m, on the 7 ft floor, clearing the band; the bass-drum block stands behind it.
 
 **The vertical split.** Anderson records something none of the other sources state plainly: **the lower half of the Wall fed the musicians onstage and the upper half threw to the crowd.** The PA *was* the monitoring — there were no wedges at all. This drives the "how it worked" overlay in stage 5, which shades each array by height rather than by channel.
 
@@ -234,7 +234,7 @@ Owsley specified cabinet proportions using **the cube root of two** as the multi
 
 The measured cabinet's squarer front also settles the caveat in the previous draft: photographs *did* show squarer fronts than the 2^⅓ rule produces, and now there is a measurement saying so.
 
-The 5″ and tweeter sections are modelled as **shared baffle panels with drilled driver arrays**, not as discrete boxes — this is what the close-up photographs show: large black baffle boards with rows of circular cutouts and, above them, rectangular horn mouths.
+The 5″ and tweeter sections are modeled as **shared baffle panels with drilled driver arrays**, not as discrete boxes — this is what the close-up photographs show: large black baffle boards with rows of circular cutouts and, above them, rectangular horn mouths.
 
 ---
 
@@ -242,18 +242,18 @@ The 5″ and tweeter sections are modelled as **shared baffle panels with drille
 
 This matters, because one common assumption is wrong.
 
-- **No grille cloth over the 12s and 15s.** Those drivers are **exposed**: visible cones, visible surrounds, bright aluminium dust caps, visible mounting screws. Any reconstruction with black grille cloth over them is wrong.
-- **Tie-dye: on the structure, not over the wall's drivers.** Surviving Hard Truckers enclosures from the crew's stock are catalogued as *small plywood enclosure with 4.5-inch speaker and tie-dye grille cloth*, and an earlier draft of this spec read that as cloth over the 5-inch sections of the arrays.
+- **No grille cloth over the 12s and 15s.** Those drivers are **exposed**: visible cones, visible surrounds, bright aluminum dust caps, visible mounting screws. Any reconstruction with black grille cloth over them is wrong.
+- **Tie-dye: on the structure, not over the wall's drivers.** Surviving Hard Truckers enclosures from the crew's stock are cataloged as *small plywood enclosure with 4.5-inch speaker and tie-dye grille cloth*, and an earlier draft of this spec read that as cloth over the 5-inch sections of the arrays.
 
-  **On reflection that over-reads the catalogue.** The close-up photographs of the Wall itself plainly show the 5-inch sections as a large black baffle board with bare drilled cutouts and visible cones — no cloth. The catalogued enclosures are small standalone boxes and are not dated to the Wall; they may be monitors or later Jerry Garcia Band gear. Where a photograph of the object and an auction description of a different object disagree, the photograph wins.
+  **On reflection that over-reads the catalog.** The close-up photographs of the Wall itself plainly show the 5-inch sections as a large black baffle board with bare drilled cutouts and visible cones — no cloth. The cataloged enclosures are small standalone boxes and are not dated to the Wall; they may be monitors or later Jerry Garcia Band gear. Where a photograph of the object and an auction description of a different object disagree, the photograph wins.
 
-  So: **the arrays ran bare, and Pollock's tie-dye hangs on the scaffolding** — behind and beside the towers — which is both documented and unmistakable in the wide shots. Modelled that way.
-- **Cabinet carcasses: 14-ply laminated Finnish birch.** The finish varied. The one surviving cabinet is **painted matte black all over**; photographs elsewhere on the wall clearly show **bare plywood frames** around black baffles. Both are modelled and mixed across the arrays (`materials.blackFinishRatio`, default 0.55). All of them are road-worn — scuffed edges, adhesive residue, darkened corners and handles, visible plies where the paint has gone.
+  So: **the arrays ran bare, and Pollock's tie-dye hangs on the scaffolding** — behind and beside the towers — which is both documented and unmistakable in the wide shots. Modeled that way.
+- **Cabinet carcasses: 14-ply laminated Finnish birch.** The finish varied. The one surviving cabinet is **painted matte black all over**; photographs elsewhere on the wall clearly show **bare plywood frames** around black baffles. Both are modeled and mixed across the arrays (`materials.blackFinishRatio`, default 0.55). All of them are road-worn — scuffed edges, adhesive residue, darkened corners and handles, visible plies where the paint has gone.
 - **Baffle boards: matte black**, flat. Where the carcass is left bare, the black-face / pale-body contrast is the Wall's signature read at distance.
-- **Cones:** paper, mid-grey to grey-blue in colour film, with a **specular aluminium dust cap** that catches stage light — the reason the Wall reads as hundreds of points of light in photographs. This is the single most important material to get right.
-- **Scaffolding: galvanised steel tube-and-clamp**, standard period frames, plus a dense web of **diagonal guy wires** crossing in front of and between the arrays. The wires are structurally and visually essential; photographs are full of them.
-- **Cabling: arm-thick.** Not a detail — a visual feature. The crew found that nothing lighter would carry the current, and wired the Wall with **military-surplus cable originally made for connecting docked ships to shore power.** Modelled at 50 mm per run, gathered into 140 mm bundles at deck level.
-- **McIntosh MC-2300s:** black glass front panels, **glowing blue illuminated power meters**, gold-anodised lettering, chrome-and-black chassis, racked at stage level behind and beneath the arrays. 128 lb each. **The amps were named**, and the names were painted on the road cases — surviving examples include *Budman* (Garcia's), *M-14*, *Ketchup* and *Mustard*. Stencilled onto the cases in the model; it is the kind of detail that tells a visitor this was a working rig, not a product.
+- **Cones:** paper, mid-gray to gray-blue in color film, with a **specular aluminum dust cap** that catches stage light — the reason the Wall reads as hundreds of points of light in photographs. This is the single most important material to get right.
+- **Scaffolding: galvanized steel tube-and-clamp**, standard period frames, plus a dense web of **diagonal guy wires** crossing in front of and between the arrays. The wires are structurally and visually essential; photographs are full of them.
+- **Cabling: arm-thick.** Not a detail — a visual feature. The crew found that nothing lighter would carry the current, and wired the Wall with **military-surplus cable originally made for connecting docked ships to shore power.** Modeled at 50 mm per run, gathered into 140 mm bundles at deck level.
+- **McIntosh MC-2300s:** black glass front panels, **glowing blue illuminated power meters**, gold-anodized lettering, chrome-and-black chassis, racked at stage level behind and beneath the arrays. 128 lb each. **The amps were named**, and the names were painted on the road cases — surviving examples include *Budman* (Garcia's), *M-14*, *Ketchup* and *Mustard*. Stencilled onto the cases in the model; it is the kind of detail that tells a visitor this was a working rig, not a product.
 
 ---
 
@@ -281,7 +281,7 @@ Everything in this section except the last two rows is now transcribed from the 
 | Item | Value | Confidence |
 |---|---|---|
 | Scaffold end frames | 6'-6" high × 5'-0" wide | **confirmed — drawing** |
-| Scaffold bay (X-brace span) | 7'-0", closing on a 3'-6" half bay at the centreline | **confirmed — drawing** |
+| Scaffold bay (X-brace span) | 7'-0", closing on a 3'-6" half bay at the centerline | **confirmed — drawing** |
 | Deck construction | 4×6 beams, 2×10 planks, 1⅛" T&G ply, ⅝" ply facing | **confirmed — drawing** |
 | Deck overhang | 9'-0" each side, 1'-0" downstage | **confirmed — drawing** |
 | Scaffolding sets | 2, leapfrogging ahead of a single sound system | confirmed (Anderson) |
@@ -296,17 +296,17 @@ The deck was tied into the scaffolding for a reason worth putting in an info pan
 
 ## 11. Stage context
 
-Modelled to give the PA a place to stand, deliberately understated so it never competes with the Wall.
+Modeled to give the PA a place to stand, deliberately understated so it never competes with the Wall.
 
 - **Stage deck:** plank-over-steel, 12 m deep, with a dark skirt.
-- **The instruments are deliberately not modelled.** A first attempt produced generic primitive shapes that cost the reconstruction more credibility than they added — see `docs/qa-findings.md` §5. What is on the stage is the furniture that is both documented and legible at this scale: the paired vocal microphones, and road cases carrying the 1969 stencil. The instruments that *were* there in 1974 are listed below for the record, not because they are in the model.
+- **The instruments are deliberately not modeled.** A first attempt produced generic primitive shapes that cost the reconstruction more credibility than they added — see `docs/qa-findings.md` §5. What is on the stage is the furniture that is both documented and legible at this scale: the paired vocal microphones, and road cases carrying the 1969 stencil. The instruments that *were* there in 1974 are listed below for the record, not because they are in the model.
 - **Band gear, 1974-correct, for the record:**
   - **Jerry Garcia** — "Wolf", the Doug Irwin custom (in use from late 1973; the wolf was a sticker in 1974, inlaid later).
   - **Bob Weir** — Gibson ES-335, with an Alembic parametric EQ and an Eventide digital delay in his rack.
   - **Phil Lesh** — Alembic quadraphonic bass. Lesh had two in 1974; the second, "Mission Control" (serial 74 00008, built by Rick Turner), from 16 June 1974. The earlier one is the right choice for a March–May scene, the later for the Winterland scene.
   - **Keith Godchaux** — grand piano with five Countryman pickups, one per frame division.
-  - **Bill Kreutzmann** — drum kit, centre, upstage.
-- **Band positions**, audience view left → right: **Garcia · Weir · Kreutzmann (upstage centre) · Lesh · Godchaux at a grand lying across the stage, keyboard at the right.** Measured on Pechner's 17 May 1974 photograph through its solved camera; every other photograph found to mid-June agrees on Garcia far left and Keith to the right (`docs/qa-findings.md` §7, §9). Marked **estimated**: Weir and Lesh changed places now and then, and nothing yet shows the whole band between July and October.
+  - **Bill Kreutzmann** — drum kit, center, upstage.
+- **Band positions**, audience view left → right: **Garcia · Weir · Kreutzmann (upstage center) · Lesh · Godchaux at a grand lying across the stage, keyboard at the right.** Measured on Pechner's 17 May 1974 photograph through its solved camera; every other photograph found to mid-June agrees on Garcia far left and Keith to the right (`docs/qa-findings.md` §7, §9). Marked **estimated**: Weir and Lesh changed places now and then, and nothing yet shows the whole band between July and October.
 - **Logos.** The mark sprayed on the band's gear was the **lightning bolt alone** — a 5½" white circle, red half and blue half, split by a jagged white bolt. **No skull.** Owsley Stanley's own account (`bear`) says Ernie Fischbach cut it as a single half-circle stencil with a jagged edge, sprayed red, turned over and sprayed blue, and that "we put it on to all our gear" in 1969; his page shows a toolbox still carrying it. The bolt outline in the model is traced from Bob Thomas's drawing of it, red above and blue below as Stanley describes. The skull-and-bolt was a later design by Bob Thomas, and no source found puts it on the equipment, so it is not used as a 1974 mark. **Exception, by the project owner's choice:** the Blender scene puts a skull-and-bolt sticker and a "GRATEFUL DEAD" lettering sticker on some cases and amplifiers, copied from a surviving Wall amplifier and its case (Sotheby's 2021, lot 43). Nothing dates those stickers to 1974; see `materials.stickers` in the config. Applied only to the road cases, at its true 5½" size. It is **not** placed as a backdrop banner or on the speaker cabinets, for which no evidence was found. The evidence is from 1969; nothing found says the mark had changed by 1974.
 - **Arena:** suggested only — a dark bowl of raked seating and a hint of roof structure, unlit, low detail, fading into black. Enough to give scale, not enough to draw the eye.
 
@@ -332,7 +332,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 
 **What the drawings still do not tell us:** which channel occupied which bay. That is the one thing a plan view could have settled and doesn't — it dimensions the steel, not the speakers.
 
-**A finding from building it (stage 2).** 641 drivers of these sizes **cannot fill a 60 × 29 ft face** — and the face is in fact 60 × 39 ft (`docs/qa-findings.md` §6), so the true figure is nearer 42% coverage. Add up the baffle area — 89 fifteens at 0.37 m², 178 twelves at 0.24 m², 320 fives at 0.043 m², 54 horns — and you get about 92 m² of speaker in a 157 m² opening. **Roughly 58% coverage, and 42% open scaffolding, is not a modelling failure — it is arithmetic.** The photographs agree: the Wall is a set of dense stacks with structure showing between and above them, not a solid plane of cones. Any reconstruction that shows an unbroken wall of speakers has either invented drivers or shrunk the frame.
+**A finding from building it (stage 2).** 641 drivers of these sizes **cannot fill a 60 × 29 ft face** — and the face is in fact 60 × 39 ft (`docs/qa-findings.md` §6), so the true figure is nearer 42% coverage. Add up the baffle area — 89 fifteens at 0.37 m², 178 twelves at 0.24 m², 320 fives at 0.043 m², 54 horns — and you get about 92 m² of speaker in a 157 m² opening. **Roughly 58% coverage, and 42% open scaffolding, is not a modeling failure — it is arithmetic.** The photographs agree: the Wall is a set of dense stacks with structure showing between and above them, not a solid plane of cones. Any reconstruction that shows an unbroken wall of speakers has either invented drivers or shrunk the frame.
 
 ---
 
@@ -366,7 +366,7 @@ Modelled to give the PA a place to stand, deliberately understated so it never c
 
 | Stage | Deliverable | Gate |
 |---|---|---|
-| 2 | Grey-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
+| 2 | Gray-box geometry at true scale from the config — every array and cabinet, plus **the scaffold built to the 10 April 1974 drawing**: a 64 × 40 ft grid of 6'-6" × 5' frames on 7 ft bays closing on a 3'-6" half bay, the deck at 10 ft with its 9 ft overhangs, towers rising from the X-braced bays. Untextured. Orbit camera, a 1.75 m figure for scale, and an on-screen driver count that must read 641. | Screenshots |
 | 3 | Materials and lighting — PBR, HDRI, worn birch, black baffles, specular dust caps, steel, glowing McIntosh meters. Soft shadows, AO, subtle bloom, all tier-switchable. | Screenshots |
 | 4 ✔ | Navigation — orbit and an eight-stop guided tour (first-person walk was built, then removed). Mouse, touch and full keyboard; `prefers-reduced-motion` respected; tour text in a live region and complete without the picture. | Live build |
 | 5 ✔ | Hover or pick any array for a panel giving what it carried, its speaker count, its confidence and its sources; a keyboard-reachable list of all 28 arrays; exploded view; channel overlay with isolation; the band's gear at true size; an About page generated from `PROVENANCE` so it cannot drift from the model. | Live build |

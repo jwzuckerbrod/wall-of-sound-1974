@@ -6,14 +6,14 @@ import { CHANNELS } from '../data/wall.config';
  * Wall's wavefronts travel in, reach both capsules at once, and both flash and
  * cancel. Animation: .dg in story.css.
  *
- * Not to scale: the capsules are 60 mm apart and the Wall about three metres
+ * Not to scale: the capsules are 60 mm apart and the Wall about three meters
  * behind the singer.
  */
 export function MicDiagram() {
   const voice = CHANNELS.vocals.color;
   return (
     <svg className="diagram mic-diagram" viewBox="0 0 640 400" role="img" aria-labelledby="mic-title mic-desc">
-      <title id="mic-title">How the paired microphones cancelled the Wall</title>
+      <title id="mic-title">How the paired microphones canceled the Wall</title>
       <desc id="mic-desc">
         A singer sings into the nearer of two microphones, wired in opposite polarity. The voice reaches the near one
         first and loudest, so it survives. Sound from the Wall behind reaches both equally, so the two cancel.
@@ -59,7 +59,7 @@ export function MicDiagram() {
         ))}
         <text x="562" y="290" className="d-label" textAnchor="middle">The Wall</text>
       </g>
-      {/* The Wall's sound: flat wavefronts travelling in to the capsules. */}
+      {/* The Wall's sound: flat wavefronts traveling in to the capsules. */}
       <g className="d-wall">
         {[0, 1, 2].map((i) => (
           <path key={i} d="M520 92 v168" className="d-front" style={{ animationDelay: `${1.4 + i}s` }} />

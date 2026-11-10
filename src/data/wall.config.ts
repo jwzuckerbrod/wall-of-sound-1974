@@ -5,9 +5,9 @@
  * lives here. Geometry code reads this file and nothing else. Correcting the
  * history should never mean editing geometry.
  *
- * Units: metres, radians, seconds. Colours: sRGB hex.
+ * Units: meters, radians, seconds. Colors: sRGB hex.
  * Frame: right-handed, +Y up, +Z toward the audience, +X to the audience's right.
- *        Origin at the centre of the stage deck surface, on the wall's front-face plane.
+ *        Origin at the center of the stage deck surface, on the wall's front-face plane.
  *
  * Provenance for every value is in PROVENANCE, keyed by dotted path.
  * See docs/reconstruction-spec.md for the reasoning behind each choice.
@@ -17,9 +17,9 @@
 // Units
 // ─────────────────────────────────────────────────────────────────────────────
 
-/** inches → metres */
+/** inches → meters */
 export const IN = (n: number) => n * 0.0254;
-/** feet → metres */
+/** feet → meters */
 export const FT = (n: number) => n * 0.3048;
 /** degrees → radians */
 export const DEG = (n: number) => (n * Math.PI) / 180;
@@ -30,7 +30,7 @@ export const DEG = (n: number) => (n * Math.PI) / 180;
 
 export type Confidence = 'confirmed' | 'estimated' | 'guessed';
 
-/** The colour of each confidence level in the story's evidence render and its key (the same hues as the explorer's chips in styles.css). */
+/** The color of each confidence level in the story's evidence render and its key (the same hues as the explorer's chips in styles.css). */
 export const CONFIDENCE_COLOURS: Record<Confidence, string> = {
   confirmed: '#6fcf97',
   estimated: '#f4c95d',
@@ -139,12 +139,12 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     kind: 'photographic',
   },
   schneider: {
-    title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, 25 May 1974 — two colour photographs, close and full-stage, published by Paul Dorpat',
+    title: 'Steve Schneider, the Grateful Dead at Campus Stadium, UC Santa Barbara, 25 May 1974 — two color photographs, close and full-stage, published by Paul Dorpat',
     url: 'https://pauldorpat.com/2023/08/10/seattle-now-then-grateful-dead-1974/',
     kind: 'photographic',
   },
   sothebys: {
-    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends", New York, closed 14 October 2021. Lots 34–50 are Wall of Sound equipment: eight McIntosh MC 2300s with their cases, two ZERO amp cases, six speaker cabinets and the centre cluster\'s aluminium 5-inch enclosures, most with a statement from Steve Parish. Catalogued lot by lot in docs/surviving-gear.md',
+    title: 'Sotheby\'s, "From the Vault: Property from the Grateful Dead and Friends", New York, closed 14 October 2021. Lots 34–50 are Wall of Sound equipment: eight McIntosh MC 2300s with their cases, two ZERO amp cases, six speaker cabinets and the center cluster\'s aluminum 5-inch enclosures, most with a statement from Steve Parish. Cataloged lot by lot in docs/surviving-gear.md',
     url: 'https://www.sothebys.com/en/buy/auction/2021/from-the-vault-property-from-the-grateful-dead-and-friends',
     kind: 'primary',
   },
@@ -166,7 +166,7 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   juliens: {
     title:
-      'Julien\'s Auctions, "Treasures From The Golden Road: Featuring Property From Big Steve, Ram Rod & Trixie Garcia", 22 April 2026 — lot catalogue. Surviving hardware from the Dead\'s own crew: lot 72 (Wall of Sound 1974 Electro-Voice T350 tweeter), lots 276/277 (Hard Truckers small plywood enclosures, 4.5-inch speaker, tie-dye grille cloth), lots 58/62/69/70 (McIntosh MC2300s and their named road cases).',
+      'Julien\'s Auctions, "Treasures From The Golden Road: Featuring Property From Big Steve, Ram Rod & Trixie Garcia", 22 April 2026 — lot catalog. Surviving hardware from the Dead\'s own crew: lot 72 (Wall of Sound 1974 Electro-Voice T350 tweeter), lots 276/277 (Hard Truckers small plywood enclosures, 4.5-inch speaker, tie-dye grille cloth), lots 58/62/69/70 (McIntosh MC2300s and their named road cases).',
     url: 'https://www.juliensauctions.com/en/auctions/treasures-from-the-golden-road',
     kind: 'primary',
   },
@@ -227,7 +227,7 @@ export const PROVENANCE: Record<string, Provenance> = {
     confidence: 'estimated',
     sources: ['deadsources74', 'precedence', 'derived'],
     note:
-      'The story\'s seat diagram, computed in src/geometry/localize.ts. A rule of thumb in a plan view, not an acoustic simulation: arrival times only, at 343 m/s, with no level, height, reflections, or sound off the stage itself. The typical PA\'s stacks are placed at the stage\'s front corners (the 1974 report), carrying one mix. The Wall\'s positions are the model\'s, and its left-to-right order is the largest invention in the model (see the arrays entry); what the spec sheet documents is the centre vocal cluster, identical drum columns left and right, a column for each guitar, and Garcia\'s extension behind Kreutzmann.',
+      'The story\'s seat diagram, computed in src/geometry/localize.ts. A rule of thumb in a plan view, not an acoustic simulation: arrival times only, at 343 m/s, with no level, height, reflections, or sound off the stage itself. The typical PA\'s stacks are placed at the stage\'s front corners (the 1974 report), carrying one mix. The Wall\'s positions are the model\'s, and its left-to-right order is the largest invention in the model (see the arrays entry); what the spec sheet documents is the center vocal cluster, identical drum columns left and right, a column for each guitar, and Garcia\'s extension behind Kreutzmann.',
   },
   'comparison.signalPath': {
     confidence: 'estimated',
@@ -270,7 +270,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'system.stagingSets': {
     confidence: 'confirmed',
     sources: ['anderson', 'wiki'],
-    note: 'RESOLVED by Anderson: there was ONE sound system and TWO identical scaffolding sets, so that Crew B had the frame standing before Crew A arrived with the PA. That settles the McNally (two) / Stanley (three) disagreement in McNally\'s favour, and explains it — Stanley may have been counting crews, or the band paying rent at two venues at once.',
+    note: 'RESOLVED by Anderson: there was ONE sound system and TWO identical scaffolding sets, so that Crew B had the frame standing before Crew A arrived with the PA. That settles the McNally (two) / Stanley (three) disagreement in McNally\'s favor, and explains it — Stanley may have been counting crews, or the band paying rent at two venues at once.',
   },
   'system.transportLabourUsdPerMonth': { confidence: 'confirmed', sources: ['anderson'] },
   'system.onstageSplDb': {
@@ -286,7 +286,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'inventory': {
     confidence: 'confirmed',
     sources: ['deadsources22'],
-    note: 'Itemised 89/178/320/54. Sums to 587 JBL, one more than the commonly published 586. Unresolved in the sources; the model carries 587 and says so.',
+    note: 'Itemized 89/178/320/54. Sums to 587 JBL, one more than the commonly published 586. Unresolved in the sources; the model carries 587 and says so.',
   },
 
   'dimensions.arrayWidth': {
@@ -312,7 +312,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.scaffoldFootprint': {
     confidence: 'confirmed',
     sources: ['blueprints'],
-    note: 'Top view, 10 April 1974: 64\'-0" wide × 40\'-0" deep. The width chain reads 9" + 5\'-0" + 7\'-0" bays + a 3\'-6" closer at the centreline, mirrored. The model\'s speaker array packs to 62.2 ft and drops inside this footprint with room for the end frames — an independent check that landed.',
+    note: 'Top view, 10 April 1974: 64\'-0" wide × 40\'-0" deep. The width chain reads 9" + 5\'-0" + 7\'-0" bays + a 3\'-6" closer at the centerline, mirrored. The model\'s speaker array packs to 62.2 ft and drops inside this footprint with room for the end frames — an independent check that landed.',
   },
   'dimensions.deckOverhang': {
     confidence: 'confirmed',
@@ -335,7 +335,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'cabinets.absoluteSizes': {
     confidence: 'estimated',
     sources: ['anderson', 'sothebys', 'pechner', 'derived'],
-    note: 'Sizes from surviving cabinets (docs/surviving-gear.md). 15": 19.5 W × 25.5 H × 29.5 D in, Sotheby\'s 2021 lot 46, read height × width × depth as Sotheby\'s lists the amplifiers; the 25.5" height matches the 24.5" row pitch measured on Pechner\'s photograph and makes the 16-high columns 34 ft against the photo\'s ~35. Lot 50 ("ca. 1974") agrees on the three numbers but its photograph suggests a taller face, which would make those columns taller than the tower, so it is not followed. The driver sits low on the baffle, as on lot 50 (lot 46 has it high). 12": lot 47, a 2 × 12" box of 16 × 26 × 22 in with the drivers stacked; each cell is half of it. 5": rows 5.5 in high, the height of the cluster\'s aluminium enclosures (lot 49) and the photo\'s row pitch; the 8.9 in width is kept so the cluster\'s 5" band stays as wide as its 12" section, as in the photographs. Also, Anderson measured a surviving vocal-fill cabinet, 31 × 22.5 × 24 in, 64 lb, two 12" JBLs and two small drivers, stamped JUL 17 1974: it anchors cab12x2.',
+    note: 'Sizes from surviving cabinets (docs/surviving-gear.md). 15": 19.5 W × 25.5 H × 29.5 D in, Sotheby\'s 2021 lot 46, read height × width × depth as Sotheby\'s lists the amplifiers; the 25.5" height matches the 24.5" row pitch measured on Pechner\'s photograph and makes the 16-high columns 34 ft against the photo\'s ~35. Lot 50 ("ca. 1974") agrees on the three numbers but its photograph suggests a taller face, which would make those columns taller than the tower, so it is not followed. The driver sits low on the baffle, as on lot 50 (lot 46 has it high). 12": lot 47, a 2 × 12" box of 16 × 26 × 22 in with the drivers stacked; each cell is half of it. 5": rows 5.5 in high, the height of the cluster\'s aluminum enclosures (lot 49) and the photo\'s row pitch; the 8.9 in width is kept so the cluster\'s 5" band stays as wide as its 12" section, as in the photographs. Also, Anderson measured a surviving vocal-fill cabinet, 31 × 22.5 × 24 in, 64 lb, two 12" JBLs and two small drivers, stamped JUL 17 1974: it anchors cab12x2.',
   },
   'cabinets.construction': {
     confidence: 'confirmed',
@@ -352,12 +352,12 @@ export const PROVENANCE: Record<string, Provenance> = {
   'drivers.hornT350': {
     confidence: 'confirmed',
     sources: ['juliens'],
-    note: 'The surviving unit (Julien\'s 2026, lot 72): 7.25 × 4.5 × 3.5 in, a rectangular horn in a plain grey cast-metal frame, its throat black with vertical vanes. Julien\'s says these sat on the upper part of the centre array, above the drums. Mounted landscape here, since a 7.25 in horn only fits the 6.3 in high horn cells that way. See docs/qa-findings.md §18.',
+    note: 'The surviving unit (Julien\'s 2026, lot 72): 7.25 × 4.5 × 3.5 in, a rectangular horn in a plain gray cast-metal frame, its throat black with vertical vanes. Julien\'s says these sat on the upper part of the center array, above the drums. Mounted landscape here, since a 7.25 in horn only fits the 6.3 in high horn cells that way. See docs/qa-findings.md §18.',
   },
   'drivers.smallCone': {
     confidence: 'estimated',
     sources: ['juliens', 'deadsources74'],
-    note: 'The 1974 spec sheet calls these 5-inch; surviving Hard Truckers enclosures are catalogued with a 4.5-inch speaker. Both fit a nominal 5" driver with a ~4.5" frame, which is what is modelled.',
+    note: 'The 1974 spec sheet calls these 5-inch; surviving Hard Truckers enclosures are cataloged with a 4.5-inch speaker. Both fit a nominal 5" driver with a ~4.5" frame, which is what is modeled.',
   },
 
   'channels.count': { confidence: 'confirmed', sources: ['wiki', 'mcintosh', 'mayberry'], note: 'Six independent systems on eleven channels.' },
@@ -376,7 +376,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'arrays.clusterStrips': {
     confidence: 'estimated',
     sources: ['sothebys', 'photos'],
-    note: 'The cluster\'s 5"s in curved aluminium strips, as Sotheby\'s 2021 lot 49, which Steve Parish says replaced the first cluster\'s individual plywood cells. The Hollywood Bowl photographs of 21 July 1974 show strips already in use: four rows, the holes a third of the 12" cabinets\' spacing, the band as wide as the 12" section. So 4 rows of 33 at lot 49\'s 5.3 in spacing, each row three lengths of 11 (lot 49\'s hold about 13). That is 132 drivers, 12 more than the cells had, so the vocal fills give up a row of 6 each: the vocals\' 5" total and the 641 are unchanged. Pechner\'s 17 May photograph shows a taller 5" band, probably the plywood cells.',
+    note: 'The cluster\'s 5"s in curved aluminum strips, as Sotheby\'s 2021 lot 49, which Steve Parish says replaced the first cluster\'s individual plywood cells. The Hollywood Bowl photographs of 21 July 1974 show strips already in use: four rows, the holes a third of the 12" cabinets\' spacing, the band as wide as the 12" section. So 4 rows of 33 at lot 49\'s 5.3 in spacing, each row three lengths of 11 (lot 49\'s hold about 13). That is 132 drivers, 12 more than the cells had, so the vocal fills give up a row of 6 each: the vocals\' 5" total and the 641 are unchanged. Pechner\'s 17 May photograph shows a taller 5" band, probably the plywood cells.',
   },
   'arrays.kickPosition': {
     confidence: 'guessed',
@@ -409,23 +409,23 @@ export const PROVENANCE: Record<string, Provenance> = {
   'dimensions.arrayStandoff': {
     confidence: 'estimated',
     sources: ['photos', 'derived'],
-    note: 'Where the stacks\' faces stand against the front plane of the towers. Negative is behind it. The photographs show the stacks BEHIND the front steel: uprights, ledgers and X-braces cross in front of the speaker faces on both sides, at the Hollywood Bowl on 21 July 1974 and on Pechner\'s 17 May photograph. So the faces sit just behind the front tubes. An earlier note claimed the opposite. The centre cluster is the exception: see dimensions.clusterStandoff. See docs/qa-findings.md §13.',
+    note: 'Where the stacks\' faces stand against the front plane of the towers. Negative is behind it. The photographs show the stacks BEHIND the front steel: uprights, ledgers and X-braces cross in front of the speaker faces on both sides, at the Hollywood Bowl on 21 July 1974 and on Pechner\'s 17 May photograph. So the faces sit just behind the front tubes. An earlier note claimed the opposite. The center cluster is the exception: see dimensions.clusterStandoff. See docs/qa-findings.md §13.',
   },
   'dimensions.clusterStandoff': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'The curved centre cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (21 July 1974) and on Pechner\'s 17 May photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
+    note: 'The curved center cluster projects forward of the steel, with no tubes across its face, at the Hollywood Bowl (21 July 1974) and on Pechner\'s 17 May photograph. Its front stands proud of the front plane; front ledgers and braces stop at its edges.',
   },
   'venues.arena': { confidence: 'confirmed', sources: ['pechner'], note: 'Indoors, as on Pechner\'s 17 May 1974 photograph: the light bars\' ladders show, the tie-dyes don\'t.' },
   'venues.hollywoodBowl': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide colour photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
+    note: 'Sunday 21 July 1974. The 1929 shell, Frank Gehry\'s Sonotubes and the white crown panels measured on the wide color photograph, first by eye (§14), then through the photographer\'s camera solved from the Wall\'s known dimensions (§19): sizes and heights are measured, depths assumed. The reflecting pool gone by 1972; the seating, the canyon and the trees approximate. The show time isn\'t recorded; the photographs are in daylight. See docs/qa-findings.md §14 and §19.',
   },
   'structure.crewAloft': {
     confidence: 'estimated',
     sources: ['pechner', 'photos'],
-    note: 'AI-GENERATED FIGURES, NOT PHOTOGRAPHS OR PORTRAITS. Two of the crew at the top corners of the steel: each a picture generated by FLUX.1 schnell from a text prompt, turned into a mesh by TRELLIS.2. No real person\'s photograph went in. That men worked there comes from Pechner\'s 17 May 1974 photograph (two men in this corner, a rope at the rail) and an undated 1974 outdoor photograph (one climbing, one sitting high up). Rope is from the hoists on rope in IATSE Local 205\'s 2014 article (newsletter.iatse205.org/?p=815). The look follows three photographs of crew and backstage people supplied by the project owner, NOT dated to summer 1974: curly hair, moustache, dark glasses, down vest; ponytail, plaid shirt, dark vest, jeans. The prompts asked for that look; the beard, watch, poses and colours are the generator\'s. No harness shows in any photograph. See docs/qa-findings.md §25.',
+    note: 'AI-GENERATED FIGURES, NOT PHOTOGRAPHS OR PORTRAITS. Two of the crew at the top corners of the steel: each a picture generated by FLUX.1 schnell from a text prompt, turned into a mesh by TRELLIS.2. No real person\'s photograph went in. That men worked there comes from Pechner\'s 17 May 1974 photograph (two men in this corner, a rope at the rail) and an undated 1974 outdoor photograph (one climbing, one sitting high up). Rope is from the hoists on rope in IATSE Local 205\'s 2014 article (newsletter.iatse205.org/?p=815). The look follows three photographs of crew and backstage people supplied by the project owner, NOT dated to summer 1974: curly hair, mustache, dark glasses, down vest; ponytail, plaid shirt, dark vest, jeans. The prompts asked for that look; the beard, watch, poses and colors are the generator\'s. No harness shows in any photograph. See docs/qa-findings.md §25.',
   },
   'scale.b737': {
     confidence: 'confirmed',
@@ -435,17 +435,17 @@ export const PROVENANCE: Record<string, Provenance> = {
   'scale.vwBus': {
     confidence: 'estimated',
     sources: ['derived'],
-    note: 'For comparing sizes, not part of the 1974 stage: nothing says a bus stood there. 4,505 mm long, 1,720 mm wide, 2,400 mm wheelbase agree across secondary sources (motor-car.net, dimensionsguide.com). Height is less settled (1,955 to 2,040 mm by source and roof); 2,040 mm is the figure those two give. No Volkswagen document found yet. The model is scripted from these numbers and photographs (blender/scale/vwbus.py); the paint colours are the reconstruction\'s choice.',
+    note: 'For comparing sizes, not part of the 1974 stage: nothing says a bus stood there. 4,505 mm long, 1,720 mm wide, 2,400 mm wheelbase agree across secondary sources (motor-car.net, dimensionsguide.com). Height is less settled (1,955 to 2,040 mm by source and roof); 2,040 mm is the figure those two give. No Volkswagen document found yet. The model is scripted from these numbers and photographs (blender/scale/vwbus.py); the paint colors are the reconstruction\'s choice.',
   },
   'structure.tieDyes': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Courtenay Pollock\'s tie-dyes: four, hung on the front of the scaffold near the top, at Oakland (8 June 1974) and the Hollywood Bowl (21 July). Scaled off the Oakland photograph, about 4.3 ft wide and 8 ft tall; each kept above the stacks below it, clear of the three 34 ft columns. Outdoors only: indoors (Pechner, 17 May) the light bars\' ladders hang there instead. Their designs are spirals and rings in the photographs\' colours, not copies of the real cloths.',
+    note: 'Courtenay Pollock\'s tie-dyes: four, hung on the front of the scaffold near the top, at Oakland (8 June 1974) and the Hollywood Bowl (21 July). Scaled off the Oakland photograph, about 4.3 ft wide and 8 ft tall; each kept above the stacks below it, clear of the three 34 ft columns. Outdoors only: indoors (Pechner, 17 May) the light bars\' ladders hang there instead. Their designs are spirals and rings in the photographs\' colors, not copies of the real cloths.',
   },
   'structure.lightBars': {
     confidence: 'estimated',
     sources: ['pechner', 'photos'],
-    note: 'Stage-lighting bars of black can lamps clamped to the scaffold at both upper outer corners, in front of the stacks: on Pechner\'s 17 May photograph, at the Hollywood Bowl on 21 July and at UC Santa Barbara on 25 May. Measured on Pechner\'s photograph through its solved camera: each side a horizontal bar of about 5 lamps, a diagonal bar of about 8 rising toward the centre, and two vertical ladders of about 6. The ladders show only indoors; outdoors the tie-dyes hang in that space and only the flat and diagonal bars are seen. Lamp counts are read off small images; the lamps\' type is not known. The bar along the top front on some dates is not modelled.',
+    note: 'Stage-lighting bars of black can lamps clamped to the scaffold at both upper outer corners, in front of the stacks: on Pechner\'s 17 May photograph, at the Hollywood Bowl on 21 July and at UC Santa Barbara on 25 May. Measured on Pechner\'s photograph through its solved camera: each side a horizontal bar of about 5 lamps, a diagonal bar of about 8 rising toward the center, and two vertical ladders of about 6. The ladders show only indoors; outdoors the tie-dyes hang in that space and only the flat and diagonal bars are seen. Lamp counts are read off small images; the lamps\' type is not known. The bar along the top front on some dates is not modeled.',
   },
   'structure.guyWires': {
     confidence: 'guessed',
@@ -455,7 +455,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'materials.palette': {
     confidence: 'estimated',
     sources: ['photos', 'anderson', 'derived'],
-    note: 'Every colour, roughness and metalness value is an interpretation of black-and-white and faded colour film, lit by a stage rig that is itself a reconstruction. The materials are plausible, not measured. The one hard fact underneath them is that the cabinets were 14-ply Finnish birch and the surviving one is painted matte black.',
+    note: 'Every color, roughness and metalness value is an interpretation of black-and-white and faded color film, lit by a stage rig that is itself a reconstruction. The materials are plausible, not measured. The one hard fact underneath them is that the cabinets were 14-ply Finnish birch and the surviving one is painted matte black.',
   },
   'band.bowlKitRiser': {
     confidence: 'estimated',
@@ -470,7 +470,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.instruments': {
     confidence: 'estimated',
     sources: ['derived'],
-    note: 'The instruments are honest silhouettes at true size, not replicas. Which instruments were on that stage in 1974 is reasonably established; their exact geometry here is not modelled from the objects.',
+    note: 'The instruments are honest silhouettes at true size, not replicas. Which instruments were on that stage in 1974 is reasonably established; their exact geometry here is not modeled from the objects.',
   },
   'structure.scaffold': {
     confidence: 'confirmed',
@@ -485,23 +485,23 @@ export const PROVENANCE: Record<string, Provenance> = {
   'structure.cabling': {
     confidence: 'confirmed',
     sources: ['anderson'],
-    note: 'Arm-thick military-surplus cable, originally made for connecting docked ships to shore power. Nothing lighter could carry the current. Modelled at 50 mm — these runs are a visual feature, not a detail.',
+    note: 'Arm-thick military-surplus cable, originally made for connecting docked ships to shore power. Nothing lighter could carry the current. Modeled at 50 mm — these runs are a visual feature, not a detail.',
   },
 
   'materials.exposedDrivers': {
     confidence: 'confirmed',
     sources: ['photos', 'juliens'],
-    note: 'The big drivers were NOT behind grille cloth — cones, surrounds, aluminium dust caps and mounting screws are visible in every photograph. PARTIAL CORRECTION: surviving Hard Truckers small plywood enclosures are catalogued with tie-dye grille cloth over the 4.5-inch driver. So the small-cone boxes were covered and the 12s and 15s were not, which also explains where Courtenay Pollock\'s tie-dye went. Modelled accordingly.',
+    note: 'The big drivers were NOT behind grille cloth — cones, surrounds, aluminum dust caps and mounting screws are visible in every photograph. PARTIAL CORRECTION: surviving Hard Truckers small plywood enclosures are cataloged with tie-dye grille cloth over the 4.5-inch driver. So the small-cone boxes were covered and the 12s and 15s were not, which also explains where Courtenay Pollock\'s tie-dye went. Modeled accordingly.',
   },
   'materials.cone': {
     confidence: 'estimated',
     sources: ['photos'],
-    note: 'Near-black. JBL cones of the period are dark grey paper, and every colour photograph (Oakland 8 June, the Hollywood Bowl 21 July 1974) reads them dark against the plywood. Was mid-grey; changed on the project owner\'s ruling, docs/qa-findings.md §18.',
+    note: 'Near-black. JBL cones of the period are dark gray paper, and every color photograph (Oakland 8 June, the Hollywood Bowl 21 July 1974) reads them dark against the plywood. Was mid-gray; changed on the project owner\'s ruling, docs/qa-findings.md §18.',
   },
   'materials.steel': {
     confidence: 'estimated',
     sources: ['photos', 'pechner'],
-    note: 'Bright galvanised steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one: since 9 November 2026 the explorer returns less light from it (render.explorerLook, docs/qa-findings.md §26).',
+    note: 'Bright galvanized steel: pale silver in daylight at Oakland and bright against the hall on Pechner\'s photograph. Was darkened for the explorer\'s lighting; restored on the project owner\'s ruling (docs/qa-findings.md §18). If it swamps the speakers on screen, that is a lighting problem, not a paint one: since 9 November 2026 the explorer returns less light from it (render.explorerLook, docs/qa-findings.md §26).',
   },
   'cabinets.panelCells': {
     confidence: 'estimated',
@@ -516,19 +516,19 @@ export const PROVENANCE: Record<string, Provenance> = {
   'materials.plywood': {
     confidence: 'confirmed',
     sources: ['anderson', 'mixrebuild', 'photos'],
-    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. The bare colour is set so it comes out paler and less orange through the grain map, closer to the sunlit ply at UC Santa Barbara, 25 May 1974 (hue about 41°). Under stage light a cabinet frame now measures hue 33°, saturation 0.44; it was 29°, 0.59, orange (docs/qa-findings.md §22). Both are modelled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
+    note: '14-ply laminated Finnish birch, Hard Truckers style. Finish varied: Anderson\'s surviving cabinet is matte black throughout; photographs show other cabinets with bare plywood frames around black baffles, both finishes in the same columns on Pechner\'s photograph. The bare color is set so it comes out paler and less orange through the grain map, closer to the sunlit ply at UC Santa Barbara, 25 May 1974 (hue about 41°). Under stage light a cabinet frame now measures hue 33°, saturation 0.44; it was 29°, 0.59, orange (docs/qa-findings.md §22). Both are modeled, mixed across the wall at blackFinishRatio, in the explorer and in Blender alike (src/geometry/arrays.ts decides each cabinet\'s finish).',
   },
   'materials.tieDye': { confidence: 'confirmed', sources: ['deadsources22'], note: 'Courtenay Pollock tie-dyed the fabric panels — on the structure, not over the drivers.' },
   'materials.mcIntoshMeters': { confidence: 'confirmed', sources: ['mcintosh', 'mc2300', 'sothebys'], note: 'Blue illuminated meters, 128 lb per amplifier. The front panel is brushed, anodized gold over a black chassis, with a black strip along the bottom carrying three knobs and a red power rocker, 10.5 × 19 × 17 in, as on the Wall amplifiers Sotheby\'s sold (lots 36 and 43). Not black glass: an earlier version of the explorer had that wrong (docs/qa-findings.md §18).' },
   'materials.roadCases': {
     confidence: 'estimated',
     sources: ['sothebys', 'photos'],
-    note: 'Orange Anvil rolling cases with aluminium edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on 8 June 1974. Wear, tape and labels are modelled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
+    note: 'Orange Anvil rolling cases with aluminum edging, ball corners and recessed latches, from a Wall amplifier\'s own case (Sotheby\'s lot 43). Orange-red cases also stand under the piano at Oakland on 8 June 1974. Wear, tape and labels are modeled on the surviving case, which was in use until at least 1993, so they show decades of handling rather than one summer\'s.',
   },
   'structure.roadCases': {
     confidence: 'estimated',
     sources: ['sothebys', 'juliens', 'photos'],
-    note: 'What the cases are comes from the survivors: orange Anvil rack cases with aluminium edging and ball corners (Sotheby\'s lot 43), a white one (lot 40), Budman\'s black one with folded rusted corners and a piano hinge (lot 36), and the amps\' empty ZERO metal cases (lots 34-35); orange-red cases stand under the piano at Oakland on 8 June 1974. Names are the crew\'s (structure.amps.caseNames). How many of each, and which carries which label, is invented for variety (structure.roadCases.odds).',
+    note: 'What the cases are comes from the survivors: orange Anvil rack cases with aluminum edging and ball corners (Sotheby\'s lot 43), a white one (lot 40), Budman\'s black one with folded rusted corners and a piano hinge (lot 36), and the amps\' empty ZERO metal cases (lots 34-35); orange-red cases stand under the piano at Oakland on 8 June 1974. Names are the crew\'s (structure.amps.caseNames). How many of each, and which carries which label, is invented for variety (structure.roadCases.odds).',
   },
   'materials.stickers': {
     confidence: 'guessed',
@@ -544,7 +544,7 @@ export const PROVENANCE: Record<string, Provenance> = {
   'band.instrumentPlacement': {
     confidence: 'guessed',
     sources: ['pechner', 'photos'],
-    note: 'The grand across the stage with its keyboard at the audience\'s right, Keith at that end, as on Pechner\'s photograph. Where the Rhodes stood isn\'t known: upstage of Keith at his right hand, beyond the grand from the audience, as at Oakland on 8 June 1974. The guitars and the bass stand upright on plain stands, which are review props; they belong in the players\' hands. The Bowl\'s kit is the wine-red one, but its drums are still modelled on the Hartford butcher-block kit.',
+    note: 'The grand across the stage with its keyboard at the audience\'s right, Keith at that end, as on Pechner\'s photograph. Where the Rhodes stood isn\'t known: upstage of Keith at his right hand, beyond the grand from the audience, as at Oakland on 8 June 1974. The guitars and the bass stand upright on plain stands, which are review props; they belong in the players\' hands. The Bowl\'s kit is the wine-red one, but its drums are still modeled on the Hartford butcher-block kit.',
   },
   'band.gear': { confidence: 'estimated', sources: ['derived'], note: 'Garcia "Wolf" (Doug Irwin); Weir Gibson ES-335; Lesh Alembic quad bass ("Mission Control", serial 74 00008, from 16 June 1974); Godchaux grand with five Countryman pickups.' },
   'band.logo': {
@@ -583,7 +583,7 @@ export interface Channel {
   /** Grouping used by the exploded view and the subsystem info panels. */
   system: 'vocals' | 'leadGuitar' | 'rhythmGuitar' | 'piano' | 'drums' | 'bass';
   label: string;
-  /** Overlay colour for the channel view. */
+  /** Overlay color for the channel view. */
   color: string;
   player?: string;
   /** Shown verbatim in the info panel. Also serves as the text alternative. */
@@ -597,7 +597,7 @@ export const CHANNELS: Record<ChannelId, Channel> = {
     label: 'Vocals',
     color: '#F4C95D',
     blurb:
-      'The largest subsystem — 372 of the 641 drivers. Four-way crossover: horns, 5-inch, 12-inch and 15-inch. Singers stood directly in front of it without feedback because each vocal microphone was a matched Brüel & Kjær pair, capsules 60 mm apart and wired in reverse polarity: the voice reached the near capsule first and survived, everything arriving equally at both — including 26 kilowatts of Wall three metres behind — cancelled.',
+      'The largest subsystem — 372 of the 641 drivers. Four-way crossover: horns, 5-inch, 12-inch and 15-inch. Singers stood directly in front of it without feedback because each vocal microphone was a matched Brüel & Kjær pair, capsules 60 mm apart and wired in reverse polarity: the voice reached the near capsule first and survived, everything arriving equally at both — including 26 kilowatts of Wall three meters behind — canceled.',
   },
   leadGuitar: {
     id: 'leadGuitar',
@@ -674,7 +674,7 @@ export interface Driver {
   coneDia: number;
   /** Cone depth from baffle plane to apex. */
   coneDepth: number;
-  /** Aluminium dust cap — the specular highlight that makes the Wall read at distance. */
+  /** Aluminum dust cap — the specular highlight that makes the Wall read at distance. */
   dustCapDia: number;
   dustCapRise: number;
   /** Rubber/cloth surround annulus width. */
@@ -765,7 +765,7 @@ export interface Cabinet {
   shellThickness: number;
   /** How far the black baffle sits behind the cabinet's front edge. */
   baffleInset: number;
-  /** Driver centre above (+) or below (−) the middle of the face. Default 0. */
+  /** Driver center above (+) or below (−) the middle of the face. Default 0. */
   driverOffsetY?: number;
   /** For a strip: how many cells make one length of it. */
   strip?: number;
@@ -785,11 +785,11 @@ export const CABINETS: Record<CabinetId, Cabinet> = {
   cab12: { id: 'cab12', kind: 'box', driver: 'jbl12', depth: IN(22), widthExplicit: IN(16), heightExplicit: IN(13), shellThickness: IN(0.75), baffleInset: IN(0.5), pairRows: true },
   // The measured cabinet itself — used for the vocal fills, at true size.
   cab12x2: { id: 'cab12x2', kind: 'box', driver: 'jbl12', depth: IN(22.5), widthExplicit: IN(31), heightExplicit: IN(24), shellThickness: IN(0.75), baffleInset: IN(0.5) },
-  // Rows 5.5 in high: the height of the cluster's aluminium 5" enclosures
+  // Rows 5.5 in high: the height of the cluster's aluminum 5" enclosures
   // (lot 49), and the row pitch Pechner's photo gives the cluster's 5" band.
   // Small plywood cells, one driver each. See PROVENANCE['cabinets.panelCells'].
   panel5: { id: 'panel5', kind: 'box', finishPerBlock: true, driver: 'jbl5', depth: 0.300, widthExplicit: 0.225, heightExplicit: IN(5.5), pitch: 0.225, shellThickness: IN(0.75), baffleInset: IN(0.25) },
-  // The centre cluster's 5"s in curved aluminium channels, as Sotheby's 2021
+  // The center cluster's 5"s in curved aluminum channels, as Sotheby's 2021
   // lot 49: 5.5 high × 3.5 deep, holes 69/13 in apart. Three lengths of 11 make
   // a row as wide as the 12" section below. See PROVENANCE['arrays.clusterStrips'].
   strip5: { id: 'strip5', kind: 'panel', driver: 'jbl5', depth: IN(3.5), widthExplicit: IN(69 / 13), heightExplicit: IN(5.5), pitch: IN(69 / 13), shellThickness: IN(0.125), baffleInset: IN(0.1), strip: 11 },
@@ -817,7 +817,7 @@ export interface ArrayBlock {
   cabinet: CabinetId;
   cols: number;
   rows: number;
-  /** Centre of the block, audience-view X. */
+  /** Center of the block, audience-view X. */
   x: number;
   /** Underside height above the stage deck. */
   baseY: number;
@@ -849,23 +849,23 @@ const A = (b: ArrayBlock) => b;
  * of sixteen 15"s beside the cluster, and the curved cluster hung at 7 ft. Every
  * block keeps its driver count; only its shape and its floor changed.
  *
- * The wall is not symmetric about the centreline: Garcia's main column stands
+ * The wall is not symmetric about the centerline: Garcia's main column stands
  * on the left behind him, the piano's two take the right behind Keith, and
  * Garcia's extension stands behind the kit beside Keith (arrays.garciaExtensionPlacement),
  * they are not the same width. The real wall was asymmetric for the same reason.
  */
 export const ARRAYS: ArrayBlock[] = [
-  // ── Vocals — the curved centre cluster, elevated to clear the band ──────────
-  // Scaffold floors above the deck, in metres — the only heights a stack can
+  // ── Vocals — the curved center cluster, elevated to clear the band ──────────
+  // Scaffold floors above the deck, in meters — the only heights a stack can
   // start from. P[0] is the deck itself.
   //   P0 0.000   P1 2.134   P2 3.912   P3 5.893   P4 7.874   P5 9.855
   // Within a channel the crossover bands stack on each other, so only the
   // bottom band of each tower snaps to a floor.
 
-  // ── Vocals — curved centre cluster on P1, hung clear over the band ────────
-  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.452, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, centre — 20 horns' }),
-  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'strip5',  cols: 33, rows: 4, x:  0.00, baseY: 5.893, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, centre — 132 × 5″ in aluminium strips' }),
-  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 3.912, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, centre — 66 × 12″' }),
+  // ── Vocals — curved center cluster on P1, hung clear over the band ────────
+  A({ id: 'voc-hf',   channel: 'vocals', band: 'high',     cabinet: 'panelHF', cols: 20, rows: 1, x:  0.00, baseY: 6.452, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.6, 0.9], label: 'Vocal highs, center — 20 horns' }),
+  A({ id: 'voc-um',   channel: 'vocals', band: 'upperMid', cabinet: 'strip5',  cols: 33, rows: 4, x:  0.00, baseY: 5.893, z: 0, curveRadius: 5.5, explode: [ 0.0, 1.1, 0.9], label: 'Vocal upper mids, center — 132 × 5″ in aluminum strips' }),
+  A({ id: 'voc-lm',   channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 11, rows: 6, x:  0.00, baseY: 3.912, z: 0, curveRadius: 5.5, explode: [ 0.0, 0.6, 0.9], label: 'Vocal lower mids, center — 66 × 12″' }),
   // Vocal fill towers flanking the cluster, on the deck — the role of the one
   // cabinet anybody has measured.
   A({ id: 'voc-lmL',  channel: 'vocals', band: 'lowerMid', cabinet: 'cab12',   cols: 3,  rows: 6, x: -3.04, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-0.9, 0.2, 0.7], label: 'Vocal fill, left — 18 × 12″' }),
@@ -877,7 +877,7 @@ export const ARRAYS: ArrayBlock[] = [
   A({ id: 'voc-loL',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x: -4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [-1.3, 0.0, 0.6], label: 'Vocal lows, left — 16 × 15″' }),
   A({ id: 'voc-loR',  channel: 'vocals', band: 'low',      cabinet: 'cab15',   cols: 1,  rows: 16, x:  4.44, baseY: 0.000, z: 0, curveRadius: 0,   explode: [ 1.3, 0.0, 0.6], label: 'Vocal lows, right — 16 × 15″' }),
 
-  // ── Bass drum — deck level, on the centreline, tucked under the cluster ────
+  // ── Bass drum — deck level, on the centerline, tucked under the cluster ────
   // Not under the cluster: every photograph shows that space open (qa-findings
   // §7, §10). Sixteen 15"s "in a column" (arrays.kickCount), stood in the one
   // free slot. Where it really stood is not known: PROVENANCE['arrays.kickPosition'].
@@ -1007,7 +1007,7 @@ export const wall = {
      */
     /** Speaker faces just behind the front tubes. See PROVENANCE['dimensions.arrayStandoff']. */
     arrayStandoff: -0.06,
-    /** The curved centre cluster stands proud of the steel. */
+    /** The curved center cluster stands proud of the steel. */
     clusterStandoff: 0.16,
   },
 
@@ -1022,7 +1022,7 @@ export const wall = {
       liftHeight: FT(6.5),
       /** 7' X-braces set the bay spacing along the run. */
       bayWidth: FT(7),
-      /** The plan closes on a 3'-6" half bay at the centreline, with 9" at each end. */
+      /** The plan closes on a 3'-6" half bay at the centerline, with 9" at each end. */
       closerBay: FT(3.5),
       endMargin: IN(9),
       tubeDiameter: 0.0483,
@@ -1036,7 +1036,7 @@ export const wall = {
         floorPlanks: { count: 40, section: [IN(2), IN(10)] as const, length: FT(16) },
       },
       /**
-       * Scaffold floor levels available above the stage deck, in metres.
+       * Scaffold floor levels available above the stage deck, in meters.
        *
        * The lift chain (7'-0" + 5'-10" + 6'-6" x4) measured up from the deck:
        * 7'-0", 12'-10", 19'-4", 25'-10", 32'-4". Cabinets sat on these floors —
@@ -1052,11 +1052,11 @@ export const wall = {
     winterTower1973: { height: FT(30), liftHeight: FT(6), bayWidth: FT(5), braceSpan: FT(5), levels: 3 },
     /**
      * Courtenay Pollock's tie-dyes, on the front of the scaffold near the top,
-     * outdoors only. x across, metres; they hang from the second-highest lift.
+     * outdoors only. x across, meters; they hang from the second-highest lift.
      * See PROVENANCE['structure.tieDyes'].
      */
     /**
-     * Two of the crew at the top corners, scene frame (metres, +y up, +z toward
+     * Two of the crew at the top corners, scene frame (meters, +y up, +z toward
      * the audience). AI-generated figures, placed on the real tubes by
      * blender/make_roadies.py; verify.mjs keeps their grips on the steel. See
      * PROVENANCE['structure.crewAloft'].
@@ -1115,7 +1115,7 @@ export const wall = {
     cabling: { runDiameter: 0.050, bundleDiameter: 0.14, color: '#0E0E0E' },
     /**
      * Stage-lighting bars on the scaffold, audience-left side; the right is
-     * its mirror. x across and y above the deck, metres, as measured on
+     * its mirror. x across and y above the deck, meters, as measured on
      * Pechner's photograph; z in front of the front plane. Each bar is a pipe
      * from `from` to `to` with `lamps` cans hung evenly along it, aimed down
      * at the band. See PROVENANCE['structure.lightBars'].
@@ -1213,14 +1213,14 @@ export const wall = {
     mirrored: false,
     members: [
       // Downstage of the Wall, not tucked into it. The first pass put the kit
-      // and the piano at z = 1.2 to 2.0, and since a drum kit is a metre and a
-      // half deep and a grand is over two metres long, both ended up inside the
+      // and the piano at z = 1.2 to 2.0, and since a drum kit is a meter and a
+      // half deep and a grand is over two meters long, both ended up inside the
       // speaker stacks. verify.mjs now checks every piece of gear against the
       // array footprints.
       //
       // x is measured on Pechner's 17 May 1974 photograph through its solved
       // camera (blender/build_scene.py, shot 'pechner'), at the players' depth.
-      // Keith's mark is the centre of the grand, which lay across the stage
+      // Keith's mark is the center of the grand, which lay across the stage
       // with its keyboard at the audience's right; he sat at that end, about
       // 1.5 m further right. See PROVENANCE['band.positions'].
       { id: 'garcia',  name: 'Jerry Garcia',    instrument: '"Wolf" — Doug Irwin custom',    x: -4.8,  z: 5.6 },
@@ -1235,9 +1235,9 @@ export const wall = {
      * PROVENANCE['band.instrumentPlacement'].
      */
     instruments: {
-      /** The grand lies across the stage, centred on Keith's mark, keyboard to the audience's right: half a Steinway D. */
+      /** The grand lies across the stage, centered on Keith's mark, keyboard to the audience's right: half a Steinway D. */
       pianoKeyboardOffset: IN(53.9),
-      /** The Rhodes: beyond the grand's keyboard, upstage of Keith at his right hand (x, upstage), metres. */
+      /** The Rhodes: beyond the grand's keyboard, upstage of Keith at his right hand (x, upstage), meters. */
       rhodesFromKeys: [0.75, 1.0] as [number, number],
       /** The kit's middle, this far upstage of Kreutzmann's mark. */
       kitBack: 0.5,
@@ -1262,22 +1262,22 @@ export const wall = {
     /**
      * Fraction of cabinets finished black rather than left bare. The one
      * surviving cabinet is black; the photographs show plenty of bare ply. With
-     * no way to count, this is a judgement call, and it is the single value
+     * no way to count, this is a judgment call, and it is the single value
      * that most changes how the wall reads.
      */
     blackFinishRatio: 0.42,
     baffle: { baseColor: '#141414', roughness: 0.94, metalness: 0.0 },
     /** Near-black paper. See PROVENANCE['materials.cone']. */
     cone: { baseColor: '#2A2A2C', roughness: 0.88, metalness: 0.0 },
-    /** The T350: grey cast frame, black throat. See PROVENANCE['drivers.hornT350']. */
+    /** The T350: gray cast frame, black throat. See PROVENANCE['drivers.hornT350']. */
     hornFrame: { baseColor: '#8A8E91', roughness: 0.55, metalness: 0.8 },
     hornThroat: { baseColor: '#161616', roughness: 0.5, metalness: 0.0 },
-    /** The cluster's 5" strips: dull, oxidised aluminium channel (Sotheby's lot 49). */
+    /** The cluster's 5" strips: dull, oxidized aluminum channel (Sotheby's lot 49). */
     stripAluminium: { baseColor: '#8A8E91', roughness: 0.5, metalness: 0.9 },
-    /** Brushed aluminium, not chrome: in a dark hall a mirror just reflects the dark. */
+    /** Brushed aluminum, not chrome: in a dark hall a mirror just reflects the dark. */
     dustCap: { baseColor: '#D2D6DB', roughness: 0.42, metalness: 0.82 },
     surround: { baseColor: '#1C1C1C', roughness: 0.75, metalness: 0.0 },
-    /** Bright galvanised tube. See PROVENANCE['materials.steel']. */
+    /** Bright galvanized tube. See PROVENANCE['materials.steel']. */
     steel: { baseColor: '#A9ADB1', roughness: 0.38, metalness: 1.0 },
     cable: { baseColor: '#0E0E0E', roughness: 0.68, metalness: 0.0 },
     /**
@@ -1299,7 +1299,7 @@ export const wall = {
     /**
      * The Hollywood Bowl, Sunday 21 July 1974, where the story is set. Sizes
      * measured on the wide photograph against the Wall's 64 ft scaffold
-     * (docs/qa-findings.md §14). Lengths in metres; "back" is upstage of the
+     * (docs/qa-findings.md §14). Lengths in meters; "back" is upstage of the
      * Wall's front plane, from the scene origin.
      */
     hollywoodBowl: {
@@ -1314,8 +1314,8 @@ export const wall = {
       /**
        * The 1929 shell: concentric white rings. Measured through the camera
        * solved from the 21 July photograph (docs/qa-findings.md §19): the
-       * front arch 17.8 m in radius, centred 2.45 m above the stage and
-       * 2.3 m to the audience's right of the Wall's centre, at the depth the
+       * front arch 17.8 m in radius, centered 2.45 m above the stage and
+       * 2.3 m to the audience's right of the Wall's center, at the depth the
        * model already had (7 m behind the Wall's face; one photo cannot fix it).
        */
       shell: { rings: 6, outerRadius: 17.8, ringStep: 1.66, frontBack: 7.0, ringDepth: 1.25, spring: 2.45, hood: 0.6, centreX: 2.3 },
@@ -1333,7 +1333,7 @@ export const wall = {
       /**
        * Tall white panels hung across the shell's crown: a shallow row over
        * the Wall, not following the shell's curve. Measured through the
-       * solved camera (§19): centres 16.5 m above the stage in the middle,
+       * solved camera (§19): centers 16.5 m above the stage in the middle,
        * about 1.5 m lower at the ends, from 11.8 m left to 10.4 m right.
        */
       crownPanels: { count: 15, left: -11.8, right: 10.4, height: 2.2, width: 0.75, rise: 16.5, sag: 1.5, back: 8.6 },
@@ -1352,7 +1352,7 @@ export const wall = {
       wheelbase: 2.4,
       /** Ground gap between the bus and the stage skirt. */
       setback: 1.5,
-      /** One lower-body colour for each bus. */
+      /** One lower-body color for each bus. */
       colours: ['#2a6ba3', '#c9652b', '#5f7a4f', '#b8a06a'],
     },
     /** All Boeing's figures. See PROVENANCE['scale.b737']. */
@@ -1402,9 +1402,9 @@ export const wall = {
      * the speakers past (qa-findings §26). Display choices, not evidence: the
      * paint stays as photographed (materials.steel, materials.roadCases), and
      * Blender's renders are unchanged. steelReflection scales what the
-     * galvanised tube reflects of the room around it, and steelLight and
+     * galvanized tube reflects of the room around it, and steelLight and
      * caseLight how much of the stage lights the steel and the road cases send
-     * back (a multiplier on the lit colour, 1 = as painted).
+     * back (a multiplier on the lit color, 1 = as painted).
      */
     explorerLook: { steelReflection: 0.5, steelLight: 0.55, caseLight: 0.6 },
   },

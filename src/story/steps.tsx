@@ -141,7 +141,7 @@ export const STEPS: Step[] = [
     body: (
       <>
         <p className="figure">
-          {wall.inventory.total} speakers. {S.amplifierCount} amplifiers. Four storeys.
+          {wall.inventory.total} speakers. {S.amplifierCount} amplifiers. Four stories.
         </p>
         <p>
           {S.weightTonsComplete} tons on the road. Those are four Volkswagen buses, for scale; they weren't there.
@@ -226,10 +226,10 @@ export const STEPS: Step[] = [
     full: true,
     body: (
       <>
-        <p className="figure">The voice reached one. The Wall reached both, and cancelled itself out.</p>
+        <p className="figure">The voice reached one. The Wall reached both, and canceled itself out.</p>
         <DiagramFigure label="paired-microphone">
           <p className="dg-read">
-            The coloured arcs are the singer's voice, reaching the near microphone. The grey-blue lines are the Wall's
+            The colored arcs are the singer's voice, reaching the near microphone. The gray-blue lines are the Wall's
             sound, reaching both microphones at once.
           </p>
           <MicDiagram />

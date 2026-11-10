@@ -115,7 +115,7 @@ export const plywoodRoughness = () =>
 
 // ─── cone paper ──────────────────────────────────────────────────────────────
 
-/** Pressed-paper cone: fibrous, faintly blotchy, grey going slightly warm. */
+/** Pressed-paper cone: fibrous, faintly blotchy, gray going slightly warm. */
 export const coneMap = () =>
   make('cone', 256, (ctx, s) => {
     const img = ctx.createImageData(s, s);
@@ -157,7 +157,7 @@ export const baffleMap = () =>
 /**
  * One of Courtenay Pollock's tie-dyes (structure.tieDyes), as Blender's
  * shader draws it (blender/venue.py tiedye_material): dye bands round a
- * centre a little off middle, a spiral on even panels and rings with petals
+ * center a little off middle, a spiral on even panels and rings with petals
  * on odd ones, their edges bled by noise, with pale crazing where the folds
  * kept the dye out. Drawn on the panel's own proportions so the rings stay
  * round.
@@ -228,7 +228,7 @@ export function tieDyeTexture(k: number, palette: readonly string[], aspect: num
 
 // ─── steel ───────────────────────────────────────────────────────────────────
 
-/** Galvanised tube: mottled spangle, rust creeping in at random. */
+/** Galvanized tube: mottled spangle, rust creeping in at random. */
 export const steelRoughness = () =>
   make('steel-rough', 256, (ctx, s) => {
     const img = ctx.createImageData(s, s);

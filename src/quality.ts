@@ -18,7 +18,7 @@ export const TIER_LABEL: Record<Tier, string> = {
 /**
  * Guessing hardware from a browser is inexact, so this is deliberately blunt:
  * coarse pointer or a narrow screen means a phone, few cores means a weak GPU.
- * The real defence is the manual override and the adaptive downgrade below.
+ * The real defense is the manual override and the adaptive downgrade below.
  */
 export function detectTier(): Tier {
   if (typeof window === 'undefined') return 'medium';

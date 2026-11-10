@@ -9,10 +9,10 @@
  * three.js, so scripts/export-scene.mjs can run it.
  *
  * Face coordinates: x across the face as you look at it, z up from the foot of
- * the case (for an amp, from the middle of its front panel), metres.
+ * the case (for an amp, from the middle of its front panel), meters.
  *
- * Modelled on the survivors (PROVENANCE['structure.roadCases']); the stickers
- * are an artistic choice, labelled as such (PROVENANCE['materials.stickers']).
+ * Modeled on the survivors (PROVENANCE['structure.roadCases']); the stickers
+ * are an artistic choice, labeled as such (PROVENANCE['materials.stickers']).
  */
 import { IN, wall } from '../data/wall.config';
 import { generator } from './random';
@@ -24,9 +24,9 @@ export type Paint = 'stamp' | 's_black' | 's_white';
 export type Decal =
   /** A strip of tape, with something written on it in felt-tip or not. */
   | { kind: 'tape'; tape: 'masking' | 'duct' | 'gaffer'; at: [number, number]; length: number; width: number; angle: number; text?: string }
-  /** The skull-and-bolt as a die-cut colour sticker. */
+  /** The skull-and-bolt as a die-cut color sticker. */
   | { kind: 'skullSticker'; at: [number, number]; height: number }
-  /** The skull-and-bolt sprayed through a stencil in one colour, as on Budman's case. */
+  /** The skull-and-bolt sprayed through a stencil in one color, as on Budman's case. */
   | { kind: 'skullStamp'; at: [number, number]; height: number; paint: Paint }
   /** The black "GRATEFUL DEAD" sticker. */
   | { kind: 'wordSticker'; at: [number, number]; width: number }
@@ -38,7 +38,7 @@ export type Decal =
   | { kind: 'bolt'; at: [number, number] };
 
 export interface Rack {
-  /** Front centre of the amps, scene frame; y is the deck. */
+  /** Front center of the amps, scene frame; y is the deck. */
   front: [number, number, number];
   style: CaseStyle;
   name: string | null;
@@ -51,7 +51,7 @@ export interface Rack {
 }
 
 export interface ZeroCase {
-  /** Foot centre, scene frame. */
+  /** Foot center, scene frame. */
   pos: [number, number, number];
   rot: number;
   colour: 'orange' | 'purple';

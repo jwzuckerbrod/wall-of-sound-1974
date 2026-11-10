@@ -1,6 +1,6 @@
 /**
  * Every image the story shows, with what it is and whose it is. A photograph
- * is never shown without its credit; a render is always labelled as one, so
+ * is never shown without its credit; a render is always labeled as one, so
  * nobody mistakes the reconstruction for the record.
  *
  * Files live in public/story/, written by scripts/story-images.sh.
@@ -60,12 +60,12 @@ export const IMAGES = {
     widths: [960, 1920],
     focus: '50% 50%',
   },
-  /** The same frame as `bowl`, every cabinet in its system's colour (the explorer's channel colours). */
+  /** The same frame as `bowl`, every cabinet in its system's color (the explorer's channel colors). */
   bowlSystems: {
     id: 'bowl-systems',
     kind: 'render',
-    alt: 'The same view of the reconstructed Wall with each speaker block coloured by the system it belonged to: vocals gold in the centre, Garcia red, Weir purple, piano teal, drums blue, and four shades of green for the bass.',
-    caption: 'The same view, each speaker coloured by its system.',
+    alt: 'The same view of the reconstructed Wall with each speaker block colored by the system it belonged to: vocals gold in the center, Garcia red, Weir purple, piano teal, drums blue, and four shades of green for the bass.',
+    caption: 'The same view, each speaker colored by its system.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
     focus: '50% 50%',
@@ -92,7 +92,7 @@ export const IMAGES = {
   clusterUp: {
     id: 'cluster-up',
     kind: 'render',
-    alt: 'The curved centre cluster of vocal speakers seen from below, hanging over the stage.',
+    alt: 'The curved center cluster of vocal speakers seen from below, hanging over the stage.',
     caption: 'The vocal cluster, from below.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
@@ -119,12 +119,12 @@ export const IMAGES = {
     widths: [960, 1920],
     focus: '50% 60%',
   },
-  /** The same frame as `bowl`, the Wall's parts coloured by how sure we are of them (PROVENANCE). */
+  /** The same frame as `bowl`, the Wall's parts colored by how sure we are of them (PROVENANCE). */
   bowlEvidence: {
     id: 'bowl-evidence',
     kind: 'render',
-    alt: 'The same view of the reconstructed Wall coloured by evidence: the scaffold green for confirmed, the speakers and stage amber for estimated, and one column of speakers red for guessed.',
-    caption: 'The same view, coloured by how sure we are.',
+    alt: 'The same view of the reconstructed Wall colored by evidence: the scaffold green for confirmed, the speakers and stage amber for estimated, and one column of speakers red for guessed.',
+    caption: 'The same view, colored by how sure we are.',
     credit: RENDER_CREDIT,
     widths: [960, 1920],
     focus: '50% 50%',

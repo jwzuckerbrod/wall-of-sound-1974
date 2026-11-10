@@ -6,7 +6,7 @@ import { tierSettings, type Tier } from '../quality';
  * Post-processing, driven entirely by the quality tier.
  *
  * Bloom is kept deliberately low. The only things in the scene bright enough to
- * bloom are the McIntosh meters and the highlights on the aluminium dust caps,
+ * bloom are the McIntosh meters and the highlights on the aluminum dust caps,
  * and that is the point — turn it up and the whole wall goes to mush.
  *
  * At the low tier the composer is skipped entirely rather than run with its

@@ -8,7 +8,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 
 - **Evidence first.** Every number lives in `src/data/wall.config.ts` with a
   `PROVENANCE` entry (confidence + sources). Change the config, not geometry.
-  Anything not dated to summer 1974 is labelled (e.g. `materials.stickers`).
+  Anything not dated to summer 1974 is labeled (e.g. `materials.stickers`).
 - **Check against photographs.** Pechner's 17 May 1974 photo has a solved
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
@@ -74,4 +74,6 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - **Build mobile-first, for every site.** Design and test each change at phone
   size first (thumb-sized targets, nothing that fights scrolling, portrait and
   sideways), then widen. Review it with `npm run phone`.
+- **American English spelling everywhere** (color, center, meter, gray): copy, docs, comments.
+  Older code identifiers and the Blender scripts' comments are still British; leave those names.
 - Commit in logical pieces with clear messages; push when asked.

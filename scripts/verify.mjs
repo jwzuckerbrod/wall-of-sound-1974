@@ -166,7 +166,7 @@ check('stop ids are unique', new Set(tour.TOUR.map((s) => s.id)).size, tour.TOUR
 console.log(`        stops: ${tour.TOUR.length}`);
 
 console.log('\nBand and gear on the stage');
-// Footprints in metres, centred on each player. Generous on purpose: a drum kit
+// Footprints in meters, centered on each player. Generous on purpose: a drum kit
 // is about 1.6 m across and a 6'11" grand is 2.11 m long, and neither may end
 // up inside a speaker stack. This is the check that was missing when the kit
 // and the piano were first placed.
@@ -237,7 +237,7 @@ for (const id of missing) console.log(` FAIL  ${id} cannot describe itself`);
 check('every array has label, channel blurb and bounds', missing.length, 0);
 
 const CHANNEL_COLOURS = Object.values(cfg.CHANNELS).map((c) => c.color);
-check('every channel has its own overlay colour', new Set(CHANNEL_COLOURS).size, CHANNEL_COLOURS.length);
+check('every channel has its own overlay color', new Set(CHANNEL_COLOURS).size, CHANNEL_COLOURS.length);
 check('every channel is used by at least one array', (() => {
   const used = new Set(cfg.ARRAYS.map((b) => b.channel));
   return Object.keys(cfg.CHANNELS).every((c) => used.has(c));
@@ -285,7 +285,7 @@ console.log('\nThe buses and the 737, for scale');
   const span = row.length * B.length;
   check('four buses', row.length, 4);
   check('their length matches the 60 ft run within 1 ft (ft)', span / 0.3048, 60, 1);
-  check('the row is centred on the stage', row.reduce((a, b) => a + b.pos[0], 0), 0, 1e-9);
+  check('the row is centered on the stage', row.reduce((a, b) => a + b.pos[0], 0), 0, 1e-9);
   check('the row stands clear of the stage front', row.every((b) => b.pos[2] - B.width / 2 > L.deck.maxZ), true);
   const scale = await load('geometry/scale.js');
   const P = cfg.wall.scale.b737;

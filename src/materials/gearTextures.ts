@@ -45,7 +45,7 @@ function canvas(w: number, h: number) {
   return { c, ctx: c.getContext('2d')! };
 }
 
-/** Text centred on (x, y), shrunk to fit `width` if given. */
+/** Text centered on (x, y), shrunk to fit `width` if given. */
 function text(ctx: CanvasRenderingContext2D, s: string, font: string, px: number, x: number, y: number, width?: number) {
   ctx.font = `bold ${px}px ${font}`;
   const m = ctx.measureText(s).width;
@@ -59,7 +59,7 @@ function text(ctx: CanvasRenderingContext2D, s: string, font: string, px: number
   ctx.restore();
 }
 
-/** Closed outlines, y up, filled even-odd: a traced colour region with its holes. */
+/** Closed outlines, y up, filled even-odd: a traced color region with its holes. */
 function loops(ctx: CanvasRenderingContext2D, L: Loops, scale: number, colour: string) {
   ctx.fillStyle = colour;
   ctx.beginPath();
@@ -75,7 +75,7 @@ function loops(ctx: CanvasRenderingContext2D, L: Loops, scale: number, colour: s
 /**
  * The front panel at 54 px an inch, laid out from the Budman photograph as
  * blender/roadgear.py mc2300() places its parts (x across from the panel's
- * centre, z up from it, inches). Returns the colour map and an emissive map
+ * center, z up from it, inches). Returns the color map and an emissive map
  * that lights only the meter faces.
  */
 export function mc2300Panel(): { map: THREE.CanvasTexture; emissive: THREE.CanvasTexture } {
@@ -167,7 +167,7 @@ export function mc2300Panel(): { map: THREE.CanvasTexture; emissive: THREE.Canva
 
 // ─── decals ──────────────────────────────────────────────────────────────────
 
-/** A decal's size on its face, metres, before any rotation. */
+/** A decal's size on its face, meters, before any rotation. */
 export function decalSize(d: Decal, marks: Marks): [number, number] {
   switch (d.kind) {
     case 'tape': return [d.length, d.width];
@@ -188,7 +188,7 @@ export function decalSize(d: Decal, marks: Marks): [number, number] {
   }
 }
 
-/** Draws one decal centred on the origin, `s` pixels a metre, y down. */
+/** Draws one decal centered on the origin, `s` pixels a meter, y down. */
 export function drawDecal(ctx: CanvasRenderingContext2D, d: Decal, s: number, marks: Marks) {
   switch (d.kind) {
     case 'tape': {
@@ -279,7 +279,7 @@ export interface AtlasCell {
 
 /**
  * Packs every decal into one canvas, shelf by shelf, at `density` pixels a
- * metre (lowered until everything fits). Returns the texture and each
+ * meter (lowered until everything fits). Returns the texture and each
  * decal's UVs, in the order given.
  */
 export function decalAtlas(decals: Decal[], marks: Marks, size = 2048): { texture: THREE.CanvasTexture; cells: AtlasCell[] } {

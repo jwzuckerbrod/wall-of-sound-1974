@@ -1,6 +1,6 @@
 /**
  * Where the sound comes from, seen from a seat at the Hollywood Bowl: the
- * story's seat diagram. Plan view, metres, scene frame (x across, -x the
+ * story's seat diagram. Plan view, meters, scene frame (x across, -x the
  * audience's left; +z toward the audience). Pure.
  *
  * When one sound arrives from two places, you hear one sound (the precedence
@@ -62,7 +62,7 @@ export function paSounds(): Sound[] {
   return six.map((id) => ({ id, color: CHANNELS[id].color, label: CHANNELS[id].label, emitters: STACKS }));
 }
 
-/** A seat from its distance off the stage front and its angle off the centre line (radians, negative to the left). */
+/** A seat from its distance off the stage front and its angle off the center line (radians, negative to the left). */
 export function seatAt(r: number, angle: number): Seat {
   return { x: r * Math.sin(angle), z: STAGE.front + r * Math.cos(angle) };
 }

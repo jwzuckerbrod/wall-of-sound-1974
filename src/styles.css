@@ -435,7 +435,7 @@ canvas { display: block; touch-action: none; }
 /* ══ The explorer's controls ═════════════════════════════════════════════
    A top bar (name, story, About, Settings), dots on the model, one card on
    the right (a sheet on a phone), and a bar along the bottom: take it apart,
-   colour by system, where to stand. Glass over the scene, out of its way. */
+   color by system, where to stand. Glass over the scene, out of its way. */
 
 :root { --accent: #e9b85a; --glass: rgba(16, 19, 23, 0.72); --glass-line: rgba(255, 255, 255, 0.09); }
 

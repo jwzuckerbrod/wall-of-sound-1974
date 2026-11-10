@@ -6,13 +6,13 @@ import { wall } from '../data/wall.config';
 import { scaffoldLayout } from './scaffold';
 
 export interface BusPlace {
-  /** Centre of the bus, on the ground. Side-on, its side toward the audience. */
+  /** Center of the bus, on the ground. Side-on, its side toward the audience. */
   pos: [number, number, number];
   colour: string;
 }
 
 /**
- * Four buses end to end on the ground, along the stage front and centred on it,
+ * Four buses end to end on the ground, along the stage front and centered on it,
  * as long as the run of speakers above them. `ground` is the height of the
  * floor at the venue (0 indoors).
  */
@@ -32,7 +32,7 @@ export const PLANE_POSITIONS: PlaneAt[] = ['beside', 'behind', 'front'];
 /**
  * The 737, on the ground, side-on. Beside the stage at the audience's left, at the
  * depth of the speakers' face, nose pointing away and its tail nearest the Wall.
- * Or centred behind the stage, or in front of it, its near wing clear of the stage.
+ * Or centered behind the stage, or in front of it, its near wing clear of the stage.
  */
 export function planePlace(at: PlaneAt = 'beside', L = scaffoldLayout()): { pos: [number, number, number]; turn: number } {
   const P = wall.scale.b737;

@@ -101,7 +101,7 @@ export function StoryLayer({
     if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) go(at + (dx < 0 ? 1 : -1));
   };
 
-  // One figure per picture, so a still shared by neighbouring steps doesn't blink between them.
+  // One figure per picture, so a still shared by neighboring steps doesn't blink between them.
   const stills = STEPS.map((s) => s.still).filter((s, i, all): s is StoryImage => !!s && all.indexOf(s) === i);
 
   return (

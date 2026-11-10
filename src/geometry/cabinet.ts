@@ -6,18 +6,18 @@
  * four merged geometries that four InstancedMeshes can draw with the same set
  * of per-instance matrices. 641 cabinets cost 20 draw calls, not 641.
  *
- * Local frame: origin at the cabinet centre, front face at +Z.
+ * Local frame: origin at the cabinet center, front face at +Z.
  */
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils.js';
 import { CABINETS, DRIVERS, cabinetSize, type CabinetId, type Driver } from '../data/wall.config';
 import type { Variant } from './arrays';
 
-/** trim: the horns' grey frames. throat: the horns' black throats. */
+/** trim: the horns' gray frames. throat: the horns' black throats. */
 export type Role = 'shell' | 'baffle' | 'cone' | 'metal' | 'trim' | 'throat';
 export type CabinetGeometry = Record<Role, THREE.BufferGeometry | null>;
 
-/** Texture density: one texture tile per this many metres of surface. */
+/** Texture density: one texture tile per this many meters of surface. */
 const UV_PER_METRE = 1.6;
 
 function scaleUv(geo: THREE.BufferGeometry, sx: number, sy: number) {
@@ -121,7 +121,7 @@ const HORN_RIM = 0.009;
 /**
  * A driver mounted in a baffle at z = frontZ.
  *
- * The aluminium dust cap is modelled separately from the paper cone on purpose:
+ * The aluminum dust cap is modeled separately from the paper cone on purpose:
  * it is the only specular element on the whole face, and it is why the Wall
  * photographs as hundreds of points of light rather than a dark mass.
  */
@@ -134,7 +134,7 @@ function driver(d: Driver, x: number, y: number, frontZ: number, detail: 'full' 
 
   if (d.horn) {
     // The T350 (lot 72): a rectangular horn, mouth flush with the baffle,
-    // narrowing to its throat behind it, in a grey cast frame.
+    // narrowing to its throat behind it, in a gray cast frame.
     const { w, h, depth } = d.horn;
     const mw = w - 2 * HORN_RIM;
     const mh = h - 2 * HORN_RIM;
@@ -182,7 +182,7 @@ function driver(d: Driver, x: number, y: number, frontZ: number, detail: 'full' 
     out.cone.push(surround);
   }
 
-  // Aluminium dust cap: a flattened dome at the neck.
+  // Aluminum dust cap: a flattened dome at the neck.
   const cap = new THREE.SphereGeometry(capR, seg, Math.max(4, seg / 3), 0, Math.PI * 2, 0, Math.PI / 2);
   cap.rotateX(Math.PI / 2);
   cap.scale(1, 1, d.dustCapRise / capR);
@@ -255,7 +255,7 @@ export function cabinetGeometry(id: CabinetId, variant: Variant = 'whole'): Cabi
    * null when it does — silently, which cost an hour: ExtrudeGeometry (the
    * drilled baffle) is non-indexed while RingGeometry (the driver flange) is
    * indexed, so every baffle board in the wall quietly vanished and the bare
-   * carcass showed through. Normalise first, then refuse to continue on null.
+   * carcass showed through. Normalize first, then refuse to continue on null.
    */
   const merge = (parts: THREE.BufferGeometry[]) => {
     if (!parts.length) return null;

@@ -1,5 +1,5 @@
 /**
- * The Hollywood Bowl, 21 July 1974, laid out in the scene frame (metres, +y
+ * The Hollywood Bowl, 21 July 1974, laid out in the scene frame (meters, +y
  * up, +z toward the audience): the canyon's ground, the seating, the 1929
  * shell, Gehry's Sonotubes and the crown panels. Pure: the explorer builds
  * meshes from it (src/scene/Bowl.tsx) and scripts/export-scene.mjs hands the
@@ -18,7 +18,7 @@ export interface BowlFrame {
   deck: number;
   /** The paving in front of the stage. */
   floor: number;
-  /** The stage front's z: everything in the bowl is measured from its centre. */
+  /** The stage front's z: everything in the bowl is measured from its center. */
   front: number;
 }
 
@@ -39,7 +39,7 @@ const smooth = (a: number, b: number, x: number) => {
 
 /** The canyon: seats in the fan, hills beside and behind, the stage flat. */
 export function terrainHeight(x: number, z: number, f: BowlFrame) {
-  // Blender's frame: y = -z, and the stage front's centre line at -front.
+  // Blender's frame: y = -z, and the stage front's center line at -front.
   const y = -z;
   const dx = x;
   const dy = y + f.front;
@@ -86,7 +86,7 @@ export function sonotubes(): { x: number; z: number; height: number }[] {
   return path.map(([x, back]) => ({ x, z: -back, height: rng.uniform(T.minHeight, T.maxHeight) }));
 }
 
-/** The tall white panels across the shell's crown: centres along a shallow curve, highest in the middle. */
+/** The tall white panels across the shell's crown: centers along a shallow curve, highest in the middle. */
 export function crownPanels(f: BowlFrame): [number, number, number][] {
   const P = V.crownPanels;
   const mid = (P.left + P.right) / 2;
@@ -119,7 +119,7 @@ export function treePoints(f: BowlFrame): { small: [number, number, number][]; l
   return out;
 }
 
-/** Where to stand in the seats: seated eye height, `back` metres from the stage front. */
+/** Where to stand in the seats: seated eye height, `back` meters from the stage front. */
 export function seatEye(x: number, back: number, f: BowlFrame): [number, number, number] {
   return [x, seatHeight(back, f) + 1.15, f.front + back];
 }

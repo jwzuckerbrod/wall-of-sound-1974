@@ -70,7 +70,7 @@ out of step with the model.
 
 ## Status
 
-Stages 1 to 5 are done: research and spec, grey-box geometry, materials and
+Stages 1 to 5 are done: research and spec, gray-box geometry, materials and
 lighting, navigation, and the info panels and tour. Stage 6 is the performance
 pass - frame rate has not yet been measured on real hardware - and stage 7 is
 deployment.

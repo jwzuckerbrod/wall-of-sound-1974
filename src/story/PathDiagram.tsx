@@ -5,9 +5,9 @@ import { CHANNELS } from '../data/wall.config';
  * One mix, or none (the story's signal-path beat), one half at a time with a
  * switch between them.
  *
- * Typical PA: six coloured pulses run into one desk out in the crowd and come
- * out as one grey pulse, to stacks at the stage's front corners and back to the
- * stage as the monitor mix. The Wall: each pulse keeps its colour all the way
+ * Typical PA: six colored pulses run into one desk out in the crowd and come
+ * out as one gray pulse, to stacks at the stage's front corners and back to the
+ * stage as the monitor mix. The Wall: each pulse keeps its color all the way
  * to its own speakers, behind the player.
  *
  * The typical PA is a composite; see PROVENANCE['comparison.signalPath'].
@@ -82,7 +82,7 @@ function TypicalPA() {
       <text x={desk.x + desk.w / 2} y={my - 3} className="d-tiny" textAnchor="middle">Mixing desk</text>
       <text x={desk.x + desk.w / 2} y={my + 15} className="d-tiny d-dim" textAnchor="middle">in the crowd</text>
 
-      {/* One mix out, the colour gone: everything is now one signal. */}
+      {/* One mix out, the color gone: everything is now one signal. */}
       <Wire when="second" d={`M${out} ${my} C ${out + 60} ${my}, 500 70, 552 70`} />
       <Wire when="second" d={`M${out} ${my} C ${out + 60} ${my}, 500 200, 552 200`} />
       <text x={out + 10} y={desk.y - 8} className="d-tiny d-dim">one mix</text>
@@ -136,8 +136,8 @@ export function PathDiagram() {
       </div>
       <p className="dg-read">
         {side === 'pa'
-          ? 'Each coloured pulse is one sound on its way. In the desk they are mixed into one grey pulse, and that is what everyone hears.'
-          : 'Each coloured pulse is one sound on its way. Nothing mixes them: each keeps its colour to its own speakers.'}
+          ? 'Each colored pulse is one sound on its way. In the desk they are mixed into one gray pulse, and that is what everyone hears.'
+          : 'Each colored pulse is one sound on its way. Nothing mixes them: each keeps its color to its own speakers.'}
       </p>
       {/* Keyed, so a switch draws the other half in afresh. */}
       <svg key={side} className="diagram" viewBox="0 0 640 296" role="img" aria-labelledby="path-title path-desc">

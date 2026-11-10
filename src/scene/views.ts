@@ -6,8 +6,8 @@ import { TOUR } from './tour';
  * Named camera positions, so a screenshot can be reproduced exactly rather
  * than hand-orbited. Append ?view=oblique (and &hud=0) to the URL.
  *
- * Positions are metres in the scene frame: +Y up, +Z toward the audience,
- * origin at the centre of the stage deck on the wall's front face.
+ * Positions are meters in the scene frame: +Y up, +Z toward the audience,
+ * origin at the center of the stage deck on the wall's front face.
  */
 export interface View {
   label: string;
@@ -30,7 +30,7 @@ export interface View {
 }
 
 export const VIEWS = {
-  // The first thing anyone sees: low, from the crowd, a little off centre, so
+  // The first thing anyone sees: low, from the crowd, a little off center, so
   // the Wall reads as forty-odd feet of speakers rather than a flat elevation.
   hero: {
     label: 'From the crowd, house left',
@@ -40,7 +40,7 @@ export const VIEWS = {
     fit: true,
   },
   front: {
-    label: 'Front, house centre',
+    label: 'Front, house center',
     position: [0, 9, 38],
     target: [0, 7.5, -1],
     fov: 40,
@@ -121,7 +121,7 @@ const PIANO = TOUR.find((s) => s.id === 'piano')!;
  * them to a seated eye in the row they stand in.
  */
 export const VIEWPOINTS = {
-  crowdCentre: { label: 'Crowd, centre', position: [0, 1.7, 30], target: [0, 7.8, 0], fov: 50 },
+  crowdCentre: { label: 'Crowd, center', position: [0, 1.7, 30], target: [0, 7.8, 0], fov: 50 },
   crowdLeft: { label: 'Crowd, left', position: [-15, 1.7, 34], target: [0, 7.8, 0], fov: 48 },
   crowdRight: { label: 'Crowd, right', position: [18, 1.7, 40], target: [0, 7.8, 0], fov: 46 },
   above: { label: 'Above', position: [4, 33, 30], target: [0, 4, -4], fov: 38 },

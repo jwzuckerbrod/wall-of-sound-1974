@@ -11,12 +11,12 @@ import { rackFronts } from './roadgear';
 import { scaffoldLayout, vocalMics } from './scaffold';
 
 export interface KitRiser {
-  /** Centre of the riser's footprint; y is the deck. */
+  /** Center of the riser's footprint; y is the deck. */
   pos: [number, number, number];
   size: { w: number; d: number; h: number };
 }
 
-/** Under the kit, centred on where the kit stands (band.instruments.kitBack). */
+/** Under the kit, centered on where the kit stands (band.instruments.kitBack). */
 export function kitRiser(L = scaffoldLayout()): KitRiser {
   const k = wall.band.members.find((m) => m.id === 'kreutz')!;
   return {

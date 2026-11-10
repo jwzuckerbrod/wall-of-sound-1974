@@ -48,7 +48,7 @@ export const TAPES: Record<TapeId, Tape> = {
     taper: 'Rob Bertrando',
     transfer: 'Ben Kasper',
     rig: 'Sony ECM-22P microphones into a Sony 770 reel-to-reel at 7½ inches a second',
-    position: '40 to 50 feet back, dead centre',
+    position: '40 to 50 feet back, dead center',
     pa: 'A conventional PA, three years before the Wall',
   },
 };

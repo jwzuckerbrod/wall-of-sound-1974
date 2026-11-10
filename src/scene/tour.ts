@@ -45,7 +45,7 @@ export const TOUR: TourStop[] = [
     id: 'whole',
     title: 'The Wall of Sound',
     body:
-      "In 1974 the Grateful Dead toured the largest sound system anyone had built: 641 speakers and 48 McIntosh amplifiers on a scaffold tower 38 feet 10 inches above the stage. It was six independent systems, not one PA, each carrying a single voice or instrument, so nothing was mixed together until it reached the air. It stood behind the band rather than in front of it, with no monitor speakers at all, and its singers sang into paired microphones that cancelled the Wall's own sound. It played 37 shows between 23 March and 20 October 1974, and then it was taken apart. This is a reconstruction of it, built from photographs, the scaffolding drawings and the equipment that survives.",
+      "In 1974 the Grateful Dead toured the largest sound system anyone had built: 641 speakers and 48 McIntosh amplifiers on a scaffold tower 38 feet 10 inches above the stage. It was six independent systems, not one PA, each carrying a single voice or instrument, so nothing was mixed together until it reached the air. It stood behind the band rather than in front of it, with no monitor speakers at all, and its singers sang into paired microphones that canceled the Wall's own sound. It played 37 shows between 23 March and 20 October 1974, and then it was taken apart. This is a reconstruction of it, built from photographs, the scaffolding drawings and the equipment that survives.",
     position: [0, DECK + 12, 52],
     target: [0, DECK + 6.5, -1],
     fov: 42,
@@ -64,7 +64,7 @@ export const TOUR: TourStop[] = [
     id: 'mics',
     title: 'Singing in front of the Wall',
     body:
-      'A microphone in front of twenty-six kilowatts of speakers should howl. These didn\'t. Each singer sang into a matched pair of microphones sixty millimetres apart, wired in opposite polarity. The voice reached the nearer one first and loudest, so it came through; the Wall\'s sound arrived at both equally, and cancelled itself out.',
+      'A microphone in front of twenty-six kilowatts of speakers should howl. These didn\'t. Each singer sang into a matched pair of microphones sixty millimeters apart, wired in opposite polarity. The voice reached the nearer one first and loudest, so it came through; the Wall\'s sound arrived at both equally, and canceled itself out.',
     // Close on the two capsules at the top of Weir's stand.
     position: [WEIR.x + 0.75, DECK + 1.62, WEIR.z + 1.15],
     target: [WEIR.x, DECK + 1.49, WEIR.z + 0.32],
@@ -76,7 +76,7 @@ export const TOUR: TourStop[] = [
     id: 'vocals',
     title: 'The vocal cluster',
     body:
-      'Three hundred and seventy-two of the 641 drivers carried vocals alone — more than half the system. The centre cluster curves toward the audience to spread the sound across roughly 140 to 180 degrees. Singers stood directly in front of twenty-six kilowatts without feedback, because each vocal microphone was a matched pair sixty millimetres apart wired in reverse polarity: the voice reached the near capsule first and survived, and everything arriving equally at both cancelled.',
+      'Three hundred and seventy-two of the 641 drivers carried vocals alone — more than half the system. The center cluster curves toward the audience to spread the sound across roughly 140 to 180 degrees. Singers stood directly in front of twenty-six kilowatts without feedback, because each vocal microphone was a matched pair sixty millimeters apart wired in reverse polarity: the voice reached the near capsule first and survived, and everything arriving equally at both canceled.',
     position: [1.8, DECK + 4.4, 9.5],
     target: [0, DECK + 4.6, 0],
     anchor: faceOf('voc-um'),
@@ -156,7 +156,7 @@ export const TOUR_CEILING = wall.dimensions.totalHeight + FT(4);
 
 /**
  * A camera pose for each instrument, for when it is clicked: a couple of
- * metres downstage of it, a little above, looking at it.
+ * meters downstage of it, a little above, looking at it.
  */
 export function instrumentPose(id: string): { position: [number, number, number]; target: [number, number, number]; fov: number } {
   const I = wall.band.instruments;

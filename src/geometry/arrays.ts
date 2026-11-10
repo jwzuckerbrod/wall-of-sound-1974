@@ -15,7 +15,7 @@ import { ARRAYS, CABINETS, cabinetSize, wall, type ArrayBlock, type CabinetId, t
  */
 export type Variant = 'whole' | 'lower' | 'upper' | 'first' | 'mid' | 'last' | 'single';
 
-/** Bare birch, matte black paint, or the strips' aluminium. */
+/** Bare birch, matte black paint, or the strips' aluminum. */
 export type Finish = 'bare' | 'black' | 'metal';
 
 /** A stable 0–1 number from a string, so the finish mix is the same everywhere and every visit. */
@@ -27,7 +27,7 @@ function unit(key: string): number {
 
 export interface Cell {
   /**
-   * Centre of the cabinet box, metres, with y measured from the stage deck
+   * Center of the cabinet box, meters, with y measured from the stage deck
    * surface, not the ground. Anything that draws a cell must lift it by
    * wall.dimensions.stageDeckHeight.
    */
@@ -77,7 +77,7 @@ function finishOf(b: ArrayBlock, col: number, row: number): Finish {
  * One block's worth of cells.
  *
  * Flat blocks are a plain grid. Curved blocks wrap the grid onto a convex arc
- * opening toward the audience (+Z), with the centre of curvature `curveRadius`
+ * opening toward the audience (+Z), with the center of curvature `curveRadius`
  * behind the block — the documented "curved... for cylindrical dispersion"
  * geometry of the vocal cluster.
  */
@@ -107,7 +107,7 @@ export function cellsForBlock(b: ArrayBlock): Cell[] {
       rotationY = 0;
     }
 
-    // The block's z is its FRONT FACE. Push the box centre back by half a depth,
+    // The block's z is its FRONT FACE. Push the box center back by half a depth,
     // along the face normal so curved columns recess correctly.
     const nx = Math.sin(rotationY);
     const nz = Math.cos(rotationY);

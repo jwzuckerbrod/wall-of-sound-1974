@@ -27,7 +27,7 @@ import {
 
 const DEG = Math.PI / 180;
 const PRESETS: { id: string; label: string; seat: Seat }[] = [
-  { id: 'front', label: 'Front, centre', seat: seatAt(16, 0) },
+  { id: 'front', label: 'Front, center', seat: seatAt(16, 0) },
   { id: 'side', label: 'Front, far left', seat: seatAt(18, -55 * DEG) },
   { id: 'mid', label: 'Halfway up, right', seat: seatAt(60, 25 * DEG) },
   { id: 'back', label: 'Back row', seat: seatAt(110, 0) },
@@ -59,7 +59,7 @@ function fanPath() {
   return `M${o1.x} ${o1.y} A${ro} ${ro} 0 0 0 ${o2.x} ${o2.y} L${i2.x} ${i2.y} A${ri} ${ri} 0 0 1 ${i1.x} ${i1.y} Z`;
 }
 
-/** Spread dots that land on each other upward, so each colour stays visible. */
+/** Spread dots that land on each other upward, so each color stays visible. */
 function stackDots(dots: { id: string; color: string; x: number }[]) {
   const sorted = [...dots].sort((a, b) => a.x - b.x);
   const placed: { id: string; color: string; x: number; y: number }[] = [];
@@ -208,7 +208,7 @@ export function SeatDiagram() {
       >
         <title id="seat-title">
           A plan of the Hollywood Bowl with a chosen seat, and above it the width of the stage as seen from that seat,
-          with a coloured dot where each sound seems to come from.
+          with a colored dot where each sound seems to come from.
         </title>
 
         {/* What you hear, across the stage's width as you see it. */}
@@ -276,7 +276,7 @@ export function SeatDiagram() {
             max={halfAngle}
             value={degrees}
             aria-label="Your seat, left to right"
-            aria-valuetext={degrees === 0 ? 'centre' : `${Math.abs(degrees)} degrees ${degrees < 0 ? 'left' : 'right'}`}
+            aria-valuetext={degrees === 0 ? 'center' : `${Math.abs(degrees)} degrees ${degrees < 0 ? 'left' : 'right'}`}
             style={{ ['--f' as string]: share(degrees, -halfAngle, halfAngle) }}
             onChange={(e) => slide({ angle: Number(e.target.value) * DEG })}
           />
@@ -290,7 +290,7 @@ export function SeatDiagram() {
             max={SEATING.lastRow}
             value={Math.round(r)}
             aria-label="Your seat, front to back"
-            aria-valuetext={`${Math.round(r)} metres from the stage`}
+            aria-valuetext={`${Math.round(r)} meters from the stage`}
             style={{ ['--f' as string]: share(r, SEATING.firstRow, SEATING.lastRow) }}
             onChange={(e) => slide({ r: Number(e.target.value) })}
           />

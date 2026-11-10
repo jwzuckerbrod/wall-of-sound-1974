@@ -57,7 +57,7 @@ exist, which is why this shipped.
 Three separate faults:
 
 **a. Stacks floating.** Array bases snap to scaffold floor levels (0.86 m, 2.85 m and so on), but the
-floors themselves were never modelled — only standards and ledgers. Thirteen stacks hung in mid-air.
+floors themselves were never modeled — only standards and ledgers. Thirteen stacks hung in mid-air.
 **Fixed:** `scaffoldFloors()` emits plank decks under every stack that starts on a platform, sized to the
 block, which is also what the drawing implies ("40 2x10x16 planks used as floors" is nowhere near enough
 to deck out a 64 × 40 ft tower, so the floors were partial and placed where needed). Verified.
@@ -87,7 +87,7 @@ width, with crew working along it. Every bay now runs to the full height again.
 | 2.4 | The whole composition reads as a small object in a large black void. No sense of scale or occasion. | Fixed in Blender (§12); the browser is unchanged |
 | 2.5 | Bare-plywood cabinets are too orange and too uniform; they read as pine crates rather than road-worn birch. | Fixed in §22 |
 | 2.6 | The 5-inch panels render as dark circles with no visible cone — the small drivers catch no light at all. | Closed in §22: already fixed by §11 and §18 |
-| 2.7 | The curve of the vocal centre cluster barely reads from the front. | Closed in §22: it reads from any camera below it, as on the photographs; from level with it, a curve can't show |
+| 2.7 | The curve of the vocal center cluster barely reads from the front. | Closed in §22: it reads from any camera below it, as on the photographs; from level with it, a curve can't show |
 | 2.8 | The `front` camera now frames the rig too small, because `FitCamera` fits the full tower height including empty steel. | Fixed in §22 |
 
 ---
@@ -129,15 +129,15 @@ it. Three honest options:
 2. **Model them properly.** Several hours each on the guitar, bass, piano and kit, with real reference.
    Achievable, and the right answer if the gear matters to the piece.
 3. **Silhouette them deliberately.** Treat them as dark, unlit forms that read as shapes rather than as
-   attempts at objects — a museum convention for "this is a stand-in, not the artefact."
+   attempts at objects — a museum convention for "this is a stand-in, not the artifact."
 
 My recommendation is **1 for now, 2 later if the gear earns its place** — the Wall is the subject, and
 right now the instruments actively cost the piece credibility.
 
 **Decided: option 1.** The instruments are removed. What stays on the stage is the furniture that is both
-documented and legible at this scale — the paired vocal microphones sixty millimetres apart, and the road
+documented and legible at this scale — the paired vocal microphones sixty millimeters apart, and the road
 cases carrying the 1969 equipment stencil, which is the correct and only use of that design in the scene.
-`docs/reconstruction-spec.md` §11 now records the absence rather than implying the gear is modelled.
+`docs/reconstruction-spec.md` §11 now records the absence rather than implying the gear is modeled.
 
 ---
 
@@ -165,7 +165,7 @@ photo's to within about 10 px, so the camera is right; everything that disagreed
 | Scaffold top above the deck | **38.8 ft** | 28.9 ft | High | **38'-10"** |
 | Tallest stacks above the deck | **~35 ft** | 24.8 ft | High | 32 ft |
 | Scaffold profile | Full height across the whole width | Stepped down with the stacks (§1.3c) | High | Full height |
-| Centre cluster | 12"s at ~11.6–17.9 ft, a band of 5"s above to ~20.8 ft | 12"s 9.3–21.3 ft, 5"s to 25.1 ft | Medium | 12"s 7–19 ft, 5"s to 22.7 ft |
+| Center cluster | 12"s at ~11.6–17.9 ft, a band of 5"s above to ~20.8 ft | 12"s 9.3–21.3 ft, 5"s to 25.1 ft | Medium | 12"s 7–19 ft, 5"s to 22.7 ft |
 | Under the cluster | Mostly open: the kit and one small box | A 4 × 4 block of 15"s, 8 ft tall | Medium | Unchanged — see below |
 
 **The cause.** The 10 April 1974 drawing gives the tower as a lift chain — 7'-0" + 5'-10" + four lifts of
@@ -196,7 +196,7 @@ Read that way, the floors fall at 7'-0", 12'-10", 19'-4", 25'-10" and 32'-4" abo
 - (Closed in §10: the block is gone.) The photo shows little under the cluster besides the kit. The 4 × 4 bass-drum block was still in the model,
   behind the cluster, because the 16 × 15" count is confirmed and nothing yet says where else they went.
 - Channel-by-channel placement is still the reconstruction's own. Only the heights are photo-checked.
-- The Cow Palace debut (23 March 1974) had a flat centre cluster, not the cylinder. The model shows the
+- The Cow Palace debut (23 March 1974) had a flat center cluster, not the cylinder. The model shows the
   Wall as it stood from May, and is checked against May.
 
 ---
@@ -226,7 +226,7 @@ the Iowa State Fairgrounds show was outdoors. A match of clothes, not a credit.
 
 **Reading positions across the stage.** Weir stands downstage of the kit, so whether he appears left or right
 of it depends on where the photographer stood. The close photo from 16 June puts him left of the kit, and
-Kirk West's straight-on view of the same show puts him a little right of its centre. So only the straight-on
+Kirk West's straight-on view of the same show puts him a little right of its center. So only the straight-on
 views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for order across the stage.
 
 **Findings**
@@ -234,15 +234,15 @@ views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for ord
 | | What the photographs show | The model now | Confidence |
 |---|---|---|---|
 | Garcia's side | **Far left** in every photograph that shows him: 17 May (`pechner`, a guitarist far left; too small to name), 25 May, 8 June (a guitarist in blue, far left), 16 June (probable, two photographs), and the undated summer photo | Far right, `x = 7.0` | High for May–June. No photo from July to October yet shows him |
-| Weir | Just downstage of the kit, a little right of its centre, in the straight-on views (25 May, 16 June) | Far left, `x = -5.6` | Medium-high |
+| Weir | Just downstage of the kit, a little right of its center, in the straight-on views (25 May, 16 June) | Far left, `x = -5.6` | Medium-high |
 | Lesh | Right of Weir on 25 May, 16 June and 31 July. The undated summer photo, and probably 8 June (a figure in white between Garcia and the kit; no bass visible at this size), have him **left** of the kit, so it varied | Left of the kit, `x = -2.6` | Medium. Right of the kit in 3 of 5 |
 | Keith | At a grand to the **right**: 17 May, 25 May (far right, in line with the band; a second grand far left looks parked) 8 June (far right: the grand under a white cover, and a smaller keyboard beyond it, to the audience's right, with someone at it) and 16 June (far right, lid down) | Right, `x = 4.6` | High for May–June. Agrees with the model |
 | The kit | 25 May and 16 June (probable): **wine-red shells with chrome lugs**, on a riser draped in red velvet. Undated summer: the same red kit. 31 July: butcher-block concert toms | Butcher block | High. The kit changed between 16 June and 31 July, **inside** the target window. See `blender/instruments/drums/README.md` |
 | Under the cluster | **Open** in every photograph: sky and hills (rigging photo), trees (undated summer), a blue backdrop (25 May, 8 June and 16 June), open sky through a scrim (31 July, `bill-kit-anderson-1974-07-31-preshow.jpg`). Only the kit, Garcia's natural-wood 2×12 cabinet, and racks | A 4 × 4 block of sixteen 15"s, 8 ft tall | High. Seven photographs from five or more shows, at least one of them in the target window. The config's own note on `arrays.kickCount`, from `deadsources74`, says the sixteen 15"s were "in a column", not a block |
-| Casters | The cluster's cabinets have casters on their undersides, clearest at Hartford. In colour they show as red and green discs | Not modelled | High |
+| Casters | The cluster's cabinets have casters on their undersides, clearest at Hartford. In color they show as red and green discs | Not modeled | High |
 | Which side is heavier | 25 May, 8 June and 16 June wide shots: the tallest, densest stacks on the left, behind Garcia; on the right, a few columns and a raised platform of 12"s, then the piano | Piano's columns left, Garcia's right (comment above `arrays` in the config) | Medium. Consistent with each player's speakers standing behind them |
 | Stage width | 25 May: the deck runs well past the Wall on the right, with the piano out in the open | The deck overhangs the scaffold 9 ft each side, from the 10 April drawing | Low. One venue's stage |
-| Scaffold colour | 25 May: rusty brown pipe. 17 May and 31 July: pale | Silver | Low. Probably varied with the venue's own scaffolding |
+| Scaffold color | 25 May: rusty brown pipe. 17 May and 31 July: pale | Silver | Low. Probably varied with the venue's own scaffolding |
 | Amp racks | 25 May: McIntosh racks with blue meters stand on the deck beside the players | Under the scaffold, behind the band | Medium |
 | Backdrop | Outdoors: blue tarps on the sides and back of the structure (25 May, 8 June, 16 June), or open sky |
 | Tie-dyes | 8 June: four tie-dyed panels hang high on the scaffold, two over each side, below a valance of blue tarp along the top. `materials.tieDye` already says Courtenay Pollock's tie-dyes hung on the structure | Not in the Blender render | High for 8 June | A black void (§2.4) | High for outdoor shows |
@@ -266,13 +266,13 @@ views (Kirk West, the 25 May and 8 June wide shots, Pechner) are trusted for ord
 
 ## 8. Cabinet sizes from the surviving cabinets
 
-Sotheby's 2021 sale included six speaker cabinets and the cluster's aluminium 5"
+Sotheby's 2021 sale included six speaker cabinets and the cluster's aluminum 5"
 enclosures (`docs/surviving-gear.md`). Their sizes replace the reconstruction's
 own, and two of the open items in §6 close with them.
 
 | Cabinet | Before | Now | From |
 |---|---|---|---|
-| 15" | 24 × 24 × 22.5 in, driver centred | **19.5 × 25.5 × 29.5**, driver 4" low | Lot 46; lot 50 for the driver |
+| 15" | 24 × 24 × 22.5 in, driver centered | **19.5 × 25.5 × 29.5**, driver 4" low | Lot 46; lot 50 for the driver |
 | 12" | 15.5 × 24 × 22.5 a driver | **16 × 13 × 22** a driver, rows paired into 2 × 12" boxes | Lot 47 |
 | 5" rows | 0.19 m | **5.5 in** (0.14 m) | Lot 49; Pechner |
 
@@ -313,7 +313,7 @@ tower face.
 | **Keith**, at its keyboard end | 562 | +3.6 | +4.6 |
 
 Garcia and Weir are told apart by the other photographs, which all put Garcia
-at the far left (§7). Keith's mark is now the centre of the grand.
+at the far left (§7). Keith's mark is now the center of the grand.
 
 **The columns follow the players**, as the Wall was each player's monitor:
 
@@ -341,7 +341,7 @@ Nothing from July to October shows the whole band.
 
 ## 10. Hollywood Bowl, 21 July 1974, and the bass-drum block
 
-Two colour photographs of the Hollywood Bowl show, before the show, with no
+Two color photographs of the Hollywood Bowl show, before the show, with no
 photographer known (`.shots/reference/unsourced-hollywoodbowl-1974-07-21-a.png`,
 `-b.webp`). This is the first full view of the Wall **inside the target window**.
 
@@ -351,10 +351,10 @@ photographer known (`.shots/reference/unsourced-hollywoodbowl-1974-07-21-a.png`,
 - **The grand lies across the stage just right of the kit**, under a white
   cover, as on Pechner's photograph (§9). A second keyboard area is at the far
   right under two white umbrellas, with what looks like another grand.
-- **MC 2300 racks stand on the deck**, right of centre: silver-framed, blue
+- **MC 2300 racks stand on the deck**, right of center: silver-framed, blue
   meters.
 - **The cluster's 5" band** reads as rows of curved strips with small, closely
-  spaced holes, like the aluminium enclosures of Sotheby's lot 49, more than 20
+  spaced holes, like the aluminum enclosures of Sotheby's lot 49, more than 20
   to a row. If so, the strips were in use by late July. Not applied: the 5"
   allocation would have to change (`docs/surviving-gear.md`, decision 3).
 - Tie-dyes hang high on the scaffold, as at Oakland, and wooden crates numbered
@@ -370,7 +370,7 @@ places it. §6's "4 × 4 block" item is closed.
 
 ---
 
-## 11. The cluster's 5" band in aluminium strips
+## 11. The cluster's 5" band in aluminum strips
 
 The Hollywood Bowl photographs (§10) show the cluster's 5" band close up enough
 to count, at about 8 px a hole.
@@ -380,13 +380,13 @@ to count, at about 8 px a hole.
   is lot 49's spacing (69 in for 13 holes) against lot 47's width.
 - **The band is as wide as the 12" section.** At 5.3", that's 33 to a row
   (33 × 5.3 in = 4.44 m, against the 12"s' 4.47 m).
-- The band is light grey metal with dark holes, not a black baffle.
+- The band is light gray metal with dark holes, not a black baffle.
 
 **Now:** the `voc-um` block is a new cabinet type, `strip5` (lot 49:
 5.5 × 3.5 in in section, holes 69/13 in apart), **33 × 4 = 132 drivers**, on the
 cluster's arc. In Blender each row is three lengths of 11, with end plates only
-at the ends of each length, open backs, and a dull aluminium face. In the
-browser the cells are coloured aluminium.
+at the ends of each length, open backs, and a dull aluminum face. In the
+browser the cells are colored aluminum.
 
 **Against the inventory:** the cells were 20 × 6 = 120. The 12 extra come from
 the vocal fills (`voc-umL`, `voc-umR`), 7 rows to 6 each: the same channel and
@@ -447,7 +447,7 @@ floors inside the towers.
 
 - The flat stacks' faces now stand 6 cm behind the front plane, just behind
   the tubes.
-- **The curved centre cluster is the exception.** It projects forward of the
+- **The curved center cluster is the exception.** It projects forward of the
   steel with no tubes across its face, so it keeps its 0.16 m
   (`dimensions.clusterStandoff`).
 - The front plane gets its X-braces back. The scaffold generator had left
@@ -462,7 +462,7 @@ floors inside the towers.
 through its solved camera, each upper outer corner carries:
 
 - a horizontal bar of about 5 black can lamps, 6.9 m above the deck
-- a diagonal bar of about 8, rising toward the centre to 8.6 m
+- a diagonal bar of about 8, rising toward the center to 8.6 m
 - two vertical ladders of about 6
 
 They are clamped to the scaffold in front of the stacks and aimed down at the
@@ -473,7 +473,7 @@ lines them up.
   tie-dyes hang in that space, and only the flat and diagonal bars are seen.
 - Blender builds pipes, clamps, yokes and cans, unlit. The browser draws pipes
   and cans.
-- **Not modelled:** the horizontal bar along the top front seen on some
+- **Not modeled:** the horizontal bar along the top front seen on some
   dates; the lamps' make; any light from them.
 
 ---
@@ -512,16 +512,16 @@ photographic record of the Wall in the window, and is instantly recognisable.
 - **The kit at the Bowl is the wine-red one**, on a natural-wood riser, not
   the butcher block of Hartford (31 July). So the change was between 21 and
   31 July. For the Bowl, `stage_review.py` recolours the kit's shells, but its
-  drums are still the concert toms modelled from Hartford, which isn't right.
+  drums are still the concert toms modeled from Hartford, which isn't right.
   The red kit needs its own model.
 - **A second, smaller curved cluster** stands low on the right of the Wall in
   the wide photograph, under the right-hand stacks. Not in the model, and
   nothing yet says what it carried.
 - The band: Garcia far left, Weir, the kit, Lesh right of it, and the grand
-  across the stage right of the kit, under a white cover. As modelled (§9).
-- Tie-dyes and light bars, as modelled (§12, §13).
+  across the stage right of the kit, under a white cover. As modeled (§9).
+- Tie-dyes and light bars, as modeled (§12, §13).
 
-**Stylised, not photographed:** the crowd is simple figures, the trees are
+**Stylized, not photographed:** the crowd is simple figures, the trees are
 simple shapes, and the hills are a heightfield. Depth of field and haze carry
 them at a distance; close up they read as models. See `docs/story.md`.
 
@@ -539,7 +539,7 @@ folder, the bowl falls back to simple shapes.
 
 **Crowd.** Four poses read off the 1970s crowd photographs
 (`docs/crowd-references.md`): sitting on a bench, sitting on the grass, lying on
-a blanket, standing. Each faces the stage, with tops, hair and trousers coloured
+a blanket, standing. Each faces the stage, with tops, hair and trousers colored
 per person from a 1970s palette (little tie-dye). Mostly seated on the benches,
 with blankets in the pool circle.
 
@@ -547,7 +547,7 @@ with blankets in the pool circle.
 difference between renders with and without the crowd. Only those pixels are
 taken from an AI-edited image (Kling), so the Wall, the scaffold, the shell and
 the band can't change. Then one grade over the whole frame to match a 1974
-colour print.
+color print.
 
 - First Kling test (1 credit): it replaced the distant crowd with a dozen large
   people at the camera, in modern clothes. Through the mask they came out
@@ -562,12 +562,12 @@ the people who were there, and the story page should say so.
 
 ## 16. A crowd of real people (MPFB)
 
-The crowd is now real modelled people, not figures. `blender/make_people.py`
+The crowd is now real modeled people, not figures. `blender/make_people.py`
 generates them with MPFB, the MakeHuman add-on for Blender (GPL; installed in
 Blender's user extensions), from the MakeHuman community's asset packs,
 downloaded into the ignored `blender/assets/makehuman/zips/` (912 MB):
 
-| Pack | Licence |
+| Pack | License |
 |---|---|
 | MakeHuman system assets, Skins 01 and 02, Poses 01, Bodyparts 05, Hair 01, Shirts 01, Pants 01, Hats 01 | CC0 |
 | Hair 02, Hair 03 | **CC-BY: credit the MakeHuman community and the hair authors wherever the renders are published** |
@@ -575,8 +575,8 @@ downloaded into the ignored `blender/assets/makehuman/zips/` (912 MB):
 48 people, saved to the ignored `blender/assets/makehuman/people.blend`:
 young adults, mostly white with some Black and Asian (as the photographs of
 the crowd show), long hair more often than not on men and women alike, beards
-on some men, T-shirts, tank tops, polos and peasant-style tops recoloured from
-a 1970s palette, jeans (wool trousers recoloured as denim) and cut-offs, a
+on some men, T-shirts, tank tops, polos and peasant-style tops recolored from
+a 1970s palette, jeans (wool trousers recolored as denim) and cut-offs, a
 hat on some, a few shirts off. Poses: standing with arms down; sitting on a
 bench, cross-legged or on the ground (Poses 01); lying back. Each is baked to
 one mesh of about 10,000 faces.
@@ -587,11 +587,11 @@ falls back to the simple figures.
 
 Assets left out, as wrong for 1974 or wrong-looking: the cargo and harem
 trousers (camouflage and floral prints), a hairstyle with two buns, a beard
-with a purple texture (beards are recoloured brown).
+with a purple texture (beards are recolored brown).
 
 **Second pass.** 144 people. Everyone faces the stage within 15° (the
 "talking" turns and random aisle headings are gone, and sitting poses that
-turn the whole figure are straightened before baking). Hair is recoloured to
+turn the whole figure are straightened before baking). Hair is recolored to
 a natural range (mostly brown, some dark, a little blond and red; one hair
 asset's texture is ginger). Fewer tank tops and shirts off. Realistic skin
 (MPFB's subsurface-scattering skin) and high-detail eyes; full-detail people
@@ -615,7 +615,7 @@ The project owner settled three open questions.
   are framed without crowd close to the camera.
 - **The band at the Hollywood Bowl, 21 July 1974: Garcia, Weir, the kit,
   Lesh, the pianos**, left to right from the audience. This is the order the
-  Bowl photographs show (§14) and the order already modelled (§9), so no
+  Bowl photographs show (§14) and the order already modeled (§9), so no
   marks move. The Weir/Lesh swaps seen on other dates (§7) no longer matter
   for the story.
 - **Rights: photographs, marks and logos stay in the repo and on the public
@@ -640,23 +640,23 @@ config that both renderers read.
 |---|---|---|---|
 | 1 | Black or bare cabinets | A mix, at `blackFinishRatio`. Blender had every cabinet bare; it now reads the same per-cabinet finish as the explorer, decided once in `src/geometry/arrays.ts` | Pechner 17 May: both finishes in the same columns |
 | 2 | 5" and horn panels | Small plywood cells, one driver each (Blender), not one drilled black board. One finish per block | Oakland 8 June: pale framed grids. Small photos: a reading |
-| 3 | Cluster strips | Aluminium, face and flanges (the explorer had a black face) | Bowl, Oakland; §11 |
-| 4 | Cones | Near-black, `#2A2A2C` (was mid-grey in the explorer) | Every colour photo |
-| 5 | Horns | The T350 as it survives: rectangular, 7.25 × 4.5 × 3.5 in, grey cast frame, black throat. Neither renderer had it right | Julien's 2026 lot 72 |
-| 6 | Scaffold steel | Bright galvanised, `#A9ADB1` (the explorer had darkened it) | Oakland daylight; Pechner |
+| 3 | Cluster strips | Aluminum, face and flanges (the explorer had a black face) | Bowl, Oakland; §11 |
+| 4 | Cones | Near-black, `#2A2A2C` (was mid-gray in the explorer) | Every color photo |
+| 5 | Horns | The T350 as it survives: rectangular, 7.25 × 4.5 × 3.5 in, gray cast frame, black throat. Neither renderer had it right | Julien's 2026 lot 72 |
+| 6 | Scaffold steel | Bright galvanized, `#A9ADB1` (the explorer had darkened it) | Oakland daylight; Pechner |
 | 7 | MC 2300 panel | Brushed gold, black lower strip, 3 knobs and a red rocker (the explorer had black glass and 4 knobs) | Sotheby's 2021 lot 36 |
 | 8 | Road cases | Blender's orange and black Anvils and ZERO cases, stencils, names, stickers | Oakland; Sotheby's lots 36–43 |
 | 9 | Tie-dyes | Four on the front of the scaffold near the top, outdoors only; none indoors | Bowl 21 July; Oakland 8 June |
 | 10 | 12"s | Paired two to a box (Blender) | Sotheby's lot 47 |
 
 **The T350.** Julien's lot 72 is the only surviving tweeter. Its frame is
-plain grey metal and its throat black, with vertical vanes (not modelled). It
+plain gray metal and its throat black, with vertical vanes (not modeled). It
 is 7.25 in by 4.5 in, so it fits the 6.3 in high horn cells only on its side:
-modelled landscape. Julien's says these horns sat on the upper part of the
-centre array, above the drums. The model also has horn rows at the tops of the
+modeled landscape. Julien's says these horns sat on the upper part of the
+center array, above the drums. The model also has horn rows at the tops of the
 vocal fills and the drum stacks; that placement is unchanged and unconfirmed.
 
-**The road gear, one plan.** Blender used to pick each case's colour and each
+**The road gear, one plan.** Blender used to pick each case's color and each
 label with Python's random generator, which the explorer can't reproduce.
 `src/geometry/roadgear.ts` now makes every choice once (seeded,
 `structure.roadCases`) and both renderers build from that plan: Blender via
@@ -683,10 +683,10 @@ only the explorer had, are in Blender now.
 the Wolf, the ES-335, Mission Control, the grand, the Rhodes, the kit and the
 guitar stands exactly where the renders stand them (`stage_review.py place()`,
 now reading `band.instruments`), joins each, bakes its procedural materials
-to a colour, roughness and metalness atlas with Cycles, and writes a
+to a color, roughness and metalness atlas with Cycles, and writes a
 Draco-compressed `.glb` to `public/models/` (1.8 MB for all eight). The kit is
 written twice, the Bowl's in wine red. The explorer fetches them after the
-Wall is up. The grey scale figures are off by default now: they stood on the
+Wall is up. The gray scale figures are off by default now: they stood on the
 same marks and buried the guitars.
 
 **What changes in the renders.** Blender's cabinets are now mixed black and
@@ -706,8 +706,8 @@ solved rather than placed by eye: `blender/solve_camera.py`, from points in
 **Method.** Six points read off the photo whose positions the model knows:
 the scaffold's two outer uprights at the top and at the deck (64 ft apart,
 38'-10" tall), and the vocal cluster's top and foot. A pinhole camera,
-principal point at the frame's centre, is fitted by least squares: 5.4 px
-RMS. The checks agree with the model at about 35 px a metre: cluster 128
+principal point at the frame's center, is fitted by least squares: 5.4 px
+RMS. The checks agree with the model at about 35 px a meter: cluster 128
 px wide against 133 expected, 98 px tall against 95, the tower 414 px
 against 418.
 
@@ -717,13 +717,13 @@ from 20 m to 80 m, the fit only moves from 5.8 to 5.4 px. The photograph
 settles it: the photographer stood in the crowd (heads fill the bottom of
 the frame), so the camera goes where the fitted height meets a standing eye
 (1.6 m) over the Bowl's seating. **Result:** 47 m out from the Wall's face,
-5.2 m right of centre, eye 7.2 m above the model's ground, a 24° vertical
+5.2 m right of center, eye 7.2 m above the model's ground, a 24° vertical
 field of view (a short telephoto), level within a degree.
 
 **What the overlay shows.** Through that camera the Wall lands on the
 photo's Wall. The Bowl does not:
 
-- The 1929 shell is much bigger than modelled: in the photo it spans
+- The 1929 shell is much bigger than modeled: in the photo it spans
   nearly the whole frame, far past both sides of the Wall; the model's
   barely clears the scaffold.
 - The crossbeam tubes and the Sonotube banks stand further out to the sides.
@@ -738,10 +738,10 @@ model had; sizes and heights are measured. In `venues.hollywoodBowl`:
 
 | | Was (§14, by eye) | Now (measured) |
 |---|---|---|
-| Shell front arch | 14.5 m radius, springing 1 m above the stage, centred on the Wall | 17.8 m radius, centred 2.45 m above the stage and 2.3 m to the audience's right of the Wall's centre (a circle through 14 points on its edge, 0.6 m worst fit) |
-| Crown panels | on an arc following the shell | a shallow row across the crown over the Wall, centres 16.5 m above the stage, 1.5 m lower at the ends, from 11.8 m left to 10.4 m right; 2.2 × 0.75 m |
+| Shell front arch | 14.5 m radius, springing 1 m above the stage, centered on the Wall | 17.8 m radius, centered 2.45 m above the stage and 2.3 m to the audience's right of the Wall's center (a circle through 14 points on its edge, 0.6 m worst fit) |
+| Crown panels | on an arc following the shell | a shallow row across the crown over the Wall, centers 16.5 m above the stage, 1.5 m lower at the ends, from 11.8 m left to 10.4 m right; 2.2 × 0.75 m |
 | Crossbeam tubes | 10.6 and 11.35 m up, 0.84 m across | 11.05 m (the front one, 1.3 m across) and 12.2 m (1.1 m across); 30 m long |
-| Sonotube banks | 5.0–6.6 m tall, 0.82 m, at the shell's sides | 7.4–8.4 m tall, 1.0 m across, 12 m either side of the Wall's centre |
+| Sonotube banks | 5.0–6.6 m tall, 0.82 m, at the shell's sides | 7.4–8.4 m tall, 1.0 m across, 12 m either side of the Wall's center |
 
 Rendered through the camera, the shell, tubes, banks and panels now land on
 the photograph's. Still not matched: the shell's inner rings (the photo is
@@ -749,7 +749,7 @@ too small to read them), and the right-hand bank's short front row of
 tubes, about 4 m tall, which the model leaves out.
 
 The shell's offset to the right may be real (the Wall set a little off the
-Bowl's centreline) or partly the camera's error; it is kept as measured.
+Bowl's centerline) or partly the camera's error; it is kept as measured.
 
 **Also seen:** the Wall appears to stand on the Bowl's own stage, its feet
 at the stage floor, with no sign of a 10 ft deck. If so, the venue differs
@@ -793,7 +793,7 @@ signal diagram on its side until the reader scrolls.
 
 - **Beat 7, evidence.** `bowl-tower` looked only at the crowd, with none of the
   Wall in frame, so a tint could show nothing. The beat now crossfades `bowl` to
-  `bowl-evidence` (`stage_review.py --tint evidence`). Colours come from
+  `bowl-evidence` (`stage_review.py --tint evidence`). Colors come from
   `PROVENANCE` through `scene.json`, so the picture can't claim more than the
   config. The stage takes the Bowl's confidence (estimated), not the drawing's
   (confirmed), because §19 sees no 10 ft deck there.
@@ -824,7 +824,7 @@ on measurements.
 
 | Row | What the app shows now | Outcome |
 |---|---|---|
-| 2.5 Plywood | Frames measured `#93663d`: hue 29°, saturation 0.59. The grain map is warm and it multiplied a warm base colour. Sunlit ply at UC Santa Barbara, 25 May, is about hue 41°. | Fixed: `materials.plywood` paler, now `#977954` under stage light (hue 33°, saturation 0.44), with a little hue drift from board to board. Blender's bare ply has its own colour and is unaffected |
+| 2.5 Plywood | Frames measured `#93663d`: hue 29°, saturation 0.59. The grain map is warm and it multiplied a warm base color. Sunlit ply at UC Santa Barbara, 25 May, is about hue 41°. | Fixed: `materials.plywood` paler, now `#977954` under stage light (hue 33°, saturation 0.44), with a little hue drift from board to board. Blender's bare ply has its own color and is unaffected |
 | 2.6 5" cones | Cones, surrounds and dust caps all read close up, in strips and in cells. | Closed, no change. Fixed by §11 and §18 |
 | 2.7 Cluster's curve | Through Pechner's solved camera, the top and bottom edges arc as they do on his photograph. From a camera level with the cluster it looks flat, and it would on a photograph too. | Closed, no change. The curve is right |
 | 2.8 `front` framing | The Wall took 56% of a 4:3 frame. | Fixed: `FitCamera` projects the corners of the steel instead of fitting a sphere round them. Now 72%. The deck's empty wings may run off a narrow window, and on a phone the Wall fills the width |
@@ -839,17 +839,17 @@ fill it. What the photographs do show, and the model lacked:
   invented (`src/geometry/deckdressing.ts`, `structure.deckCables`).
 - **The riser**, at the Bowl only (§14): natural wood, open frame, size scaled by
   eye from one photograph (`band.bowlKitRiser`). The kit stands on it. Other dates
-  had red velvet (25 May; probably 16 June), not modelled.
+  had red velvet (25 May; probably 16 June), not modeled.
 - **A pale floor in the sun**, at the Bowl: weathered board, close to white on the
-  photograph. Colour there is unreliable (blue cast, overexposed), so this is
-  only "pale", not a measured colour. Under stage lights it stays brown.
+  photograph. Color there is unreliable (blue cast, overexposed), so this is
+  only "pale", not a measured color. Under stage lights it stays brown.
 - **A black skirt.** It was brown here, black on Pechner's photograph and in Blender.
 
 These are in the explorer only. **The story's renders differ:** Blender has no
 cables or riser and a brown deck at the Bowl. That is for whoever next re-renders
 the story, not changed here.
 
-Seen and not modelled: Garcia's natural-wood 2×12 behind the kit (25 May, 31 July),
+Seen and not modeled: Garcia's natural-wood 2×12 behind the kit (25 May, 31 July),
 and a green strip along the stage front (Oakland; the Bowl crowd photograph), which
 may be plants.
 
@@ -867,7 +867,7 @@ may be plants.
 - **Crowd: tried and removed.** Instanced figures (about 32 triangles each, 1,500 to
   9,000 by tier), with a painted surface for the far rows, cost little. They looked
   bad: the explorer's views stand in the crowd, and up close the figures were rows of
-  crayons with the painted rows a coloured grid. Keeping them only farther back would
+  crayons with the painted rows a colored grid. Keeping them only farther back would
   leave the seats in front of the camera empty anyway. Empty seats read as a model;
   those read as a mistake. Same reasoning as §1.1. The story has the real crowd.
 
@@ -912,7 +912,7 @@ yet. At this scale the difference is about 3 in.
 
 **The model** (`blender/scale/vwbus.py`). Scripted, from those numbers and the
 photographs in `.shots/reference/scale/bus/`, so its proportions are by eye: not a
-survey. It carries the VW roundel, a trademark. The four paint colours are invented. It
+survey. It carries the VW roundel, a trademark. The four paint colors are invented. It
 reads as a Bay Window bus at every distance tried, but up close it looks like a good
 die-cast toy, not a photograph: flat black glass, no interior, plain surfaces. Good enough
 for scale in the explorer; the film's "photographic" bus would need more work on the same
@@ -948,7 +948,7 @@ fair comparison, and showing the other two makes that visible rather than hiding
 hides the stage and the band. The tour's dots are off while the plane shows, and the hall's fog
 is pushed back, since these views stand far from the Wall.
 
-**Indoors only.** At the Bowl the shell and the hill are in its way, so the menu greys it out.
+**Indoors only.** At the Bowl the shell and the hill are in its way, so the menu grays it out.
 
 **Compare size is now a menu,** one object at a time, each with its own view and note, and
 `?compare=737` opens on the airliner. **Not done:** the whale, left to the film.
@@ -991,27 +991,27 @@ holding and releasing a crossfade. **Not yet tested:** touch, on the Simulator o
 The explorer has two of the crew at the top of the scaffold, one at each corner: they
 give the Wall a person's size, and they are where the photographs put people.
 
-**They are AI-generated, and labelled so** (About panel, `structure.crewAloft`). Two
+**They are AI-generated, and labeled so** (About panel, `structure.crewAloft`). Two
 earlier versions, posed MakeHuman figures, were rejected by the project owner as not good
 enough for the site: skin-tight clothes and game-character bodies, which better light
 didn't fix. Free add-ons, scans and character tools were compared; none solved the
-clothes within its licence (Renderpeople's terms bar easily downloadable meshes; MetaHuman
+clothes within its license (Renderpeople's terms bar easily downloadable meshes; MetaHuman
 is reportedly Unreal-only). So, as a deliberate choice by the owner:
 
 1. **Picture:** FLUX.1 schnell (Apache 2.0), free Hugging Face demo, text prompt only.
    No photograph of anyone went in.
 2. **Mesh:** TRELLIS.2 (MIT), free Hugging Face demo, one picture to a textured mesh.
 3. **Placing:** `blender/make_roadies.py`, from `structure.crewAloft`: cuts away the
-   pipe or rope stub, calms the skin colour, scales and places on the tubes, reduces
+   pipe or rope stub, calms the skin color, scales and places on the tubes, reduces
    to about 30,000 faces and 1K textures. Raw meshes are in the ignored
    `blender/assets/crew-ai/` with their pictures and helper scripts.
 
 The free demo's GPU quota allows only a few runs a day for a free account.
 
 **The prompts.** Shared: full-body documentary photograph of one man about 30, a 1970s
-rock concert road crew member, plain light grey background, realistic 35mm film.
+rock concert road crew member, plain light gray background, realistic 35mm film.
 
-- *Astride:* dark curly shoulder-length hair, thick moustache, dark aviator sunglasses,
+- *Astride:* dark curly shoulder-length hair, thick mustache, dark aviator sunglasses,
   bulky brown quilted down vest open over a dark T-shirt, loose worn baggy dark denim
   jeans, big belt buckle, scuffed brown work boots; sitting on a horizontal steel pipe,
   legs dangling, facing the camera. Seed 721.
@@ -1026,7 +1026,7 @@ rock concert road crew member, plain light grey background, realistic 35mm film.
 |---|---|
 | Pechner, 17 May 1974 (`.shots/reference/`) | Two men at the top right corner: one at the top rail, arm along the tube; one on the ladder below him. A rope hangs at the rail |
 | Undated 1974 outdoor photo of a printed page (`unsourced-rigging-1974-undated.webp`) | A man climbing a stack, one arm up; a man sitting high on a stack, arm raised |
-| [IATSE Local 205, 2014](https://newsletter.iatse205.org/?p=815) | Over 20 crew; speakers tied on with rope and hoisted by block-and-falls; local labour too |
+| [IATSE Local 205, 2014](https://newsletter.iatse205.org/?p=815) | Over 20 crew; speakers tied on with rope and hoisted by block-and-falls; local labor too |
 | [InsideHook on *Loud and Clear*](https://www.insidehook.com/books/grateful-dead-accidental-future-sound) | The crew climbed the tower mid-set to fix a channel |
 
 **How they look: three photographs from the project owner.** In
@@ -1035,9 +1035,9 @@ rock concert road crew member, plain light grey background, realistic 35mm film.
 
 | Photograph | Date | The look taken from it |
 |---|---|---|
-| Group portrait against a plywood wall | Undated | Big curly hair, moustache, quilted down vest over a dark T-shirt, dark jeans, big belt buckle |
+| Group portrait against a plywood wall | Undated | Big curly hair, mustache, quilted down vest over a dark T-shirt, dark jeans, big belt buckle |
 | Backstage by the amp racks | Undated | Ponytail, beard, plaid shirt under a dark vest, jeans. The Hell's Angels patch beside him is not used |
-| Ed Perlstein | 1978 | Curly hair, moustache, dark glasses, a vest |
+| Ed Perlstein | 1978 | Curly hair, mustache, dark glasses, a vest |
 
 **The two figures**
 
@@ -1049,19 +1049,19 @@ rock concert road crew member, plain light grey background, realistic 35mm film.
 
 **Known flaws.** Astride's forearms stay too warm in tone even after correction, especially indoors, partly from the warm stage light, and he has a
 short beard and a modern-looking wristwatch the prompt didn't ask for; he rests rather than
-works. A moustache-only picture (`sit2.png`) is ready, its mesh stopped by the quota.
+works. A mustache-only picture (`sit2.png`) is ready, its mesh stopped by the quota.
 Hauling's face was invented by the generator and is weak, but he faces the Wall; his
 free hand is out of sight and a brace crosses his leg from the front. The backs of the figures are less
 sharp than their fronts, since the generator sees one side. Nobody is identifiable, but
 faces are the generator's invention, not evidence.
 
-**Photorealism, as far as the current meshes go.** 2K colour textures kept in full, a normal
+**Photorealism, as far as the current meshes go.** 2K color textures kept in full, a normal
 map derived from each texture's fine detail so quilting and denim catch the light, and about
 42,000 faces each. The limit is now the source: one generated view, lit into its texture, in
 a real-time renderer.
 
 **Tried and dropped: painting the sharp picture back onto the mesh.** The camera was fitted
-automatically, first on colour, then on outline. Neither lined up: 30% (sitter) and 45%
+automatically, first on color, then on outline. Neither lined up: 30% (sitter) and 45%
 (hauler) of the outline still missed. The generated mesh's shape differs from the picture's,
 so the projection smeared the face and painted background onto the clothes. Far worse than
 the mesh's own texture, so it isn't in the build. The experiment is kept in the ignored
@@ -1084,8 +1084,8 @@ Six notes from people who tried the two pages.
 2. *"Whose idea was the Wall?"* A new card in beat 2: Owsley "Bear" Stanley conceived it and
    led its design, with the sound crew and Alembic, from `meta.designers` (Wikipedia, Grateful
    Dead Sources).
-3. *"Some of the audio visualisations were confusing."* The signal-path and microphone diagrams
-   each get one line on how to read them: what the coloured pulses, arcs and lines are.
+3. *"Some of the audio visualizations were confusing."* The signal-path and microphone diagrams
+   each get one line on how to read them: what the colored pulses, arcs and lines are.
 
 **Explorer.**
 1. *"Make the scaffolding less bright."* The steel stays as photographed, `#A9ADB1` (§18,
@@ -1094,9 +1094,9 @@ Six notes from people who tried the two pages.
    stage light and half the room's reflection. Blender's renders are unchanged. At the Bowl the
    steel now reads darker than the pale silver in the daylight photographs: the trade-off.
 2. *"Don't make the orange boxes so bright."* The same for the road cases: their photographed
-   colours, returning 0.6 of the light. That dims the white and black cases too.
+   colors, returning 0.6 of the light. That dims the white and black cases too.
 3. *"How do I use this page?"* The card it opens on lists what you can do, before the history:
-   the tour, the dots, turning and zooming, Take it apart and Colour, Listen.
+   the tour, the dots, turning and zooming, Take it apart and Color, Listen.
 
 **Checked** at 402 x 681 and on a desktop in Chromium, indoors and at the Bowl. **Not checked**
 on a real phone or the Simulator.
@@ -1114,7 +1114,7 @@ airliner stands indoors only.
 explorer and didn't tell a whole narrative. Read back, it was a tour of
 features: no problem, no cost, no ending, the payoff (Listen) in the middle,
 and the same wide frames seven times. A friend's note agreed on what worked:
-the visualisations of whose sound came from where.
+the visualizations of whose sound came from where.
 
 **What changed.**
 
@@ -1135,7 +1135,7 @@ the visualisations of whose sound came from where.
    from whatever the step was showing; the top bar's pill leads back.
 
 **How it's built.** A step (`src/story/steps.tsx`) sets the explorer's own
-state in `App.tsx`: venue, colours, comparison, isolation, how far apart,
+state in `App.tsx`: venue, colors, comparison, isolation, how far apart,
 camera. `StoryLayer.tsx` draws the stills, the card and the controls. A link
 with a query (`?venue=…`, `?compare`, `?hud=0`) or `#explore` opens the
 explorer; `#<step>` opens that step. Every still carries its tag, caption and

@@ -54,7 +54,7 @@ beats, with the copy on cards over the image.
 > Sunday, 21 July 1974. The Hollywood Bowl.
 >
 > The Grateful Dead have brought the largest sound system anyone had built: a
-> wall of speakers four storeys high, standing in front of the Bowl's shell.
+> wall of speakers four stories high, standing in front of the Bowl's shell.
 > This is a photograph of it that afternoon. *(crossfade)* This is our
 > reconstruction, from the same seat.
 
@@ -89,7 +89,7 @@ Two figures after Six systems. `src/story/PathDiagram.tsx`: the signal path, a
 typical early-1970s PA (a sourced composite) against the Wall. `SeatDiagram.tsx`
 and `src/geometry/localize.ts`: pick a seat in the Bowl and see where each sound
 seems to come from, by the precedence effect (arrival times only: a rule of
-thumb, and labelled so). Sources in PROVENANCE `comparison.signalPath` and
+thumb, and labeled so). Sources in PROVENANCE `comparison.signalPath` and
 `comparison.localization`.
 
 ### 3½. Listen
@@ -122,19 +122,19 @@ alone, and the caption says so (qa-findings §21).
 
 > A microphone in front of 26,000 watts should howl. Theirs didn't. Each singer
 > sang into a matched pair of microphones, 60 mm apart, wired in opposite
-> polarity. The voice reached one; the Wall reached both, and cancelled itself
+> polarity. The voice reached one; the Wall reached both, and canceled itself
 > out.
 
-Image: `cluster-up`, the curved centre cluster from below, then a diagram of the
+Image: `cluster-up`, the curved center cluster from below, then a diagram of the
 paired microphones (to draw). This is the beat people remember. **Not in the
 Blender scene yet:** the paired microphones themselves. The browser has them.
-**No band recordings** without a licence; if there's sound here, it's our own
+**No band recordings** without a license; if there's sound here, it's our own
 demonstration of the cancellation.
 
 ### 6. The power
 
 > Forty-eight McIntosh MC 2300s, 600 watts each, 128 pounds each. The crew
-> named them. Garcia's favourite was called Budman.
+> named them. Garcia's favorite was called Budman.
 
 Image: `amps-close`, one rack with the meters lit and the needles swinging; the caption says the movement is illustrative. The count
 (48, or Parish's "over 70") is shown as a range in the explorer.
@@ -146,7 +146,7 @@ Image: `amps-close`, one rack with the meters lit and the needles swinging; the 
 > survive, and every photograph we could date. Where we're sure, it's solid.
 > Where we've had to estimate, it's marked.
 
-Image: `bowl`, crossfading to `bowl-evidence`, the same frame coloured by
+Image: `bowl`, crossfading to `bowl-evidence`, the same frame colored by
 confidence from `PROVENANCE` (confirmed, estimated, guessed). Links to the photograph record
 and the register of surviving equipment.
 
@@ -192,11 +192,11 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 
 | # | Beat | What it says | Picture |
 |---|---|---|---|
-| 4 | The whole Wall | 641 speakers, 48 amplifiers, four storeys. Scale lands here: the explorer's size comparisons (the bus, the 737) as a still or live. **(config)** | `bowl-hero`, push in |
-| 5 | Six systems, not one | As now, with the colour-by-system crossfade visitors liked. The signal-path diagram's second half: no desk. **(config)** | `bowl` to `bowl-systems` |
+| 4 | The whole Wall | 641 speakers, 48 amplifiers, four stories. Scale lands here: the explorer's size comparisons (the bus, the 737) as a still or live. **(config)** | `bowl-hero`, push in |
+| 5 | Six systems, not one | As now, with the color-by-system crossfade visitors liked. The signal-path diagram's second half: no desk. **(config)** | `bowl` to `bowl-systems` |
 | 6 | Each player's own wall | The Wall was the monitor. Garcia's guitar came out of the columns behind him. **(config:** `arrays.verticalSplit`**)** | `garcia-mark` |
 | 7 | The singing problem | A microphone in front of 26 kilowatts should howl. The paired microphones. **(config:** `channels.vocalMics`**)** | `cluster-up`, the mic diagram |
-| 8 | What it did for the crowd | The seat diagram: the band has a width. Clear at 180 metres. **(config:** `system.usableThrowMetres`**)** | The seat diagram over a new high, wide still |
+| 8 | What it did for the crowd | The seat diagram: the band has a width. Clear at 180 meters. **(config:** `system.usableThrowMetres`**)** | The seat diagram over a new high, wide still |
 | 9 | Listen | The act's climax, and the page's. The Bowl tape, then 1971 against 1974. Last in the act, so the reader knows what they are hearing. | The Bowl photograph |
 
 ### Act 3. The cost, and the end
@@ -260,7 +260,7 @@ next; what concert sound took from it; what it was like to play through.
 
 ## To make
 
-- The red kit, modelled (the Bowl show had the wine-red kit, not the butcher block).
+- The red kit, modeled (the Bowl show had the wine-red kit, not the butcher block).
 
 The story and the explorer are one page (decided 10 November 2026, reversing
 4 November): it opens on the story, and the explorer is what's left when the
@@ -271,7 +271,7 @@ story is put away.
 They're simple figures and shapes, made in code. At a distance, with haze and
 depth of field, they read as a crowd and a canyon. Close up they read as
 models. To make them photographic would take outside assets: scanned or
-modelled people, real tree models, an HDRI sky. Free libraries such as Poly
+modeled people, real tree models, an HDRI sky. Free libraries such as Poly
 Haven (CC0) have trees and skies; people are harder. Each download needs your
 say-so. Kling could add motion to finished frames (haze, cloth), but it
 shouldn't be asked to invent people or the Wall.

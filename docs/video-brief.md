@@ -27,12 +27,12 @@ the reason the system exists, and the instruments only in the last shot.
 - **A black studio.** The arena's dark hall with the floor turned into a
   glossy black stage, so the Wall sits in a void with a soft reflection under
   it. One warm key light, cool rim lights picking out the scaffold tubes,
-  and the 641 aluminium dust caps catching the light like points of light.
+  and the 641 aluminum dust caps catching the light like points of light.
 - **Motion:** slow, weighted camera moves, nothing handheld. Every move ends
   on a hold long enough to read the text.
 - **Type:** one clean sans-serif, white, thin rules and leader lines pointing
   at parts, the way a product page labels a speaker. Numbers big, labels small.
-- **Colour coding:** each of the six sound systems gets the colour it already
+- **Color coding:** each of the six sound systems gets the color it already
   has in the explorer (vocals gold, lead guitar red, rhythm guitar violet,
   piano teal, drums blue, bass green).
 - **The ending** steps out of the studio into the Hollywood Bowl on 21 July
@@ -46,8 +46,8 @@ the reason the system exists, and the instruments only in the last shot.
 | 2 | 0:06–0:16 | The hero: a slow half-orbit of the whole Wall in the studio, low, from the front round to three-quarter | **641 speakers** · **48 McIntosh amplifiers** · **26,400 watts** |
 | 2b | 0:16–0:22 | For scale: the camera holds on the whole setup while three objects appear beside it one at a time, about 2 seconds each, each lined up with the dimension it matches (see below) | The Wall's dimensions throughout; each object's height, width and length as it appears |
 | 3 | 0:22–0:34 | The Wall takes itself apart: each block slides out along its own direction (the explorer's exploded view), the scaffold fading back | A label on each group as it separates |
-| 4 | 0:34–0:48 | It reassembles, then lights up one system at a time in its colour, each with its driver count | *Six independent systems* · Vocals 372 drivers · Lead guitar · Rhythm guitar · Piano · Drums · Bass, quadraphonic |
-| 5 | 0:48–0:58 | Close on the curved vocal cluster and its aluminium strips; cut to an animated diagram of the paired microphones (as on the story page) | *Two microphones, 60 mm apart, opposite polarity* · *The voice is heard. The Wall cancels.* |
+| 4 | 0:34–0:48 | It reassembles, then lights up one system at a time in its color, each with its driver count | *Six independent systems* · Vocals 372 drivers · Lead guitar · Rhythm guitar · Piano · Drums · Bass, quadraphonic |
+| 5 | 0:48–0:58 | Close on the curved vocal cluster and its aluminum strips; cut to an animated diagram of the paired microphones (as on the story page) | *Two microphones, 60 mm apart, opposite polarity* · *The voice is heard. The Wall cancels.* |
 | 6 | 0:58–1:08 | A slow dolly along the amplifier racks under the stacks, the blue meters glowing; ends on Budman's black case | *48 × McIntosh MC 2300* · *600 W each, 128 lb each* |
 | 7 | 1:08–1:12 | Two component close-ups, product-page style, each on black with a spec line: a 15" JBL in its cabinet, then the T350 horn | Each with its source: *Surviving cabinet, Sotheby's 2021*; *Surviving tweeter, Julien's 2026* |
 | 8 | 1:12–1:20 | The structure: the scaffold builds itself lift by lift, then the stacks drop in | *38 ft of steel above a 10 ft stage* · *From the scaffolding drawings of 10 April 1974* |
@@ -72,7 +72,7 @@ The figures go into the config with sources before they go on screen. The
 against NOAA Fisheries. The bus's length and width agree across sources; its
 height varies by source and roof (1,955–2,040 mm) and needs a Volkswagen
 figure. References are in `.shots/reference/scale/` (local), with
-`CREDITS.md` listing each photograph's author and licence.
+`CREDITS.md` listing each photograph's author and license.
 
 **Staging.** The bus parks in front of the stage, then three more roll in
 behind it. The whale doesn't lie on the floor (a whale out of water reads as
@@ -81,7 +81,7 @@ natural-history museum, level with the stage. The 737 sits beside the Wall at
 the same depth, side on, its tail nearest the tower, so perspective doesn't
 flatter either height (as in the explorer; qa-findings §23).
 
-**Realism.** Photographic, like the Wall: each modelled in Blender from
+**Realism.** Photographic, like the Wall: each modeled in Blender from
 dimensioned drawings and photographs, scaled exactly, with real paint,
 chrome, glass and skin. References needed:
 
@@ -90,7 +90,7 @@ chrome, glass and skin. References needed:
   through the windows.
 - **The whale:** a scientific side profile and cross-sections (the NOAA and
   museum illustrations), and photographs of the skin, which is mottled
-  blue-grey.
+  blue-gray.
 - **The 737-200:** Boeing's "737 Airplane Characteristics for Airport
   Planning" (public, with three-view drawings), and photographs of a 1974
   aircraft.
@@ -117,8 +117,8 @@ All in Blender, from the model as it stands, scripted like the renders
 
 - **The studio** is a new venue setting: the arena hall in black with a
   reflective floor.
-- **The exploded view and the system colours** use the same data the
-  explorer does (each block's explode direction, each channel's colour), so
+- **The exploded view and the system colors** use the same data the
+  explorer does (each block's explode direction, each channel's color), so
   they match the explorer exactly.
 - **The text** is laid over the frames in Blender's video editor; Blender
   writes the finished MP4 itself.
@@ -134,14 +134,14 @@ All in Blender, from the model as it stands, scripted like the renders
 
 ## Decisions for you
 
-0. **For shot 2b:** the bus's colour; whether the 737 carries a real 1974
+0. **For shot 2b:** the bus's color; whether the 737 carries a real 1974
    airline's livery (a trademark, credited like the band's marks) or plain
    paint (recommended, so it doesn't look like an airline's advert); and
    the hanging whale.
 
 1. **Music.** Silent with on-screen text (recommended for a first version),
    or a licensed instrumental bed. A Grateful Dead recording would need a
-   licence; a stock-library track would cost money, and I'd ask before
+   license; a stock-library track would cost money, and I'd ask before
    buying anything.
 2. **Length.** 90 seconds plus a 30-second cut (recommended), or only one of
    them.

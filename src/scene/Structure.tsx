@@ -76,7 +76,7 @@ export function Scaffold({ shadows }: { shadows: boolean }) {
  * Speaker runs. Arm-thick military-surplus cable, originally made for
  * connecting docked ships to shore power: nothing lighter would carry the
  * current. At 50 mm a run these are a visual feature, not a detail, so they
- * are modelled rather than implied.
+ * are modeled rather than implied.
  */
 export function Cabling({ shadows }: { shadows: boolean }) {
   const materials = wallMaterials();

@@ -19,10 +19,10 @@ import { wallMaterials } from '../materials';
  */
 
 /**
- * The paired vocal microphones: two matched capsules sixty millimetres apart on
+ * The paired vocal microphones: two matched capsules sixty millimeters apart on
  * one stand, wired in reverse polarity. This is the detail that let the band
- * sing three metres in front of twenty-six kilowatts without feedback, so it is
- * worth modelling even at this size.
+ * sing three meters in front of twenty-six kilowatts without feedback, so it is
+ * worth modeling even at this size.
  */
 function VocalMic() {
   const m = wallMaterials();

@@ -21,7 +21,7 @@ interface OrbitLike {
  * Glides the camera to a tour stop, then hands control back to OrbitControls so
  * the visitor can look around before moving on.
  *
- * Honours prefers-reduced-motion by cutting straight to the pose: a long
+ * Honors prefers-reduced-motion by cutting straight to the pose: a long
  * sweeping camera move is exactly the kind of thing that setting exists for.
  */
 export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {

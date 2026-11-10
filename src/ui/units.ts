@@ -1,5 +1,5 @@
 /**
- * Everything in the model is stored in metres. Everything the Wall was actually
+ * Everything in the model is stored in meters. Everything the Wall was actually
  * built to was in feet and inches — the drawings are dimensioned 7'-0", 6'-6",
  * 38'-10" — so feet and inches is the default here, and metric is the toggle.
  */
@@ -7,7 +7,7 @@ export type UnitSystem = 'imperial' | 'metric';
 
 export const UNIT_LABEL: Record<UnitSystem, string> = {
   imperial: 'Feet',
-  metric: 'Metres',
+  metric: 'Meters',
 };
 
 const M_PER_FT = 0.3048;

@@ -78,7 +78,7 @@ export function ViewOffset({ room, up }: { room: number; up: number }) {
     }
     const W = size.width;
     const H = size.height;
-    // s < 1 widens the frustum: the old frame then fills the left s of the screen, centred vertically.
+    // s < 1 widens the frustum: the old frame then fills the left s of the screen, centered vertically.
     const s = Math.max(0.3, (W - c.room) / W);
     camera.setViewOffset(W * s, H * s, 0, -((1 - s) * H) / 2 + c.up * s, W, H);
   });

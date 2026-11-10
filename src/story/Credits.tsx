@@ -22,7 +22,7 @@ const MODELLING: { name: string; what: string; licence: string; url: string }[] 
   { name: 'Poly Haven', what: 'trees, shrubs, ground and the late-afternoon sky at the Bowl', licence: 'CC0', url: 'https://polyhaven.com' },
   { name: 'The MakeHuman community', what: 'the people in the crowd, built with MPFB from the community asset packs', licence: 'CC0', url: 'http://www.makehumancommunity.org' },
   { name: 'Elvs, CulturaLibre, punkduck, o4saken and other MakeHuman community artists', what: 'hairstyles (Hair packs 02 and 03)', licence: 'CC-BY 4.0', url: 'http://www.makehumancommunity.org' },
-  { name: 'Blender', what: 'modelling and Cycles rendering', licence: 'GPL', url: 'https://www.blender.org' },
+  { name: 'Blender', what: 'modeling and Cycles rendering', licence: 'GPL', url: 'https://www.blender.org' },
 ];
 
 const ORDER: SourceId[] = [
@@ -50,7 +50,7 @@ export function Credits() {
         {photos.map((p) => (
           <PhotoOnPage key={p.id} img={p} />
         ))}
-        <li>Every other image is a render of the reconstruction, and labelled as one.</li>
+        <li>Every other image is a render of the reconstruction, and labeled as one.</li>
       </ul>
 
       <h3>Photographers</h3>
@@ -80,7 +80,7 @@ export function Credits() {
         ))}
       </ol>
 
-      <h3>Modelling and rendering</h3>
+      <h3>Modeling and rendering</h3>
       <ul>
         {MODELLING.map((m) => (
           <li key={m.name}>

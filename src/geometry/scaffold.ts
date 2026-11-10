@@ -19,9 +19,9 @@ export interface Tube {
  *   9" | 5'-0" | 7'-0" ×3 | 3'-6" | 7'-0" ×4 | 5'-0" | 9"   = 64'-0"
  *
  * It is asymmetric by one 7 ft bay — the drawing is hand-dimensioned and the
- * closer does not land on the footprint centre. The chain is reproduced as
- * drawn, then the whole run is centred on x = 0 so the arrays sit on the
- * centreline. Sums to exactly 64.0 ft, which is what the drawing's overall
+ * closer does not land on the footprint center. The chain is reproduced as
+ * drawn, then the whole run is centered on x = 0 so the arrays sit on the
+ * centerline. Sums to exactly 64.0 ft, which is what the drawing's overall
  * dimension says, so the chain is read correctly even where it looks odd.
  */
 export const BAY_CHAIN_FT = [0.75, 5, 7, 7, 7, 3.5, 7, 7, 7, 7, 5, 0.75] as const;
@@ -64,7 +64,7 @@ const cumulative = (chain: readonly number[]) =>
   chain.reduce<number[]>((acc, v) => [...acc, acc[acc.length - 1] + v], [0]);
 
 export interface ScaffoldLayout {
-  /** Grid line positions in metres. */
+  /** Grid line positions in meters. */
   xLines: number[];
   zLines: number[];
   yLevels: number[];
@@ -125,7 +125,7 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
     for (const z of towerZ) tubes.push({ a: [x, 0, z], b: [x, top, z], kind: 'standard' });
   });
 
-  // The centre cluster projects forward of the front plane (clusterStandoff),
+  // The center cluster projects forward of the front plane (clusterStandoff),
   // so front ledgers and braces stop at its edges rather than run through it.
   const cluster = ARRAYS.filter((b) => b.curveRadius > 0).map((b) => {
     const s = cabinetSize(b.cabinet);
@@ -167,7 +167,7 @@ export function scaffoldTubes(L = scaffoldLayout()): Tube[] {
     }
 
   // Stage substructure: 5' x 5' frames under the deck, on a 10 ft grid for the
-  // grey-box (the drawing specifies 5 ft; every 5 ft is visually solid mush at
+  // gray-box (the drawing specifies 5 ft; every 5 ft is visually solid mush at
   // this scale and adds nothing to a massing check).
   const step = FT(10);
   for (let x = L.deck.minX + step / 2; x < L.deck.maxX; x += step)
@@ -247,7 +247,7 @@ export function stageSlabs(L = scaffoldLayout()): Slab[] {
   ];
 }
 
-/** A road case on the deck: its foot centre (deck-relative y), size and turn about y. */
+/** A road case on the deck: its foot center (deck-relative y), size and turn about y. */
 export interface StageCase {
   pos: [number, number, number];
   size: [number, number, number];
@@ -310,7 +310,7 @@ export const TUBE_RADIUS = wall.structure.scaffold.tubeDiameter / 2;
 export const PLANK = { width: IN(10), thickness: IN(2) };
 
 /**
- * Where the tie-dyes hang (structure.tieDyes): the top centre of each, on the
+ * Where the tie-dyes hang (structure.tieDyes): the top center of each, on the
  * front of the scaffold, from the second-highest lift. Read off the tubes the
  * way blender/venue.py used to: the highest tubes give the front face, the
  * horizontal ones the lifts.

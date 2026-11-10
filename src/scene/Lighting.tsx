@@ -13,7 +13,7 @@ import { tierSettings } from '../quality';
  * startup from the Lightformers below instead of fetching a 2–8 MB .hdr file.
  * That keeps the whole page inside the 5 MB budget and means it works offline.
  *
- * The emitters are not decorative. Six hundred and forty-one aluminium dust
+ * The emitters are not decorative. Six hundred and forty-one aluminum dust
  * caps need something to reflect: without broad bright sources overhead and to
  * the sides, every driver on the wall goes dead flat and the thing stops
  * reading as a wall of speakers at all.
@@ -31,7 +31,7 @@ export function Lighting({ tier }: { tier: Tier }) {
         background={false}
         // Without this the generated map alone over-lights every upward-facing
         // surface: the deck and the ground blow out to near-white whatever
-        // their base colour is, and the shadows on them stop reading.
+        // their base color is, and the shadows on them stop reading.
         environmentIntensity={wall.render.hdri.intensity}
         environmentRotation={[0, wall.render.hdri.rotation, 0]}
       >
@@ -52,7 +52,7 @@ export function Lighting({ tier }: { tier: Tier }) {
         <Lightformer form="rect" intensity={0.8} color="#d9b98a" scale={[26, 12, 1]} position={[0, L.deck.y + 0.2, -2]} rotation={[-Math.PI / 2, 0, 0]} />
       </Environment>
 
-      {/* A hemisphere light lands its full sky colour on every upward-facing
+      {/* A hemisphere light lands its full sky color on every upward-facing
           normal, so it hits the deck harder than anything else in the scene.
           Kept low, with the environment doing most of the ambient work. */}
       <hemisphereLight args={['#8ea4bd', '#15120f', 0.35]} />
@@ -80,7 +80,7 @@ export function Lighting({ tier }: { tier: Tier }) {
 
       {/* Ground. Not a floor so much as a suggestion of the hall — and unlit,
           because it faces straight up into the key and a lit version blows out
-          to near-white however dark its base colour is. */}
+          to near-white however dark its base color is. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
         <planeGeometry args={[400, 400]} />
         <meshBasicMaterial color="#0c0e11" />

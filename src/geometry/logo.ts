@@ -6,11 +6,11 @@
 /**
  * The bolt's outline, traced from Bob Thomas's own drawing of it (the circle
  * inside the Steal Your Face artwork, where it runs rim to rim) and expressed
- * in units of the coloured field's radius, y down. Top tip first, down the blue
+ * in units of the colored field's radius, y down. Top tip first, down the blue
  * side, back up the red side. Traced rather than drawn freehand: a hand-built
  * sawtooth came out as a staircase and read as an imitation. Where the
  * low-resolution source rounded a tooth into two or three vertices, the one
- * farthest from the bolt's centre line is kept, which restores the point.
+ * farthest from the bolt's center line is kept, which restores the point.
  */
 export const BOLT: readonly [number, number][] = [
   [0.468, -0.858], [0.496, -0.816], [0.383, -0.603], [0.553, -0.603], [0.255, -0.362],

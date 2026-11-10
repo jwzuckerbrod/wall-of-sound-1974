@@ -5,7 +5,7 @@
  * in world space and merged: the whole of the road gear is a handful of draw
  * calls.
  *
- * Local frame of a case: origin at the centre of its foot, front at +z,
+ * Local frame of a case: origin at the center of its foot, front at +z,
  * y up. (Blender's frame is front at -y, z up; sizes here are already turned.)
  */
 import * as THREE from 'three';
@@ -14,7 +14,7 @@ import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeom
 import { IN, wall } from '../data/wall.config';
 import type { CaseStyle } from './roadgear';
 
-/** paint carries vertex colours, so every case style shares one material. */
+/** paint carries vertex colors, so every case style shares one material. */
 export type GearRole = 'paint' | 'alu' | 'steel' | 'rubber' | 'dark' | 'rust' | 'interior' | 'black' | 'gold' | 'knob' | 'red';
 
 export class GearBuilder {
@@ -58,7 +58,7 @@ export function caseColour(style: CaseStyle | 'zeroOrange' | 'zeroPurple') {
 }
 
 /**
- * An Anvil case (blender/roadgear.py anvil()): laminate, aluminium angle on
+ * An Anvil case (blender/roadgear.py anvil()): laminate, aluminum angle on
  * all twelve edges, ball corners (orange, white) or folded rusted corners
  * (black, as Budman's), rivets, a lid seam with two latches (or an open rack
  * front with rails), recessed end handles, casters.
@@ -97,7 +97,7 @@ export function anvil(B: GearBuilder, base: THREE.Matrix4, w: number, h: number,
     B.add('paint', box(w, hb, d), at(base, 0, z0 + hb / 2, 0), paint);
   }
 
-  // Aluminium angle along all twelve edges.
+  // Aluminum angle along all twelve edges.
   const e = 0.022;
   const inset = (sz: number) => sz - Math.sign(sz - z0 - hb / 2) * (e / 2 - 0.002);
   for (const sx of [-1, 1]) {
@@ -152,7 +152,7 @@ export function anvil(B: GearBuilder, base: THREE.Matrix4, w: number, h: number,
 
 /**
  * A ZERO metal case for one amplifier (blender/roadgear.py zero_case(); lots
- * 34-35): a painted aluminium cube with rounded edges, a lip where the lid
+ * 34-35): a painted aluminum cube with rounded edges, a lip where the lid
  * meets the base, draw latches on all four sides, a handle in each end.
  */
 export function zeroCase(B: GearBuilder, base: THREE.Matrix4, colour: 'orange' | 'purple') {

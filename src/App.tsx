@@ -212,7 +212,7 @@ export default function App() {
   }, []);
 
   /**
-   * A step of the story sets the explorer's own state: the venue, the colours,
+   * A step of the story sets the explorer's own state: the venue, the colors,
    * what stands beside the Wall, how far apart it is, where the camera is. So
    * when the story is put away, the explorer carries on from what was showing.
    */

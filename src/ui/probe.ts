@@ -24,7 +24,7 @@ export const FRONT_PROBES: ProbePoint[] = [
   { name: 'tie-dye', x: 0.42, y: 0.47 },
   { name: 'scaffold', x: 0.2, y: 0.42 },
   { name: 'bare plywood cabinet', x: 0.1, y: 0.6 },
-  { name: 'centre cluster', x: 0.5, y: 0.6 },
+  { name: 'center cluster', x: 0.5, y: 0.6 },
   { name: 'deck', x: 0.5, y: 0.7 },
   { name: 'stage facing', x: 0.5, y: 0.77 },
   { name: 'ground', x: 0.5, y: 0.9 },
