@@ -234,7 +234,13 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 
 ### Then: the live model as the story's picture
 
-Not part of this draft. Once the order is settled, prototype beat 5 with the
+**Mockup built (10 November 2026):** `live.html` (`src/live/`), at
+<http://localhost:5174/live.html>, or `npm run phone /live.html`. Dev only: it is
+not in `vite.config.ts`'s inputs, so it is never published. Twelve beats of the
+three acts in working copy: eight fly the explorer's camera and set what the
+model shows, four lay a still over it, and the last hands over the controls.
+
+Once the order is settled, prototype beat 5 with the
 explorer's model behind the words, the six systems lighting up as the reader
 scrolls, and test it on a phone. If it holds, the story becomes the guided way
 through the model and the explorer's own tour retires. That would reverse the

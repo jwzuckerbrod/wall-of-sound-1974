@@ -1,0 +1,68 @@
+/* The live-story mockup (live.html). Phone first: the model fills the screen,
+   pinned; cards scroll up over its lower part. The explorer's styles.css locks
+   the page for its canvas, so the page's scrolling is turned back on here. */
+:root {
+  --bg: #0e0d0b; --ink: #ece6da; --dim: #b4ab9b; --faint: #7d7568; --accent: #e9b85a;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+html, body, #root { height: auto; min-height: 100%; overflow: visible; }
+html { overflow-y: auto; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.5; }
+
+.live-canvas, .live-still { position: fixed; inset: 0; height: 100lvh; }
+.live-canvas { pointer-events: none; touch-action: pan-y; }
+.live.free .live-canvas { pointer-events: auto; touch-action: none; }
+.live-canvas canvas { display: block; }
+
+.live-still { margin: 0; opacity: 0; transition: opacity 0.9s ease; pointer-events: none; background: #000; }
+.live-still[data-on] { opacity: 1; }
+.live-still img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.live-still figcaption {
+  position: absolute; top: 28%; left: 50%; transform: translate(-50%, -50%); width: max-content; max-width: 80vw;
+  font: 13px/1.4 var(--sans); letter-spacing: 0.04em; text-align: center; color: var(--ink);
+  background: rgba(14, 13, 11, 0.8); border: 1px dashed var(--faint); border-radius: 6px; padding: 8px 12px;
+}
+.live-still:has(figcaption) img { object-fit: cover; filter: brightness(0.45) saturate(0.6); }
+
+.live-flow { position: relative; z-index: 2; pointer-events: none; }
+.live-title { min-height: 62svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 16px 24px; background: linear-gradient(var(--bg) 55%, transparent); }
+.live-title h1 { font-weight: 400; font-size: clamp(44px, 12vw, 110px); line-height: 0.95; margin: 0; }
+.eyebrow { font: 12px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
+.dek { color: var(--dim); margin: 14px 0 0; }
+
+/* Each beat is a screen and a half of scroll; its card rides up the lower part. */
+.live-beat { min-height: 135svh; display: flex; align-items: flex-end; padding: 0 12px 30svh; }
+.live-beat:last-child { min-height: 100svh; padding-bottom: 12svh; }
+.live-card {
+  pointer-events: auto; width: 100%; max-width: 430px; padding: 16px 18px 18px; border-radius: 12px;
+  background: rgba(14, 13, 11, 0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(236, 230, 218, 0.08); opacity: 0.35; transition: opacity 0.4s ease;
+}
+.live-card[data-on] { opacity: 1; }
+.live-card p { margin: 0 0 0.7em; }
+.live-card p:last-child { margin-bottom: 0; }
+.live-card .figure, .live-card .kicker { font-size: 1.28em; line-height: 1.25; }
+.live-card .kicker { color: var(--accent); }
+.live-card .aside { color: var(--dim); font-size: 0.86em; }
+.live-act { font: 11px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; gap: 12px; }
+.live-act span { color: var(--accent); }
+
+.live-go, .live-back {
+  font: 600 16px var(--sans); color: #17130a; background: var(--accent); border: 0; border-radius: 999px;
+  min-height: 48px; padding: 0 22px; margin-top: 6px; cursor: pointer;
+}
+.live-back { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom)); }
+
+.live-tag, .live-fps { position: fixed; z-index: 3; top: max(8px, env(safe-area-inset-top)); margin: 0; font: 11px var(--sans); letter-spacing: 0.04em; color: var(--dim); background: rgba(14, 13, 11, 0.7); padding: 3px 8px; border-radius: 999px; }
+.live-tag { left: 8px; }
+.live-fps { right: 8px; font-variant-numeric: tabular-nums; }
+.live-fps:empty { display: none; }
+
+/* Wide screens: the card sits on the right, the model takes the left. */
+@media (min-width: 900px) {
+  .live-title { padding: 0 6vw 40px; }
+  .live-beat { justify-content: flex-end; padding: 0 4vw 34svh; }
+  .live-card { max-width: 400px; }
+}
+@media (prefers-reduced-motion: reduce) { .live-still, .live-card { transition: none; } }
