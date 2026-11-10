@@ -160,6 +160,88 @@ curated viewpoint.
 
 ---
 
+## Proposed: the story in three acts (draft, 10 November 2026)
+
+A draft to react to. Nothing on the page has changed. The beats above are the
+page as built: a tour of features. This reorders them into a narrative with a
+question, a payoff, a cost and an ending. Copy is working copy.
+
+**The spine, in one sentence:** in 1974 the Grateful Dead built the best sound
+system anyone had heard, to fix a problem every band had, and it was too big to
+keep.
+
+**Three rules for the rewrite**
+
+1. One story: the Wall's. The reconstruction speaks at the start (one line) and
+   in the coda, and nowhere between.
+2. Claims in the copy, caveats in a note. Each beat keeps its sources line; the
+   hedges move behind a "How sure are we?" note on the card, or into the coda.
+3. Every beat gets its own picture. No frame is used twice except in a crossfade.
+
+Facts marked **(config)** are in `wall.config.ts` with a source today. Facts
+marked **(needs a source)** are not, and can't go on the page until they are.
+
+### Act 1. The problem
+
+| # | Beat | What it says | Picture |
+|---|---|---|---|
+| 1 | The hook | The photograph, then one sentence of stakes: for 37 shows in 1974 the Grateful Dead carried 75 tons of sound system from city to city. Nothing had sounded like it. By October it was gone. **(config:** `meta.showCount`, `system.weightTonsComplete`, `meta.retired`**)** | The Bowl photograph, crossfading to the render from the same seat (as now) |
+| 2 | What a concert sounded like | Every microphone to one desk, one mix out of two stacks, monitors so the band could guess. The 1974 report's line: musicians "don't really know how they sound." The signal-path diagram's first half lives here. **(config:** `comparison.signalPath`**)** | A new still or diagram of a typical early-1970s stage; today's page has none |
+| 3 | Bear's answer | Owsley "Bear" Stanley's idea: no mix at all. Give every instrument its own speakers and stand them behind the band. The people who built it. The first try, at Stanford on 9 February 1973: the tweeters failed during the first number. **(config:** `meta.designers`, `meta.prototypeTest`**)** | A portrait or period photograph **(needs finding, and a credit)**; failing that, the `title` cones |
+
+### Act 2. The machine
+
+| # | Beat | What it says | Picture |
+|---|---|---|---|
+| 4 | The whole Wall | 641 speakers, 48 amplifiers, four storeys. Scale lands here: the explorer's size comparisons (the bus, the 737) as a still or live. **(config)** | `bowl-hero`, push in |
+| 5 | Six systems, not one | As now, with the colour-by-system crossfade visitors liked. The signal-path diagram's second half: no desk. **(config)** | `bowl` to `bowl-systems` |
+| 6 | Each player's own wall | The Wall was the monitor. Garcia's guitar came out of the columns behind him. **(config:** `arrays.verticalSplit`**)** | `garcia-mark` |
+| 7 | The singing problem | A microphone in front of 26 kilowatts should howl. The paired microphones. **(config:** `channels.vocalMics`**)** | `cluster-up`, the mic diagram |
+| 8 | What it did for the crowd | The seat diagram: the band has a width. Clear at 180 metres. **(config:** `system.usableThrowMetres`**)** | The seat diagram over a new high, wide still |
+| 9 | Listen | The act's climax, and the page's. The Bowl tape, then 1971 against 1974. Last in the act, so the reader knows what they are hearing. | The Bowl photograph |
+
+### Act 3. The cost, and the end
+
+| # | Beat | What it says | Picture |
+|---|---|---|---|
+| 10 | What it took | $350,000 to build. Two identical scaffolds leapfrogging from city to city so one was always standing when the speakers arrived. 21 people to load it; four hours for the stage, four for the sound. $100,000 a month to move. 120 decibels on stage. **(config:** `system.buildCostUsd1974`, `stagingSets`, `crew`, `setupHours`, `transportLabourUsdPerMonth`, `onstageSplDb`**)** | `amps-close` with the needles; or the crew on the scaffold (`crew.glb`) as a new render |
+| 11 | The last night | Winterland, San Francisco, 16 to 20 October 1974. Seven months after its first show, the Wall came down for the last time. **(config:** `meta.retired`, `meta.debut`**)** Why it ended, and what the band did next: **(needs a source)**. | A new render: the Wall half-struck, or the empty stage at dusk |
+| 12 | What's left | Budman, the amplifier that drove Garcia's guitar, sold at Sotheby's in 2021, still in its road case. Six cabinets. A handful of photographs. **(config:** `docs/surviving-gear.md`**)** What it left behind in how concerts sound: **(needs a source)**. | A photograph of a surviving piece **(needs a credit)**, or `amps-close` if beat 10 takes the crew |
+
+### Coda
+
+| # | Beat | What it says | Picture |
+|---|---|---|---|
+| 13 | How we know | Nobody drew a plan. What is confirmed, estimated and guessed. The caveats pulled out of acts 1 to 3 land here. | `bowl` to `bowl-evidence` |
+| 14 | Step inside | As now. | The live model |
+
+### What moves, what's new, what goes
+
+- **Moves:** the typical-PA half of the signal path (up to act 1); Bear's card
+  (to its own beat); Listen (to the end of act 2); the amplifiers (into the
+  cost); the evidence (to the coda).
+- **New copy:** the hook's stakes line, beat 3's failed first try, all of act 3.
+- **New pictures:** up to five (beats 2, 3, 8, 11, 12). Renders are about two
+  minutes each; photographs need finding and crediting, and each download needs
+  your say-so.
+- **Goes:** nothing is deleted. Asides shrink into notes.
+
+### Needs a source before it can be written
+
+1. Why the Wall was retired, and the band's break from touring after October 1974.
+2. What concert sound took from it afterwards.
+3. Anything on what the crew or band said it was like to play through.
+
+### Then: the live model as the story's picture
+
+Not part of this draft. Once the order is settled, prototype beat 5 with the
+explorer's model behind the words, the six systems lighting up as the reader
+scrolls, and test it on a phone. If it holds, the story becomes the guided way
+through the model and the explorer's own tour retires. That would reverse the
+4 November decision to keep the two apart; the stills stay as the fallback.
+
+---
+
 ## Open questions for you
 
 1. **Tone.** The copy above is plain and factual. Warmer and more personal, or
