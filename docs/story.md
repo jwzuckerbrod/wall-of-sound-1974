@@ -236,13 +236,18 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 
 **Mockup built (10 November 2026):** `live.html` (`src/live/`), at
 <http://localhost:5174/live.html>, or `npm run phone /live.html`. Dev only: it is
-not in `vite.config.ts`'s inputs, so it is never published. Twelve beats of the
-three acts in working copy: eight fly the explorer's camera and set what the
-model shows, four lay a still over it, and the last hands over the controls.
+not in `vite.config.ts`'s inputs, so it is never published. Working copy.
 
-Once the order is settled, prototype beat 5 with the
-explorer's model behind the words, the six systems lighting up as the reader
-scrolls, and test it on a phone. If it holds, the story becomes the guided way
+It is a **stepped story, not a scrolling page**. A scrolling version was tried
+first and dropped: the page and the model both want the same gesture, and the
+reader got trapped between them. Now the page never scrolls. The model fills the
+screen and can be turned at any step; a card at the bottom carries the words,
+Back and Next (also arrow keys, or a swipe on the card). Sixteen steps: nine fly
+the explorer's camera and set what the model shows, three are stills, and four
+(the three sound diagrams and the players) take the whole screen. "Hide text"
+puts the card away to look around; the last step's button does the same.
+
+If it holds up on a real phone, the story becomes the guided way
 through the model and the explorer's own tour retires. That would reverse the
 4 November decision to keep the two apart; the stills stay as the fallback.
 

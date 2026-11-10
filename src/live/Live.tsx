@@ -1,5 +1,5 @@
 import { Canvas, useFrame } from '@react-three/fiber';
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
 import { wall, type ChannelId } from '../data/wall.config';
 import { detectTier, tierSettings } from '../quality';
@@ -19,40 +19,60 @@ import { ListenCompare } from '../ui/Listen';
 
 /**
  * A mockup of the story told over the live model (docs/story.md, "the story in
- * three acts"). One canvas is pinned behind the page. Each beat either flies
- * its camera somewhere and sets what the model shows, or lays a still over it
- * (photographs are evidence, so they stay photographs). The last beat hands the
- * camera to the reader. Dev only: live.html is not built or published.
+ * three acts"), as steps, not a scrolling page: the page never scrolls, so every
+ * drag and wheel turn belongs to the model, and the reader can look around at
+ * any step. Next and Back (buttons, arrow keys, a swipe on the card) move
+ * between steps. A step flies the camera and sets what the model shows, or lays
+ * a still over it (photographs are evidence, so they stay photographs), or
+ * opens a diagram or the players full-screen. Dev only: live.html is not built
+ * or published.
  */
 
 const VENUE = 'hollywoodBowl' as const;
 const S = wall.system;
 const stop = (id: string): Pose => TOUR.find((t) => t.id === id)!;
 
-interface LiveBeat {
+interface Step {
   id: string;
   act: string;
-  /** Where the camera flies. Absent: the beat is a still, and the camera stays put behind it. */
+  /** Where the camera flies. Absent: the camera stays where the last step left it. */
   pose?: (portrait: boolean) => Pose;
   still?: StoryImage;
   /** A still that doesn't exist yet: what it would be. */
   placeholder?: string;
+  /** A diagram or the players: the card takes the whole screen, over the dimmed picture. */
+  full?: boolean;
   colorMode?: ColorMode;
   isolated?: ChannelId;
   compare?: CompareId;
   body: ReactNode;
 }
 
-const WIDE: Pose = { position: [-14, 9, 44], target: [0, 9, 0], fov: 42 };
 const DECK = wall.dimensions.stageDeckHeight;
+const WIDE: Pose = { position: [-14, 9, 44], target: [0, 9, 0], fov: 42 };
+const SEATS: Pose = { position: [0, 6, 40], target: [0, 9.5, 0], fov: 40 };
 /** In front of Garcia's mark, looking back past it and up his columns. */
 const GARCIA: Pose = { position: [-3.4, DECK + 1.7, 10.5], target: [-6.2, DECK + 5.2, 0], fov: 58 };
-const SEATS: Pose = { position: [0, 6, 40], target: [0, 9.5, 0], fov: 40 };
 
-const BEATS: LiveBeat[] = [
+const ACT1 = 'Act 1 · The problem';
+const ACT2 = 'Act 2 · The machine';
+const ACT3 = 'Act 3 · The cost, and the end';
+
+const STEPS: Step[] = [
+  {
+    id: 'title',
+    act: 'A reconstruction',
+    still: IMAGES.photoBowl,
+    body: (
+      <>
+        <h1>The Wall of Sound</h1>
+        <p className="dek">The Grateful Dead's sound system, summer 1974</p>
+      </>
+    ),
+  },
   {
     id: 'hook',
-    act: 'Act 1 · The problem',
+    act: ACT1,
     still: IMAGES.photoBowl,
     body: (
       <>
@@ -66,7 +86,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'before',
-    act: 'Act 1 · The problem',
+    act: ACT1,
     still: IMAGES.title,
     placeholder: 'Picture to come: a typical stage of the early 1970s',
     body: (
@@ -76,6 +96,17 @@ const BEATS: LiveBeat[] = [
           Every microphone ran to one mixing desk in the crowd and came back as one mix, out of two stacks at the
           corners of the stage. The players, the band's own report said, “don't really know how they sound.”
         </p>
+      </>
+    ),
+  },
+  {
+    id: 'path',
+    act: ACT1,
+    still: IMAGES.title,
+    full: true,
+    body: (
+      <>
+        <p className="figure">One mix, or none.</p>
         <DiagramFigure label="signal-path">
           <PathDiagram />
         </DiagramFigure>
@@ -84,22 +115,22 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'bear',
-    act: 'Act 1 · The problem',
+    act: ACT1,
     pose: () => WIDE,
     body: (
       <>
         <p className="figure">Bear's answer: no mix at all.</p>
         <p>
           Owsley “Bear” Stanley wanted every instrument to have its own speakers, standing behind the band. The first
-          try, at Stanford in February 1973, blew its tweeters during the first number.
+          try, at Stanford in February 1973, blew its tweeters during the first number. A year later, this stood at
+          the Cow Palace.
         </p>
-        <p>A year later, this stood at the Cow Palace.</p>
       </>
     ),
   },
   {
     id: 'whole',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     pose: (portrait) => standIn(portrait ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, VENUE),
     compare: 'bus',
     body: (
@@ -113,7 +144,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'systems',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     pose: () => SEATS,
     colorMode: 'channel',
     body: (
@@ -128,7 +159,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'garcia',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     pose: () => GARCIA,
     colorMode: 'channel',
     isolated: 'leadGuitar',
@@ -144,15 +175,25 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'mics',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     pose: () => stop('mics'),
     body: (
       <>
         <p className="figure">The singing problem.</p>
         <p>
           A microphone in front of {Math.round(S.wattsQuoted1974 / 1000)} kilowatts should howl. Each singer sang into
-          two, wired in opposite polarity. The voice reached one; the Wall reached both, and cancelled itself out.
+          two, wired in opposite polarity.
         </p>
+      </>
+    ),
+  },
+  {
+    id: 'cancel',
+    act: ACT2,
+    full: true,
+    body: (
+      <>
+        <p className="figure">The voice reached one. The Wall reached both, and cancelled itself out.</p>
         <DiagramFigure label="paired-microphone">
           <MicDiagram />
         </DiagramFigure>
@@ -161,9 +202,10 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'seats',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     pose: () => SEATS,
     colorMode: 'channel',
+    full: true,
     body: (
       <>
         <p className="figure">What it did for the crowd.</p>
@@ -177,8 +219,9 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'listen',
-    act: 'Act 2 · The machine',
+    act: ACT2,
     still: IMAGES.photoBowl,
+    full: true,
     body: (
       <>
         <p className="figure">Now listen.</p>
@@ -189,7 +232,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'cost',
-    act: 'Act 3 · The cost, and the end',
+    act: ACT3,
     pose: () => stop('structure'),
     body: (
       <>
@@ -203,7 +246,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'amps',
-    act: 'Act 3 · The cost, and the end',
+    act: ACT3,
     pose: () => stop('amps'),
     body: (
       <>
@@ -216,7 +259,7 @@ const BEATS: LiveBeat[] = [
   },
   {
     id: 'end',
-    act: 'Act 3 · The cost, and the end',
+    act: ACT3,
     still: IMAGES.bowlHero,
     placeholder: 'Picture to come: the last night, the Wall coming down',
     body: (
@@ -259,71 +302,79 @@ function Fps() {
 }
 
 const noop = () => {};
+const fromHash = () => Math.max(0, STEPS.findIndex((s) => s.id === window.location.hash.slice(1)));
 
 export function Live() {
-  const [active, setActive] = useState(0);
-  const [free, setFree] = useState(false);
+  const [at, setAt] = useState(fromHash);
+  /** The card put away, to look around; the story keeps its place. */
+  const [hidden, setHidden] = useState(false);
   const [portrait, setPortrait] = useState(() => window.innerHeight > window.innerWidth);
   const tier = useMemo(detectTier, []);
   const q = tierSettings(tier);
-  const cards = useRef<(HTMLElement | null)[]>([]);
+  const step = STEPS[at];
+  const last = at === STEPS.length - 1;
 
-  // The beat whose card is nearest the reading line owns the picture.
-  useEffect(() => {
-    let frame = 0;
-    const update = () => {
-      frame = 0;
-      // The last card whose top has come up past the line: a tall card (a diagram) keeps the picture while it's read.
-      const line = window.innerHeight * 0.85;
-      let best = 0;
-      cards.current.forEach((c, i) => {
-        if (c && c.getBoundingClientRect().top < line) best = i;
-      });
-      setActive(best);
-      setPortrait(window.innerHeight > window.innerWidth);
-    };
-    const on = () => {
-      if (!frame) frame = requestAnimationFrame(update);
-    };
-    update();
-    window.addEventListener('scroll', on, { passive: true });
-    window.addEventListener('resize', on);
-    return () => {
-      window.removeEventListener('scroll', on);
-      window.removeEventListener('resize', on);
-      cancelAnimationFrame(frame);
-    };
+  const go = useCallback((n: number) => {
+    const i = Math.min(STEPS.length - 1, Math.max(0, n));
+    setAt(i);
+    setHidden(false);
+    window.history.replaceState(null, '', i ? `#${STEPS[i].id}` : window.location.pathname);
   }, []);
 
-  // Exploring: the page stops scrolling, so the wheel and a finger only turn and zoom the model,
-  // and the story is still where it was left on the way back.
   useEffect(() => {
-    if (!free) return;
-    const at = window.scrollY;
-    document.documentElement.classList.add('live-locked');
-    return () => {
-      document.documentElement.classList.remove('live-locked');
-      window.scrollTo(0, at);
+    const onResize = () => setPortrait(window.innerHeight > window.innerWidth);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // A slider or a switch in a diagram keeps its own arrow keys.
+      const el = document.activeElement;
+      if (el instanceof HTMLElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') go(at + 1);
+      else if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(at - 1);
+      else if (e.key === 'Escape') setHidden((h) => !h);
+      else return;
+      e.preventDefault();
     };
-  }, [free]);
+    window.addEventListener('resize', onResize);
+    window.addEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [at, go]);
 
-  const beat = BEATS[active];
-  // A still keeps the camera where the last live beat left it, or sends it ahead to the next one.
+  // A sideways swipe on the card steps; on the model, a drag turns it.
+  const touch = useRef<{ x: number; y: number } | null>(null);
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.target as HTMLElement;
+    touch.current = t.closest('input, .seat-figure, .dg') ? null : { x: e.touches[0].clientX, y: e.touches[0].clientY };
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const from = touch.current;
+    touch.current = null;
+    if (!from) return;
+    const dx = e.changedTouches[0].clientX - from.x;
+    const dy = e.changedTouches[0].clientY - from.y;
+    if (Math.abs(dx) > 60 && Math.abs(dx) > 2 * Math.abs(dy)) go(at + (dx < 0 ? 1 : -1));
+  };
+
+  // A step without a camera keeps the last one's.
   const pose = useMemo(() => {
-    for (let i = active; i >= 0; i--) if (BEATS[i].pose) return BEATS[i].pose!(portrait);
-    return BEATS.find((b) => b.pose)!.pose!(portrait);
-  }, [active, portrait]);
+    for (let i = at; i >= 0; i--) if (STEPS[i].pose) return STEPS[i].pose!(portrait);
+    return STEPS.find((s) => s.pose)!.pose!(portrait);
+  }, [at, portrait]);
 
   const interaction: ArrayInteraction = useMemo(
-    () => ({ hovered: null, selected: null, isolated: free ? null : (beat.isolated ?? null), explode: 0, onHover: noop, onSelect: noop }),
-    [beat.isolated, free],
+    () => ({ hovered: null, selected: null, isolated: step.isolated ?? null, explode: 0, onHover: noop, onSelect: noop }),
+    [step.isolated],
   );
   const view = useMemo(() => viewIn('front', VENUE), []);
   // Lift the model clear of the card: above it on a phone, beside it on a wide screen.
-  const offset = free ? { room: 0, up: 0 } : portrait ? { room: 0, up: Math.round(window.innerHeight * 0.17) } : { room: 380, up: 0 };
+  const covered = !hidden && !step.full && !step.still;
+  const offset = !covered ? { room: 0, up: 0 } : portrait ? { room: 0, up: Math.round(window.innerHeight * 0.17) } : { room: 400, up: 0 };
+  const live = !step.still && !step.full;
 
   return (
-    <div className={`live${free ? ' free' : ''}`}>
+    <div className={`live${hidden ? ' looking' : ''}`}>
       <div className="live-canvas">
         <Canvas
           shadows={q.shadowMapSize > 0}
@@ -337,11 +388,11 @@ export function Live() {
           <Scene
             {...sceneDefaults}
             venue={VENUE}
-            colorMode={free ? 'material' : (beat.colorMode ?? 'material')}
-            compare={free ? null : (beat.compare ?? null)}
+            colorMode={step.colorMode ?? 'material'}
+            compare={step.compare ?? null}
             view={view}
             tier={tier}
-            navMode={free ? 'orbit' : 'tour'}
+            navMode="tour"
             pose={pose}
             interaction={interaction}
             activeStop={null}
@@ -357,47 +408,73 @@ export function Live() {
       </div>
 
       {/* Stills lie over the model and fade away to show it. */}
-      {BEATS.map((b, i) =>
-        b.still ? (
-          <figure key={b.id} className="live-still" data-on={(!free && i === active) || undefined} aria-hidden={i !== active}>
-            <img {...srcOf(b.still)} sizes="100vw" alt={b.still.alt} style={{ objectPosition: b.still.focus }} />
-            {b.placeholder && <figcaption>{b.placeholder}</figcaption>}
+      {STEPS.map((s, i) =>
+        s.still && (i === 0 || STEPS[i - 1].still !== s.still || STEPS[i - 1].placeholder !== s.placeholder) ? (
+          <figure
+            key={s.id}
+            className="live-still"
+            data-on={(!hidden && step.still === s.still && step.placeholder === s.placeholder) || undefined}
+            data-dim={step.full || undefined}
+          >
+            <img {...srcOf(s.still)} sizes="100vw" alt={s.still.alt} style={{ objectPosition: s.still.focus }} />
+            {s.placeholder && <figcaption>{s.placeholder}</figcaption>}
           </figure>
         ) : null,
       )}
+      {step.full && !step.still && !hidden && <div className="live-dim" />}
 
       <span id="live-fps" className="live-fps" />
       <p className="live-tag">Mockup · working copy</p>
 
-      {free && (
-        <button className="live-back" onClick={() => setFree(false)}>
+      {hidden ? (
+        <button className="live-pill live-return" onClick={() => setHidden(false)}>
           Back to the story
         </button>
+      ) : (
+        <section
+          className={`live-card${step.full ? ' full' : ''}${at === 0 ? ' opening' : ''}`}
+          aria-live="polite"
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+        >
+          <div className="live-body" key={step.id}>
+            <p className="live-act">
+              {step.act}
+              {at > 0 && <span>{step.full ? '' : step.still ? (step.placeholder ? 'Still' : 'Photograph') : 'Live model · drag to look around'}</span>}
+            </p>
+            {step.body}
+          </div>
+          <div className="live-nav">
+            <div className="live-progress" role="progressbar" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={at + 1} aria-label="Place in the story">
+              <i style={{ width: `${((at + 1) / STEPS.length) * 100}%` }} />
+            </div>
+            <div className="live-buttons">
+              {at > 0 && (
+                <button className="live-back" onClick={() => go(at - 1)} aria-label="Back">
+                  <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 3 5 8l5 5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                </button>
+              )}
+              {live && !last && (
+                <button className="live-look" onClick={() => setHidden(true)}>
+                  Hide text
+                </button>
+              )}
+              <span className="live-count">
+                {at + 1} / {STEPS.length}
+              </span>
+              {last ? (
+                <button className="live-next" onClick={() => setHidden(true)}>
+                  Explore it yourself
+                </button>
+              ) : (
+                <button className="live-next" onClick={() => go(at + 1)}>
+                  {at === 0 ? 'Begin' : 'Next'}
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
       )}
-      {
-        <main className="live-flow" inert={free}>
-          <header className="live-title">
-            <p className="eyebrow">A reconstruction</p>
-            <h1>The Wall of Sound</h1>
-            <p className="dek">The Grateful Dead's sound system, summer 1974</p>
-          </header>
-          {BEATS.map((b, i) => (
-            <section key={b.id} className="live-beat" id={b.id}>
-              <div className="live-card" ref={(el) => void (cards.current[i] = el)} data-on={i === active || undefined}>
-                <p className="live-act">
-                  {b.act} <span>{b.still ? (b.still.kind === 'photograph' && !b.placeholder ? 'Photograph' : 'Still') : 'Live model'}</span>
-                </p>
-                {b.body}
-                {b.id === 'inside' && (
-                  <button className="live-go" onClick={() => setFree(true)}>
-                    Explore it yourself
-                  </button>
-                )}
-              </div>
-            </section>
-          ))}
-        </main>
-      }
     </div>
   );
 }

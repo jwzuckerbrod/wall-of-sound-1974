@@ -1,72 +1,85 @@
-/* The live-story mockup (live.html). Phone first: the model fills the screen,
-   pinned; cards scroll up over its lower part. The explorer's styles.css locks
-   the page for its canvas, so the page's scrolling is turned back on here. */
+/* The live-story mockup (live.html), as steps. Phone first. The page never
+   scrolls (the explorer's styles.css locks it), so a drag or the wheel only
+   ever turns the model; a card at the bottom carries the words and the Next
+   and Back buttons. A diagram's step takes the whole screen. */
 :root {
   --bg: #0e0d0b; --ink: #ece6da; --dim: #b4ab9b; --faint: #7d7568; --accent: #e9b85a;
   --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
 }
-html, body, #root { height: auto; min-height: 100%; overflow: visible; }
-html { overflow-y: auto; scroll-behavior: auto; }
-html.live-locked { overflow: hidden; }
-.live.free .live-flow { visibility: hidden; }
-body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.5; }
+html { scroll-behavior: auto; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.5; overscroll-behavior: none; }
 
-.live-canvas, .live-still { position: fixed; inset: 0; height: 100lvh; }
-.live-canvas { pointer-events: none; touch-action: pan-y; }
-.live.free .live-canvas { pointer-events: auto; touch-action: none; }
+.live { position: fixed; inset: 0; overflow: hidden; }
+.live-canvas, .live-still, .live-dim { position: absolute; inset: 0; }
 .live-canvas canvas { display: block; }
 
-.live-still { margin: 0; opacity: 0; transition: opacity 0.9s ease; pointer-events: none; background: #000; }
-.live-still[data-on] { opacity: 1; }
-.live-still img { width: 100%; height: 100%; object-fit: contain; display: block; }
+/* A still blocks the model under it: there is nothing to turn. */
+.live-still { margin: 0; opacity: 0; visibility: hidden; transition: opacity 0.8s ease, visibility 0s 0.8s; background: #000; }
+.live-still[data-on] { opacity: 1; visibility: visible; transition: opacity 0.8s ease; }
+.live-still img { width: 100%; height: 100%; object-fit: contain; object-position: 50% 30%; display: block; transition: filter 0.5s ease; }
+.live-still[data-dim] img { filter: brightness(0.25) saturate(0.6); }
 .live-still figcaption {
-  position: absolute; top: 28%; left: 50%; transform: translate(-50%, -50%); width: max-content; max-width: 80vw;
+  position: absolute; top: 26%; left: 50%; transform: translate(-50%, -50%); width: max-content; max-width: 80vw;
   font: 13px/1.4 var(--sans); letter-spacing: 0.04em; text-align: center; color: var(--ink);
   background: rgba(14, 13, 11, 0.8); border: 1px dashed var(--faint); border-radius: 6px; padding: 8px 12px;
 }
 .live-still:has(figcaption) img { object-fit: cover; filter: brightness(0.45) saturate(0.6); }
+.live-still[data-dim] figcaption { display: none; }
+.live-dim { background: rgba(14, 13, 11, 0.8); }
 
-.live-flow { position: relative; z-index: 2; pointer-events: none; }
-.live-title { min-height: 62svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 16px 24px; background: linear-gradient(var(--bg) 55%, transparent); }
-.live-title h1 { font-weight: 400; font-size: clamp(44px, 12vw, 110px); line-height: 0.95; margin: 0; }
-.eyebrow { font: 12px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin: 0 0 12px; }
-.dek { color: var(--dim); margin: 14px 0 0; }
-
-/* Each beat is a screen and a half of scroll; its card rides up the lower part. */
-.live-beat { min-height: 135svh; display: flex; align-items: flex-end; padding: 0 12px 30svh; }
-.live-beat:last-child { min-height: 100svh; padding-bottom: 12svh; }
+/* The card: the bottom of the screen on a phone. */
 .live-card {
-  pointer-events: auto; width: 100%; max-width: 430px; padding: 16px 18px 18px; border-radius: 12px;
-  background: rgba(14, 13, 11, 0.86); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(236, 230, 218, 0.08); opacity: 0.35; transition: opacity 0.4s ease;
+  position: absolute; z-index: 2; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom));
+  display: flex; flex-direction: column; max-height: 52svh; border-radius: 14px;
+  background: rgba(14, 13, 11, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(236, 230, 218, 0.1);
 }
-.live-card[data-on] { opacity: 1; }
-.live-card > p { margin: 0 0 0.7em; }
-.live-card .dg, .live-card .seat-figure { margin-top: 12px; }
-.live-card p:last-child { margin-bottom: 0; }
-.live-card .figure, .live-card .kicker { font-size: 1.28em; line-height: 1.25; }
-.live-card .kicker { color: var(--accent); }
-.live-card .aside { color: var(--dim); font-size: 0.86em; }
+.live-card.full { top: max(40px, env(safe-area-inset-top)); max-height: none; background: rgba(14, 13, 11, 0.94); }
+.live-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px 6px; animation: live-in 0.35s ease both; }
+@keyframes live-in { from { opacity: 0; transform: translateY(6px); } }
+.live-body > p { margin: 0 0 0.6em; }
+.live-body .figure, .live-body .kicker { font-size: 1.24em; line-height: 1.25; }
+.live-body .kicker { color: var(--accent); }
+.live-body .aside { color: var(--dim); font-size: 0.86em; }
+.live-body h1 { font-weight: 400; font-size: clamp(40px, 12vw, 84px); line-height: 0.95; margin: 4px 0 0; }
+.live-body .dek { color: var(--dim); margin: 12px 0 0.6em; max-width: none; font-size: 1em; }
+.live-body .dg, .live-body .seat-figure { margin-top: 10px; }
 .live-act { font: 11px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; gap: 12px; }
-.live-act span { color: var(--accent); }
+.live-act span { color: var(--accent); text-align: right; }
+.opening .live-act { color: var(--accent); }
 
-.live-go, .live-back {
-  font: 600 16px var(--sans); color: #17130a; background: var(--accent); border: 0; border-radius: 999px;
-  min-height: 48px; padding: 0 22px; margin-top: 6px; cursor: pointer;
+.live-nav { flex: none; padding: 6px 12px 12px; }
+.live-progress { height: 2px; background: rgba(236, 230, 218, 0.14); border-radius: 1px; overflow: hidden; margin: 0 4px 10px; }
+.live-progress i { display: block; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+.live-buttons { display: flex; align-items: center; gap: 8px; }
+.live-buttons button, .live-pill {
+  font: 600 16px var(--sans); min-height: 48px; border-radius: 999px; border: 0; cursor: pointer; padding: 0 20px;
 }
-.live-back { position: fixed; z-index: 3; left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom)); }
+.live-next { color: #17130a; background: var(--accent); margin-left: auto; }
+.live-back, .live-look { color: var(--ink); background: rgba(236, 230, 218, 0.1); }
+.live-back { width: 48px; padding: 0; display: grid; place-items: center; }
+.live-back svg { width: 18px; height: 18px; }
+.live-look { font-weight: 500; font-size: 14px; padding: 0 14px; }
+.live-count { font: 12px var(--sans); color: var(--faint); font-variant-numeric: tabular-nums; margin-left: auto; }
+.live-count + .live-next { margin-left: 0; }
 
-.live-tag, .live-fps { position: fixed; z-index: 3; top: max(8px, env(safe-area-inset-top)); margin: 0; font: 11px var(--sans); letter-spacing: 0.04em; color: var(--dim); background: rgba(14, 13, 11, 0.7); padding: 3px 8px; border-radius: 999px; }
+.live-pill { position: absolute; z-index: 3; }
+.live-return { left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom)); color: #17130a; background: var(--accent); }
+
+.live-tag, .live-fps { position: absolute; z-index: 3; top: max(8px, env(safe-area-inset-top)); margin: 0; font: 11px var(--sans); letter-spacing: 0.04em; color: var(--dim); background: rgba(14, 13, 11, 0.7); padding: 3px 8px; border-radius: 999px; pointer-events: none; }
 .live-tag { left: 8px; }
 .live-fps { right: 8px; font-variant-numeric: tabular-nums; }
 .live-fps:empty { display: none; }
 
-/* Wide screens: the card sits on the right, the model takes the left. */
-@media (min-width: 900px) {
-  .live-title { padding: 0 6vw 40px; }
-  .live-beat { justify-content: flex-end; padding: 0 4vw 34svh; }
-  .live-card { max-width: 400px; }
-  .live-card:has(.dg, .seat-figure) { max-width: 560px; }
+/* A phone on its side, and wide screens: the card down the right, the model on the left. */
+@media (orientation: landscape) {
+  .live-card { left: auto; right: max(12px, env(safe-area-inset-right)); bottom: 12px; width: min(400px, 46vw); max-height: calc(100svh - 24px); }
+  .live-card.full { top: 12px; width: min(620px, 60vw); }
+  .live-still img { object-position: 30% 50%; }
 }
-@media (prefers-reduced-motion: reduce) { .live-still, .live-card { transition: none; } }
+@media (min-width: 900px) and (orientation: landscape) {
+  .live-card { right: 3vw; bottom: 5svh; max-height: 80svh; }
+  .live-card.full { top: 5svh; }
+}
+@media (prefers-reduced-motion: reduce) { .live-still, .live-body, .live-progress i { transition: none; animation: none; } }
