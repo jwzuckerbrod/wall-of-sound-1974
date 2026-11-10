@@ -1,250 +1,94 @@
-/* The story page. Phone first: one beat is an image pinned to the screen with
-   cards of copy scrolling over it. Scroll progress arrives as --p (0 to 1) on
-   each beat, from Story.tsx. */
+/* The story, in steps, over the explorer's model (StoryLayer.tsx). Phone first.
+   The page never scrolls (styles.css locks it), so a drag or the wheel only
+   ever turns the model. A card at the bottom carries the words and Back and
+   Next; a diagram's step takes the whole screen. Everything here sits under
+   .sty or belongs to a diagram, so the explorer's own look is untouched. */
 
-:root {
-  --bg: #0e0d0b;
-  --ink: #ece6da;
-  --dim: #b4ab9b;
-  --faint: #7d7568;
-  --rule: #2e2a24;
-  --card: rgba(14, 13, 11, 0.78);
-  --accent: #e9b85a;
+.sty, .sty-credits {
+  --bg: #0e0d0b; --ink: #ece6da; --dim: #b4ab9b; --faint: #7d7568; --rule: #2e2a24; --accent: #e9b85a;
   --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
   --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-  color-scheme: dark;
+  color: var(--ink); font-family: var(--serif); font-size: 18px; line-height: 1.5; -webkit-font-smoothing: antialiased;
 }
+/* The layer lets drags through to the model; only its own parts catch them. */
+.sty { position: fixed; inset: 0; z-index: 10; overflow: hidden; pointer-events: none; }
+.sty a { color: var(--ink); text-decoration-color: var(--faint); text-underline-offset: 3px; }
+.sty-still, .sty-dim { position: absolute; inset: 0; pointer-events: auto; }
 
-* { box-sizing: border-box; }
+/* A still blocks the model under it: there is nothing to turn. */
+.sty-still { margin: 0; opacity: 0; visibility: hidden; transition: opacity 0.8s ease, visibility 0s 0.8s; background: #000; }
+.sty-still[data-on] { opacity: 1; visibility: visible; transition: opacity 0.8s ease; }
+/* The whole 16:9 frame across the top of a phone, its caption along its foot. */
+.sty-pic { position: absolute; left: 0; right: 0; top: max(8px, env(safe-area-inset-top)); aspect-ratio: 16 / 9; overflow: hidden; }
+.sty-pic img, .sty-pic .needles { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.5s ease; }
+.sty-still[data-dim] img { filter: brightness(0.22) saturate(0.6); }
+.sty-still figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 10px 6px;
+  font: 11px/1.4 var(--sans); letter-spacing: 0.03em; color: #e6dfd0;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.78));
+}
+.sty-still[data-dim] figcaption { display: none; }
+.sty-still figcaption a { color: inherit; }
+.tag { display: inline-block; font: 10px var(--sans); letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px; margin-right: 8px; border-radius: 3px; border: 1px solid var(--faint); color: var(--dim); }
+.tag-photograph { background: var(--accent); border-color: var(--accent); color: #17130a; }
+.sty-dim { background: rgba(14, 13, 11, 0.82); }
+.needles { pointer-events: none; }
+.needles line { stroke: #0a0a0a; stroke-width: 1.2px; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--serif);
-  font-size: 18px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+/* The card: the bottom of the screen on a phone. */
+.sty-card {
+  position: absolute; z-index: 2; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom)); pointer-events: auto;
+  display: flex; flex-direction: column; max-height: 58svh; border-radius: 14px;
+  background: rgba(14, 13, 11, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(236, 230, 218, 0.1);
 }
-a { color: var(--ink); text-decoration-color: var(--faint); text-underline-offset: 3px; }
-a:hover { text-decoration-color: var(--accent); }
+.sty-card.full { top: max(8px, env(safe-area-inset-top)); max-height: none; background: rgba(14, 13, 11, 0.95); }
+.sty-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px 6px; animation: sty-in 0.35s ease both; }
+@keyframes sty-in { from { opacity: 0; transform: translateY(6px); } }
+.sty-body > p { margin: 0 0 0.6em; }
+.sty-body .figure, .sty-body .kicker { font-size: 1.24em; line-height: 1.25; }
+.sty-body .kicker { color: var(--accent); }
+.sty-body .aside { color: var(--dim); font-size: 0.84em; }
+.sty-body h1 { font-weight: 400; font-size: clamp(40px, 12vw, 84px); line-height: 0.95; letter-spacing: -0.01em; margin: 4px 0 0; }
+.sty-body .dek { color: var(--dim); margin: 12px 0 0.6em; }
+.sty-body .dg, .sty-body .seat-figure, .sty-body .ls { margin: 10px 0 12px; }
+.sty-act { font: 11px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; gap: 12px; }
+.sty-act span { color: var(--accent); text-align: right; }
+.opening .sty-act { color: var(--accent); }
+.sty .sources { display: block; font: 11.5px/1.5 var(--sans); color: var(--faint); margin-top: 0.8em; }
+.sty .sources a { color: var(--dim); }
+.sty .sources button { font: inherit; color: var(--dim); background: none; border: 0; padding: 0; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 
-/* ── Title ─────────────────────────────────────────────────────────────── */
+.sty-nav { flex: none; padding: 6px 12px 12px; }
+.sty-progress { height: 2px; background: rgba(236, 230, 218, 0.14); border-radius: 1px; overflow: hidden; margin: 0 4px 10px; }
+.sty-progress i { display: block; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+.sty-buttons { display: flex; align-items: center; gap: 8px; }
+.sty-buttons button, .sty-close { font: 600 16px var(--sans); min-height: 48px; border-radius: 999px; border: 0; cursor: pointer; padding: 0 20px; }
+.sty-next { color: #17130a; background: var(--accent); }
+.sty-back, .sty-look, .sty-close { color: var(--ink); background: rgba(236, 230, 218, 0.1); }
+.sty-back { width: 48px; padding: 0 !important; display: grid; place-items: center; }
+.sty-back svg { width: 18px; height: 18px; }
+.sty-look { font-weight: 500 !important; font-size: 14px !important; padding: 0 14px !important; }
+.sty-count { font: 12px var(--sans); color: var(--faint); font-variant-numeric: tabular-nums; margin-left: auto; }
 
-.title {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 max(16px, 7vw);
-  position: relative;
-  overflow: hidden;
-  background: var(--bg);
+/* The one control a step offers. */
+.sty-chips { list-style: none; margin: 4px 0 6px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.sty-chips button {
+  display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 14px var(--sans); color: var(--ink); background: rgba(236, 230, 218, 0.08); border: 1px solid transparent;
 }
-.title > * { position: relative; }
-.title .title-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-/* The cones are texture behind the words; darkest where the words sit, and into the page below. */
-.title::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(transparent 55%, var(--bg)),
-    linear-gradient(90deg, rgba(10, 8, 6, 0.86), rgba(10, 8, 6, 0.42));
-}
-.title > :not(.title-image) { z-index: 1; }
-.eyebrow, .tag, .sources, figcaption, .scroll-hint, .credits h3 {
-  font-family: var(--sans);
-  letter-spacing: 0.06em;
-}
-.eyebrow { text-transform: uppercase; font-size: 12px; color: var(--accent); margin: 0 0 12px; }
-h1 {
-  font-weight: 400;
-  font-size: clamp(44px, 11vw, 120px);
-  line-height: 0.95;
-  letter-spacing: -0.01em;
-  margin: 0;
-}
-.dek { font-size: clamp(18px, 2.4vw, 26px); color: var(--dim); margin: 18px 0 0; max-width: 30ch; }
-.scroll-hint {
-  position: absolute;
-  top: calc(100svh - 56px);
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  text-transform: uppercase;
-  color: var(--faint);
-  margin: 0;
-}
-
-/* ── Beats ─────────────────────────────────────────────────────────────── */
-
-.beat { position: relative; }
-/* Holds the image a little after the last card leaves. Inside the section,
-   not padding on it: a sticky element stops at its parent's content box. */
-.hold { height: 50svh; }
-.stage {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  overflow: hidden;
-  background: #000;
-}
-.layer { position: absolute; inset: 0; margin: 0; }
-.layer img {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.layer .ambient { display: none; }
-/* A portrait phone would crop a 16:9 frame to its middle third, losing the
-   Wall. Show the whole frame across the width instead, over a blurred, dimmed
-   copy of itself. */
-@media (orientation: portrait) {
-  .layer .main { top: max(64px, 11svh); bottom: auto; height: auto; aspect-ratio: 16 / 9; }
-  .layer .ambient { display: block; filter: blur(22px) brightness(0.42) saturate(0.9); transform: scale(1.25); }
-}
-.layer-b { opacity: var(--f, 0); }
-/* Only one caption at a time in a crossfade. */
-.motion-crossfade .layer:first-child figcaption { opacity: calc(1 - var(--f, 0)); }
-
-/* A crossfade's slider (Compare in Story.tsx). Each end's name brightens as its picture does. */
-.compare { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; font-family: var(--sans); font-size: 12.5px; }
-.compare-a { opacity: calc(1 - 0.5 * var(--f, 0)); }
-.compare-b { opacity: calc(0.5 + 0.5 * var(--f, 0)); }
-.compact .compare { padding: 0 var(--side); background: var(--bg); }
-.stage > .compare {
-  /* In the space the cards leave: their left margin is 6vw and they're at most 34rem wide. */
-  position: absolute; top: 16px; right: 20px; width: min(460px, calc(94vw - 34rem - 40px)); padding: 0 14px;
-  background: var(--card); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--rule); border-radius: 999px;
-}
-
-.motion-push .layer .main {
-  transform: scale(calc(1 + var(--p, 0) * 0.14));
-  transform-origin: 52% 48%;
-  will-change: transform;
-}
-
-.layer figcaption {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  padding: max(10px, env(safe-area-inset-top)) 16px 18px;
-  background: linear-gradient(rgba(0, 0, 0, 0.72), rgba(0, 0, 0, 0.45) 70%, transparent);
-  font-size: 11.5px;
-  line-height: 1.4;
-  color: rgba(236, 230, 218, 0.86);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
-}
-figcaption a { color: inherit; }
-.tag {
-  display: inline-block;
-  font-size: 10px;
-  text-transform: uppercase;
-  padding: 2px 6px;
-  margin-right: 8px;
-  border-radius: 2px;
-  text-shadow: none;
-}
-.tag-render { background: rgba(14, 13, 11, 0.7); border: 1px solid rgba(236, 230, 218, 0.35); }
-.tag-photograph { background: var(--accent); color: #1a1408; }
-
-/* The cards scroll over the stage; only the cards themselves catch the pointer,
-   so the stage's slider and caption links stay reachable between them. */
-.cards { margin-top: -100svh; position: relative; pointer-events: none; }
-.card { pointer-events: auto; }
-.card-slot {
-  height: 100svh;
-  display: flex;
-  align-items: flex-end;
-  padding: 0 16px max(28px, env(safe-area-inset-bottom));
-}
-.card {
-  max-width: 34rem;
-  background: var(--card);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  padding: 18px 20px;
-}
-.card p { margin: 0 0 0.7em; }
-.card p:last-child { margin-bottom: 0; }
-.kicker { color: var(--accent); }
-.figure { font-size: 1.3em; line-height: 1.25; }
-.aside { font-size: 0.82em; color: var(--dim); }
-.sources { font-size: 11.5px; color: var(--faint); margin-top: 1em !important; }
-.sources a { color: var(--dim); }
-.key { list-style: none; margin: 0 0 0.9em; padding: 0; display: grid; gap: 4px; font-size: 0.86em; }
-.key li { display: flex; align-items: center; gap: 10px; }
-.key-dots { display: inline-flex; flex: none; width: 48px; }
-.key-single .key-dots { width: 14px; }
-.key-dots i { width: 12px; height: 12px; border-radius: 50%; margin-right: -2px; border: 1px solid rgba(0, 0, 0, 0.45); }
-.links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
-
-@media (min-width: 900px) {
-  .card-slot { align-items: center; padding-left: 6vw; }
-  .card { font-size: 20px; padding: 24px 28px; }
-  .layer figcaption {
-    left: auto; right: 0; top: auto; bottom: 0; max-width: 46rem; text-align: right;
-    padding: 18px 20px 14px 40px;
-    background: linear-gradient(to left, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.45) 75%, transparent);
-  }
-}
-
-.d-line {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-dasharray: 1;
-  stroke-dashoffset: calc(1 - var(--draw, 1));
-}
-.d-faint { opacity: 0.55; }
-.d-wall { color: #8fa3b8; }
-.d-wall-text { fill: #8fa3b8; }
-.d-label, .d-small, .d-result, .d-sign { font-family: var(--sans); fill: var(--ink); }
-.d-label { font-size: 21px; }
-.d-small { font-size: 17px; fill: var(--dim); }
-.d-sign { font-size: 28px; }
-.d-result { font-size: 23px; }
-.d-ok { fill: #8fd19e; }
-.d-no { fill: #e8806e; }
+.sty-chips button[aria-pressed='true'] { border-color: var(--accent); background: rgba(233, 184, 90, 0.16); }
+.sty-chips i { width: 12px; height: 12px; border-radius: 50%; }
+.sty-apart { display: flex; align-items: center; gap: 12px; font: 12px var(--sans); letter-spacing: 0.04em; text-transform: uppercase; color: var(--dim); margin: 2px 0 4px; }
 
 
-/* ── Step inside ───────────────────────────────────────────────────────── */
-
-.inside { position: relative; min-height: 100svh; display: flex; align-items: flex-end; }
-.inside-image { position: absolute; inset: 0; margin: 0; }
-.inside-image img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
-.inside-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 30%, var(--bg)); }
-.inside-copy { position: relative; padding: 0 max(16px, 7vw) 12svh; max-width: 40rem; }
-.inside h2 { font-weight: 400; font-size: clamp(36px, 7vw, 64px); margin: 0 0 12px; }
-.button {
-  display: inline-block;
-  margin: 10px 0 6px;
-  padding: 14px 22px;
-  background: var(--accent);
-  color: #1a1408;
-  font-family: var(--sans);
-  font-weight: 600;
-  font-size: 16px;
-  text-decoration: none;
-  border-radius: 4px;
-}
-.button:hover { background: #f3c977; }
-
-/* ── Credits ───────────────────────────────────────────────────────────── */
-
+/* Sources and credits, over everything. */
+.sty-credits { position: fixed; inset: 0; z-index: 30; overflow-y: auto; background: var(--bg); padding: max(12px, env(safe-area-inset-top)) 0 0; }
+.sty-close { position: sticky; top: 12px; float: right; margin-right: 12px; z-index: 1; }
+.sty-credits a { color: var(--ink); text-decoration-color: var(--faint); text-underline-offset: 3px; }
 .credits {
   max-width: 46rem;
-  padding: 10svh max(16px, 7vw) 16svh;
+  padding: 24px 16px 16svh; margin: 0 auto;
   font-size: 16px;
   color: var(--dim);
 }
@@ -256,11 +100,32 @@ figcaption a { color: inherit; }
 .source-list { font-size: 14px; }
 .colophon { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; }
 
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  .motion-push .layer .main { transform: none; }
-  .d-wave { animation: none; opacity: 0.8; }
+/* The sound keeps its pill, above the card. */
+body:has(.sty) .np-floating { bottom: auto; top: max(10px, env(safe-area-inset-top)); }
+
+/* Shared with the diagrams and the cards' words. */
+.key { list-style: none; margin: 0 0 0.9em; padding: 0; display: grid; gap: 4px; font-size: 0.86em; }
+.key li { display: flex; align-items: center; gap: 10px; }
+.key-dots { display: inline-flex; flex: none; width: 48px; }
+.key-single .key-dots { width: 14px; }
+.key-dots i { width: 12px; height: 12px; border-radius: 50%; margin-right: -2px; border: 1px solid rgba(0, 0, 0, 0.45); }
+.links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+
+/* A phone on its side, and wide screens: the card down the right, the picture on the left. */
+@media (orientation: landscape) {
+  .sty-card { left: auto; right: max(12px, env(safe-area-inset-right)); bottom: 12px; width: min(400px, 46vw); max-height: calc(100svh - 24px); }
+  .sty-card.full { top: 12px; width: min(640px, 62vw); }
+  .sty-pic { inset: 0; aspect-ratio: auto; }
+  .sty-still figcaption { right: auto; max-width: 52vw; padding: 26px 14px 10px; }
+  .seat-figure { display: grid; grid-template-columns: 1fr 260px; gap: 0 16px; align-items: start; }
+  .seat-figure > * { grid-column: 2; }
+  .seat-figure > .seat-diagram { grid-column: 1; grid-row: 1 / span 4; width: auto; max-width: 100%; }
 }
+@media (min-width: 900px) and (orientation: landscape) {
+  .sty-card { right: 3vw; bottom: 5svh; max-height: 84svh; }
+  .sty-card.full { top: 5svh; }
+}
+@media (prefers-reduced-motion: reduce) { .sty-still, .sty-body, .sty-progress i { transition: none; animation: none; } .d-wave { animation: none; opacity: 0.8; } }
 
 /* ── Diagrams (DiagramFigure.tsx): a figure in the reading flow ──────────────
    Draws itself in once on first view (--draw 0 → 1), then loops; .still
@@ -268,8 +133,6 @@ figcaption a { color: inherit; }
 
 @property --draw { syntax: '<number>'; inherits: true; initial-value: 1; }
 
-.card-slot.slot-figure { align-items: center; justify-content: center; }
-.card-figure { width: min(100%, 44rem); max-width: none; margin: 0; padding: 14px 14px 10px; }
 .dg { position: relative; }
 .diagram { width: 100%; height: auto; display: block; color: var(--ink); }
 .dg:not(.drawn) .diagram { --draw: 0; }
@@ -380,80 +243,33 @@ figcaption a { color: inherit; }
   .dg-pause { display: none; }
 }
 
-/* ── The compact layout (Story.tsx: phones, and short windows) ───────────────
-   The picture is pinned and the words scroll in their own space, never over
-   it. Each block is as tall as its content. Upright: picture above, words
-   below. On its side: picture left, words right. --f from Story.tsx drives a
-   crossfade; only one caption shows at a time. */
 
-.compact { --side: max(16px, env(safe-area-inset-left), env(safe-area-inset-right)); }
-.compact .title { min-height: 60svh; }
-.compact .scroll-hint { display: none; }
+/* The diagrams' lines and lettering. */
+.d-line {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--draw, 1));
+}
+.d-faint { opacity: 0.55; }
+.d-wall { color: #8fa3b8; }
+.d-wall-text { fill: #8fa3b8; }
+.d-label, .d-small, .d-result, .d-sign { font-family: var(--sans); fill: var(--ink); }
+.d-label { font-size: 21px; }
+.d-small { font-size: 17px; fill: var(--dim); }
+.d-sign { font-size: 28px; }
+.d-result { font-size: 23px; }
+.d-ok { fill: #8fd19e; }
+.d-no { fill: #e8806e; }
 
-.compact .pin { position: sticky; top: 0; z-index: 2; background: var(--bg); }
-.compact .pin::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 22px; background: linear-gradient(var(--bg), transparent); pointer-events: none; }
-.pin-image { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #000; }
-.pin-image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-.pin-image .pin-b { opacity: var(--f, 0); }
-.c-pinned.motion-push .pin-image img { transform: scale(calc(1 + var(--p, 0) * 0.14)); transform-origin: 52% 48%; }
-.pin-caption { position: relative; font-family: var(--sans); font-size: 11.5px; line-height: 1.4; letter-spacing: 0.03em; color: var(--dim); min-height: 42px; }
-.pin-caption > span { display: block; padding: 6px var(--side) 2px; }
-.pin-caption a { color: inherit; }
-.pin-cap-a { opacity: clamp(0, calc((0.5 - var(--f, 0)) * 1000), 1); }
-.pin-cap-b { position: absolute; inset: 0; opacity: clamp(0, calc((var(--f, 0) - 0.5) * 1000), 1); pointer-events: none; }
-
-.compact .block { max-width: 34rem; }
-.compact .block p { margin: 0 0 0.7em; }
-.compact .block p:last-child { margin-bottom: 0; }
-.c-copy { padding: 24px var(--side) 22svh; }
-.c-copy .block + .block { margin-top: 44px; }
-.c-copy .block[data-fade] { margin-top: 26svh; }
-
-.c-flow { padding: 44px var(--side) 56px; border-top: 1px solid var(--rule); }
-.c-flow > * + * { margin-top: 36px; }
-.c-flow .pin { display: none; }
-.c-figure { margin-left: 0; margin-right: 0; margin-bottom: 0; }
-
-.compact .dg-switch { max-width: calc(100% - 52px); }
-.compact .seat-figure .dg-switch { max-width: 100%; }
+/* On a phone the diagrams' controls are thumb-sized. */
+.dg-switch { max-width: calc(100% - 52px); }
+.seat-figure .dg-switch { max-width: 100%; }
 /* The note's longest wording, reserved, so the plan doesn't jump under a dragging finger. */
-.compact .seat-note { min-height: 5.4em; }
-.compact .dg-switch button, .compact .seat-presets button { min-height: 40px; }
-.compact .dg-pause { width: 44px; height: 44px; }
-.compact .credits, .compact .inside-copy { padding-left: var(--side); padding-right: var(--side); }
-
-@media (orientation: landscape) {
-  .compact .title { min-height: 70svh; }
-  .c-pinned { display: grid; grid-template-columns: 46fr 54fr; }
-  .c-pinned .pin { height: 100svh; align-self: start; }
-  .compact .pin::after { display: none; }
-  .compact .block, .c-flow { font-size: 17px; }
-  .compact .pin-caption > span { padding-left: max(16px, env(safe-area-inset-left)); padding-right: 16px; }
-  .c-copy { padding: 16px max(20px, env(safe-area-inset-right)) 45svh 20px; }
-  .c-copy .block[data-fade] { margin-top: 50svh; }
-
-  .c-flow { padding: 0 0 32px; }
-  .c-flow > * + * { margin-top: 20px; }
-  .c-seg { display: grid; grid-template-columns: 46fr 54fr; }
-  .c-flow .pin { display: block; align-self: start; }
-  .c-seg .block { padding: 16px max(20px, env(safe-area-inset-right)) 24px 20px; }
-  .c-figure { padding: 12px max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left)); }
-  /* A diagram fits the screen's height; the seat's controls sit clear of the now-playing pill. */
-  .c-figure .diagram:not(.seat-diagram) { width: auto; height: calc(100svh - 80px); max-width: 100%; margin: 0 auto; }
-  .seat-figure { display: grid; grid-template-columns: 1fr 300px; gap: 0 16px; align-items: start; }
-  .seat-figure > * { grid-column: 2; }
-  .seat-figure > .seat-diagram { grid-column: 1; grid-row: 1 / span 4; width: auto; max-width: 100%; max-height: calc(100svh - 24px); }
-  .seat-figure .seat-note { font-size: 13.5px; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .c-pinned.motion-push .pin-image img { transform: none; }
-}
-
-/* Beat 6's needles: over the picture, in the picture's own box (Needles.tsx). */
-.needles { pointer-events: none; }
-.layer .needles, .pin-image .needles { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.needles line { stroke: #0a0a0a; stroke-width: 1.2px; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-
+.seat-note { min-height: 5.4em; }
+.dg-switch button, .seat-presets button { min-height: 40px; }
+.dg-pause { width: 44px; height: 44px; }
 /* A reading line at the very top of a diagram clears its pause button. */
 .dg > .dg-read:first-child { padding-right: 52px; }

@@ -223,6 +223,8 @@ export function TopBar({
   openAbout,
   openListen,
   onHome,
+  onStory,
+  storyUnfinished,
 }: {
   options: SceneOptions;
   setOptions: (o: SceneOptions) => void;
@@ -233,6 +235,10 @@ export function TopBar({
   openAbout: () => void;
   openListen: () => void;
   onHome: () => void;
+  /** Back to the story, on this same page. */
+  onStory: () => void;
+  /** The reader put the story away part-way through. */
+  storyUnfinished: boolean;
 }) {
   const toggle = (k: 'showScaffold' | 'showAmps' | 'showBand' | 'showStage' | 'showFigures', label: string) => (
     <label className="check-row">
@@ -263,9 +269,9 @@ export function TopBar({
         </div>
       </div>
       <div className="top-actions">
-        <a className="pill pill-story" href="./story.html">
-          The story
-        </a>
+        <button className={`pill pill-story${storyUnfinished ? ' pill-resume' : ''}`} onClick={onStory}>
+          {storyUnfinished ? 'Back to the story' : 'The story'}
+        </button>
         <button className="pill pill-listen" onClick={openListen}>
           Listen
         </button>

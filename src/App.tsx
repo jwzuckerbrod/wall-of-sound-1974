@@ -19,6 +19,8 @@ import { COMPARE_VIEW, PLANE_VIEWS, standIn, VIEWPOINTS, viewFromSearch, viewIn,
 import { INSTRUMENTS, InstrumentCard, SpotCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 import { track } from './analytics';
+import { StoryLayer } from './story/StoryLayer';
+import { STEPS } from './story/steps';
 
 /** Whether a mesh, or something it sits in, is marked as clickable (userData.pickable). */
 function isPickable(o: THREE.Object3D | null): boolean {
@@ -94,6 +96,18 @@ function useOnChange<T>(value: T, report: (v: T) => void) {
   }, [value]);
 }
 
+/**
+ * The page opens on the story (src/story), told over this same model. A link
+ * that asks for something of the explorer (a venue, a comparison, a view, no
+ * interface) or ends in #explore opens the explorer; #<step> opens that step.
+ */
+function storyFromLocation(hud: boolean): { on: boolean; at: number } {
+  const at = Math.max(0, STEPS.findIndex((s) => s.id === window.location.hash.slice(1)));
+  return { on: hud && window.location.search === '' && window.location.hash !== '#explore', at };
+}
+
+const setHash = (hash: string) => window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
+
 export default function App() {
   const initial = useMemo(() => viewFromSearch(window.location.search), []);
   const viewId = initial.id;
@@ -126,7 +140,14 @@ export default function App() {
 
   // What the card on the right shows: a tour stop (the overview on arrival),
   // a speaker block someone clicked, an instrument, or nothing.
-  const [stop, setStop] = useState<number | null>(initial.hud ? 0 : null);
+  // The story: which step, and whether it has the screen (else the explorer does).
+  const opened = useMemo(() => storyFromLocation(initial.hud), [initial.hud]);
+  const [storyAt, setStoryAt] = useState(opened.at);
+  const [inStory, setInStory] = useState(opened.on);
+  const [portrait, setPortrait] = useState(() => window.innerHeight > window.innerWidth);
+  const step = STEPS[storyAt];
+
+  const [stop, setStop] = useState<number | null>(initial.hud && !opened.on ? 0 : null);
   const [instrument, setInstrument] = useState<string | null>(null);
 
   // Inspection state: what the cursor is over, what is pinned open, which
@@ -154,7 +175,7 @@ export default function App() {
   );
 
   const view = useMemo(() => viewIn(viewId, options.venue), [viewId, options.venue]);
-  const hud = initial.hud;
+  const hud = initial.hud && !inStory;
   const q = tierSettings(tier);
 
   /** Fly to a tour stop and open its card. The overview (0) opens its card where the camera is. */
@@ -190,6 +211,51 @@ export default function App() {
     setInstrument(null);
   }, []);
 
+  /**
+   * A step of the story sets the explorer's own state: the venue, the colours,
+   * what stands beside the Wall, how far apart it is, where the camera is. So
+   * when the story is put away, the explorer carries on from what was showing.
+   */
+  useEffect(() => {
+    if (!inStory) return;
+    const s = STEPS[storyAt];
+    setOptions((o) => ({ ...o, venue: 'hollywoodBowl', colorMode: s.colorMode ?? 'material', compare: s.compare ?? null, planeAt: 'beside' }));
+    setIsolated(s.isolated ?? null);
+    setExplode(s.explode ?? 0);
+    closeCard();
+    setAboutOpen(false);
+    setListenOpen(false);
+    for (let i = storyAt; i >= 0; i--) {
+      const at = STEPS[i].pose;
+      if (!at) continue;
+      // A new object each time, so coming back to a step flies back to its view.
+      setPose({ ...at(portrait) });
+      setNavMode('tour');
+      break;
+    }
+    setHash(storyAt ? `#${s.id}` : '');
+  }, [inStory, storyAt, portrait, setOptions, closeCard]);
+
+  const goToStep = useCallback((n: number) => setStoryAt(Math.min(STEPS.length - 1, Math.max(0, n))), []);
+  /** Put the story away: the explorer, as the step left it. */
+  const leaveStory = useCallback(() => {
+    setInStory(false);
+    setHash('#explore');
+  }, []);
+  /** Back to the story where it was left; from its end, to its start. */
+  const openStory = useCallback(() => {
+    setStoryAt((n) => (n >= STEPS.length - 1 ? 0 : n));
+    setInStory(true);
+  }, []);
+
+  // Each step once, the first time it's reached, in order: where readers stop.
+  const reached = useRef(new Set<string>());
+  useEffect(() => {
+    if (!inStory || reached.current.has(step.id)) return;
+    reached.current.add(step.id);
+    track('beat', step.id, { order: reached.current.size, label: step.name });
+  }, [inStory, step]);
+
   // What people do, for the private dashboard (src/analytics.ts). Watching the state, not the buttons,
   // so a keyboard shortcut counts the same as a click.
   // Each sends a stable id and the name people see on screen (the label), which the dashboard shows.
@@ -202,8 +268,9 @@ export default function App() {
     const i = id ? INSTRUMENTS[id] : undefined;
     if (id) track('instrument', id, { label: i ? `${i.title} (${i.player})` : id });
   });
-  useOnChange(isolated, (id) => id && track('isolate', id, { label: CHANNELS[id].label }));
-  useOnChange(options.venue, (v) => track('venue', v, { label: wall.venues[v].label }));
+  // Not what a step of the story set by itself.
+  useOnChange(isolated, (id) => id && id !== step.isolated && track('isolate', id, { label: CHANNELS[id].label }));
+  useOnChange(options.venue, (v) => !inStory && track('venue', v, { label: wall.venues[v].label }));
   useOnChange(aboutOpen, (open) => open && track('about', null, { label: 'About' }));
   useOnChange(listenOpen, (open) => open && track('listen', null, { label: 'Listen' }));
   useOnChange(units, (u) => track('units', u, { label: u === 'metric' ? 'Metric' : 'Feet and inches' }));
@@ -214,11 +281,18 @@ export default function App() {
   // on a phone, lift the picture out of the sheet.
   const [wide, setWide] = useState(() => window.innerWidth > 720);
   useEffect(() => {
-    const on = () => setWide(window.innerWidth > 720);
+    const on = () => {
+      setWide(window.innerWidth > 720);
+      setPortrait(window.innerHeight > window.innerWidth);
+    };
     window.addEventListener('resize', on);
     return () => window.removeEventListener('resize', on);
   }, []);
-  const offset = cardOpen ? (wide ? { room: 300, up: 0 } : { room: 0, up: Math.round(window.innerHeight * 0.2) }) : { room: 0, up: 0 };
+  // In the story, clear of its card: above it on a phone, beside it on a wide screen.
+  const storyCard = inStory && !step.still && !step.full;
+  const offset = storyCard
+    ? portrait ? { room: 0, up: Math.round(window.innerHeight * 0.17) } : { room: 400, up: 0 }
+    : cardOpen ? (wide ? { room: 300, up: 0 } : { room: 0, up: Math.round(window.innerHeight * 0.2) }) : { room: 0, up: 0 };
 
   /** Stand where the comparison shows. */
   const goToCompare = useCallback(
@@ -244,6 +318,8 @@ export default function App() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      // The story has its own keys (StoryLayer).
+      if (inStory) return;
       // Escape always closes, wherever focus is.
       if (e.key === 'Escape') {
         if (listenOpen) setListenOpen(false);
@@ -281,7 +357,7 @@ export default function App() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [stop, goToStop, goToViewpoint, aboutOpen, listenOpen, closeCard, setOptions]);
+  }, [stop, goToStop, goToViewpoint, aboutOpen, listenOpen, closeCard, setOptions, inStory]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -337,6 +413,8 @@ export default function App() {
           interaction={interaction}
           activeStop={hud ? stop : null}
           dots={hud}
+          // In the story the camera stays near the Wall: a long pull back loses the reader.
+          maxDistance={inStory ? 110 : undefined}
           onPickStop={goToStop}
           onPickInstrument={pickInstrument}
           offset={offset}
@@ -361,6 +439,8 @@ export default function App() {
             openAbout={() => setAboutOpen(true)}
             openListen={() => setListenOpen(true)}
             onHome={() => goToStop(0)}
+            onStory={openStory}
+            storyUnfinished={storyAt > 0 && storyAt < STEPS.length - 1}
           />
           <BottomBar
             explode={explode}
@@ -383,10 +463,28 @@ export default function App() {
         </>
       )}
 
+      {inStory && (
+        <StoryLayer
+          at={storyAt}
+          go={goToStep}
+          onLook={leaveStory}
+          onSkip={() => {
+            leaveStory();
+            goToStop(0);
+          }}
+          isolated={isolated}
+          setIsolated={setIsolated}
+          explode={explode}
+          setExplode={setExplode}
+        />
+      )}
+
       {aboutOpen && <About onClose={() => setAboutOpen(false)} />}
       {listenOpen && <ListenPanel onClose={() => setListenOpen(false)} />}
       {/* Over the scene while the sound plays on; the panels have their own place for it. */}
-      {!listenOpen && !aboutOpen && <NowPlaying onOpen={() => setListenOpen(true)} />}
+      {!listenOpen && !aboutOpen && (
+        <NowPlaying onOpen={() => (inStory ? goToStep(STEPS.findIndex((x) => x.id === 'listen')) : setListenOpen(true))} />
+      )}
     </>
   );
 }

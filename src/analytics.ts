@@ -1,8 +1,8 @@
 /**
  * Records what people do, for the private dashboard at jzuckerbrod.com/stats.
  * The counter itself (https://jzuckerbrod.com/s.js, from the personal-website project) is loaded by
- * index.html and story.html. It keeps no cookies or IP addresses and does nothing on localhost.
- * Calls made before it loads wait in a queue that index.html and story.html set up.
+ * index.html. It keeps no cookies or IP addresses and does nothing on localhost.
+ * Calls made before it loads wait in a queue that index.html sets up.
  */
 type Jzt = (name: string, value?: string | number | null, props?: Record<string, unknown>) => void;
 

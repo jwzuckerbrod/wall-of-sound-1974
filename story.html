@@ -1,21 +1,23 @@
 <!doctype html>
+<!--
+  The story used to be this page. It is now told over the 3D model on the front
+  page (src/story/, src/App.tsx), so old links land there, on the same part.
+-->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#0e0d0b" />
-    <title>The Wall of Sound — Hollywood Bowl, 1974</title>
-    <meta
-      name="description"
-      content="The Grateful Dead's Wall of Sound at the Hollywood Bowl, 21 July 1974: a historically sourced reconstruction, with every source credited."
-    />
-    <!-- Privacy-friendly visit counter (no cookies; see src/analytics.ts). Calls made before it loads queue up. -->
-    <script>window.jzt = window.jzt || function () { (window.jzt.q = window.jzt.q || []).push(arguments); };</script>
-    <script defer src="https://jzuckerbrod.com/s.js" data-site="story"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The Wall of Sound, 1974</title>
+    <script>
+      (function () {
+        var moved = { real: 'hook', paths: 'before', monitor: 'garcia', singing: 'mics', power: 'amps', credits: 'evidence' };
+        var id = location.hash.slice(1);
+        location.replace('./' + (id ? '#' + (moved[id] || id) : ''));
+      })();
+    </script>
+    <noscript><meta http-equiv="refresh" content="0; url=./" /></noscript>
   </head>
   <body>
-    <div id="root"></div>
-    <noscript>This page needs JavaScript. The reconstruction's notes are at github.com/jwzuckerbrod/wall-of-sound-1974.</noscript>
-    <script type="module" src="/src/story/main.tsx"></script>
+    <p><a href="./">The Wall of Sound, 1974: the story and the 3D model</a></p>
   </body>
 </html>

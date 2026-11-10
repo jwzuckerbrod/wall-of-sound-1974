@@ -5,7 +5,7 @@
 # Safari (same engine family, no touch), and how to get the real thing.
 cd "$(dirname "$0")/.."
 PORT=5174
-ROUTE="${1:-/story.html}"
+ROUTE="${1:-/}"
 BASE="http://localhost:$PORT"
 
 if ! curl -s -o /dev/null "$BASE"; then

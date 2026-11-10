@@ -36,8 +36,8 @@
   <body>
     <header>
       <select id="page" aria-label="Page">
-        <option value="/story.html">The story</option>
-        <option value="/index.html">The explorer (the Bowl)</option>
+        <option value="/">The story</option>
+        <option value="/#explore">The explorer (the Bowl)</option>
         <option value="/index.html?venue=indoors">The explorer, indoors</option>
       </select>
       <select id="device" aria-label="iPhone"></select>
@@ -67,7 +67,7 @@
       const $ = (id) => document.getElementById(id);
       const saved = new URLSearchParams(location.search);
       const state = {
-        page: saved.get('page') || '/story.html',
+        page: saved.get("page") || "/",
         device: DEVICES[saved.get('device')] ? saved.get('device') : 'std',
         sideways: saved.get('sideways') === '1',
       };
