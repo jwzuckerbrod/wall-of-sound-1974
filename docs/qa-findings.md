@@ -1105,3 +1105,51 @@ on a real phone or the Simulator.
 where the story is set. `?venue=indoors` (or `?venue=arena`) opens indoors, as on Pechner's
 photograph. `?venue=bowl` still works. `?compare=737` without a venue opens indoors, since the
 airliner stands indoors only.
+
+---
+
+## 27. The story, in steps over the model (10 November 2026)
+
+**Why.** The owner's verdict on the scrolling story: it didn't "wow" like the
+explorer and didn't tell a whole narrative. Read back, it was a tour of
+features: no problem, no cost, no ending, the payoff (Listen) in the middle,
+and the same wide frames seven times. A friend's note agreed on what worked:
+the visualisations of whose sound came from where.
+
+**What changed.**
+
+1. **Three acts and a coda** (`docs/story.md`): the problem (before the Wall,
+   Bear's answer), the machine (ending on Listen), the cost and the end, then
+   how we know. Act 3's figures were already in the config with sources.
+2. **Told over the live model, on the front page.** One page: it opens on the
+   story, and the explorer is what's left when the story is put away. This
+   reverses the 4 November decision to keep them apart.
+3. **Steps, not scrolling.** A scrolling mockup put the reader in a trap: the
+   page and the model both want the drag and the wheel. Now the page never
+   scrolls. Back and Next (buttons, arrow keys, a swipe on the card) move
+   between eighteen steps; the model can be turned at any live step, and the
+   camera stays within 110 m of the Wall while the story is up.
+4. **One control per step.** The explorer's tools each get the step they are
+   the point of: the buses for scale, the six systems' chips, a slider to pull
+   the Wall apart. "Hide text" and the last step hand over the whole explorer,
+   from whatever the step was showing; the top bar's pill leads back.
+
+**How it's built.** A step (`src/story/steps.tsx`) sets the explorer's own
+state in `App.tsx`: venue, colours, comparison, isolation, how far apart,
+camera. `StoryLayer.tsx` draws the stills, the card and the controls. A link
+with a query (`?venue=…`, `?compare`, `?hud=0`) or `#explore` opens the
+explorer; `#<step>` opens that step. Every still carries its tag, caption and
+credit; every step its sources; "All credits" opens the full credits.
+
+**Honest limits.** "The last night" shows the model coming apart, a schematic,
+not a picture of Winterland. Why the Wall was retired is not on the page: no
+source for it is in the config yet. The live Bowl has empty seats; the stills
+have the crowd.
+
+**Checked** in desktop Chromium at 402 x 760 and at desktop width: every step,
+turning the model, the chips, the slider's start, hiding and returning,
+skipping, credits, deep links, `npm run build`. **Not checked:** a real phone
+or the Simulator (touch, the swipe, pinch), a phone on its side, audio
+playback, the explorer bar's Compare and View menus when arrived at from the
+story. **Known:** drei's dot labels log eight React "unmount a root" warnings
+once, when the page opens on the story; nothing breaks.

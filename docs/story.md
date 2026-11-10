@@ -8,15 +8,14 @@ instantly on any device, and it ends by inviting people into the 3D explorer.
 A draft to react to. The copy is working copy; every figure is from the config
 and carries its source.
 
-**Built, first version (7 October 2026):** `story.html` (`src/story/`), at
-<http://localhost:5174/story.html>. Beats 1–7 scroll over pinned images; beat 8
-links to the explorer, which stays at `index.html` for now. Every beat lists
-its sources, every image says whether it's a photograph or a render, and the
-page ends in full credits (qa-findings §17). Images: `npm run story:images`
-copies the graded renders from `.shots/story/v2/` (made by
-`.shots/story/v2/render.sh`) and the Bowl photograph into `public/story/`.
-On a phone the picture is pinned and the words scroll beside or below it, never
-over it (qa-findings §20). Larger windows keep cards over a full-screen picture.
+**Built (10 November 2026): the story is told in steps, over the live 3D model,
+on the front page.** `index.html` opens on it; `src/story/steps.tsx` holds the
+eighteen steps, `src/story/StoryLayer.tsx` the card, stills and controls, and
+`src/App.tsx` applies each step to the explorer's own state. See "Proposed: the
+story in three acts" below for the order, and qa-findings §27 for how it got
+here. `story.html` now only sends old links to the front page. The sections
+"The shape" and "The beats" below describe the scrolling page it replaced
+(7 October to 9 November 2026) and are kept as its record.
 
 **The place: the Hollywood Bowl, Sunday 21 July 1974.** One real show gives the
 story a sense of place: the white shell, the hills, seventeen thousand people.
@@ -234,28 +233,19 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 
 ### Then: the live model as the story's picture
 
-**Mockup built (10 November 2026):** `live.html` (`src/live/`), at
-<http://localhost:5174/live.html>, or `npm run phone /live.html`. Dev only: it is
-not in `vite.config.ts`'s inputs, so it is never published. Working copy.
+**Built as proposed, with these changes.** Steps, not scrolling: a scrolling
+version was mocked up first and dropped, because the page and the model both
+want the same gesture and the reader got trapped between them. No placeholder
+pictures: "Before the Wall" is the signal-path diagram's own step, and "The last
+night" is the model coming fully apart. Bear has no portrait. The explorer's
+three tools each get a step (the buses, the six systems' chips, pull it apart).
+"What's left" uses the `amps-close` render with its needles; "How we know" uses
+`bowl-evidence`. Renders no step uses any more (`title`, `bowl`, `bowl-systems`,
+`bowl-photo`, `bowl-hero`, `garcia-mark`, `cluster-up`) are still in
+`public/story/`.
 
-It is a **stepped story, not a scrolling page**. A scrolling version was tried
-first and dropped: the page and the model both want the same gesture, and the
-reader got trapped between them. Now the page never scrolls. The model fills the
-screen and can be turned at any step; a card at the bottom carries the words,
-Back and Next (also arrow keys, or a swipe on the card). Seventeen steps: ten fly
-the explorer's camera and set what the model shows, three are stills, and four
-(the three sound diagrams and the players) take the whole screen. "Hide text"
-puts the card away to look around; the last step's button does the same.
-
-The explorer's three tools each get one step where they are the point, with one
-control in the card: the buses for scale ("641 speakers"), the six systems'
-chips to light one alone ("Six systems"), and a slider to take the Wall apart
-("Pull it apart"). While looking around, the explorer's whole bottom bar is
-there: Take it apart, Colour, Compare (with the 737) and View.
-
-If it holds up on a real phone, the story becomes the guided way
-through the model and the explorer's own tour retires. That would reverse the
-4 November decision to keep the two apart; the stills stay as the fallback.
+**Still to source and write:** why the Wall was retired and what the band did
+next; what concert sound took from it; what it was like to play through.
 
 ---
 
@@ -272,9 +262,9 @@ through the model and the explorer's own tour retires. That would reverse the
 
 - The red kit, modelled (the Bowl show had the wine-red kit, not the butcher block).
 
-The story and the explorer are separate products, closely linked (decided 4
-November 2026): `story.html` stays the story's own address, and `index.html`
-stays the explorer's. Neither is the other's front page.
+The story and the explorer are one page (decided 10 November 2026, reversing
+4 November): it opens on the story, and the explorer is what's left when the
+story is put away.
 
 ## The crowd and the hills
 

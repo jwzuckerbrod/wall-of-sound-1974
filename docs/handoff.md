@@ -1,4 +1,4 @@
-# Handoff: where things stand (4 November 2026)
+# Handoff: where things stand (10 November 2026)
 
 ## Done recently
 
@@ -24,17 +24,19 @@
   Credit generously: photographer and source on every photo shown, sources
   linked, and a full credits page on the site.
 
-## Decided (4 November 2026)
+## Decided (10 November 2026, qa-findings §27)
 
-- **The story and the explorer are separate products, closely linked.** Neither
-  is the other's front page: `story.html` and `index.html` keep their addresses.
+- **The story and the explorer are one page.** `index.html` opens on the story,
+  told in eighteen steps over the live model (`src/story/`); putting the story
+  away leaves the explorer. This reverses 4 November's "separate products".
+  `story.html` only redirects.
 
 ## Other open items
 
-- **Story:** built, on the phone layout (§20) and with its last pictures (§21).
-  Left: the red kit (still the Hartford concert-tom model, recoloured), and two
-  questions in `docs/story.md` (tone, the name). Not yet tried on a real phone:
-  the new title and the needles.
+- **Story:** built as steps over the model (§27). Not yet tried on a real
+  phone or the Simulator: touch, the swipe, a phone on its side. Left: the
+  ending's why (needs sources), the red kit, tone and the name
+  (`docs/story.md`). Not pushed as of this note.
 - A second, smaller curved cluster low right at the Bowl, not modelled, and the
   right-hand bank's short front row of tubes (§19).
 - The Bowl photograph shows no sign of a 10 ft deck (§19); the model keeps it.

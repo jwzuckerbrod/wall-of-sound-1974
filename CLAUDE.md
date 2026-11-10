@@ -1,7 +1,7 @@
 # Wall of Sound, 1974: working notes for Claude
 
 A historically sourced 3D reconstruction of the Grateful Dead's Wall of Sound
-(summer 1974), as a browser app and a Blender scene, plus a story page built
+(summer 1974), as a browser app (a story told over the model, then an explorer) and a Blender scene, with stills built
 from Cycles renders. Read `docs/handoff.md` first for where things stand.
 
 ## Principles
@@ -13,7 +13,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   camera (`build_scene.py --shot pechner`, `blender/compare.py`). The story is
   set at the **Hollywood Bowl, 21 July 1974**.
 - **Record findings** in `docs/qa-findings.md` (numbered sections; last is
-  §26) and gear in `docs/surviving-gear.md`.
+  §27) and gear in `docs/surviving-gear.md`.
 - **Run `npm run check` and `npm run verify` before committing.** 641 drivers.
 
 ## Running things
@@ -21,7 +21,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - Browser app: `npm run dev` (port 5174; `.claude/launch.json` "wall-of-sound").
 - Phone review: `npm run phone [path]` opens real Safari on a simulated iPhone if
   Xcode is installed; if not, `phone.html`, a dev-only device frame for sizes.
-  Story page at `/story.html`; its images via `npm run story:images`.
+  The story's stills via `npm run story:images`.
 - After config changes: `npm run export:scene` (writes `blender/scene.json`).
 - Blender: `/Applications/Blender.app/Contents/MacOS/Blender -b -P <script> -- <args>`
   - `blender/build_scene.py --shot pechner|gear|rack|cluster [--venue arena|outdoor|hollywood]`
@@ -39,11 +39,15 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - `blender/scale/vwbus.py` and `b737.py` script the bus and the airliner to
   `public/models/` (after `npm run export:scene`). They appear under the explorer's
   "Compare size" menu, or with `?compare` and `?compare=737` (`&at=behind` or `&at=front`).
+- The page opens on **the story**, told in steps over the live model: the steps in
+  `src/story/steps.tsx` (camera, what the model shows, words, sources), the card and
+  stills in `src/story/StoryLayer.tsx`; `src/App.tsx` applies a step to the explorer's
+  state. `#<step id>` opens a step; `#explore` or any `?query` opens the explorer.
 - The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
   (each stop's camera, text, dot anchor and system), viewpoints in
   `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and
   bottom bars in `src/ui/Controls.tsx`.
-- Analytics: `index.html` and `story.html` load the counter from jzuckerbrod.com/s.js
+- Analytics: `index.html` loads the counter from jzuckerbrod.com/s.js
   (personal-website project); events via `track()` in `src/analytics.ts`. Dashboard at
   jzuckerbrod.com/stats.
 - Published at https://jwzuckerbrod.github.io/wall-of-sound-1974/ by
