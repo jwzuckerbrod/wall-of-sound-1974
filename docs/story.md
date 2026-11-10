@@ -242,10 +242,16 @@ It is a **stepped story, not a scrolling page**. A scrolling version was tried
 first and dropped: the page and the model both want the same gesture, and the
 reader got trapped between them. Now the page never scrolls. The model fills the
 screen and can be turned at any step; a card at the bottom carries the words,
-Back and Next (also arrow keys, or a swipe on the card). Sixteen steps: nine fly
+Back and Next (also arrow keys, or a swipe on the card). Seventeen steps: ten fly
 the explorer's camera and set what the model shows, three are stills, and four
 (the three sound diagrams and the players) take the whole screen. "Hide text"
 puts the card away to look around; the last step's button does the same.
+
+The explorer's three tools each get one step where they are the point, with one
+control in the card: the buses for scale ("641 speakers"), the six systems'
+chips to light one alone ("Six systems"), and a slider to take the Wall apart
+("Pull it apart"). While looking around, the explorer's whole bottom bar is
+there: Take it apart, Colour, Compare (with the 737) and View.
 
 If it holds up on a real phone, the story becomes the guided way
 through the model and the explorer's own tour retires. That would reverse the

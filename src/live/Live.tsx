@@ -1,15 +1,18 @@
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import * as THREE from 'three';
-import { wall, type ChannelId } from '../data/wall.config';
+import { CHANNELS, wall, type ChannelId } from '../data/wall.config';
 import { detectTier, tierSettings } from '../quality';
 import type { ArrayInteraction, ColorMode } from '../scene/Arrays';
 import { Post } from '../scene/Post';
-import { Scene, sceneDefaults } from '../scene/Scene';
+import { Scene, sceneDefaults, type SceneOptions } from '../scene/Scene';
 import type { CompareId } from '../scene/ScaleObjects';
 import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
-import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
+import { COMPARE_VIEW, PLANE_VIEWS, standIn, viewIn, viewpointIn, type ViewpointId } from '../scene/views';
+import type { PlaneAt } from '../geometry/scale';
+import { BottomBar, SYSTEMS } from '../ui/Controls';
+import '../ui/range.css';
 import { IMAGES, srcOf, type StoryImage } from '../story/images';
 import { DiagramFigure } from '../story/DiagramFigure';
 import { MicDiagram } from '../story/MicDiagram';
@@ -45,11 +48,18 @@ interface Step {
   colorMode?: ColorMode;
   isolated?: ChannelId;
   compare?: CompareId;
+  /** How far apart the Wall stands on arrival (0 to 1). */
+  explode?: number;
+  /** The one thing this step lets the reader do, in the card. */
+  control?: 'systems' | 'explode';
   body: ReactNode;
 }
 
 const DECK = wall.dimensions.stageDeckHeight;
 const WIDE: Pose = { position: [-14, 9, 44], target: [0, 9, 0], fov: 42 };
+/** Back and a little above, with room for the Wall to come apart. */
+const APART: Pose = { position: [-12, 12, 34], target: [0, 9, 0], fov: 46 };
+const APART_TALL: Pose = { position: [-12, 17, 54], target: [0, 9, 0], fov: 46 };
 const SEATS: Pose = { position: [0, 6, 40], target: [0, 9.5, 0], fov: 40 };
 /** In front of Garcia's mark, looking back past it and up his columns. */
 const GARCIA: Pose = { position: [-3.4, DECK + 1.7, 10.5], target: [-6.2, DECK + 5.2, 0], fov: 58 };
@@ -147,13 +157,25 @@ const STEPS: Step[] = [
     act: ACT2,
     pose: () => SEATS,
     colorMode: 'channel',
+    control: 'systems',
     body: (
       <>
         <p className="figure">Six systems, not one.</p>
-        <p>
-          Vocals, Garcia's guitar, Weir's guitar, the piano, the drums, and Lesh's bass on four channels of its own.
-          Nothing was mixed together until it reached the air.
-        </p>
+        <p>Each carried one thing, and nothing was mixed together until it reached the air. Tap one to see it alone.</p>
+      </>
+    ),
+  },
+  {
+    id: 'apart',
+    act: ACT2,
+    pose: (portrait) => (portrait ? APART_TALL : APART),
+    colorMode: 'channel',
+    explode: 0.6,
+    control: 'explode',
+    body: (
+      <>
+        <p className="figure">Pull it apart.</p>
+        <p>They were separate stacks of speakers, standing side by side. Drag to take the Wall apart and put it back.</p>
       </>
     ),
   },
@@ -313,6 +335,22 @@ export function Live() {
   const q = tierSettings(tier);
   const step = STEPS[at];
   const last = at === STEPS.length - 1;
+  // What the reader has set on this step: which system stands alone, how far apart the Wall is.
+  const [isolated, setIsolated] = useState<ChannelId | null>(null);
+  const [explode, setExplode] = useState(0);
+  // Looking around: the explorer's own bar, starting from what the step was showing.
+  const [opts, setOpts] = useState<SceneOptions>({ ...sceneDefaults, venue: VENUE });
+  const [roam, setRoam] = useState<Pose | null>(null);
+  useEffect(() => {
+    setIsolated(STEPS[at].isolated ?? null);
+    setExplode(STEPS[at].explode ?? 0);
+  }, [at, hidden]);
+  const look = useCallback(() => {
+    const s = STEPS[at];
+    setOpts({ ...sceneDefaults, venue: VENUE, colorMode: s.colorMode ?? 'material', compare: s.compare ?? null });
+    setRoam(null);
+    setHidden(true);
+  }, [at]);
 
   const go = useCallback((n: number) => {
     const i = Math.min(STEPS.length - 1, Math.max(0, n));
@@ -330,7 +368,7 @@ export function Live() {
       if (el instanceof HTMLElement && ['INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
       if (e.key === 'ArrowRight' || e.key === 'PageDown') go(at + 1);
       else if (e.key === 'ArrowLeft' || e.key === 'PageUp') go(at - 1);
-      else if (e.key === 'Escape') setHidden((h) => !h);
+      else if (e.key === 'Escape' && hidden) setHidden(false);
       else return;
       e.preventDefault();
     };
@@ -340,13 +378,13 @@ export function Live() {
       window.removeEventListener('resize', onResize);
       window.removeEventListener('keydown', onKey);
     };
-  }, [at, go]);
+  }, [at, go, hidden]);
 
   // A sideways swipe on the card steps; on the model, a drag turns it.
   const touch = useRef<{ x: number; y: number } | null>(null);
   const onTouchStart = (e: React.TouchEvent) => {
     const t = e.target as HTMLElement;
-    touch.current = t.closest('input, .seat-figure, .dg') ? null : { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    touch.current = t.closest('input, label, .seat-figure, .dg') ? null : { x: e.touches[0].clientX, y: e.touches[0].clientY };
   };
   const onTouchEnd = (e: React.TouchEvent) => {
     const from = touch.current;
@@ -358,15 +396,26 @@ export function Live() {
   };
 
   // A step without a camera keeps the last one's.
-  const pose = useMemo(() => {
-    for (let i = at; i >= 0; i--) if (STEPS[i].pose) return STEPS[i].pose!(portrait);
-    return STEPS.find((s) => s.pose)!.pose!(portrait);
-  }, [at, portrait]);
+  // A new object each time the story is come back to, so the camera returns to the step's view.
+  const stepPose = useMemo(() => {
+    for (let i = at; i >= 0; i--) if (STEPS[i].pose) return { ...STEPS[i].pose!(portrait) };
+    return { ...STEPS.find((s) => s.pose)!.pose!(portrait) };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [at, portrait, hidden]);
+  const pose = hidden && roam ? roam : stepPose;
+  const venue = hidden ? opts.venue : VENUE;
 
   const interaction: ArrayInteraction = useMemo(
-    () => ({ hovered: null, selected: null, isolated: step.isolated ?? null, explode: 0, onHover: noop, onSelect: noop }),
-    [step.isolated],
+    () => ({ hovered: null, selected: null, isolated, explode, onHover: noop, onSelect: noop }),
+    [isolated, explode],
   );
+
+  /** Stand where the comparison shows (as the explorer does). */
+  const onCompare = (id: CompareId, placed: PlaneAt = 'beside') => {
+    const tall = window.innerHeight > window.innerWidth;
+    if (id === 'b737') setRoam(tall ? PLANE_VIEWS[placed].tall : PLANE_VIEWS[placed].wide);
+    else setRoam(standIn(tall ? { ...COMPARE_VIEW, position: [-1, 2.4, 68], fov: 40 } : COMPARE_VIEW, opts.venue));
+  };
   const view = useMemo(() => viewIn('front', VENUE), []);
   // Lift the model clear of the card: above it on a phone, beside it on a wide screen.
   const covered = !hidden && !step.full && !step.still;
@@ -387,9 +436,10 @@ export function Live() {
         >
           <Scene
             {...sceneDefaults}
-            venue={VENUE}
-            colorMode={step.colorMode ?? 'material'}
-            compare={step.compare ?? null}
+            {...(hidden ? opts : {})}
+            venue={venue}
+            colorMode={hidden ? opts.colorMode : (step.colorMode ?? 'material')}
+            compare={hidden ? opts.compare : (step.compare ?? null)}
             view={view}
             tier={tier}
             navMode="tour"
@@ -427,9 +477,21 @@ export function Live() {
       <p className="live-tag">Mockup · working copy</p>
 
       {hidden ? (
-        <button className="live-pill live-return" onClick={() => setHidden(false)}>
-          Back to the story
-        </button>
+        <>
+          <button className="live-pill live-return" onClick={() => setHidden(false)}>
+            Back to the story
+          </button>
+          <BottomBar
+            explode={explode}
+            setExplode={setExplode}
+            options={opts}
+            setOptions={setOpts}
+            isolated={isolated}
+            setIsolated={setIsolated}
+            onViewpoint={(id: ViewpointId) => setRoam(viewpointIn(id, opts.venue))}
+            onCompare={onCompare}
+          />
+        </>
       ) : (
         <section
           className={`live-card${step.full ? ' full' : ''}${at === 0 ? ' opening' : ''}`}
@@ -443,6 +505,39 @@ export function Live() {
               {at > 0 && <span>{step.full ? '' : step.still ? (step.placeholder ? 'Still' : 'Photograph') : 'Live model · drag to look around'}</span>}
             </p>
             {step.body}
+            {step.control === 'systems' && (
+              <ul className="live-chips" aria-label="The six sound systems">
+                {SYSTEMS.map((sys) => {
+                  const on = !!isolated && CHANNELS[isolated].system === CHANNELS[sys.channel].system;
+                  return (
+                    <li key={sys.label}>
+                      <button aria-pressed={on} onClick={() => setIsolated(on ? null : sys.channel)}>
+                        <i style={{ background: CHANNELS[sys.channel].color }} aria-hidden="true" />
+                        {sys.label}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            {step.control === 'explode' && (
+              <label className="live-apart">
+                <span>Together</span>
+                <input
+                  className="range"
+                  type="range"
+                  min={0}
+                  max={1}
+                  step={0.01}
+                  value={explode}
+                  style={{ ['--f' as string]: explode }}
+                  onChange={(e) => setExplode(Number(e.target.value))}
+                  aria-label="Take the Wall apart"
+                  aria-valuetext={`${Math.round(explode * 100)}% apart`}
+                />
+                <span>Apart</span>
+              </label>
+            )}
           </div>
           <div className="live-nav">
             <div className="live-progress" role="progressbar" aria-valuemin={1} aria-valuemax={STEPS.length} aria-valuenow={at + 1} aria-label="Place in the story">
@@ -455,7 +550,7 @@ export function Live() {
                 </button>
               )}
               {live && !last && (
-                <button className="live-look" onClick={() => setHidden(true)}>
+                <button className="live-look" onClick={look}>
                   Hide text
                 </button>
               )}
@@ -463,7 +558,7 @@ export function Live() {
                 {at + 1} / {STEPS.length}
               </span>
               {last ? (
-                <button className="live-next" onClick={() => setHidden(true)}>
+                <button className="live-next" onClick={look}>
                   Explore it yourself
                 </button>
               ) : (

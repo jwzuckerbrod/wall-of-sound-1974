@@ -47,7 +47,7 @@ const COMPARE_ITEMS: { id: CompareId; label: string }[] = [
 ];
 
 /** The six systems, grouped as the colour view groups them. */
-const SYSTEMS: { label: string; channel: ChannelId }[] = [
+export const SYSTEMS: { label: string; channel: ChannelId }[] = [
   { label: 'Vocals', channel: 'vocals' },
   { label: 'Lead guitar', channel: 'leadGuitar' },
   { label: 'Rhythm guitar', channel: 'rhythmGuitar' },

@@ -31,7 +31,7 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--s
 /* The card: the bottom of the screen on a phone. */
 .live-card {
   position: absolute; z-index: 2; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom));
-  display: flex; flex-direction: column; max-height: 52svh; border-radius: 14px;
+  display: flex; flex-direction: column; max-height: 58svh; border-radius: 14px;
   background: rgba(14, 13, 11, 0.9); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(236, 230, 218, 0.1);
 }
@@ -65,7 +65,17 @@ body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--s
 .live-count + .live-next { margin-left: 0; }
 
 .live-pill { position: absolute; z-index: 3; }
-.live-return { left: 50%; transform: translateX(-50%); bottom: max(18px, env(safe-area-inset-bottom)); color: #17130a; background: var(--accent); }
+.live-return { left: 50%; transform: translateX(-50%); top: max(40px, calc(env(safe-area-inset-top) + 8px)); color: #17130a; background: var(--accent); min-height: 44px; font-size: 15px; }
+
+/* The one control a step offers. */
+.live-chips { list-style: none; margin: 4px 0 6px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.live-chips button {
+  display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 999px; cursor: pointer;
+  font: 14px var(--sans); color: var(--ink); background: rgba(236, 230, 218, 0.08); border: 1px solid transparent;
+}
+.live-chips button[aria-pressed='true'] { border-color: var(--accent); background: rgba(233, 184, 90, 0.16); }
+.live-chips i { width: 12px; height: 12px; border-radius: 50%; }
+.live-apart { display: flex; align-items: center; gap: 12px; font: 12px var(--sans); letter-spacing: 0.04em; text-transform: uppercase; color: var(--dim); margin: 2px 0 4px; }
 
 .live-tag, .live-fps { position: absolute; z-index: 3; top: max(8px, env(safe-area-inset-top)); margin: 0; font: 11px var(--sans); letter-spacing: 0.04em; color: var(--dim); background: rgba(14, 13, 11, 0.7); padding: 3px 8px; border-radius: 999px; pointer-events: none; }
 .live-tag { left: 8px; }
