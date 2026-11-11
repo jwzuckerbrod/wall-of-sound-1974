@@ -115,6 +115,16 @@ export const player = {
     setPlace({ length: NaN });
     if (resume) play();
   },
+  /** The bar's year switch: the playing song's other tape, from the same place, playing on if it was. */
+  switchTo(item: PlayerItem) {
+    if (!state.item || state.item.src === item.src) return;
+    const time = state.places[state.item.id]?.time ?? 0;
+    const resume = !element().paused;
+    set({ places: { ...state.places, [item.id]: { ...(state.places[item.id] ?? NO_PLACE), time } } });
+    load(item);
+    setPlace({ length: NaN });
+    if (resume) play();
+  },
   /** Move a row's place, whether or not it is the one loaded. */
   seek(id: string, fraction: number) {
     const place = state.places[id];

@@ -1,5 +1,8 @@
 /* The listening players (src/ui/Listen.tsx), on the story's cards and in the explorer's Listen panel. */
 .ls { --ls-accent: #e9b85a; font-size: 0.86em; }
+/* The story's early taste of the comparison (Before the Wall). */
+.ls-teaser { margin: 4px 0 14px; padding: 12px 14px; border-radius: 12px; background: rgba(233, 184, 90, 0.08); border: 1px solid rgba(233, 184, 90, 0.28); }
+.ls-head { margin: 0 0 8px; font: 600 12px var(--sans, -apple-system, sans-serif); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ls-accent); }
 .ls-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .ls-row { display: grid; gap: 6px; }
 .ls-title { font-weight: 600; }
@@ -50,6 +53,13 @@
 .np-info b, .np-info span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .np-info b { font-size: 14px; font-weight: 600; }
 .np-info span { font-size: 12px; color: #b4ab9b; font-variant-numeric: tabular-nums; }
+/* The year switch, for a song on both tapes: two short years, the chosen one filled. */
+.np-years { flex: none; position: relative; display: flex; padding: 2px; gap: 2px; border-radius: 999px; box-shadow: inset 0 0 0 1px rgba(233, 184, 90, 0.5); }
+.np-years button { position: relative; width: 36px; height: 28px; border-radius: 999px; font-family: inherit; font-weight: 600; font-size: 13px; line-height: 1; font-variant-numeric: tabular-nums; color: #e9b85a; }
+.np-years button::after { content: ''; position: absolute; inset: -8px -1px; } /* a thumb-sized target */
+.np-years button[aria-pressed='true'] { background: #e9b85a; color: #1a1408; }
+.np-years[data-pulse] { animation: np-pulse 1.2s ease-out 0.6s 2; }
+@keyframes np-pulse { 0% { box-shadow: inset 0 0 0 1px rgba(233, 184, 90, 0.5), 0 0 0 0 rgba(233, 184, 90, 0.6); } 100% { box-shadow: inset 0 0 0 1px rgba(233, 184, 90, 0.5), 0 0 0 10px rgba(233, 184, 90, 0); } }
 /* Keeps the end of the page clear of the bar. */
 .np-room { height: 72px; }
 @media (orientation: portrait) and (max-width: 899px) {
@@ -68,10 +78,14 @@
 @media (max-width: 720px) {
   .np.np-floating { top: 98px; left: 10px; width: min(330px, calc(100vw - 20px)); }
 }
+/* With the year switch, a little wider, so the time still shows. */
+@media (max-width: 720px) and (orientation: portrait) {
+  .np.np-floating:has(.np-years) { width: min(376px, calc(100vw - 20px)); }
+}
 /* A phone on its side: the card docks right (styles.css), the pill keeps the left. */
 @media (max-width: 720px) and (orientation: landscape) {
   .np.np-floating { width: min(330px, calc(100vw - 370px)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ls-play[data-loading], .np-toggle[data-loading] span { animation: none; }
+  .ls-play[data-loading], .np-toggle[data-loading] span, .np-years[data-pulse] { animation: none; }
 }

@@ -65,19 +65,29 @@ function TrackRow({ track }: { track: Track }) {
 }
 
 const SIDE_LABEL = { before: '1971 · before', after: '1974 · the Wall' };
+type Side = 'before' | 'after';
+type Pair = (typeof PAIRS)[number];
 
-function PairRow({ pair }: { pair: (typeof PAIRS)[number] }) {
+/** One side of a pair, as the player holds it: both sides share the song's id, so they share its place. */
+export function pairItem(pair: Pair, side: Side): PlayerItem {
+  return { id: pair.title, src: trackUrl(pair[side]), title: pair.title, detail: SIDE_LABEL[side] };
+}
+/** The pair the playing recording belongs to, and which side it is (the Bowl's own row counts as 1974). */
+export function pairOf(item: PlayerItem): { pair: Pair; side: Side } | null {
+  for (const pair of PAIRS) {
+    if (item.src === trackUrl(pair.before)) return { pair, side: 'before' };
+    if (item.src === trackUrl(pair.after)) return { pair, side: 'after' };
+  }
+  return null;
+}
+
+function PairRow({ pair, start = 'after' }: { pair: (typeof PAIRS)[number]; start?: 'before' | 'after' }) {
   // Whichever recording is loaded wins, so the switch is right after a layout change remounts this row.
   const { item: current } = usePlayer();
   const loaded = current?.id === pair.title ? (current.detail === SIDE_LABEL.before ? 'before' : 'after') : null;
-  const [chosen, setChosen] = useState<'before' | 'after'>('after');
+  const [chosen, setChosen] = useState<'before' | 'after'>(start);
   const side = loaded ?? chosen;
-  const itemFor = (s: 'before' | 'after'): PlayerItem => ({
-    id: pair.title,
-    src: trackUrl(pair[s]),
-    title: pair.title,
-    detail: SIDE_LABEL[s],
-  });
+  const itemFor = (s: Side) => pairItem(pair, s);
   const choose = (s: 'before' | 'after') => {
     setChosen(s);
     player.swap(itemFor(s));
@@ -138,6 +148,22 @@ export function ListenCompare() {
           <li key={c}>{c}</li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+/** Early in the story: one song, before and after, starting on 1971. The full comparison waits for the listen step. */
+export function ListenTeaser() {
+  return (
+    <div className="ls ls-teaser">
+      <p className="ls-head">Hear the difference</p>
+      <ul className="ls-list">
+        <PairRow pair={PAIRS[0]} start="before" />
+      </ul>
+      <p className="ls-credit">
+        The same taper and microphones, three years apart: {T71.venue}, 1971, and {T74.venue}, 1974. The 1971 tape is
+        the better recorder, reel-to-reel against cassette. More, and what else differs, at “Now listen.”
+      </p>
     </div>
   );
 }

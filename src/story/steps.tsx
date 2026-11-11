@@ -5,7 +5,7 @@ import type { CompareId } from '../scene/ScaleObjects';
 import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
 import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
-import { ListenCompare, ListenWall } from '../ui/Listen';
+import { ListenCompare, ListenTeaser, ListenWall } from '../ui/Listen';
 import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, type StoryImage } from './images';
 import { MicDiagram } from './MicDiagram';
@@ -108,6 +108,7 @@ export const STEPS: Step[] = [
         <DiagramFigure label="signal-path">
           <PathDiagram />
         </DiagramFigure>
+        <ListenTeaser />
         <p className="aside">
           The typical PA here is a composite: practice varied from band to band and changed fast.
         </p>
