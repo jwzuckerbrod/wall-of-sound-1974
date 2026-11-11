@@ -43,10 +43,11 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   `src/story/steps.tsx` (camera, what the model shows, words, sources), the card and
   stills in `src/story/StoryLayer.tsx`; `src/App.tsx` applies a step to the explorer's
   state. `#<step id>` opens a step; `#explore` or any `?query` opens the explorer.
-- The explorer's interface: tour stops and their dots in `src/scene/tour.ts`
-  (each stop's camera, text, dot anchor and system), viewpoints in
-  `src/scene/views.ts` (`VIEWPOINTS`), cards in `src/ui/Cards.tsx`, top and
-  bottom bars in `src/ui/Controls.tsx`.
+- The explorer's interface: places to stand, the View row's chips and each one's
+  line, in `src/scene/views.ts` (`PLACES`; no dots on the model); camera poses and
+  their sourced text in `src/scene/tour.ts` (`TOUR`, also used by the story), the
+  overview and instrument cards in `src/ui/Cards.tsx`, top and bottom bars in
+  `src/ui/Controls.tsx`.
 - Analytics: `index.html` loads the counter from jzuckerbrod.com/s.js
   (personal-website project); events via `track()` in `src/analytics.ts`. Dashboard at
   jzuckerbrod.com/stats.

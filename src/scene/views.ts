@@ -130,6 +130,45 @@ export const VIEWPOINTS = {
 
 export type ViewpointId = keyof typeof VIEWPOINTS;
 
+const pose = (id: string): View => {
+  const t = TOUR.find((s) => s.id === id)!;
+  return { label: t.title, position: t.position, target: t.target, fov: t.fov };
+};
+
+/**
+ * Places to stand, in the explorer's View row: one list, in the story's order,
+ * for the camera to fly to. Each has one line, for what the eye lands on and a
+ * fact the story doesn't tell; the facts come from the tour's sourced text
+ * (tour.ts), whose stops still hold the poses. `crowd`: lift to a seat at the
+ * Bowl (standIn).
+ */
+export const PLACES: { id: string; label: string; caption: string; view: View; crowd?: boolean }[] = [
+  { id: 'crowd', label: 'Crowd, center', crowd: true, view: VIEWPOINTS.crowdCentre,
+    caption: 'Where the vocal cluster aimed: its curve spread the voices across roughly 140 to 180 degrees.' },
+  { id: 'deck', label: 'On the deck', view: pose('behind'),
+    caption: 'Where the band stood. No wedge monitors anywhere: the lower half of the Wall fed the players.' },
+  { id: 'mics', label: "Weir's microphones", view: pose('mics'),
+    caption: 'Two capsules 60 mm apart, wired in opposite polarity: the voice came through, the Wall canceled.' },
+  { id: 'vocals', label: 'The vocal cluster', view: pose('vocals'),
+    caption: '372 of the 641 drivers carried vocals alone: more than half the system.' },
+  { id: 'kick', label: 'The kick drum', view: pose('kick'),
+    caption: 'Sixteen fifteens for the bass drum alone. Snare, toms and cymbals ran separately, in stereo.' },
+  { id: 'bass', label: "Phil's bass", view: pose('bass'),
+    caption: 'Four independent channels, eight fifteen-inch speakers each, sixteen cabinets a side.' },
+  { id: 'piano', label: "Keith's piano", view: pose('piano'),
+    caption: 'Five pickups inside the grand fed a system of its own: nine fifteens, twelve twelves, thirty-six fives.' },
+  { id: 'amps', label: 'At the amps', view: pose('amps'),
+    caption: '48 McIntosh MC 2300s, 128 pounds each, named rather than numbered: Budman, M-14, Ketchup, Mustard.' },
+  { id: 'above', label: 'Above', crowd: true, view: VIEWPOINTS.above,
+    caption: 'Built from a scaffolding drawing dated April 10, 1974: seven-foot bays, 275 couplers, six 22-foot trusses.' },
+];
+export type Place = (typeof PLACES)[number];
+
+/** A place as it stands at a venue. */
+export function placeIn(p: Place, venue: 'arena' | 'hollywoodBowl'): View {
+  return p.crowd ? standIn(p.view, venue) : p.view;
+}
+
 /** Where to stand for the size comparison: back far enough for the row of buses and the Wall above them. */
 export const COMPARE_VIEW: View = { label: 'With the buses', position: [-6, 2.4, 31], target: [0, 6.2, 4], fov: 46 };
 

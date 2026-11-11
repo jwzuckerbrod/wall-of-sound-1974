@@ -15,8 +15,8 @@ import type { CompareId } from './scene/ScaleObjects';
 import { PLANE_POSITIONS, type PlaneAt } from './geometry/scale';
 import type { Pose } from './scene/TourCamera';
 import { TOUR, instrumentPose } from './scene/tour';
-import { COMPARE_VIEW, PLANE_VIEWS, standIn, VIEWPOINTS, viewFromSearch, viewIn, viewpointIn, type ViewpointId } from './scene/views';
-import { INSTRUMENTS, InstrumentCard, SpotCard } from './ui/Cards';
+import { COMPARE_VIEW, PLACES, PLANE_VIEWS, placeIn, standIn, viewFromSearch, viewIn } from './scene/views';
+import { INSTRUMENTS, InstrumentCard, OverviewCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 import { track } from './analytics';
 import { StoryLayer } from './story/StoryLayer';
@@ -138,7 +138,7 @@ export default function App() {
   }, []);
   const [fps, setFps] = useState(0);
 
-  // What the card on the right shows: a tour stop (the overview on arrival),
+  // What the card on the right shows: the overview (on arrival),
   // a speaker block someone clicked, an instrument, or nothing.
   // The story: which step, and whether it has the screen (else the explorer does).
   const opened = useMemo(() => storyFromLocation(initial.hud), [initial.hud]);
@@ -147,7 +147,9 @@ export default function App() {
   const [portrait, setPortrait] = useState(() => window.innerHeight > window.innerWidth);
   const step = STEPS[storyAt];
 
-  const [stop, setStop] = useState<number | null>(initial.hud && !opened.on ? 0 : null);
+  const [overview, setOverview] = useState(initial.hud && !opened.on);
+  /** The place picked from the View row; its line shows until the model is touched. */
+  const [place, setPlace] = useState<string | null>(null);
   const [instrument, setInstrument] = useState<string | null>(null);
 
   // Inspection state: what the cursor is over, what is pinned open, which
@@ -164,7 +166,7 @@ export default function App() {
   const setSelected = useCallback((id: string | null) => {
     setSelectedState(id);
     if (id) {
-      setStop(null);
+      setOverview(false);
       setInstrument(null);
     }
   }, []);
@@ -178,35 +180,52 @@ export default function App() {
   const hud = initial.hud && !inStory;
   const q = tierSettings(tier);
 
-  /** Fly to a tour stop and open its card. The overview (0) opens its card where the camera is. */
-  const goToStop = useCallback((i: number) => {
-    const n = ((i % TOUR.length) + TOUR.length) % TOUR.length;
-    setStop(n);
+  /** Back to the overview: its card, and the camera where the page opens. */
+  const goHome = useCallback(() => {
+    setOverview(true);
+    setPlace(null);
     setSelectedState(null);
     setInstrument(null);
-    setPose(TOUR[n]);
+    setPose(TOUR[0]);
     setNavMode('tour');
   }, []);
 
-  const goToViewpoint = useCallback(
-    (id: ViewpointId) => {
-      track('view', id, { label: VIEWPOINTS[id].label });
-      setPose(viewpointIn(id, options.venue));
+  /** Fly to a place to stand, with its one line; any card closes, so the view is clear. */
+  const goToPlace = useCallback(
+    (id: string) => {
+      const p = PLACES.find((x) => x.id === id);
+      if (!p) return;
+      track('place', id, { label: p.label });
+      setPlace(id);
+      setOverview(false);
+      setSelectedState(null);
+      setInstrument(null);
+      setPose(placeIn(p, options.venue));
       setNavMode('tour');
     },
     [options.venue],
   );
 
+  // Touching the model puts the place's line away: from then on, it's their view.
+  useEffect(() => {
+    if (!place) return;
+    const down = (e: PointerEvent) => {
+      if (e.target instanceof HTMLCanvasElement) setPlace(null);
+    };
+    window.addEventListener('pointerdown', down, true);
+    return () => window.removeEventListener('pointerdown', down, true);
+  }, [place]);
+
   const pickInstrument = useCallback((id: string) => {
     setInstrument(id);
-    setStop(null);
+    setOverview(false);
     setSelectedState(null);
     setPose(instrumentPose(id));
     setNavMode('tour');
   }, []);
 
   const closeCard = useCallback(() => {
-    setStop(null);
+    setOverview(false);
     setSelectedState(null);
     setInstrument(null);
   }, []);
@@ -259,7 +278,6 @@ export default function App() {
   // What people do, for the private dashboard (src/analytics.ts). Watching the state, not the buttons,
   // so a keyboard shortcut counts the same as a click.
   // Each sends a stable id and the name people see on screen (the label), which the dashboard shows.
-  useOnChange(stop, (n) => n !== null && track('tour', TOUR[n].id, { label: TOUR[n].title }));
   useOnChange(selected, (id) => {
     const b = id ? ARRAYS.find((a) => a.id === id) : undefined;
     if (id) track('block', id, { label: b ? `${CHANNELS[b.channel].label}: ${b.label}` : id });
@@ -275,7 +293,7 @@ export default function App() {
   useOnChange(listenOpen, (open) => open && track('listen', null, { label: 'Listen' }));
   useOnChange(units, (u) => track('units', u, { label: u === 'metric' ? 'Metric' : 'Feet and inches' }));
 
-  const cardOpen = hud && (stop !== null || !!selected || !!instrument);
+  const cardOpen = hud && (overview || !!selected || !!instrument);
 
   // Make room for the card: the 360px card and its margins on a wide screen;
   // on a phone, lift the picture out of the sheet.
@@ -298,7 +316,7 @@ export default function App() {
   const goToCompare = useCallback(
     (id: CompareId, at: PlaneAt = 'beside') => {
       if (id) track('compare', id, { at, label: id === 'b737' ? 'A Boeing 737-200' : 'Four VW buses' });
-      setStop(null);
+      setOverview(false);
       setSelectedState(null);
       setInstrument(null);
       // Upright on a phone, stand back until it fits the narrow frame.
@@ -330,9 +348,8 @@ export default function App() {
       const el = document.activeElement;
       if (el instanceof HTMLElement && ['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(el.tagName)) return;
 
-      const ids = Object.keys(VIEWPOINTS) as ViewpointId[];
       const n = Number(e.key);
-      if (n >= 1 && n <= ids.length) return goToViewpoint(ids[n - 1]);
+      if (n >= 1 && n <= PLACES.length) return goToPlace(PLACES[n - 1].id);
 
       switch (e.key.toLowerCase()) {
         case 'x':
@@ -346,18 +363,17 @@ export default function App() {
           break;
       }
 
-      // Arrows walk the tour.
-      if (e.key === 'ArrowRight' || e.key === 'PageDown') {
+      // Arrows walk the places, in order.
+      if (['ArrowRight', 'PageDown', 'ArrowLeft', 'PageUp'].includes(e.key)) {
         e.preventDefault();
-        goToStop((stop ?? 0) + 1);
-      } else if ((e.key === 'ArrowLeft' || e.key === 'PageUp') && stop !== null) {
-        e.preventDefault();
-        goToStop(stop - 1);
+        const at = PLACES.findIndex((p) => p.id === place);
+        const by = e.key === 'ArrowRight' || e.key === 'PageDown' ? 1 : -1;
+        goToPlace(PLACES[(at + by + PLACES.length) % PLACES.length].id);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [stop, goToStop, goToViewpoint, aboutOpen, listenOpen, closeCard, setOptions, inStory]);
+  }, [place, goToPlace, aboutOpen, listenOpen, closeCard, setOptions, inStory]);
 
   /**
    * If the picked tier turns out to be too much for the device, drop one.
@@ -411,11 +427,8 @@ export default function App() {
           navMode={navMode}
           pose={pose}
           interaction={interaction}
-          activeStop={hud ? stop : null}
-          dots={hud}
           // In the story the camera stays near the Wall: a long pull back loses the reader.
           maxDistance={inStory ? 110 : undefined}
-          onPickStop={goToStop}
           onPickInstrument={pickInstrument}
           offset={offset}
         />
@@ -438,7 +451,7 @@ export default function App() {
             }}
             openAbout={() => setAboutOpen(true)}
             openListen={() => setListenOpen(true)}
-            onHome={() => goToStop(0)}
+            onHome={goHome}
             onStory={openStory}
             storyUnfinished={storyAt > 0 && storyAt < STEPS.length - 1}
           />
@@ -449,13 +462,12 @@ export default function App() {
             setOptions={setOptions}
             isolated={isolated}
             setIsolated={setIsolated}
-            onViewpoint={goToViewpoint}
+            place={place}
+            onPlace={goToPlace}
             onCompare={goToCompare}
           />
           <Hint />
-          {stop !== null && (
-            <SpotCard index={stop} onGo={goToStop} onClose={closeCard} isolated={isolated} onIsolate={setIsolated} />
-          )}
+          {overview && <OverviewCard onClose={closeCard} />}
           {selected && (
             <ArrayPanel blockId={selected} units={units} onClose={closeCard} onIsolate={setIsolated} isolated={isolated} />
           )}
@@ -470,7 +482,7 @@ export default function App() {
           onLook={leaveStory}
           onSkip={() => {
             leaveStory();
-            goToStop(0);
+            goHome();
           }}
           isolated={isolated}
           setIsolated={setIsolated}

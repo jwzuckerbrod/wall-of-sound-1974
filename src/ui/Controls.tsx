@@ -4,7 +4,7 @@ import { TIER_LABEL, TIERS, type Tier } from '../quality';
 import type { SceneOptions } from '../scene/Scene';
 import type { CompareId } from '../scene/ScaleObjects';
 import { PLANE_POSITIONS, type PlaneAt } from '../geometry/scale';
-import { PLANE_VIEWS, VIEWPOINTS, type ViewpointId } from '../scene/views';
+import { PLACES, PLANE_VIEWS } from '../scene/views';
 import { UNIT_LABEL, type UnitSystem } from './units';
 import './range.css';
 
@@ -67,7 +67,8 @@ export function BottomBar({
   setOptions,
   isolated,
   setIsolated,
-  onViewpoint,
+  place,
+  onPlace,
   onCompare,
 }: {
   explode: number;
@@ -76,15 +77,41 @@ export function BottomBar({
   setOptions: (o: SceneOptions) => void;
   isolated: ChannelId | null;
   setIsolated: (c: ChannelId | null) => void;
-  onViewpoint: (id: ViewpointId) => void;
+  /** The place the camera stands at, if one was picked; its line shows until the model is touched. */
+  place: string | null;
+  onPlace: (id: string) => void;
   /** Stand where the comparison shows. */
   onCompare: (id: CompareId, at?: PlaneAt) => void;
 }) {
   const colour = options.colorMode === 'channel';
   // The 737 doesn't stand at the Bowl.
   const shown = options.compare === 'b737' && wall.venues[options.venue].outdoor ? null : options.compare;
+  const [placesOpen, setPlacesOpen] = useState(false);
+  const here = PLACES.find((p) => p.id === place);
+  // The chosen place stays in sight in the row, however it was chosen (a tap, a number key, an arrow).
+  const row = useRef<HTMLUListElement>(null);
+  useEffect(() => {
+    row.current?.querySelector('[aria-pressed="true"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+  }, [place, placesOpen]);
   return (
     <div className="bottom">
+      {here && (
+        <p className="compare-note place-note" aria-live="polite">
+          <strong>{here.label}.</strong> {here.caption}
+        </p>
+      )}
+      {placesOpen && (
+        <ul className="legend places" aria-label="Where to stand" ref={row}>
+          {PLACES.map((p, i) => (
+            <li key={p.id}>
+              <button aria-pressed={place === p.id} onClick={() => onPlace(p.id)}>
+                {p.label}
+                {!TOUCH && <kbd>{i + 1}</kbd>}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
       {colour && (
         <ul className="legend" aria-label="The six sound systems">
           {SYSTEMS.map((s) => {
@@ -188,25 +215,9 @@ export function BottomBar({
             </ul>
           )}
         </Menu>
-        <Menu label="View" up>
-          {(close) => (
-            <ul className="menu-list" aria-label="Where to stand">
-              {(Object.keys(VIEWPOINTS) as ViewpointId[]).map((id, i) => (
-                <li key={id}>
-                  <button
-                    onClick={() => {
-                      onViewpoint(id);
-                      close();
-                    }}
-                  >
-                    {VIEWPOINTS[id].label}
-                    {!TOUCH && <kbd>{i + 1}</kbd>}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </Menu>
+        <button className="pill" aria-pressed={placesOpen} aria-expanded={placesOpen} onClick={() => setPlacesOpen(!placesOpen)}>
+          View
+        </button>
       </div>
     </div>
   );

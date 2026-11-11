@@ -16,7 +16,7 @@ import { Bowl } from './Bowl';
 import { DaylightLighting, Lighting } from './Lighting';
 import { Cabling, LightBars, Scaffold, ScaffoldFloors, ScaleFigures, Stage, TieDye } from './Structure';
 import { TourCamera } from './TourCamera';
-import { Hotspots, ViewOffset } from './Hotspots';
+import { ViewOffset } from './ViewOffset';
 import type { Pose } from './TourCamera';
 import type { View } from './views';
 
@@ -114,9 +114,6 @@ export function Scene({
   navMode,
   pose,
   interaction,
-  activeStop,
-  dots,
-  onPickStop,
   onPickInstrument,
   offset,
   maxDistance,
@@ -127,10 +124,6 @@ export function Scene({
   /** Where the camera flies to when navMode is 'tour'. */
   pose: Pose;
   interaction: ArrayInteraction;
-  activeStop: number | null;
-  /** Dots on the model; off when the page runs without its interface (?hud=0, an embed). */
-  dots: boolean;
-  onPickStop: (i: number) => void;
   onPickInstrument: (id: string) => void;
   /** Room to make for an open card, in pixels: beside it, or above it on a phone. */
   offset: { room: number; up: number };
@@ -140,7 +133,7 @@ export function Scene({
   const q = tierSettings(tier);
   const shadows = q.shadowMapSize > 0;
   const outdoor = wall.venues[venue].outdoor;
-  // The 737's views stand far back: the hall's fog would dim the Wall, and the dots would float over the plane.
+  // The 737's views stand far back: the hall's fog would dim the Wall.
   const plane = compare === 'b737' && !outdoor;
 
   return (
@@ -204,9 +197,6 @@ export function Scene({
       {/* After OrbitControls, so `controls` is in the store when these run. */}
       {navMode === 'orbit' && <FitCamera view={view} />}
       {navMode === 'tour' && <TourCamera stop={pose} active />}
-      {/* At a tour stop the camera is in close and the dots would float over
-          the shot; they come back on the overview, or when the card closes. */}
-      <Hotspots active={activeStop} onPick={onPickStop} hidden={!dots || plane || interaction.explode > 0.05 || (navMode === 'tour' && !!activeStop)} />
       <ViewOffset room={offset.room} up={offset.up} />
     </>
   );

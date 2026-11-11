@@ -560,56 +560,6 @@ button, .pill { font: inherit; color: inherit; }
 .settings-about { display: none; width: 100%; border: 0; background: transparent; color: inherit; font: inherit; font-size: 13.5px; text-align: left; }
 .check-row input { accent-color: var(--accent); margin: 0; }
 
-/* ── dots ────────────────────────────────────────────────────────────── */
-
-.dot {
-  position: relative;
-  width: 26px;
-  height: 26px;
-  padding: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.26);
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.35);
-  cursor: pointer;
-  animation: breathe 2.8s ease-in-out infinite;
-  transition: transform 0.15s ease, background 0.15s ease;
-}
-.dot::after {
-  content: '';
-  position: absolute;
-  inset: 7px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.9);
-}
-.dot:hover, .dot:focus-visible { transform: scale(1.18); }
-.dot[aria-current='true'] { background: rgba(233, 184, 90, 0.55); border-color: var(--accent); animation: none; }
-.dot[aria-current='true']::after { background: var(--accent); }
-@keyframes breathe {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.28); }
-  50% { box-shadow: 0 0 0 9px rgba(255, 255, 255, 0); }
-}
-.dot-label {
-  position: absolute;
-  left: 34px;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 6px 10px;
-  border-radius: 8px;
-  background: var(--glass);
-  border: 1px solid var(--glass-line);
-  backdrop-filter: blur(12px);
-  font-size: 12.5px;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-}
-.dot:hover .dot-label, .dot:focus-visible .dot-label { opacity: 1; }
-@media (prefers-reduced-motion: reduce) { .dot { animation: none; } }
-
 /* ── the card ────────────────────────────────────────────────────────── */
 
 .card,
@@ -656,19 +606,6 @@ button, .pill { font: inherit; color: inherit; }
 .card-action:hover { background: rgba(255, 255, 255, 0.1); }
 .card-action[aria-pressed='true'] { border-color: rgba(233, 184, 90, 0.45); }
 .card-action .swatch, .legend .swatch { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
-.card-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 18px; }
-.card-nav button {
-  height: 38px;
-  padding: 0 16px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--glass-line);
-  border-radius: 999px;
-  font-size: 13.5px;
-  cursor: pointer;
-}
-.card-nav button:hover { background: rgba(255, 255, 255, 0.11); }
-.card-nav .primary { background: var(--accent); color: #1a1408; border-color: var(--accent); font-weight: 600; }
-.card-nav .primary:hover { background: #f3c977; }
 .card .confidence { font-size: 12px; }
 
 /* ── the bottom bar ──────────────────────────────────────────────────── */
@@ -765,8 +702,6 @@ button, .pill { font: inherit; color: inherit; }
   .legend { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; max-width: 100%; padding-bottom: 2px; }
   .legend button { flex: 0 0 auto; }
   .hint-float { bottom: 70px; font-size: 12px; }
-  .dot { width: 30px; height: 30px; }
-  .dot-label { display: none; }
 }
 /* The View menu opens over the legend, not under it. */
 .bar { position: relative; z-index: 2; }
@@ -777,18 +712,6 @@ button, .pill { font: inherit; color: inherit; }
 @media (max-width: 720px) and (orientation: landscape) {
   .card, .array-panel { left: auto; width: 340px; max-height: calc(100dvh - 76px - 98px); }
 }
-/* Back / Next stay in reach at the foot of the card, however long the text. */
-.card-nav {
-  position: sticky;
-  bottom: -20px;
-  margin: 18px -20px -20px;
-  padding: 12px 20px 16px;
-  background: linear-gradient(rgba(16, 19, 23, 0), rgba(16, 19, 23, 0.95) 35%);
-}
-@media (max-width: 720px) {
-  .card-nav { bottom: -16px; margin: 14px -16px -16px; padding: 10px 16px 12px; }
-}
-
 /* The note over the bottom bar while the size comparison is on. */
 .compare-note {
   max-width: 34rem;
@@ -826,3 +749,13 @@ button, .pill { font: inherit; color: inherit; }
 
 /* The story was put away part-way through: the way back stands out. */
 .pill-resume { background: #e9b85a; color: #17130a; border-color: #e9b85a; font-weight: 600; }
+
+/* Places to stand (the View row): chips like the legend's, one row that scrolls sideways on a phone. */
+.places { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 2px; scrollbar-width: none; }
+.places::-webkit-scrollbar { display: none; }
+.places button { flex: 0 0 auto; white-space: nowrap; }
+.places kbd { color: var(--faint); font: 11px ui-monospace, SFMono-Regular, Menlo, monospace; }
+@media (hover: none) { .places button { height: 38px; padding: 0 14px; font-size: 13px; } }
+/* The place's one line: the size comparison's note, read left to right. */
+.place-note { text-align: left; }
+.place-note strong { color: var(--accent); font-weight: 600; }

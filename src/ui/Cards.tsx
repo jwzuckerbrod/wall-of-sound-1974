@@ -1,78 +1,43 @@
 import { CHANNELS, PROVENANCE, wall, type ChannelId } from '../data/wall.config';
 import { TOUR } from '../scene/tour';
+import { PLACES } from '../scene/views';
 import { TOUCH } from './Controls';
 
 /**
  * What the explorer lets you do, on the card it opens with: visitors asked.
  * Short, in the order a first visit needs it, with the words the controls use.
  */
-function WhatYouCanDo({ stops }: { stops: number }) {
+function WhatYouCanDo() {
   const tap = TOUCH ? 'Tap' : 'Click';
   return (
     <ul className="can-do" aria-label="What you can do here">
-      <li><strong>Take the tour:</strong> {stops} stops, with Next and Back.</li>
-      <li><strong>{tap} a dot</strong>{TOUCH ? '' : ', or any speaker'} to read about that part.</li>
       <li><strong>{TOUCH ? 'Drag to turn, pinch to zoom.' : 'Drag to turn, scroll to zoom.'}</strong></li>
-      <li><strong>Take it apart</strong> with the slider below, or {TOUCH ? 'tap' : 'click'} <strong>Color</strong> to see its six systems.</li>
+      <li><strong>View</strong> has {PLACES.length} places to stand, from the crowd to Keith&rsquo;s piano.</li>
+      <li><strong>{tap} any speaker</strong> to read about it.</li>
+      <li><strong>Take it apart</strong> with the slider below, or {tap.toLowerCase()} <strong>Color</strong> to see its six systems.</li>
       <li><strong>Listen</strong> to it, on tapes from 1974.</li>
     </ul>
   );
 }
 
 /**
- * The card on the right (a sheet from the bottom on a phone): one tour stop,
- * with Back and Next to walk the rest. The text is written to stand on its own,
- * so it is also the accessible description of what the camera is showing.
+ * The card the explorer opens with (a sheet from the bottom on a phone): what
+ * this is, and what can be done with it. Its text is written to stand on its
+ * own, so it is also the accessible description of the overview.
  */
-export function SpotCard({
-  index,
-  onGo,
-  onClose,
-  isolated,
-  onIsolate,
-}: {
-  index: number;
-  onGo: (i: number) => void;
-  onClose: () => void;
-  isolated: ChannelId | null;
-  onIsolate: (c: ChannelId | null) => void;
-}) {
-  const s = TOUR[index];
-  const last = TOUR.length - 1;
-  const showing = s.channel && isolated && CHANNELS[isolated].system === CHANNELS[s.channel].system;
+export function OverviewCard({ onClose }: { onClose: () => void }) {
+  const s = TOUR[0];
   return (
     <aside className="card" aria-labelledby="card-title" aria-live="polite">
       <div className="card-head">
-        <p className="card-step">{index === 0 ? 'Overview' : `${index} of ${last}`}</p>
+        <p className="card-step">Overview</p>
         <button className="close" onClick={onClose} aria-label="Close">
           ×
         </button>
       </div>
       <h2 id="card-title">{s.title}</h2>
-      {index === 0 && <WhatYouCanDo stops={last} />}
+      <WhatYouCanDo />
       <p className="card-body">{s.body}</p>
-      {s.channel && (
-        <button className="card-action" aria-pressed={!!showing} onClick={() => onIsolate(showing ? null : s.channel!)}>
-          <span className="swatch" style={{ background: CHANNELS[s.channel].color }} aria-hidden="true" />
-          {showing ? 'Show the whole Wall' : `Show only this system`}
-        </button>
-      )}
-      <nav className="card-nav" aria-label="Tour">
-        {index > 0 ? (
-          <button onClick={() => onGo(index - 1)}>← Back</button>
-        ) : (
-          <span />
-        )}
-        {index < last ? (
-          <button className="primary" onClick={() => onGo(index + 1)}>
-            {index === 0 ? 'Start the tour →' : 'Next →'}
-          </button>
-        ) : (
-          <button className="primary" onClick={() => onGo(0)}>
-            Back to the start
-          </button>
-        )}
-      </nav>
     </aside>
   );
 }
