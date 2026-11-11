@@ -17,8 +17,9 @@
       select, button { font: inherit; color: inherit; background: #2a2b30; border: 1px solid #3c3d44; border-radius: 7px; padding: 6px 10px; cursor: pointer; }
       button[aria-pressed='true'] { background: #4a4b55; }
       #size { color: #8d8e96; font-variant-numeric: tabular-nums; min-width: 8em; text-align: center; }
-      main { position: absolute; inset: 52px 0 26px; display: grid; place-items: center; overflow: hidden; }
-      #fit { flex: none; transform-origin: center; }
+      main { position: absolute; inset: 52px 0 26px; overflow: hidden; }
+      /* Centered on the page's middle and scaled about it: a transform doesn't shrink the layout box, so grid centering would push it down. */
+      #fit { position: absolute; left: 50%; top: 50%; width: max-content; transform-origin: center; }
       #phone { display: flex; flex-direction: column; background: #000; border-radius: 54px; padding: 11px; box-shadow: 0 0 0 2px #55565c, 0 24px 70px #000; }
       #phone.landscape { flex-direction: row; }
       #screen { position: relative; display: flex; flex-direction: column; background: #0e0d0b; border-radius: 44px; overflow: hidden; }
@@ -101,9 +102,9 @@
       function fit() {
         const f = $('fit');
         const m = document.querySelector('main').getBoundingClientRect();
-        f.style.transform = 'none';
+        f.style.transform = 'translate(-50%, -50%)';
         const s = Math.min(1, (m.height - 16) / f.offsetHeight, (m.width - 16) / f.offsetWidth);
-        f.style.transform = `scale(${s})`;
+        f.style.transform = `translate(-50%, -50%) scale(${s})`;
       }
       function show() {
         $('view').src = state.page;
