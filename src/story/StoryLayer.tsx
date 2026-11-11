@@ -69,6 +69,33 @@ export function StoryLayer({
   const last = at === STEPS.length - 1;
   const live = !step.still && !step.full;
   const [credits, setCredits] = useState(false);
+  // Turning the model shrinks the card to its headline (peek), so the model has the screen; a tap opens it again.
+  const [peek, setPeek] = useState(false);
+  useEffect(() => setPeek(false), [at]);
+  useEffect(() => {
+    if (!live) return;
+    let from: { x: number; y: number } | null = null;
+    const onModel = (e: Event) => e.target instanceof HTMLCanvasElement;
+    const down = (e: PointerEvent) => (from = onModel(e) ? { x: e.clientX, y: e.clientY } : null);
+    const move = (e: PointerEvent) => {
+      if (from && Math.hypot(e.clientX - from.x, e.clientY - from.y) > 10) {
+        setPeek(true);
+        from = null;
+      }
+    };
+    const up = () => (from = null);
+    const wheel = (e: WheelEvent) => onModel(e) && setPeek(true);
+    window.addEventListener('pointerdown', down, true);
+    window.addEventListener('pointermove', move, true);
+    window.addEventListener('pointerup', up, true);
+    window.addEventListener('wheel', wheel, { capture: true, passive: true });
+    return () => {
+      window.removeEventListener('pointerdown', down, true);
+      window.removeEventListener('pointermove', move, true);
+      window.removeEventListener('pointerup', up, true);
+      window.removeEventListener('wheel', wheel, true);
+    };
+  }, [live]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -118,15 +145,26 @@ export function StoryLayer({
       {step.full && !step.still && <div className="sty-dim" />}
 
       <section
-        className={`sty-card${step.full ? ' full' : ''}${at === 0 ? ' opening' : ''}`}
+        className={`sty-card${step.full ? ' full' : ''}${at === 0 ? ' opening' : ''}${live && peek ? ' sty-peek' : ''}`}
         aria-live="polite"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
       >
-        <div className="sty-body" key={step.id}>
+        {live && (
+          <button
+            type="button"
+            className="sty-handle"
+            onClick={() => setPeek(!peek)}
+            aria-expanded={!peek}
+            aria-label={peek ? 'Show the text' : 'Shrink the text'}
+          >
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d={peek ? 'M3 10l5-5 5 5' : 'M3 6l5 5 5-5'} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          </button>
+        )}
+        <div className="sty-body" key={step.id} onClick={peek ? () => setPeek(false) : undefined}>
           <p className="sty-act">
             {step.act}
-            {live && <span>Live model · drag to look around</span>}
+            {live && <span>{peek ? 'Tap to read on' : 'Live model · drag to look around'}</span>}
           </p>
           {step.body}
           {step.control === 'systems' && (
@@ -179,9 +217,10 @@ export function StoryLayer({
                 Skip to the 3D explorer
               </button>
             )}
-            {live && !last && (
-              <button className="sty-look" onClick={onLook}>
-                Hide text
+            {at > 0 && !last && (
+              <button className="sty-explore" onClick={onLook}>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1.5 14 5v6l-6 3.5L2 11V5zM2 5l6 3.5L14 5M8 8.5v6" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" /></svg>
+                Explore in 3D
               </button>
             )}
             <span className="sty-count">
