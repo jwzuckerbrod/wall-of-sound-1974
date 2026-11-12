@@ -152,6 +152,16 @@ export function About({ onClose }: { onClose: () => void }) {
           The two crew at the top of the scaffold are AI-generated figures, not photographs or portraits of anyone:
           pictures from FLUX.1 schnell turned into 3D with TRELLIS.2, placed where 1974 photographs show men working.
         </p>
+
+        <h2>Privacy</h2>
+        <p>
+          Visits are counted without cookies or stored IP addresses, to see which parts of the story people read
+          and where the model is slow.{' '}
+          <a href="https://jzuckerbrod.com/privacy/" target="_blank" rel="noopener">
+            What's counted, and what isn't
+          </a>
+          .
+        </p>
       </div>
     </div>
   );

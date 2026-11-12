@@ -16,17 +16,25 @@
       content="Walk around the Grateful Dead's Wall of Sound, the 641-speaker PA they toured in 1974, rebuilt in 3D from photographs, scaffolding drawings and surviving equipment, every source credited."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
-    <!-- What a shared link shows. The image URL has to be absolute: set for GitHub Pages. -->
+    <!-- The page's one official address: it is also served at jwzuckerbrod.github.io/wall-of-sound-1974/, and this
+         tells search engines and link previews to credit jzuckerbrod.com (the personal site passes it through). -->
+    <link rel="canonical" href="https://jzuckerbrod.com/wall-of-sound/" />
+    <!-- What a shared link shows. URLs have to be absolute. -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://jzuckerbrod.com/wall-of-sound/" />
+    <meta property="og:site_name" content="Jonathan Zuckerbrod" />
     <meta property="og:title" content="The Wall of Sound, 1974" />
     <meta
       property="og:description"
       content="An explorable 3D reconstruction of the Grateful Dead's 641-speaker PA, from photographs, drawings and surviving equipment."
     />
-    <meta property="og:image" content="https://jwzuckerbrod.github.io/wall-of-sound-1974/og.jpg" />
+    <meta property="og:image" content="https://jzuckerbrod.com/wall-of-sound/og.jpg" />
+    <meta property="og:image:alt" content="The Grateful Dead's Wall of Sound at the Hollywood Bowl, reconstructed in 3D" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="The Wall of Sound, 1974" />
+    <meta name="twitter:image" content="https://jzuckerbrod.com/wall-of-sound/og.jpg" />
     <style>
       /* Shown from the first byte, before any JavaScript arrives; faded out by
          src/App.tsx once the model has drawn its first frames. */

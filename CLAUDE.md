@@ -52,6 +52,8 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   (personal-website project); events via `track()` and the step on screen via `setStep()` in
   `src/analytics.ts` (used in `src/App.tsx`). Dashboard at jzuckerbrod.com/stats; for questions about
   visitors, run `npm run stats:export` then `stats:report` in the personal-website project.
+  **Keep step ids stable** (`id` in `src/story/steps.tsx`): analytics history is keyed by them, so renaming
+  one splits its history in two. Change the `name` freely; add a new id only for a genuinely new step.
 - Published at https://jwzuckerbrod.github.io/wall-of-sound-1974/ by
   `.github/workflows/pages.yml` on every push to master: ask before pushing.
 - Renders go to `.shots/` (ignored). Reference photos are in `.shots/reference/`
