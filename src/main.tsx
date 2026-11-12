@@ -6,6 +6,9 @@ import './styles.css';
 
 installProbe();
 
+// When the code had arrived and started running: the network part of the model's load time (App.tsx, BootDone)
+(window as unknown as { __appStart?: number }).__appStart = performance.now();
+
 // Keep the last few runtime errors with full stacks on the window, so a
 // headless/automated browser can read them back. Dev only.
 if (import.meta.env.DEV) {

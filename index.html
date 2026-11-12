@@ -67,6 +67,17 @@
       @keyframes boot { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
       @media (prefers-reduced-motion: reduce) { #boot .bar::after { animation: none; width: 100%; opacity: 0.5; } }
     </style>
+    <!-- How long the page spends hidden (a background tab draws nothing), so the model's load time can leave it out (src/App.tsx, BootDone). -->
+    <script>
+      (function () {
+        var v = (window.__vis = { hidden: 0, at: document.visibilityState === 'hidden' ? 0 : -1 });
+        document.addEventListener('visibilitychange', function () {
+          var t = performance.now();
+          if (document.visibilityState === 'hidden') v.at = t;
+          else if (v.at >= 0) { v.hidden += t - v.at; v.at = -1; }
+        });
+      })();
+    </script>
     <!-- Privacy-friendly visit counter (no cookies; see src/analytics.ts). Calls made before it loads queue up. -->
     <script>window.jzt = window.jzt || function () { (window.jzt.q = window.jzt.q || []).push(arguments); };</script>
     <script async src="https://jzuckerbrod.com/s.js" data-site="explorer"></script>

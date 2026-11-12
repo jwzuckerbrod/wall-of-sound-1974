@@ -42,8 +42,21 @@ function BootDone() {
       boot.classList.add('done');
       setTimeout(() => boot.remove(), 700);
     }
-    // How long the model took to appear, for the dashboard's load time (and who gave up waiting)
-    track('ready', null, { ms: Math.round(performance.now()) });
+    // How long the model took to appear, for the dashboard's load time (and who gave up waiting). Only time
+    // the page was on screen counts: a tab opened in the background draws nothing until it's looked at, which
+    // once made a two-second load read as thirty. Split into getting the code (network) and drawing (device).
+    const w = window as unknown as { __vis?: { hidden: number; at: number }; __appStart?: number };
+    const now = performance.now();
+    const hidden = (w.__vis?.hidden ?? 0) + (w.__vis && w.__vis.at >= 0 ? now - w.__vis.at : 0);
+    const code = w.__appStart ?? null;
+    track('ready', null, {
+      ms: Math.round(Math.max(0, now - hidden)),
+      total: Math.round(now),
+      hidden: Math.round(hidden),
+      code: code == null ? null : Math.round(code),
+      // From the code starting to the model on screen (includes any hidden time; see `hidden`)
+      draw: code == null ? null : Math.round(now - code),
+    });
   });
   return null;
 }
