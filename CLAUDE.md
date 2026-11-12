@@ -49,8 +49,9 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   overview and instrument cards in `src/ui/Cards.tsx`, top and bottom bars in
   `src/ui/Controls.tsx`.
 - Analytics: `index.html` loads the counter from jzuckerbrod.com/s.js
-  (personal-website project); events via `track()` in `src/analytics.ts`. Dashboard at
-  jzuckerbrod.com/stats.
+  (personal-website project); events via `track()` and the step on screen via `setStep()` in
+  `src/analytics.ts` (used in `src/App.tsx`). Dashboard at jzuckerbrod.com/stats; for questions about
+  visitors, run `npm run stats:export` then `stats:report` in the personal-website project.
 - Published at https://jwzuckerbrod.github.io/wall-of-sound-1974/ by
   `.github/workflows/pages.yml` on every push to master: ask before pushing.
 - Renders go to `.shots/` (ignored). Reference photos are in `.shots/reference/`

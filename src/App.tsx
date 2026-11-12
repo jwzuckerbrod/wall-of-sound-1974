@@ -18,7 +18,7 @@ import { TOUR, instrumentPose } from './scene/tour';
 import { COMPARE_VIEW, PLACES, PLANE_VIEWS, placeIn, standIn, viewFromSearch, viewIn } from './scene/views';
 import { INSTRUMENTS, InstrumentCard, OverviewCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
-import { track } from './analytics';
+import { isTagOnly, setStep, track } from './analytics';
 import { StoryLayer } from './story/StoryLayer';
 import { STEPS } from './story/steps';
 
@@ -40,6 +40,8 @@ function BootDone() {
     if (!boot) return;
     boot.classList.add('done');
     setTimeout(() => boot.remove(), 700);
+    // How long the model took to appear, for the dashboard's load time (and who gave up waiting)
+    track('ready', null, { ms: Math.round(performance.now()) });
   });
   return null;
 }
@@ -100,10 +102,11 @@ function useOnChange<T>(value: T, report: (v: T) => void) {
  * The page opens on the story (src/story), told over this same model. A link
  * that asks for something of the explorer (a venue, a comparison, a view, no
  * interface) or ends in #explore opens the explorer; #<step> opens that step.
+ * A link tagged only with where it was shared (?ref=reddit) still opens the story.
  */
 function storyFromLocation(hud: boolean): { on: boolean; at: number } {
   const at = Math.max(0, STEPS.findIndex((s) => s.id === window.location.hash.slice(1)));
-  return { on: hud && window.location.search === '' && window.location.hash !== '#explore', at };
+  return { on: hud && isTagOnly(window.location.search) && window.location.hash !== '#explore', at };
 }
 
 const setHash = (hash: string) => window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
@@ -267,13 +270,19 @@ export default function App() {
     setInStory(true);
   }, []);
 
-  // Each step once, the first time it's reached, in order: where readers stop.
-  const reached = useRef(new Set<string>());
+  // Which step of the visit is on screen, so the dashboard's Journey can show time spent on each and where
+  // people leave: a story step, or exploring the model once the story is left.
   useEffect(() => {
-    if (!inStory || reached.current.has(step.id)) return;
-    reached.current.add(step.id);
-    track('beat', step.id, { order: reached.current.size, label: step.name });
+    if (inStory) setStep(step.id, step.name);
+    else setStep('explore', 'Exploring the model');
   }, [inStory, step]);
+  // How readers move through the story: Next, Back, or a jump (the step dots, a link)
+  const lastStep = useRef(storyAt);
+  useOnChange(storyAt, (n) => {
+    const from = lastStep.current;
+    lastStep.current = n;
+    if (inStory) track('nav', n === from + 1 ? 'next' : n === from - 1 ? 'back' : 'jump', { label: n === from + 1 ? 'Next' : n === from - 1 ? 'Back' : 'Jumped to a step', to: STEPS[n].id });
+  });
 
   // What people do, for the private dashboard (src/analytics.ts). Watching the state, not the buttons,
   // so a keyboard shortcut counts the same as a click.

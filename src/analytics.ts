@@ -13,3 +13,16 @@ export function track(name: string, value?: string | number | null, props?: Reco
     // Never let counting break the page
   }
 }
+
+/** Says which step of the visit is on screen (a story step, or exploring), so time is counted against it. */
+export function setStep(id: string, label: string): void {
+  track('@step', id, { label });
+}
+
+/** Page addresses can carry a tag saying where the link was shared (?ref=reddit, ?utm_source=linkedin). */
+export function isTagOnly(search: string): boolean {
+  const q = new URLSearchParams(search);
+  for (const k of q.keys()) if (k !== 'ref' && k !== 'src' && !k.startsWith('utm_')) return false;
+  return true;
+}
+
