@@ -118,8 +118,13 @@
 .source-list { font-size: 14px; }
 .colophon { margin-top: 3em; border-top: 1px solid var(--rule); padding-top: 1.2em; }
 
-/* The sound keeps its pill, above the card. */
-body:has(.sty) .np-floating { bottom: auto; top: max(10px, env(safe-area-inset-top)); }
+/* The sound keeps its pill at the top, over every step after the first screen, so it can always be
+   paused or put away. On the first screen the With sound switch is its control, so the pill waits. */
+body:has(.sty) .np-floating { bottom: auto; top: max(10px, env(safe-area-inset-top)); z-index: 20; }
+body:has(.ld) .np-floating { display: none; }
+/* While it's there, the photograph and a full-screen step start under it instead of behind it. */
+@media (orientation: portrait) { body:has(.np-floating) .sty-pic { top: calc(max(10px, env(safe-area-inset-top)) + 60px); } }
+body:has(.np-floating) .sty-card.full { top: calc(max(10px, env(safe-area-inset-top)) + 60px); }
 
 /* Shared with the diagrams and the cards' words. */
 .key { list-style: none; margin: 0 0 0.9em; padding: 0; display: grid; gap: 4px; font-size: 0.86em; }
