@@ -1,0 +1,146 @@
+/* The story's first screen (Landing.tsx), in three designs. Phone upright first: the picture
+   above, the words under it. On its side, and on a wide screen: the picture fills the screen and
+   the words take the left. It covers everything, the model loading under it included. */
+
+.ld {
+  --ink: #ece6da; --dim: #b4ab9b; --faint: #7d7568; --accent: #e9b85a;
+  --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+  --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+  position: fixed; inset: 0; z-index: 25; overflow: hidden; pointer-events: auto;
+  background: #000; color: var(--ink); font-family: var(--serif); -webkit-font-smoothing: antialiased;
+}
+.ld-glow { position: absolute; inset: 0; background: radial-gradient(120% 60% at 50% 30%, #2a2318 0%, #000 70%); }
+.ld-shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 16%, rgba(0,0,0,0) 40%, rgba(8,7,5,0.9) 68%, #080705 100%);
+}
+
+/* The pictures. A fitted render (lights, systems) fades into the dark under it. */
+.ld-fit, .ld-wall, .ld-dots { position: absolute; }
+.ld-wall, .ld-dots { inset: 0; width: 100%; height: 100%; transition: opacity 1.6s ease; }
+.ld-fit {
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 62%, transparent 92%);
+}
+.ld-tint { opacity: 0; animation: ld-tint 10s ease-in-out infinite; }
+@keyframes ld-tint { 0%, 20% { opacity: 0; } 32%, 78% { opacity: 1; } 90%, 100% { opacity: 0; } }
+
+/* The photograph: the whole height, drifting across the Wall; the reconstruction from the same seat dissolving in. */
+.ld-pic { position: absolute; inset: 0; }
+.ld-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+@property --ld-x { syntax: '<percentage>'; inherits: true; initial-value: 50%; }
+.ld-drift img { object-position: var(--ld-x) 50%; animation: ld-drift 22s ease-in-out infinite alternate; }
+@keyframes ld-drift { from { --ld-x: 18%; } to { --ld-x: 82%; } }
+.ld-recon { opacity: 0; animation: ld-dissolve 12s ease-in-out infinite; }
+@keyframes ld-dissolve { 0%, 30% { opacity: 0; } 42%, 70% { opacity: 1; } 82%, 100% { opacity: 0; } }
+.ld-chip {
+  position: absolute; z-index: 3; top: max(14px, env(safe-area-inset-top)); left: 16px; margin: 0;
+  font: 600 11px var(--sans); letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+}
+.ld-chip i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 7px; vertical-align: 1px; }
+
+/* The count (lights). */
+.ld-count { position: absolute; left: 0; right: 0; top: 58%; z-index: 3; margin: 0; text-align: center; transition: opacity 1.2s ease, transform 1.2s ease; }
+.ld-count b { display: block; font: 400 clamp(72px, 24vw, 150px)/1 var(--serif); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.ld-count span { font: 600 12px var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+.ld-count[data-gone] { opacity: 0; transform: translateY(-20px); pointer-events: none; }
+
+/* The words. */
+.ld-copy {
+  position: absolute; z-index: 3; left: 0; right: 0; bottom: 0;
+  padding: 0 max(22px, env(safe-area-inset-left)) max(22px, env(safe-area-inset-bottom)) max(22px, env(safe-area-inset-left));
+}
+.ld-copy > * { opacity: 0; transform: translateY(10px); animation: ld-rise 0.9s ease forwards; animation-delay: calc(var(--d, 0) * 0.12s); }
+.ld-copy > :nth-child(2) { --d: 1; } .ld-copy > :nth-child(3) { --d: 2; } .ld-copy > :nth-child(4) { --d: 3; }
+.ld-copy > :nth-child(5) { --d: 4; } .ld-copy > :nth-child(6) { --d: 5; } .ld-copy > :nth-child(7) { --d: 6; }
+@keyframes ld-rise { to { opacity: 1; transform: none; } }
+/* Lights: the words wait for the count. */
+.ld-lights:not(.done) .ld-copy > * { animation: none; }
+.ld-lights:not(.done) .ld-copy { pointer-events: none; }
+.ld-kicker { margin: 0 0 10px; font: 600 11.5px var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+.ld h1 { margin: 0; font-weight: 400; font-size: clamp(46px, 14.5vw, 96px); line-height: 0.92; letter-spacing: -0.015em; }
+.ld-dek { margin: 12px 0 20px; font-size: 18px; line-height: 1.4; color: #d9d2c4; max-width: 30ch; }
+.ld-ctas { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.ld-begin {
+  display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 28px; border: 0; border-radius: 999px;
+  background: var(--accent); color: #17130a; font: 600 17px var(--sans); cursor: pointer;
+}
+.ld-begin svg { width: 16px; height: 16px; }
+.ld-sound { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--dim); font: 14px var(--sans); cursor: pointer; }
+.ld-sound[aria-pressed='true'] { color: var(--ink); }
+.ld-sound span { width: 34px; height: 20px; border-radius: 10px; background: rgba(236,230,218,0.2); position: relative; transition: background 0.2s; }
+.ld-sound span::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transition: transform 0.2s; }
+.ld-sound[aria-pressed='true'] span { background: var(--accent); }
+.ld-sound[aria-pressed='true'] span::after { transform: translateX(14px); background: #17130a; }
+.ld-skip { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; padding: 0; font: 13.5px var(--sans); color: var(--dim); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+.ld-credit { margin: 6px 0 0; font: 11px/1.4 var(--sans); color: var(--faint); }
+.ld-begin:focus-visible, .ld-sound:focus-visible, .ld-skip:focus-visible, .ld-pick button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+
+/* The systems: tappable (lights), or named in turn (systems). */
+.ld-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 6px; padding: 0; list-style: none; }
+.ld-pick button {
+  display: flex; align-items: center; gap: 7px; height: 38px; padding: 0 12px; border-radius: 999px; cursor: pointer;
+  font: 13px var(--sans); color: var(--ink); background: rgba(236,230,218,0.08); border: 1px solid transparent;
+}
+.ld-pick button[aria-pressed='true'] { border-color: var(--c); background: color-mix(in srgb, var(--c) 22%, transparent); }
+.ld-pick i, .ld-names i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+.ld-hint { margin: 0 0 14px; font: 12px var(--sans); color: var(--faint); }
+.ld-names { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 18px; padding: 0; list-style: none; font: 13px var(--sans); }
+.ld-names li { display: flex; align-items: center; gap: 7px; opacity: 0; animation: ld-name 10s ease infinite; animation-delay: calc(var(--i) * 0.28s); }
+@keyframes ld-name { 0%, 22% { opacity: 0; transform: translateY(6px); } 30%, 80% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
+
+/* A short phone upright (an SE): tighter words, so the Wall keeps its stage. */
+@media (orientation: portrait) and (max-height: 600px) {
+  .ld h1 { font-size: clamp(40px, 12.5vw, 60px); }
+  .ld-dek { margin: 8px 0 14px; font-size: 16px; }
+  .ld-pick button { height: 34px; flex: none; }
+  /* The six systems in one row that scrolls sideways, so the Wall keeps the screen. */
+  .ld-pick { flex-wrap: nowrap; overflow-x: auto; margin-right: -22px; padding-right: 22px; scrollbar-width: none; }
+  .ld-pick::-webkit-scrollbar { display: none; }
+  .ld-hint { display: none; }
+  .ld-pick { margin-bottom: 14px; }
+}
+
+/* On its side, and wide screens: the picture across the screen, the words down the left. */
+@media (orientation: landscape) {
+  .ld-shade { background: linear-gradient(to right, rgba(8,7,5,0.94) 0%, rgba(8,7,5,0.6) 36%, rgba(0,0,0,0) 62%), linear-gradient(to top, rgba(8,7,5,0.6), rgba(0,0,0,0) 30%); }
+  .ld-copy { right: auto; width: min(44vw, 560px); bottom: auto; top: 50%; transform: translateY(-50%); }
+  .ld-fit { -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 100%); mask-image: linear-gradient(to right, transparent 0%, #000 18%, #000 100%); }
+  .ld-drift img { animation: none; object-position: 62% 50%; }
+  .ld h1 { font-size: clamp(40px, 6.4vw, 104px); }
+  .ld-dek { font-size: clamp(15px, 1.5vw, 20px); }
+  /* The count stands where the title will, left of the lights. */
+  .ld-count { left: 0; right: auto; width: min(44vw, 560px); top: 50%; transform: translateY(-50%); text-align: left; padding-left: max(22px, env(safe-area-inset-left)); }
+  .ld-count b { font-size: clamp(64px, 11vw, 170px); }
+  .ld-count[data-gone] { transform: translateY(-60%); }
+  .ld-chip { left: auto; right: max(16px, env(safe-area-inset-right)); }
+}
+/* A wide screen: a proper margin. */
+@media (orientation: landscape) and (min-width: 900px) and (min-height: 501px) {
+  .ld-copy { padding-left: clamp(32px, 6vw, 96px); width: min(46vw, 640px); }
+  .ld-count { padding-left: clamp(32px, 6vw, 96px); width: min(46vw, 640px); }
+  .ld-chip { top: 24px; }
+}
+/* A phone on its side is short: the words shrink to fit its height. */
+@media (orientation: landscape) and (max-height: 500px) {
+  .ld-copy { width: min(52vw, 440px); padding-top: 12px; padding-bottom: 12px; }
+  .ld h1 { font-size: clamp(32px, 11vh, 52px); }
+  .ld-kicker { margin-bottom: 6px; }
+  .ld-dek { margin: 6px 0 10px; font-size: 14px; }
+  .ld-begin { height: 46px; padding: 0 22px; font-size: 15px; }
+  .ld-skip { margin-top: 0; min-height: 40px; }
+  .ld-pick { gap: 4px; }
+  .ld-pick button { height: 32px; padding: 0 10px; font-size: 12px; }
+  .ld-hint { display: none; }
+  .ld-pick { margin-bottom: 10px; }
+  .ld-names { margin-bottom: 10px; gap: 4px 10px; font-size: 12px; }
+  .ld-credit { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld-copy > *, .ld-names li { animation: none; opacity: 1; transform: none; }
+  .ld-drift img, .ld-recon { animation: none; }
+  .ld-tint { animation: none; opacity: 1; }
+}

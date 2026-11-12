@@ -42,7 +42,13 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
 - The page opens on **the story**, told in steps over the live model: the steps in
   `src/story/steps.tsx` (camera, what the model shows, words, sources), the card and
   stills in `src/story/StoryLayer.tsx`; `src/App.tsx` applies a step to the explorer's
-  state. `#<step id>` opens a step; `#explore` or any `?query` opens the explorer.
+  state. `#<step id>` opens a step; `#explore` or any `?query` opens the explorer
+  (except share tags and `?landing=`).
+- The story's first screen is an **A/B test** (from November 2026): `src/story/Landing.tsx`
+  draws one of three designs per visitor (`src/story/landingTest.ts`: `lights` A, `photo` 1,
+  `systems` 5), shown in place of the loading screen; `?landing=…` previews one. The dashboard's
+  "Landing test" panel (personal-website project, `worker/analytics.js`) reads its events, so keep
+  the ids and event names while it runs. Mockups of all the ideas: `landing-mockups.html` (dev only).
 - The explorer's interface: places to stand, the View row's chips and each one's
   line, in `src/scene/views.ts` (`PLACES`; no dots on the model); camera poses and
   their sourced text in `src/scene/tour.ts` (`TOUR`, also used by the story), the

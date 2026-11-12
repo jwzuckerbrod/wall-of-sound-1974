@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { CHANNELS, SOURCES, type ChannelId, type SourceId } from '../data/wall.config';
 import { SYSTEMS } from '../ui/Controls';
 import { Credits } from './Credits';
+import { Landing } from './Landing';
 import { srcOf, type StoryImage } from './images';
 import { Needles } from './Needles';
 import { shortSource } from './sources';
@@ -144,7 +145,10 @@ export function StoryLayer({
       ))}
       {step.full && !step.still && <div className="sty-dim" />}
 
-      <section
+      {/* The first screen is its own design (Landing.tsx, under test); the card starts at the next step. */}
+      {at === 0 && <Landing onBegin={() => go(1)} onSkip={onSkip} />}
+      {at > 0 && (
+        <section
         className={`sty-card${step.full ? ' full' : ''}${at === 0 ? ' opening' : ''}${live && peek ? ' sty-peek' : ''}`}
         aria-live="polite"
         onTouchStart={onTouchStart}
@@ -237,7 +241,8 @@ export function StoryLayer({
             )}
           </div>
         </div>
-      </section>
+        </section>
+      )}
 
       {credits && (
         <div className="sty-credits" role="dialog" aria-modal="true" aria-label="Sources and credits">

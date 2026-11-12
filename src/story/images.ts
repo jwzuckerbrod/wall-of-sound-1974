@@ -133,7 +133,7 @@ export const IMAGES = {
 
 export type ImageKey = keyof typeof IMAGES;
 
-const BASE = `${import.meta.env.BASE_URL}story/`;
+export const BASE = `${import.meta.env.BASE_URL}story/`;
 
 export function srcOf(img: StoryImage): { src: string; srcSet?: string } {
   if (!img.widths) return { src: `${BASE}${img.id}.jpg` };

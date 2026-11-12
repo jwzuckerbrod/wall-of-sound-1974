@@ -22,7 +22,8 @@ export function setStep(id: string, label: string): void {
 /** Page addresses can carry a tag saying where the link was shared (?ref=reddit, ?utm_source=linkedin). */
 export function isTagOnly(search: string): boolean {
   const q = new URLSearchParams(search);
-  for (const k of q.keys()) if (k !== 'ref' && k !== 'src' && !k.startsWith('utm_')) return false;
+  // ?landing= picks the story's first screen (story/landingTest.ts), so it keeps the story too.
+  for (const k of q.keys()) if (k !== 'ref' && k !== 'src' && k !== 'landing' && !k.startsWith('utm_')) return false;
   return true;
 }
 

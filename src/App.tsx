@@ -36,10 +36,12 @@ function BootDone() {
   const frames = useRef(0);
   useFrame(() => {
     if (++frames.current !== 3) return;
+    // The story's first screen may have put the loading screen away already (story/Landing.tsx).
     const boot = document.getElementById('boot');
-    if (!boot) return;
-    boot.classList.add('done');
-    setTimeout(() => boot.remove(), 700);
+    if (boot) {
+      boot.classList.add('done');
+      setTimeout(() => boot.remove(), 700);
+    }
     // How long the model took to appear, for the dashboard's load time (and who gave up waiting)
     track('ready', null, { ms: Math.round(performance.now()) });
   });
