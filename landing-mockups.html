@@ -1,0 +1,566 @@
+<!doctype html>
+<!--
+  Dev-only mockups of the story's opening screen: five ideas, for choosing one.
+  Not in vite.config's inputs, so it is never built or published. With no query
+  it shows all five side by side; ?idea=N shows one full screen (for the phone
+  frame: phone.html?page=/landing-mockups.html%3Fidea%3DN). Uses the story's own
+  stills in public/story; nothing here is final copy or final art.
+-->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Landing mockups</title>
+    <style>
+      :root {
+        --bg: #0e0d0b; --ink: #ece6da; --dim: #b4ab9b; --faint: #7d7568; --accent: #e9b85a;
+        --serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
+        --sans: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+        color-scheme: dark;
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif); -webkit-font-smoothing: antialiased; }
+
+      /* ── one mockup, full screen ─────────────────────────────────── */
+      body.one { height: 100svh; overflow: hidden; }
+      .m { position: fixed; inset: 0; overflow: hidden; background: #000; }
+      .layer { position: absolute; inset: 0; }
+      .layer img { width: 100%; height: 100%; object-fit: cover; display: block; }
+      /* Upright on a phone: the whole Wall across the screen's width, fading into the dark under it. */
+      .layer.fit img { position: absolute; object-fit: fill; height: auto;
+        -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 72%, transparent 100%); }
+      .fit-glow { position: absolute; inset: 0; background: radial-gradient(120% 60% at 50% 30%, #2a2318 0%, #000 70%); }
+      .shade { position: absolute; inset: 0; pointer-events: none;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 18%, rgba(0,0,0,0) 42%, rgba(8,7,5,0.88) 70%, #080705 100%); }
+      .chip { position: absolute; top: max(14px, env(safe-area-inset-top)); left: 16px; z-index: 3;
+        font: 600 11px var(--sans); letter-spacing: 0.08em; text-transform: uppercase;
+        padding: 6px 10px; border-radius: 999px; background: rgba(0,0,0,0.45); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+      .chip i { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 7px; vertical-align: 1px; }
+      .copy { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; padding: 0 22px max(22px, env(safe-area-inset-bottom)); }
+      .kicker { margin: 0 0 10px; font: 600 11.5px var(--sans); letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); }
+      h1 { margin: 0; font-weight: 400; font-size: clamp(46px, 14.5vw, 96px); line-height: 0.92; letter-spacing: -0.015em; }
+      .dek { margin: 12px 0 22px; font-size: 18px; line-height: 1.4; color: #d9d2c4; max-width: 30ch; }
+      .ctas { display: flex; align-items: center; gap: 14px; }
+      .begin { display: inline-flex; align-items: center; gap: 10px; height: 54px; padding: 0 26px; border: 0; border-radius: 999px;
+        background: var(--accent); color: #17130a; font: 600 17px var(--sans); cursor: pointer; }
+      .begin svg { width: 16px; height: 16px; }
+      .sound { display: inline-flex; align-items: center; gap: 8px; height: 44px; padding: 0 4px; border: 0; background: none; color: var(--dim);
+        font: 14px var(--sans); cursor: pointer; }
+      .sound[aria-pressed='true'] { color: var(--ink); }
+      .sound span { width: 34px; height: 20px; border-radius: 10px; background: rgba(236,230,218,0.2); position: relative; transition: background 0.2s; }
+      .sound span::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transition: transform 0.2s; }
+      .sound[aria-pressed='true'] span { background: var(--accent); }
+      .sound[aria-pressed='true'] span::after { transform: translateX(14px); background: #17130a; }
+      .skip { display: inline-block; margin-top: 14px; font: 13.5px var(--sans); color: var(--dim); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
+      .fine { margin: 10px 0 0; font: 11px/1.4 var(--sans); color: var(--faint); }
+      .rise > * { opacity: 0; transform: translateY(10px); animation: rise 0.9s ease forwards; }
+      .rise > *:nth-child(2) { animation-delay: 0.12s; } .rise > *:nth-child(3) { animation-delay: 0.24s; }
+      .rise > *:nth-child(4) { animation-delay: 0.36s; } .rise > *:nth-child(5) { animation-delay: 0.48s; } .rise > *:nth-child(6) { animation-delay: 0.6s; }
+      @keyframes rise { to { opacity: 1; transform: none; } }
+      .late > * { animation-delay: calc(var(--late, 0s) + var(--i, 0) * 0.12s); }
+
+      /* Idea 1: the photograph drifts, then dissolves into the reconstruction and back. */
+      .i1 img { object-position: var(--x, 30%) 50%; animation: drift 22s ease-in-out infinite alternate; }
+      @keyframes drift { from { --x: 18%; } to { --x: 82%; } }
+      @property --x { syntax: '<percentage>'; inherits: true; initial-value: 30%; }
+      .i1 .recon { animation: drift 22s ease-in-out infinite alternate, dissolve 12s ease-in-out infinite; opacity: 0; }
+      @keyframes dissolve { 0%, 30% { opacity: 0; } 42%, 70% { opacity: 1; } 82%, 100% { opacity: 0; } }
+
+      /* Idea 2: 641 points of light. */
+      .i2 canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .i2 .after { opacity: 0; transition: opacity 2.2s ease; }
+      .i2.done .after { opacity: 0.85; }
+      .count { position: absolute; left: 0; right: 0; top: 60%; z-index: 3; text-align: center; transition: opacity 1.2s ease, transform 1.2s ease; }
+      .count b { display: block; font: 400 clamp(72px, 26vw, 150px)/1 var(--serif); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+      .count span { font: 600 12px var(--sans); letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); }
+      .i2.done .count { opacity: 0; transform: translateY(-20px); }
+      .i2 .copy { opacity: 0; transition: opacity 1s ease 0.6s; }
+      .i2.done .copy { opacity: 1; }
+
+      /* Idea 3: the meter. */
+      .i3 .layer img { filter: blur(6px) brightness(0.32) saturate(0.7); transform: scale(1.1); }
+      .meter { position: absolute; left: 50%; top: 31%; width: min(86vw, 420px); transform: translate(-50%, -50%); z-index: 2;
+        filter: drop-shadow(0 0 40px rgba(110, 190, 255, 0.35)); }
+      .meter .face { fill: #9fd3f7; }
+      .meter .glow { fill: url(#mglow); }
+      .meter text { font: 600 13px var(--sans); fill: #10324a; }
+      .meter .red { fill: #b3261e; }
+      .meter .needle { stroke: #0b0b0b; stroke-width: 2.6; stroke-linecap: round; transform-origin: 210px 236px; }
+      .i3 .stat { margin: 0 0 12px; font: 13px var(--sans); color: #9fd3f7; letter-spacing: 0.04em; }
+
+      /* Idea 4: the climb. */
+      .i4 img { transform-origin: 50% 100%; animation: climb 9s cubic-bezier(.45,0,.2,1) forwards; }
+      @keyframes climb {
+        0% { transform: scale(2.6) translateY(4%); object-position: 50% 92%; }
+        78% { transform: scale(2.6) translateY(34%); object-position: 50% 92%; }
+        100% { transform: scale(1) translateY(0); object-position: 50% 55%; }
+      }
+      .ruler { position: absolute; right: 14px; top: 16%; bottom: 40%; width: 64px; z-index: 3; border-right: 2px solid rgba(233,184,90,0.8);
+        transition: opacity 1s ease; }
+      .ruler i { position: absolute; right: 0; width: 10px; border-top: 1px solid rgba(233,184,90,0.7); }
+      .ruler i.big { width: 18px; }
+      .ruler output { position: absolute; right: 24px; transform: translateY(-50%); font: 600 15px var(--sans); color: var(--ink); white-space: nowrap;
+        text-shadow: 0 1px 8px #000; font-variant-numeric: tabular-nums; }
+      .i4.done .ruler { opacity: 0; }
+      .i4 .copy { opacity: 0; transition: opacity 1s ease; }
+      .i4.done .copy { opacity: 1; }
+
+      /* Idea 5: six systems. */
+      .i5 .sys { opacity: 0; animation: sys 10s ease-in-out infinite; }
+      @keyframes sys { 0%, 20% { opacity: 0; } 32%, 78% { opacity: 1; } 90%, 100% { opacity: 0; } }
+      .systems { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 0 0 16px; padding: 0; list-style: none; font: 13px var(--sans); }
+      .systems li { display: flex; align-items: center; gap: 7px; opacity: 0; animation: chip 10s ease infinite; animation-delay: calc(var(--i) * 0.28s); }
+      .systems i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+      @keyframes chip { 0%, 22% { opacity: 0; transform: translateY(6px); } 30%, 80% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; } }
+
+      /* A: lights that take their system's color, then the colored Wall, whose names can be tapped. */
+      .ia canvas, .ic canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+      .ia .count, .ic .count { top: 58%; }
+      .ia .copy, .ic .copy { opacity: 0; transition: opacity 1s ease 0.4s; pointer-events: none; }
+      .ia.done .copy, .ic.done .copy { opacity: 1; pointer-events: auto; }
+      .ia.done .count, .ic.done .count { opacity: 0; transform: translateY(-20px); }
+      .ia #wall { opacity: 0; transition: opacity 1.6s ease; }
+      .ia.done #wall { opacity: 1; }
+      .ia #dots { transition: opacity 1.6s ease; }
+      .ia.done #dots { opacity: 0; }
+      .pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
+      .pick button { display: flex; align-items: center; gap: 7px; height: 36px; padding: 0 12px; border-radius: 999px; cursor: pointer;
+        font: 13px var(--sans); color: var(--ink); background: rgba(236,230,218,0.08); border: 1px solid transparent; }
+      .pick button[aria-pressed='true'] { border-color: var(--c); background: color-mix(in srgb, var(--c) 22%, transparent); }
+      .pick i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 8px var(--c); }
+      .hint { margin: -8px 0 14px; font: 12px var(--sans); color: var(--faint); }
+      /* C: the meter at the top, the Wall in lights under it. */
+      .ic .meter { top: 13%; width: min(62vw, 300px); }
+      .ic .count { top: 63%; }
+      @media (orientation: landscape) and (max-height: 560px) { .ic .meter { left: 74%; top: 28%; width: min(32vw, 280px); } }
+      .replay { position: absolute; top: max(14px, env(safe-area-inset-top)); right: 14px; z-index: 4; height: 32px; padding: 0 12px; border-radius: 999px;
+        border: 1px solid rgba(236,230,218,0.25); background: rgba(0,0,0,0.4); color: var(--dim); font: 12px var(--sans); cursor: pointer; }
+
+      /* Sideways: the picture keeps the screen, the words take the left. */
+      @media (orientation: landscape) and (max-height: 560px) {
+        .copy { right: auto; width: min(58vw, 520px); }
+        h1 { font-size: clamp(38px, 9vh, 64px); }
+        .dek { margin-bottom: 14px; font-size: 16px; }
+        .shade { background: linear-gradient(to right, rgba(8,7,5,0.92) 0%, rgba(8,7,5,0.55) 45%, rgba(0,0,0,0) 75%); }
+        .meter { left: 72%; top: 50%; width: min(40vw, 340px); }
+        .count { left: 40%; top: 22%; }
+      }
+      @media (prefers-reduced-motion: reduce) { *, *::after { animation-duration: 0.01s !important; animation-iteration-count: 1 !important; } }
+
+      /* ── all five, side by side ──────────────────────────────────── */
+      body.all { padding: 20px 16px 40px; font-family: var(--sans); }
+      .all h2 { font: 400 28px var(--serif); margin: 0 0 4px; }
+      .all .lede { margin: 0 0 22px; color: var(--dim); font-size: 14px; max-width: 60ch; line-height: 1.5; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px 20px; }
+      .tile h3 { margin: 10px 0 4px; font-size: 15px; }
+      .tile h3 b { color: var(--accent); margin-right: 6px; }
+      .tile p { margin: 0 0 8px; color: var(--dim); font-size: 13px; line-height: 1.45; }
+      .tile a { color: var(--ink); font-size: 13px; text-underline-offset: 3px; }
+      .frame { position: relative; width: 100%; aspect-ratio: 402 / 681; border-radius: 22px; overflow: hidden; background: #000; box-shadow: 0 0 0 1px #34302a; }
+      .frame iframe { position: absolute; left: 0; top: 0; width: 402px; height: 681px; border: 0; transform-origin: 0 0; }
+    </style>
+  </head>
+  <body>
+    <script>
+      const IDEAS = [
+        { n: 1, name: 'The photograph comes alive', text: 'The 1974 photograph fills the phone and drifts across the Wall, then dissolves into the reconstruction and back. Here the dissolve uses a render from a different camera, so it jumps; the real one needs a render from the photo’s own camera.' },
+        { n: 2, name: '641 points of light', text: 'A dark screen. The speakers light up one by one, counting to 641, in the shape of the Wall; then the Wall itself fades in behind them and the title rises.' },
+        { n: 3, name: 'The meter', text: 'The blue McIntosh meter everyone remembers, glowing and swinging as if the band were playing. Sound on, and the Bowl tape plays under it.' },
+        { n: 4, name: 'The climb', text: 'Starting at the stage floor and climbing the Wall, with a height ruler counting up to 48 feet 10 inches; then it pulls back to the whole Wall and the title.' },
+        { n: 5, name: 'Six systems', text: 'The Wall as it looked, then lit in its six systems, one color each, with their names appearing in turn: the story’s central idea, in one picture.' },
+        { n: 6, tag: 'A', name: 'Lights, then the systems', text: 'Ideas 2 and 5 together. The 641 lights come on in the Wall\u2019s shape, each in its system\u2019s color; then the colored Wall fades in under them. Tap a system\u2019s name to see it alone.' },
+      ];
+      const idea = Number(new URLSearchParams(location.search).get('idea'));
+      const S = '/story/';
+      const TRACK = 'https://archive.org/download/gd1974-07-21.ecm22p.bertrando.89033.flac24/gd1974-07-21.motb.0056.s1t09.mp3';
+
+      // The words every idea shares: kicker, title, dek, the buttons.
+      const copy = (kicker, extra = '', after = '', mid = '') => `
+        <div class="copy rise">
+          ${extra}
+          <p class="kicker">${kicker}</p>
+          <h1>The Wall<br>of Sound</h1>
+          <p class="dek">The Grateful Dead’s sound system, summer 1974.</p>
+          ${mid}
+          <div class="ctas">
+            <button class="begin">Begin <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="sound" aria-pressed="false"><span></span>With sound</button>
+          </div>
+          <a class="skip" href="#">Skip to the 3D explorer</a>
+          ${after}
+        </div>`;
+
+      const METER = `
+            <svg class="meter" viewBox="0 0 420 260" aria-hidden="true">
+              <defs><radialGradient id="mglow" cx="50%" cy="100%" r="90%"><stop offset="0" stop-color="#d6f0ff"/><stop offset="1" stop-color="#5fb0e8"/></radialGradient></defs>
+              <rect x="6" y="6" width="408" height="248" rx="18" fill="#0d0f12" stroke="#2a2f36" stroke-width="3"/>
+              <rect x="22" y="22" width="376" height="216" rx="8" class="glow"/>
+              <g id="ticks"></g>
+              <text x="210" y="200" text-anchor="middle" style="font-size:12px;letter-spacing:.2em">POWER OUTPUT</text>
+              <line class="needle" id="needle" x1="210" y1="236" x2="210" y2="70"/>
+              <circle cx="210" cy="236" r="10" fill="#0b0b0b"/>
+            </svg>`;
+
+      function one(n) {
+        document.body.className = 'one';
+        const m = document.createElement('div');
+        m.className = `m i${n}`;
+        const replay = '<button class="replay" onclick="location.reload()">Replay</button>';
+        if (n === 1) {
+          m.innerHTML = `
+            <div class="layer"><img src="${S}photo-bowl-1974-07-21.jpg" alt=""></div>
+            <div class="layer recon"><img src="${S}bowl-photo-2040.jpg" alt=""></div>
+            <div class="shade"></div>
+            <p class="chip" id="chip"><i></i>Photograph · July 21, 1974</p>
+            ${copy('Hollywood Bowl · July 21, 1974', '', '<p class="fine">Photograph: photographer unknown.</p>')}`;
+          // The label follows the dissolve (12 s loop; the reconstruction holds from 42% to 70%).
+          const t0 = performance.now();
+          setInterval(() => {
+            const p = (((performance.now() - t0) / 12000) % 1);
+            m.querySelector('#chip').innerHTML = p > 0.38 && p < 0.76 ? '<i></i>Reconstruction · 641 speakers' : '<i></i>Photograph · July 21, 1974';
+          }, 200);
+        }
+        if (n === 2) {
+          m.innerHTML = `
+            <div class="layer after fit"><img src="${S}bowl-1920.jpg" alt=""></div>
+            <canvas></canvas>
+            <div class="shade"></div>
+            <div class="count"><b id="num">0</b><span>speakers</span></div>
+            ${replay}
+            ${copy('641 speakers · 48 amplifiers · 75 tons')}`;
+        }
+        if (n === 3) {
+          m.innerHTML = `
+            <div class="layer"><img src="${S}amps-close-960.jpg" alt=""></div>
+            ${METER}
+            <div class="shade"></div>
+            ${copy('Forty-eight amplifiers', '<p class="stat">48 McIntosh MC 2300s · 600 watts each</p>')}`;
+          const ticks = m.querySelector('#ticks');
+          const marks = ['−20', '−10', '−5', '−3', '0', '+3'];
+          for (let i = 0; i <= 20; i++) {
+            const a = (-50 + i * 5) * Math.PI / 180, big = i % 4 === 0, r1 = 150, r2 = big ? 128 : 138;
+            const x1 = 210 + r1 * Math.sin(a), y1 = 236 - r1 * Math.cos(a), x2 = 210 + r2 * Math.sin(a), y2 = 236 - r2 * Math.cos(a);
+            ticks.insertAdjacentHTML('beforeend', `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${i > 16 ? '#b3261e' : '#10324a'}" stroke-width="${big ? 2.4 : 1.4}"/>`);
+            if (big) {
+              const rx = 210 + 112 * Math.sin(a), ry = 236 - 112 * Math.cos(a);
+              ticks.insertAdjacentHTML('beforeend', `<text x="${rx}" y="${ry + 4}" text-anchor="middle" class="${i > 16 ? 'red' : ''}">${marks[i / 4]}</text>`);
+            }
+          }
+          // A needle that moves like music: a slow swell, a beat, and a little jitter, with ballistics.
+          const needle = m.querySelector('#needle');
+          let v = -50, t = 0;
+          (function frame() {
+            t += 1 / 60;
+            const swell = 0.5 + 0.35 * Math.sin(t * 0.7) + 0.15 * Math.sin(t * 0.23);
+            const beat = Math.pow(Math.max(0, Math.sin(t * Math.PI * 2 * 1.9)), 6);
+            const target = -50 + 100 * Math.min(1, swell * 0.75 + beat * 0.3 + (Math.random() - 0.5) * 0.12);
+            v += (target - v) * (target > v ? 0.32 : 0.06);
+            needle.style.transform = `rotate(${v}deg)`;
+            requestAnimationFrame(frame);
+          })();
+        }
+        if (n === 4) {
+          m.innerHTML = `
+            <div class="layer"><img src="${S}bowl-1920.jpg" alt=""></div>
+            <div class="shade"></div>
+            <div class="ruler" id="ruler"><output id="ft">0 ft</output></div>
+            ${replay}
+            ${copy('Taller than a 737’s tail')}`;
+          const ruler = m.querySelector('#ruler');
+          for (let f = 0; f <= 48; f += 4) ruler.insertAdjacentHTML('afterbegin', `<i class="${f % 12 === 0 ? 'big' : ''}" style="bottom:${(f / 48.83) * 100}%"></i>`);
+          const out = m.querySelector('#ft');
+          const start = performance.now(), span = 7000, total = 48 + 10 / 12;
+          (function tick() {
+            const p = Math.min(1, (performance.now() - start) / span);
+            const e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+            const h = total * e, ft = Math.floor(h), inch = Math.round((h - ft) * 12);
+            out.textContent = p < 1 ? `${ft} ft` : '48 ft 10 in';
+            out.style.bottom = `${e * 100}%`;
+            if (p < 1) requestAnimationFrame(tick);
+            else setTimeout(() => m.classList.add('done'), 1600);
+          })();
+        }
+        if (n === 5) {
+          const sys = [['Vocals', '#f4c95d'], ['Lead guitar', '#e8543f'], ['Rhythm guitar', '#9b5de5'], ['Piano', '#2ec4b6'], ['Drums', '#4d8be8'], ['Bass', '#2fa14c']];
+          m.innerHTML = `
+            <div class="fit-glow"></div>
+            <div class="layer fit"><img src="${S}bowl-1920.jpg" alt=""></div>
+            <div class="layer sys fit"><img src="${S}bowl-systems-1920.jpg" alt=""></div>
+            <div class="shade"></div>
+            ${copy('Six systems · nothing mixed', '', '',
+              `<ul class="systems">${sys.map(([l, c], i) => `<li style="--c:${c};--i:${i}"><i></i>${l}</li>`).join('')}</ul>`)}`;
+        }
+        if (n === 6) {
+          m.className = 'm ia';
+          m.innerHTML = `
+            <div class="fit-glow"></div>
+            <canvas id="wall"></canvas>
+            <canvas id="dots"></canvas>
+            <div class="shade"></div>
+            <div class="count"><b id="num">0</b><span>speakers, six systems</span></div>
+            ${replay}
+            ${copy('Six systems · nothing mixed', '', '',
+              `<ul class="pick" aria-label="Show one system">${SYSTEMS.map(([l, c], i) => `<li><button style="--c:${c}" data-i="${i}" aria-pressed="false"><i></i>${l}</button></li>`).join('')}</ul><p class="hint">Tap one to see it alone.</p>`)}`;
+        }
+        if (n === 7) {
+          m.className = 'm ic';
+          m.innerHTML = `
+            ${METER}
+            <canvas id="dots"></canvas>
+            <div class="shade"></div>
+            <div class="count"><b id="num">0</b><span>speakers</span></div>
+            ${replay}
+            ${copy('48 amplifiers · 641 speakers')}`;
+        }
+        document.body.append(m);
+        if (n === 7) {
+          // The same meter as idea 3; its level drives the lights (meterLevel, 0 to 1).
+          window.meterLevel = 0;
+          const ticks = m.querySelector('#ticks');
+          const marks = ['−20', '−10', '−5', '−3', '0', '+3'];
+          for (let i = 0; i <= 20; i++) {
+            const a = (-50 + i * 5) * Math.PI / 180, big = i % 4 === 0, r1 = 150, r2 = big ? 128 : 138;
+            const x1 = 210 + r1 * Math.sin(a), y1 = 236 - r1 * Math.cos(a), x2 = 210 + r2 * Math.sin(a), y2 = 236 - r2 * Math.cos(a);
+            ticks.insertAdjacentHTML('beforeend', `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${i > 16 ? '#b3261e' : '#10324a'}" stroke-width="${big ? 2.4 : 1.4}"/>`);
+            if (big) {
+              const rx = 210 + 112 * Math.sin(a), ry = 236 - 112 * Math.cos(a);
+              ticks.insertAdjacentHTML('beforeend', `<text x="${rx}" y="${ry + 4}" text-anchor="middle" class="${i > 16 ? 'red' : ''}">${marks[i / 4]}</text>`);
+            }
+          }
+          // A needle that moves like music: a slow swell, a beat, and a little jitter, with ballistics.
+          const needle = m.querySelector('#needle');
+          let v = -50, t = 0;
+          (function frame() {
+            t += 1 / 60;
+            const swell = 0.5 + 0.35 * Math.sin(t * 0.7) + 0.15 * Math.sin(t * 0.23);
+            const beat = Math.pow(Math.max(0, Math.sin(t * Math.PI * 2 * 1.9)), 6);
+            const target = -50 + 100 * Math.min(1, swell * 0.75 + beat * 0.3 + (Math.random() - 0.5) * 0.12);
+            v += (target - v) * (target > v ? 0.32 : 0.06);
+            needle.style.transform = `rotate(${v}deg)`;
+            window.meterLevel = (v + 50) / 100;
+            requestAnimationFrame(frame);
+          })();
+        }
+        if (n === 6) systemsLights(m);
+        if (n === 7) meterLights(m);
+        m.querySelectorAll('.layer.fit img').forEach((img) => fitWall(img));
+        // Shared: the sound switch plays the Bowl tape (a mockup: no player, no fade).
+        const sound = m.querySelector('.sound');
+        let audio;
+        sound.onclick = () => {
+          const on = sound.getAttribute('aria-pressed') !== 'true';
+          sound.setAttribute('aria-pressed', on);
+          if (on) { audio = audio || new Audio(TRACK); audio.volume = 0.6; audio.play().catch(() => {}); } else audio?.pause();
+        };
+        if (n === 2) lights(m);
+      }
+
+      /**
+       * Lays a Bowl render (960 × 540 frame) so the Wall, x 182 to 740, spans the screen's width,
+       * centered a little above the middle. Sideways the picture just covers the screen.
+       * Returns the frame's scale and offset in CSS pixels, for drawing over it.
+       */
+      function frameOnScreen(cy = 0.34) {
+        const W = innerWidth, H = innerHeight;
+        if (W > H) { const s = Math.max(W / 960, H / 540); return { s, ox: (W - 960 * s) / 2, oy: (H - 540 * s) / 2, cover: true }; }
+        const s = W / ((740 - 182) * 1.08), ox = W / 2 - s * 461, oy = Math.max(0, H * cy - s * 300);
+        return { s, ox, oy };
+      }
+      function fitWall(img) {
+        const f = frameOnScreen();
+        if (f.cover) return img.removeAttribute('style'), img.parentElement.classList.remove('fit');
+        Object.assign(img.style, { left: `${f.ox}px`, top: `${f.oy}px`, width: `${960 * f.s}px`, height: `${540 * f.s}px` });
+      }
+
+      const SYSTEMS = [['Vocals', '#f4c95d'], ['Lead guitar', '#e8543f'], ['Rhythm guitar', '#9b5de5'], ['Piano', '#2ec4b6'], ['Drums', '#4d8be8'], ['Bass', '#2fa14c']];
+      
+      /**
+       * Reads the six-systems render (960 × 540) and finds its speakers by their color: a class (0 to 5)
+       * for every pixel of the Wall, and 641 points spread over them, each with its system.
+       */
+      async function readSystems() {
+        const load = (src) => new Promise((ok) => { const i = new Image(); i.onload = () => ok(i); i.src = src; });
+        const [col, plain] = await Promise.all([load(S + 'bowl-systems-960.jpg'), load(S + 'bowl-960.jpg')]);
+        const read = (im) => {
+          const c = document.createElement('canvas'); c.width = 960; c.height = 540;
+          const x = c.getContext('2d', { willReadFrequently: true });
+          x.drawImage(im, 0, 0);
+          return x.getImageData(0, 0, 960, 540).data;
+        };
+        const A = read(col), B = read(plain);
+        // The two renders differ only where the speakers are tinted; the tint's hue says which system.
+        // (The render is graded warm, so the colors' own hues all read as yellow; their difference doesn't.)
+        const cls = new Int8Array(960 * 540).fill(-1);
+        const CENTERS = [38, 5, 262, 168, 210, 120]; // the tint's hue, per system, in SYSTEMS' order
+        for (let y = 100; y < 430; y++) for (let X = 160; X < 760; X++) {
+          const k = (y * 960 + X) * 4, dr = A[k] - B[k], dg = A[k + 1] - B[k + 1], db = A[k + 2] - B[k + 2];
+          if (Math.hypot(dr, dg, db) < 40) continue;
+          const h = (Math.atan2(Math.sqrt(3) * (dg - db), 2 * dr - dg - db) * 180 / Math.PI + 360) % 360;
+          let best = 0, bd = 999;
+          CENTERS.forEach((hh, n) => { const dd = Math.min(Math.abs(h - hh), 360 - Math.abs(h - hh)); if (dd < bd) { bd = dd; best = n; } });
+          cls[y * 960 + X] = best;
+        }
+        // 641 points: the coarsest even grid over the speakers that holds at least 641, thinned to exactly 641.
+        let pts = [];
+        for (let g = 14; g >= 2; g--) {
+          pts = [];
+          for (let y = 100; y < 430; y += g) for (let X = 160; X < 760; X += g) if (cls[y * 960 + X] >= 0) pts.push([X, y, cls[y * 960 + X]]);
+          if (pts.length >= 641) break;
+        }
+        const step = pts.length / 641;
+        pts = Array.from({ length: 641 }, (_, i) => pts[Math.floor(i * step)]);
+        return { cls, col, plain, pts };
+      }
+
+      /** Draws dots one by one (order: shuffled), each in its color; returns a promise when all 641 are lit. */
+      function drawDots(cv, f, pts, colorOf, litAt) {
+        const d = devicePixelRatio, W = (cv.width = innerWidth * d), H = (cv.height = innerHeight * d), ctx = cv.getContext('2d');
+        const s = f.s * d, ox = f.ox * d, oy = f.oy * d, r = Math.max(1.3 * d, s * 2);
+        const order = pts.map((p, i) => i).sort(() => Math.random() - 0.5);
+        const num = cv.parentElement.querySelector('#num');
+        return new Promise((done) => {
+          (function frame() {
+            const { lit, glow } = litAt();
+            ctx.clearRect(0, 0, W, H);
+            for (let k = 0; k < lit; k++) {
+              const [x, y, c] = pts[order[k]], age = lit - k;
+              ctx.beginPath();
+              ctx.arc(ox + s * x, oy + s * y, r, 0, Math.PI * 2);
+              ctx.fillStyle = age < 10 ? '#fff6e0' : colorOf(c);
+              ctx.shadowColor = colorOf(c);
+              ctx.shadowBlur = (age < 10 ? 16 : 5) * (glow ?? 1) * d;
+              ctx.fill();
+            }
+            if (num) num.textContent = Math.min(641, lit);
+            if (lit >= 641 && !frame.sent) { frame.sent = true; done(); }
+            requestAnimationFrame(frame);
+          })();
+        });
+      }
+
+      // A: the lights, then the colored Wall; a tap on a name shows that system alone.
+      async function systemsLights(m) {
+        const sys = await readSystems();
+        const f = frameOnScreen();
+        const start = performance.now(), span = 4200;
+        await drawDots(m.querySelector('#dots'), f, sys.pts, (c) => SYSTEMS[c][1], () => {
+          const p = Math.min(1, (performance.now() - start) / span);
+          return { lit: Math.floor(641 * (p * p * (3 - 2 * p))) };
+        });
+        // The Wall, drawn as the screen lays it: all six colors, or one system over the plain Wall, dimmed.
+        const cv = m.querySelector('#wall'), d = devicePixelRatio, ctx = cv.getContext('2d');
+        cv.width = innerWidth * d; cv.height = innerHeight * d;
+        const one = document.createElement('canvas'); one.width = 960; one.height = 540;
+        const ox1 = one.getContext('2d');
+        const draw = (only) => {
+          ox1.clearRect(0, 0, 960, 540);
+          if (only === null) ox1.drawImage(sys.col, 0, 0);
+          else {
+            ox1.filter = 'brightness(0.35) saturate(0.3)'; ox1.drawImage(sys.plain, 0, 0); ox1.filter = 'none';
+            const tmp = document.createElement('canvas'); tmp.width = 960; tmp.height = 540;
+            const t = tmp.getContext('2d'); t.drawImage(sys.col, 0, 0);
+            const im = t.getImageData(0, 0, 960, 540);
+            for (let i = 0; i < sys.cls.length; i++) if (sys.cls[i] !== only) im.data[i * 4 + 3] = 0;
+            t.putImageData(im, 0, 0);
+            ox1.shadowColor = SYSTEMS[only][1]; ox1.shadowBlur = 10; ox1.drawImage(tmp, 0, 0);
+          }
+          ctx.clearRect(0, 0, cv.width, cv.height);
+          ctx.drawImage(one, f.ox * d, f.oy * d, 960 * f.s * d, 540 * f.s * d);
+        };
+        cv.style.webkitMaskImage = cv.style.maskImage = `linear-gradient(to bottom, #000 ${((f.oy + 540 * f.s * 0.72) / innerHeight) * 100}%, transparent ${((f.oy + 540 * f.s) / innerHeight) * 100}%)`;
+        draw(null);
+        m.classList.add('done');
+        let on = null;
+        m.querySelectorAll('.pick button').forEach((b) => (b.onclick = () => {
+          const i = Number(b.dataset.i);
+          on = on === i ? null : i;
+          m.querySelectorAll('.pick button').forEach((x) => x.setAttribute('aria-pressed', String(Number(x.dataset.i) === on)));
+          draw(on);
+        }));
+      }
+
+      // C: each swing of the needle lights more of the Wall; once it's whole, the lights pulse with the meter.
+      async function meterLights(m) {
+        const sys = await readSystems();
+        const f = frameOnScreen(0.385);
+        let lit = 0, last = 0, then = performance.now();
+        await drawDots(m.querySelector('#dots'), f, sys.pts, () => '#e9b85a', () => {
+          const lv = window.meterLevel || 0, now = performance.now(), k = Math.min(0.25, (now - then) / 1000) * 60;
+          then = now;
+          // By time, not frames (a phone in low power gives fewer): about 5 to 6 s, surging with each swing.
+          if (lit < 641) lit += k * (0.6 + Math.max(0, lv - 0.3) * 12 + (lv > last + 0.02 ? 1.5 : 0));
+          last = lv;
+          return { lit: Math.min(641, Math.floor(lit)), glow: 0.5 + lv * 1.4 };
+        });
+        setTimeout(() => m.classList.add('done'), 500);
+      }
+
+      // Idea 2: 641 dots, laid out in the Wall's blocks as the Bowl render frames them (fractions of the picture).
+      function lights(m) {
+        const cv = m.querySelector('canvas'), ctx = cv.getContext('2d');
+        const d = devicePixelRatio, W = cv.width = innerWidth * d, H = cv.height = innerHeight * d;
+        // The render's frame as it lies on this screen (frameOnScreen), in canvas pixels.
+        const f = frameOnScreen(), s = f.s * d, ox = f.ox * d, oy = f.oy * d;
+        const blocks = [ // [x0, y0, x1, y1] in the 960×540 render: the stacks, the cluster, the bass.
+          [182, 220, 245, 420], [248, 150, 270, 420], [272, 215, 335, 420], [335, 135, 355, 420],
+          [403, 240, 527, 318], [360, 345, 400, 420], [530, 345, 570, 420],
+          [582, 135, 602, 420], [605, 220, 650, 420], [652, 225, 720, 420], [700, 150, 740, 420],
+        ];
+        const area = blocks.reduce((a, b) => a + (b[2] - b[0]) * (b[3] - b[1]), 0);
+        const pts = [];
+        for (const b of blocks) {
+          const n = Math.round(641 * ((b[2] - b[0]) * (b[3] - b[1])) / area);
+          const cols = Math.max(1, Math.round(Math.sqrt(n * (b[2] - b[0]) / (b[3] - b[1]))));
+          const rows = Math.ceil(n / cols);
+          for (let i = 0; i < n; i++) {
+            const c = i % cols, r = Math.floor(i / cols);
+            pts.push([ox + s * (b[0] + (c + 0.5) * (b[2] - b[0]) / cols), oy + s * (b[1] + (r + 0.5) * (b[3] - b[1]) / rows)]);
+          }
+        }
+        pts.length = Math.min(pts.length, 641);
+        while (pts.length < 641) pts.push(pts[pts.length % 40]);
+        // Light them in a shuffled order, fast at first and faster still.
+        const order = pts.map((p, i) => i).sort(() => Math.random() - 0.5);
+        const r = Math.max(1.4 * d, s * 2.1), start = performance.now(), span = 3800;
+        const num = m.querySelector('#num');
+        (function frame() {
+          const p = Math.min(1, (performance.now() - start) / span);
+          const lit = Math.floor(641 * (p * p * (3 - 2 * p)));
+          ctx.clearRect(0, 0, W, H);
+          for (let k = 0; k < lit; k++) {
+            const [x, y] = pts[order[k]], age = lit - k;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, Math.PI * 2);
+            ctx.fillStyle = age < 12 ? '#fff3d6' : 'rgba(233,184,90,0.85)';
+            ctx.shadowColor = '#e9b85a';
+            ctx.shadowBlur = age < 12 ? 18 : 6;
+            ctx.fill();
+          }
+          num.textContent = lit;
+          if (p < 1) requestAnimationFrame(frame);
+          else setTimeout(() => { m.classList.add('done'); cv.style.transition = 'opacity 2.4s ease'; cv.style.opacity = 0.35; }, 700);
+        })();
+      }
+
+      function all() {
+        document.body.className = 'all';
+        document.body.innerHTML = `
+          <h2>Landing page mockups</h2>
+          <p class="lede">Five ideas for the story's first screen, each at an iPhone 17's viewport (402 × 681). Open one in the phone frame to see it at size. Copy, crops and timing are rough; the art is the story's existing stills.</p>
+          <div class="grid">${IDEAS.map((i) => `
+            <section class="tile">
+              <div class="frame"><iframe src="?idea=${i.n}" title="Idea ${i.n}" loading="lazy"></iframe></div>
+              <h3><b>${i.tag ?? i.n}</b>${i.name}</h3>
+              <p>${i.text}</p>
+              <a href="/phone.html?page=${encodeURIComponent('/landing-mockups.html?idea=' + i.n)}&device=std" target="_top">Open in the phone frame</a>
+            </section>`).join('')}
+          </div>`;
+        const fit = () => document.querySelectorAll('.frame').forEach((f) => (f.firstElementChild.style.transform = `scale(${f.clientWidth / 402})`));
+        addEventListener('resize', fit);
+        fit();
+      }
+
+      idea >= 1 && idea <= 7 ? one(idea) : all();
+    </script>
+  </body>
+</html>
