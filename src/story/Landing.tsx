@@ -4,7 +4,7 @@ import { CHANNELS } from '../data/wall.config';
 import { TAPES, WALL_TRACKS, trackUrl } from '../data/recordings';
 import { player, usePlayer, type PlayerItem } from '../ui/player';
 import { SYSTEMS } from '../ui/Controls';
-import { BASE, IMAGES, srcOf } from './images';
+import { BASE, IMAGES, smallSrcOf, srcOf, useModelReady, type StoryImage } from './images';
 import { LANDINGS, pickLanding } from './landingTest';
 import './landing.css';
 
@@ -200,8 +200,15 @@ function LightsArt({ done, onDone, only }: { done: boolean; onDone: () => void; 
   );
 }
 
+/** A picture's files: the smaller one while the model downloads, both (the browser picks) once it's drawn. */
+function usePicture() {
+  const ready = useModelReady();
+  return (img: StoryImage) => (ready ? srcOf(img) : smallSrcOf(img));
+}
+
 /** 1: the photograph, drifting; every twelve seconds the reconstruction from the same seat dissolves in and out. */
 function PhotoArt() {
+  const pic = usePicture();
   const [recon, setRecon] = useState(false);
   useEffect(() => {
     if (reduced()) return;
@@ -218,7 +225,7 @@ function PhotoArt() {
         <img {...srcOf(IMAGES.photoBowl)} alt={IMAGES.photoBowl.alt} />
       </div>
       <div className="ld-pic ld-drift ld-recon">
-        <img {...srcOf(IMAGES.bowlPhotoMatch)} sizes="100vw" alt="" />
+        <img {...pic(IMAGES.bowlPhotoMatch)} sizes="100vw" alt="" />
       </div>
       <p className="ld-chip" aria-live="off">
         <i />
@@ -231,11 +238,12 @@ function PhotoArt() {
 /** 5: the Wall as it looked, and lit in its six systems, back and forth. */
 function SystemsArt() {
   const f = useFrame();
+  const pic = usePicture();
   return (
     <>
       <div className="ld-glow" />
-      <img className="ld-fit" {...srcOf(IMAGES.bowl)} sizes="100vw" alt={IMAGES.bowl.alt} style={placed(f)} />
-      <img className="ld-fit ld-tint" {...srcOf(IMAGES.bowlSystems)} sizes="100vw" alt="" style={placed(f)} />
+      <img className="ld-fit" {...pic(IMAGES.bowl)} sizes="100vw" alt={IMAGES.bowl.alt} style={placed(f)} />
+      <img className="ld-fit ld-tint" {...pic(IMAGES.bowlSystems)} sizes="100vw" alt="" style={placed(f)} />
     </>
   );
 }

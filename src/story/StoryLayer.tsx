@@ -3,7 +3,7 @@ import { CHANNELS, SOURCES, type ChannelId, type SourceId } from '../data/wall.c
 import { SYSTEMS } from '../ui/Controls';
 import { Credits } from './Credits';
 import { Landing } from './Landing';
-import { srcOf, type StoryImage } from './images';
+import { srcOf, useModelReady, type StoryImage } from './images';
 import { Needles } from './Needles';
 import { shortSource } from './sources';
 import { STEPS } from './steps';
@@ -131,13 +131,21 @@ export function StoryLayer({
 
   // One figure per picture, so a still shared by neighboring steps doesn't blink between them.
   const stills = STEPS.map((s) => s.still).filter((s, i, all): s is StoryImage => !!s && all.indexOf(s) === i);
+  // A still downloads when its step is on screen or next to it, and the first screen's neighbor only once
+  // the model has drawn, so the stills of the story's last steps don't slow a phone's first load.
+  const ready = useModelReady();
+  const wanted = useRef(new Set<string>());
+  for (let i = at - 1; i <= at + 1; i++) {
+    const img = STEPS[i]?.still;
+    if (img && (at > 0 || ready)) wanted.current.add(img.id);
+  }
 
   return (
     <div className="sty">
       {stills.map((img) => (
         <figure key={img.id} className="sty-still" data-on={step.still === img || undefined} data-dim={step.full || undefined}>
           <div className="sty-pic">
-            <img {...srcOf(img)} sizes="100vw" alt={img.alt} style={{ objectPosition: img.focus }} />
+            {wanted.current.has(img.id) && <img {...srcOf(img)} sizes="100vw" alt={img.alt} style={{ objectPosition: img.focus }} />}
             {img.overlay === 'needles' && step.still === img && <Needles />}
             {at > 0 && <Caption img={img} />}
           </div>

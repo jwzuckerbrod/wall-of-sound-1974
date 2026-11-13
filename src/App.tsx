@@ -20,6 +20,7 @@ import { INSTRUMENTS, InstrumentCard, OverviewCard } from './ui/Cards';
 import { BottomBar, Hint, TopBar } from './ui/Controls';
 import { isTagOnly, setStep, track } from './analytics';
 import { StoryLayer } from './story/StoryLayer';
+import { markModelReady } from './story/images';
 import { STEPS } from './story/steps';
 
 /** Whether a mesh, or something it sits in, is marked as clickable (userData.pickable). */
@@ -42,6 +43,8 @@ function BootDone() {
       boot.classList.add('done');
       setTimeout(() => boot.remove(), 700);
     }
+    // The story's pictures waited for this (story/images.ts).
+    markModelReady();
     // How long the model took to appear, for the dashboard's load time (and who gave up waiting). Only time
     // the page was on screen counts: a tab opened in the background draws nothing until it's looked at, which
     // once made a two-second load read as thirty. Split into getting the code (network) and drawing (device).

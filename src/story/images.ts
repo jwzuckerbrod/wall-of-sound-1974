@@ -6,6 +6,8 @@
  * Files live in public/story/, written by scripts/story-images.sh.
  */
 
+import { useEffect, useState } from 'react';
+
 export interface StoryImage {
   id: string;
   kind: 'render' | 'photograph';
@@ -142,4 +144,34 @@ export function srcOf(img: StoryImage): { src: string; srcSet?: string } {
     src: `${BASE}${img.id}-${large}.jpg`,
     srcSet: `${BASE}${img.id}-${small}.jpg ${small}w, ${BASE}${img.id}-${large}.jpg ${large}w`,
   };
+}
+
+/** Only the smaller file: what a picture shows while the model is still downloading. */
+export function smallSrcOf(img: StoryImage): { src: string } {
+  return { src: img.widths ? `${BASE}${img.id}-${img.widths[0]}.jpg` : `${BASE}${img.id}.jpg` };
+}
+
+// ── the model on screen ──────────────────────────────────────────────────────────────────
+// The first screen's pictures share a phone's connection with the model's code and files. Until
+// the model has drawn, the story asks only for what's on screen, in the smaller size; then the rest.
+
+let modelReady = false;
+const waiting = new Set<() => void>();
+/** Called once the model has drawn (App.tsx, BootDone). */
+export function markModelReady() {
+  if (modelReady) return;
+  modelReady = true;
+  waiting.forEach((f) => f());
+  waiting.clear();
+}
+/** True once the model has drawn. */
+export function useModelReady(): boolean {
+  const [ready, setReady] = useState(modelReady);
+  useEffect(() => {
+    if (ready) return;
+    const on = () => setReady(true);
+    waiting.add(on);
+    return () => void waiting.delete(on);
+  }, [ready]);
+  return ready;
 }
