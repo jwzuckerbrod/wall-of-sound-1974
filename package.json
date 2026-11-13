@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "vite",
     "phone": "zsh scripts/phone.sh",
-    "build": "tsc --noEmit && vite build",
+    "build": "tsc --noEmit && vite build && node scripts/story-text.mjs",
     "preview": "vite preview",
     "check": "tsc --noEmit",
     "verify": "node scripts/verify.mjs",
