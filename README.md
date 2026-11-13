@@ -1,5 +1,7 @@
 # The Wall of Sound, 1974
 
+**Live at [jzuckerbrod.com/wall-of-sound](https://jzuckerbrod.com/wall-of-sound/)**, by [Jonathan Zuckerbrod](https://jzuckerbrod.com/).
+
 An explorable 3D reconstruction of the Grateful Dead's touring PA system, as it
 stood between March 23 and October 20, 1974.
 

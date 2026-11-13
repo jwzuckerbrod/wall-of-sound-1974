@@ -46,6 +46,8 @@ function shotPlugin(): Plugin {
 }
 
 export default defineConfig({
+  // The day this was built, shown as "Last updated" in the About panel (src/ui/About.tsx)
+  define: { __BUILT__: JSON.stringify(new Date().toISOString().slice(0, 10)) },
   base: './',
   plugins: [react(), shotPlugin()],
   build: {

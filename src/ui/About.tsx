@@ -1,3 +1,4 @@
+declare const __BUILT__: string;
 import { useEffect, useMemo, useRef } from 'react';
 import { PROVENANCE, SOURCES, wall, type Confidence, type SourceId } from '../data/wall.config';
 import { allCells, driverTally, faceCoverage } from '../geometry/arrays';
@@ -151,6 +152,11 @@ export function About({ onClose }: { onClose: () => void }) {
         <p>
           The two crew at the top of the scaffold are AI-generated figures, not photographs or portraits of anyone:
           pictures from FLUX.1 schnell turned into 3D with TRELLIS.2, placed where 1974 photographs show men working.
+        </p>
+
+        <p className="level-blurb">
+          Last updated{' '}
+          {new Date(`${__BUILT__}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}.
         </p>
 
         <h2>Privacy</h2>

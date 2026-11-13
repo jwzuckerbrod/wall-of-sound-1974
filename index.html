@@ -3,6 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <script>
+      // One public address: the github.io copy sends visitors (and the credit for every link to it) to
+      // jzuckerbrod.com/wall-of-sound/, which serves this same page. The personal site fetches the files from
+      // github.io without running them, so this doesn't loop.
+      if (location.hostname === 'jwzuckerbrod.github.io') {
+        location.replace('https://jzuckerbrod.com/wall-of-sound/' + location.pathname.replace(/^\/wall-of-sound-1974\/?/, '') + location.search + location.hash);
+      }
       // Served from a folder (…/wall-of-sound/), every file is relative to it.
       // Without the closing slash they would load from the folder above and
       // the page would never start, so add it before anything else loads.
@@ -13,7 +19,7 @@
     <title>The Wall of Sound, 1974 — an explorable 3D reconstruction</title>
     <meta
       name="description"
-      content="Walk around the Grateful Dead's Wall of Sound, the 641-speaker PA they toured in 1974, rebuilt in 3D from photographs, scaffolding drawings and surviving equipment, every source credited."
+      content="Explore the Grateful Dead's 1974 Wall of Sound in 3D: 641 speakers rebuilt from photographs, drawings and surviving gear, with every source credited."
     />
     <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <!-- The page's one official address: it is also served at jwzuckerbrod.github.io/wall-of-sound-1974/, and this
@@ -106,7 +112,18 @@
       })();
     </script>
     <div id="root"></div>
-    <noscript>This reconstruction needs JavaScript and WebGL. The written spec is in docs/reconstruction-spec.md.</noscript>
+    <!-- Without JavaScript: put the loading screen away and show the story's words (written into #root at build
+         time by scripts/story-text.mjs; the app replaces them as it starts). -->
+    <noscript>
+      <style>
+        #boot { display: none; }
+        .read { max-width: 40rem; margin: 0 auto; padding: 24px 16px 64px; font: 17px/1.6 Georgia, serif; color: #e8e6e1; background: #0a0c0f; }
+        .read h1 { font-size: 2.4rem; line-height: 1.1; } .read h2 { margin-top: 2.5rem; } .read a { color: #e9b85a; }
+      </style>
+      <p style="max-width:40rem;margin:16px auto;padding:0 16px;color:#99a0a8;font:15px/1.5 sans-serif">
+        The 3D model needs JavaScript and WebGL. Here is the story in words.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
