@@ -8,7 +8,17 @@ export interface Pose {
   fov?: number;
 }
 
-const DURATION = 1.7;
+// A move's length sets its time, as a camera operator would: a small reframe is quick, a flight across
+// the Bowl takes longer. Seconds = 0.9 + 0.2·√meters, kept between 1.2 and 2.6 (about 2 m → 1.2 s,
+// 30 m → 2.0 s, 70 m → 2.6 s). Every move used to take 1.7 s.
+const MIN_S = 1.2;
+const MAX_S = 2.6;
+const secondsFor = (meters: number) => THREE.MathUtils.clamp(0.9 + 0.2 * Math.sqrt(meters), MIN_S, MAX_S);
+// Long moves rise in a gentle arc, like a crane shot, instead of sliding in a straight line: the camera
+// peaks a tenth of the distance above the straight path (at most 5 m), only on moves longer than 6 m.
+const ARC_FROM_M = 6;
+const ARC_PEAK = 0.1;
+const ARC_MAX_M = 5;
 const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 interface OrbitLike {
@@ -18,7 +28,7 @@ interface OrbitLike {
 }
 
 /**
- * Glides the camera to a tour stop, then hands control back to OrbitControls so
+ * Glides the camera to a tour stop (timed by distance, arcing on long moves), then hands control back to OrbitControls so
  * the visitor can look around before moving on.
  *
  * Honors prefers-reduced-motion by cutting straight to the pose: a long
@@ -36,6 +46,9 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
     toTarget: THREE.Vector3;
     fromFov: number;
     toFov: number;
+    /** The arc's control point (a quadratic Bézier between from and to), or null for a straight move. */
+    via: THREE.Vector3 | null;
+    seconds: number;
   } | null>(null);
 
   useEffect(() => {
@@ -59,15 +72,19 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
       return;
     }
 
-    tween.current = {
-      t: 0,
-      from: camera.position.clone(),
-      to,
-      fromTarget: controls ? controls.target.clone() : new THREE.Vector3(),
-      toTarget,
-      fromFov: camera.fov,
-      toFov,
-    };
+    const from = camera.position.clone();
+    const fromTarget = controls ? controls.target.clone() : new THREE.Vector3();
+    // How far the shot travels: where the camera goes, plus half of how far its aim swings
+    const meters = from.distanceTo(to) + 0.5 * fromTarget.distanceTo(toTarget);
+    const travel = from.distanceTo(to);
+    let via: THREE.Vector3 | null = null;
+    if (travel > ARC_FROM_M) {
+      // A Bézier peaks at half its control point's offset, so the control point sits twice as high
+      const peak = Math.min(ARC_PEAK * travel, ARC_MAX_M);
+      via = from.clone().lerp(to, 0.5).add(new THREE.Vector3(0, 2 * peak, 0));
+    }
+
+    tween.current = { t: 0, from, to, fromTarget, toTarget, fromFov: camera.fov, toFov, via, seconds: secondsFor(meters) };
     if (controls) controls.enabled = false;
   }, [stop, active, camera, controls]);
 
@@ -80,10 +97,19 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
     const tw = tween.current;
     if (!tw || !active) return;
 
-    tw.t = Math.min(1, tw.t + Math.min(rawDt, 0.1) / DURATION);
+    tw.t = Math.min(1, tw.t + Math.min(rawDt, 0.1) / tw.seconds);
     const e = easeInOutCubic(tw.t);
 
-    camera.position.lerpVectors(tw.from, tw.to, e);
+    if (tw.via) {
+      const u = 1 - e;
+      camera.position
+        .copy(tw.from)
+        .multiplyScalar(u * u)
+        .addScaledVector(tw.via, 2 * u * e)
+        .addScaledVector(tw.to, e * e);
+    } else {
+      camera.position.lerpVectors(tw.from, tw.to, e);
+    }
     camera.fov = THREE.MathUtils.lerp(tw.fromFov, tw.toFov, e);
     camera.updateProjectionMatrix();
 

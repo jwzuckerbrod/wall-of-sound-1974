@@ -16,11 +16,11 @@
 .sty-still, .sty-dim { position: absolute; inset: 0; pointer-events: auto; }
 
 /* A still blocks the model under it: there is nothing to turn. */
-.sty-still { margin: 0; opacity: 0; visibility: hidden; transition: opacity 0.8s ease, visibility 0s 0.8s; background: #000; }
-.sty-still[data-on] { opacity: 1; visibility: visible; transition: opacity 0.8s ease; }
+.sty-still { margin: 0; opacity: 0; visibility: hidden; transition: opacity var(--dur-slow) var(--ease-in-out), visibility 0s var(--dur-slow); background: #000; }
+.sty-still[data-on] { opacity: 1; visibility: visible; transition: opacity var(--dur-slow) var(--ease-in-out); }
 /* The whole 16:9 frame across the top of a phone, its caption along its foot. */
 .sty-pic { position: absolute; left: 0; right: 0; top: max(8px, env(safe-area-inset-top)); aspect-ratio: 16 / 9; overflow: hidden; }
-.sty-pic img, .sty-pic .needles { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: filter 0.5s ease; }
+.sty-pic img, .sty-pic .needles { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; transition: filter var(--dur-standard) var(--ease-in-out); }
 .sty-still[data-dim] img { filter: brightness(0.22) saturate(0.6); }
 .sty-still figcaption {
   position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 10px 6px;
@@ -43,7 +43,7 @@
   border: 1px solid rgba(236, 230, 218, 0.1);
 }
 .sty-card.full { top: max(8px, env(safe-area-inset-top)); max-height: none; background: rgba(14, 13, 11, 0.95); }
-.sty-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px 6px; animation: sty-in 0.35s ease both; }
+.sty-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 14px 16px 6px; animation: sty-in var(--dur-standard) var(--ease-out) 0.15s both; }
 @keyframes sty-in { from { opacity: 0; transform: translateY(6px); } }
 .sty-body > p { margin: 0 0 0.6em; }
 .sty-body .figure, .sty-body .kicker { font-size: 1.24em; line-height: 1.25; }
@@ -73,7 +73,7 @@
 .sty-card.sty-peek .sty-body > :not(.sty-act):not(:nth-child(2)) { display: none; }
 .sty-card.sty-peek .sty-body > :nth-child(2) { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; margin-bottom: 0.3em; }
 .sty-progress { height: 2px; background: rgba(236, 230, 218, 0.14); border-radius: 1px; overflow: hidden; margin: 0 4px 10px; }
-.sty-progress i { display: block; height: 100%; background: var(--accent); transition: width 0.3s ease; }
+.sty-progress i { display: block; height: 100%; background: var(--accent); transition: width var(--dur-standard) var(--ease-out); }
 .sty-buttons { display: flex; align-items: center; gap: 8px; }
 .sty-buttons button, .sty-close { font: 600 16px var(--sans); min-height: 48px; border-radius: 999px; border: 0; cursor: pointer; padding: 0 20px; }
 .sty-next { color: #17130a; background: var(--accent); }
@@ -230,7 +230,7 @@ body:has(.np-floating) .sty-card.full { top: calc(max(10px, env(safe-area-inset-
 .seat-handle[data-dragging] { cursor: grabbing; }
 .seat-handle[data-dragging] .seat-halo { opacity: 0.4; }
 .seat-you-label { pointer-events: none; }
-.seat-dot { transition: transform 0.45s ease; }
+.seat-dot { transition: transform var(--dur-standard) var(--ease-in-out); }
 /* Under a finger the dots follow at once; easing would make them lag behind it. */
 .seat-figure.live .seat-dot { transition: none; }
 .seat-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; margin: 4px 0 6px; font-family: var(--sans); font-size: 12px; color: var(--dim); }
