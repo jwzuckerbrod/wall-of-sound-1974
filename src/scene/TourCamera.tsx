@@ -25,6 +25,33 @@ interface OrbitLike {
   target: THREE.Vector3;
   enabled: boolean;
   update: () => void;
+  maxPolarAngle: number;
+  minDistance: number;
+}
+
+/**
+ * Some poses sit outside OrbitControls' limits: the camera lower than the point it looks at (looking up at
+ * Garcia's columns), or closer than its minimum distance (the vocal microphones). Handed back as they are, the
+ * controls snapped the camera inside the limits the moment a move ended, a visible jump. So the limits are
+ * opened just enough to hold the pose, then closed again as the visitor moves back inside them: orbiting
+ * sideways keeps the camera at the same height, so it can't reach the ground this way.
+ */
+function holdPose(camera: THREE.Camera, controls: OrbitLike, limits: { polar: number; minDistance: number }) {
+  const offset = camera.position.clone().sub(controls.target);
+  const d = offset.length();
+  const polar = Math.acos(THREE.MathUtils.clamp(offset.y / (d || 1), -1, 1));
+  controls.maxPolarAngle = Math.max(limits.polar, polar + 1e-4);
+  controls.minDistance = Math.min(limits.minDistance, d - 1e-4);
+}
+
+/** Closes opened limits back toward the scene's own, never past where the camera is now. */
+function tighten(camera: THREE.Camera, controls: OrbitLike, limits: { polar: number; minDistance: number }) {
+  if (controls.maxPolarAngle <= limits.polar && controls.minDistance >= limits.minDistance) return;
+  const offset = camera.position.clone().sub(controls.target);
+  const d = offset.length();
+  const polar = Math.acos(THREE.MathUtils.clamp(offset.y / (d || 1), -1, 1));
+  controls.maxPolarAngle = Math.max(limits.polar, Math.min(controls.maxPolarAngle, polar + 1e-4));
+  controls.minDistance = Math.min(limits.minDistance, Math.max(controls.minDistance, d - 1e-4));
 }
 
 /**
@@ -37,6 +64,10 @@ interface OrbitLike {
 export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
   const camera = useThree((s) => s.camera) as THREE.PerspectiveCamera;
   const controls = useThree((s) => s.controls) as OrbitLike | null;
+
+  // The scene's own limits, read once, before any pose opens them
+  const limits = useRef<{ polar: number; minDistance: number } | null>(null);
+  if (controls && !limits.current) limits.current = { polar: controls.maxPolarAngle, minDistance: controls.minDistance };
 
   const tween = useRef<{
     t: number;
@@ -66,6 +97,7 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
       camera.lookAt(toTarget);
       if (controls) {
         controls.target.copy(toTarget);
+        if (limits.current) holdPose(camera, controls, limits.current);
         controls.update();
       }
       tween.current = null;
@@ -88,14 +120,27 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
     if (controls) controls.enabled = false;
   }, [stop, active, camera, controls]);
 
-  // Never leave the controls disabled if the tour is exited mid-flight.
+  // Never leave the controls disabled, or their limits opened, once the tour is exited.
   useEffect(() => {
     if (!active && controls) controls.enabled = true;
   }, [active, controls]);
+  useEffect(
+    () => () => {
+      if (controls && limits.current) {
+        controls.maxPolarAngle = limits.current.polar;
+        controls.minDistance = limits.current.minDistance;
+      }
+    },
+    [controls],
+  );
 
   useFrame((_, rawDt) => {
     const tw = tween.current;
-    if (!tw || !active) return;
+    if (!tw) {
+      if (active && controls && limits.current) tighten(camera, controls, limits.current);
+      return;
+    }
+    if (!active) return;
 
     tw.t = Math.min(1, tw.t + Math.min(rawDt, 0.1) / tw.seconds);
     const e = easeInOutCubic(tw.t);
@@ -120,6 +165,7 @@ export function TourCamera({ stop, active }: { stop: Pose; active: boolean }) {
     if (tw.t >= 1) {
       tween.current = null;
       if (controls) {
+        if (limits.current) holdPose(camera, controls, limits.current);
         controls.enabled = true;
         controls.update();
       }
