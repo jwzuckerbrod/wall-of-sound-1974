@@ -11,6 +11,7 @@ import { IMAGES, type StoryImage } from './images';
 import { MicDiagram } from './MicDiagram';
 import { PathDiagram } from './PathDiagram';
 import { SeatDiagram, SeatLink } from './SeatDiagram';
+import { ToneDemo } from './ToneDemo';
 
 /**
  * The story, in steps (docs/story.md): three acts and a coda, told over the
@@ -108,6 +109,7 @@ export const STEPS: Step[] = [
           <PathDiagram />
         </DiagramFigure>
         <p className="aside">The typical PA here is a composite: practice varied from band to band.</p>
+        <ToneDemo />
       </>
     ),
   },
