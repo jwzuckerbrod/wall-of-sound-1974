@@ -288,23 +288,3 @@
 .dg-pause { width: 44px; height: 44px; }
 /* A reading line at the very top of a diagram clears its pause button. */
 .dg > .dg-read:first-child { padding-right: 52px; }
-
-/* The two-tone demonstration (ToneDemo.tsx): a play button, a switch, and the pitches in the sound. */
-.tone { margin: 14px 0 4px; padding: 12px 14px; border: 1px solid rgba(233, 184, 90, 0.28); border-radius: 12px; background: rgba(233, 184, 90, 0.06); }
-.tone-head { margin: 0 0 8px !important; font: 600 11.5px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
-.tone-controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-.tone-controls .dg-switch { margin: 0; max-width: 100%; }
-.tone-play { flex: none; width: 44px; height: 44px; border: 0; border-radius: 50%; padding: 0; display: grid; place-items: center; cursor: pointer; background: var(--accent); color: #1a1408; }
-.tone-play svg { width: 16px; height: 16px; fill: currentColor; }
-.tone-play:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-.tone .dg-read { margin: 10px 0 !important; min-height: 2.9em; }
-.tone-bars { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; align-items: end; height: 84px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
-.tone-bars span { position: relative; height: calc(var(--h, 0) * 100%); min-height: 1px; border-radius: 2px 2px 0 0; background: rgba(236, 230, 218, 0.55); transition: height 90ms linear; }
-.tone-bars span.played { background: var(--accent); }
-.tone-bars b { position: absolute; left: 50%; bottom: -14px; transform: translateX(-50%); font: 500 9.5px var(--sans); color: var(--dim); }
-.tone-key { margin: 8px 0 0 !important; font: 12px var(--sans); color: var(--dim); }
-.tone-key i { display: inline-block; width: 9px; height: 9px; margin: 0 4px 0 0; border-radius: 2px; background: rgba(236, 230, 218, 0.55); }
-.tone-key i.played { background: var(--accent); }
-.tone-key i:not(.played) { margin-left: 10px; }
-.tone .aside { margin: 8px 0 0 !important; }
-@media (prefers-reduced-motion: reduce) { .tone-bars span { transition: none; } }
