@@ -22,7 +22,6 @@ const SHORT: Record<SourceId, string> = {
   sothebys: "Sotheby's 2021",
   blueprints: 'the 1974 scaffolding drawings',
   juliens: "Julien's Auctions 2026",
-  tapes: "Rob Bertrando's tape",
   shows: 'the 1974 shows and releases',
   duncan1982: 'Ben Duncan, 1982',
   pell: 'Becky Pell',

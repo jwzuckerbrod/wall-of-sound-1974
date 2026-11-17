@@ -58,7 +58,6 @@ export type SourceId =
   | 'sothebys'
   | 'blueprints'
   | 'juliens'
-  | 'tapes'
   | 'shows'
   | 'duncan1982'
   | 'pell'
@@ -175,12 +174,6 @@ export const SOURCES: Record<SourceId, SourceRef> = {
     title:
       'Photographic record — Richard Pechner (rpechner.com), Kirk West, the 1974 galleries at vintag.es and designyoutrust.com, dead.net 1974 archive',
     kind: 'photographic',
-  },
-  tapes: {
-    title:
-      "Audience recording by Rob Bertrando: Hollywood Bowl, July 21, 1974 (Internet Archive, Grateful Dead collection; src/data/recordings.ts)",
-    url: 'https://archive.org/details/GratefulDead',
-    kind: 'recording',
   },
   shows: {
     title:

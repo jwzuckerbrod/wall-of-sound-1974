@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { track } from '../analytics';
 import { CHANNELS } from '../data/wall.config';
-import { TAPES, WALL_TRACKS, trackUrl } from '../data/recordings';
-import { player, usePlayer, type PlayerItem } from '../ui/player';
+import { FEATURED, spotifyTrackUrl } from '../data/shows';
 import { SYSTEMS } from '../ui/Controls';
 import { BASE, IMAGES, smallSrcOf, srcOf, useModelReady, type StoryImage } from './images';
 import { LANDINGS, pickLanding } from './landingTest';
@@ -250,8 +249,8 @@ function SystemsArt() {
 
 // ── the words and buttons, shared ───────────────────────────────────────────────────────
 
-const TUNE = WALL_TRACKS[0];
-const TUNE_ITEM: PlayerItem = { id: TUNE.file, src: trackUrl(TUNE), title: TUNE.title, detail: `${TAPES[TUNE.tape].venue}, 1974` };
+/** The first screen's way to the sound: the first of the Listen step's songs, on Spotify. */
+const TUNE = FEATURED.tracks[0];
 
 export function Landing({ onBegin, onSkip }: { onBegin: () => void; onSkip: () => void }) {
   const [{ id, forced }] = useState(pickLanding);
@@ -259,8 +258,8 @@ export function Landing({ onBegin, onSkip }: { onBegin: () => void; onSkip: () =
   const base = { label: `${info.tag} · ${info.label}`, forced };
   const [done, setDone] = useState(id !== 'lights');
   const [only, setOnly] = useState<number | null>(null);
-  const { item, playing } = usePlayer();
-  const sounding = item?.src === TUNE_ITEM.src && playing;
+  // Whether this visitor followed the link to Spotify before beginning (the test's `sound`).
+  const [sounding, setSounding] = useState(false);
 
   // Shown: once a page load. And it is the first screen, so the loading screen goes.
   useEffect(() => {
@@ -276,7 +275,7 @@ export function Landing({ onBegin, onSkip }: { onBegin: () => void; onSkip: () =
 
   const sound = () => {
     if (!sounding) track('landing-sound', id, base);
-    player.toggle(TUNE_ITEM);
+    setSounding(true);
   };
   const begin = () => {
     track('landing-begin', id, { ...base, sound: sounding });
@@ -346,10 +345,12 @@ export function Landing({ onBegin, onSkip }: { onBegin: () => void; onSkip: () =
               <path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
-          <button className="ld-sound" aria-pressed={sounding} onClick={sound}>
-            <span aria-hidden="true" />
-            With sound
-          </button>
+          <a className="ld-sound" href={spotifyTrackUrl(TUNE.spotify)} target="_blank" rel="noopener" onClick={sound}>
+            <svg viewBox="0 0 16 16" aria-hidden="true">
+              <path d="M4.5 2.6v10.8a.6.6 0 0 0 .9.5l8.6-5.4a.6.6 0 0 0 0-1L5.4 2.1a.6.6 0 0 0-.9.5z" />
+            </svg>
+            Hear it on Spotify
+          </a>
         </div>
         <a className="ld-skip" href="#explore" onClick={skip}>
           Skip to the 3D explorer

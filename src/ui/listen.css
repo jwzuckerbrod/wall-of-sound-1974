@@ -3,8 +3,7 @@
 .ls-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
 .ls-row { display: grid; gap: 6px; }
 .ls-title { font-weight: 600; }
-@keyframes ls-pulse { 50% { opacity: 0.55; } }
-.np button:focus-visible, .sh-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.sh-link:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
 .ls-credit { font-size: 0.86em; opacity: 0.72; margin: 12px 0 0 !important; }
 .ls-credit a { color: inherit; margin-right: 10px; }
 /* Spotify's compact player: 80px tall is the size Spotify gives it. */
@@ -22,56 +21,3 @@
 .sh-none { opacity: 0.55; }
 .sh-link { display: inline-block; color: #e9b85a; font-weight: 600; padding: 12px 4px; margin: -12px -4px; }
 
-/* The now-playing bar (NowPlaying.tsx): a bar across a portrait phone, a pill anywhere else. */
-.np {
-  position: fixed; z-index: 20;
-  left: max(10px, env(safe-area-inset-left));
-  bottom: max(10px, env(safe-area-inset-bottom));
-  width: min(310px, calc(100vw - 20px));
-  height: 52px;
-  display: flex; align-items: center; gap: 4px; padding: 0 4px;
-  background: #211d16; color: #ece6da;
-  border: 1px solid #3f392e; border-radius: 26px; overflow: hidden;
-  font-family: ui-sans-serif, -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45);
-}
-.np button { border: 0; background: transparent; color: inherit; cursor: pointer; padding: 0; }
-.np-progress { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: rgba(255, 255, 255, 0.14); }
-.np-progress i { display: block; height: 100%; width: calc(var(--f, 0) * 100%); background: #e9b85a; }
-.np-toggle, .np-close { flex: 0 0 44px; width: 44px; height: 44px; display: grid; place-items: center; }
-.np-toggle span { width: 36px; height: 36px; border-radius: 50%; background: #e9b85a; color: #1a1408; display: grid; place-items: center; }
-.np-toggle[data-loading] span { animation: ls-pulse 1s ease-in-out infinite; }
-.np-toggle svg { width: 14px; height: 14px; fill: currentColor; }
-.np-close svg { width: 14px; height: 14px; fill: none; stroke: #b4ab9b; stroke-width: 2; stroke-linecap: round; }
-.np-info { flex: 1 1 auto; min-width: 0; min-height: 44px; text-align: left; display: grid; align-content: center; gap: 1px; }
-.np-info b, .np-info span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.np-info b { font-size: 14px; font-weight: 600; }
-.np-info span { font-size: 12px; color: #b4ab9b; font-variant-numeric: tabular-nums; }
-/* Keeps the end of the page clear of the bar. */
-.np-room { height: 72px; }
-@media (orientation: portrait) and (max-width: 899px) {
-  .np {
-    left: 0; right: 0; bottom: 0; width: auto;
-    height: calc(60px + env(safe-area-inset-bottom));
-    padding: 0 6px env(safe-area-inset-bottom);
-    border-width: 1px 0 0; border-radius: 0; box-shadow: none;
-  }
-  .np-progress { top: 0; bottom: auto; height: 3px; }
-}
-/* In the explorer: a pill over the scene at the left, under the title, where
-   the card, the bottom bar and the Settings menu aren't. */
-.np.np-floating { top: 110px; bottom: auto; left: 16px; right: auto; width: 330px; height: 52px; padding: 0 4px; border-width: 1px; border-radius: 26px; box-shadow: 0 4px 18px rgba(0, 0, 0, 0.45); z-index: 9; }
-.np-floating .np-progress { top: auto; bottom: 0; height: 2px; }
-@media (max-width: 720px) {
-  .np.np-floating { top: 98px; left: 10px; width: min(330px, calc(100vw - 20px)); }
-}
-/* With the year switch, a little wider, so the time still shows. */
-@media (max-width: 720px) and (orientation: portrait) {
-}
-/* A phone on its side: the card docks right (styles.css), the pill keeps the left. */
-@media (max-width: 720px) and (orientation: landscape) {
-  .np.np-floating { width: min(330px, calc(100vw - 370px)); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .np-toggle[data-loading] span { animation: none; }
-}

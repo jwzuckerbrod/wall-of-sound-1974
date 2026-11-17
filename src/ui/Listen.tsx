@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import { FEATURED, RELEASES, SHOWS, SHOW_COUNT, spotifyAlbumUrl, spotifyTrackEmbed, type Show } from '../data/shows';
-import { PLAY_ICON } from './player';
 import './listen.css';
 
 /**
@@ -9,14 +8,6 @@ import './listen.css';
  * (src/data/shows.ts says what they play and why): a visitor signed in to
  * Spotify hears the whole song, anyone else a preview.
  */
-
-export function PlayIcon({ playing }: { playing: boolean }) {
-  return playing ? (
-    <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="2.5" width="3" height="11" rx="0.6" /><rect x="9.5" y="2.5" width="3" height="11" rx="0.6" /></svg>
-  ) : (
-    <svg viewBox="0 0 16 16" aria-hidden="true"><path d={PLAY_ICON} /></svg>
-  );
-}
 
 /** The Wall, from the nearest night that was released. */
 export function ListenWall() {

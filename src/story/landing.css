@@ -68,12 +68,9 @@
   background: var(--accent); color: #17130a; font: 600 17px var(--sans); cursor: pointer;
 }
 .ld-begin svg { width: 16px; height: 16px; }
-.ld-sound { display: inline-flex; align-items: center; gap: 9px; min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--dim); font: 14px var(--sans); cursor: pointer; }
-.ld-sound[aria-pressed='true'] { color: var(--ink); }
-.ld-sound span { width: 34px; height: 20px; border-radius: 10px; background: rgba(236,230,218,0.2); position: relative; transition: background var(--dur-quick) var(--ease-out); }
-.ld-sound span::after { content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: var(--ink); transition: transform var(--dur-quick) var(--ease-out); }
-.ld-sound[aria-pressed='true'] span { background: var(--accent); }
-.ld-sound[aria-pressed='true'] span::after { transform: translateX(14px); background: #17130a; }
+.ld-sound { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 4px; color: var(--dim); font: 14px var(--sans); text-decoration: underline; text-decoration-color: rgba(236,230,218,0.35); text-underline-offset: 4px; }
+.ld-sound:hover { color: var(--ink); }
+.ld-sound svg { width: 12px; height: 12px; fill: currentColor; }
 .ld-skip { display: inline-flex; align-items: center; min-height: 44px; margin-top: 4px; padding: 0; font: 13.5px var(--sans); color: var(--dim); text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--faint); }
 .ld-credit { margin: 6px 0 0; font: 11px/1.4 var(--sans); color: var(--faint); }
 .ld-begin:focus-visible, .ld-sound:focus-visible, .ld-skip:focus-visible, .ld-pick button:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
