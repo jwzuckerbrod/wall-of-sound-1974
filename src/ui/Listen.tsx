@@ -1,13 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
-import { COMPARISON_CAVEATS, PAIRS, TAPES, WALL_TRACKS, tapeUrl, trackUrl, type Track } from '../data/recordings';
-import { NO_PLACE, PLAY_ICON, clock, player, usePlayer, type PlayerItem } from './player';
-import './range.css';
+import { useEffect, useRef } from 'react';
+import { FEATURED, RELEASES, SHOWS, SHOW_COUNT, spotifyAlbumUrl, spotifyTrackEmbed, type Show } from '../data/shows';
+import { PLAY_ICON } from './player';
 import './listen.css';
 
 /**
- * The listening players, shared by the story's Listen beat and the explorer's
- * Listen panel. Every track streams from archive.org (src/data/recordings.ts).
- * The sound itself lives in ./player, so it carries on when a row scrolls away.
+ * The listening players and the list of shows, shared by the story and the
+ * explorer's Listen panel. The players are Spotify's own embedded players
+ * (src/data/shows.ts says what they play and why): a visitor signed in to
+ * Spotify hears the whole song, anyone else a preview.
  */
 
 export function PlayIcon({ playing }: { playing: boolean }) {
@@ -18,166 +18,86 @@ export function PlayIcon({ playing }: { playing: boolean }) {
   );
 }
 
-function Transport({ item, label }: { item: PlayerItem; label: string }) {
-  const { item: current, playing: on, loading: busy, places } = usePlayer();
-  const active = current?.id === item.id;
-  const playing = active && on;
-  const loading = active && busy;
-  const { time, length } = places[item.id] ?? NO_PLACE;
-  const f = Number.isFinite(length) && length > 0 ? time / length : 0;
-  return (
-    <div className="ls-transport">
-      <button className="ls-play" onClick={() => player.toggle(item)} aria-label={`${playing ? 'Pause' : 'Play'} ${label}`} data-loading={loading || undefined}>
-        <PlayIcon playing={playing} />
-      </button>
-      <input
-        className="range"
-        type="range"
-        min={0}
-        max={1000}
-        value={Math.round(f * 1000)}
-        onChange={(e) => player.seek(item.id, Number(e.target.value) / 1000)}
-        aria-label={`Position in ${label}`}
-        style={{ ['--f' as string]: f }}
-      />
-      <span className="ls-time">
-        {clock(time)} / {clock(length)}
-      </span>
-    </div>
-  );
-}
-
-const year = (t: Track) => TAPES[t.tape].date.slice(-4);
-
-function TrackRow({ track }: { track: Track }) {
-  const item: PlayerItem = {
-    id: track.file,
-    src: trackUrl(track),
-    title: track.title,
-    detail: `${TAPES[track.tape].venue}, ${year(track)}`,
-  };
-  return (
-    <li className="ls-row" data-track={item.id}>
-      <span className="ls-title">{track.title}</span>
-      <Transport item={item} label={track.title} />
-    </li>
-  );
-}
-
-const SIDE_LABEL = { before: '1971 · before', after: '1974 · the Wall' };
-type Side = 'before' | 'after';
-type Pair = (typeof PAIRS)[number];
-
-/** One side of a pair, as the player holds it: both sides share the song's id, so they share its place. */
-export function pairItem(pair: Pair, side: Side): PlayerItem {
-  return { id: pair.title, src: trackUrl(pair[side]), title: pair.title, detail: SIDE_LABEL[side] };
-}
-/** The pair the playing recording belongs to, and which side it is (the Bowl's own row counts as 1974). */
-export function pairOf(item: PlayerItem): { pair: Pair; side: Side } | null {
-  for (const pair of PAIRS) {
-    if (item.src === trackUrl(pair.before)) return { pair, side: 'before' };
-    if (item.src === trackUrl(pair.after)) return { pair, side: 'after' };
-  }
-  return null;
-}
-
-function PairRow({ pair, start = 'after' }: { pair: (typeof PAIRS)[number]; start?: 'before' | 'after' }) {
-  // Whichever recording is loaded wins, so the switch is right after a layout change remounts this row.
-  const { item: current } = usePlayer();
-  const loaded = current?.id === pair.title ? (current.detail === SIDE_LABEL.before ? 'before' : 'after') : null;
-  const [chosen, setChosen] = useState<'before' | 'after'>(start);
-  const side = loaded ?? chosen;
-  const itemFor = (s: Side) => pairItem(pair, s);
-  const choose = (s: 'before' | 'after') => {
-    setChosen(s);
-    player.swap(itemFor(s));
-  };
-  return (
-    <li className="ls-row" data-track={pair.title}>
-      <span className="ls-title">{pair.title}</span>
-      <p className="switch-hint" aria-hidden="true"><span className="on-touch">Tap</span><span className="on-mouse">Click</span> a year to switch, as it plays</p>
-      <div className="ls-switch" role="group" aria-label={`Which recording of ${pair.title}`}>
-        <button aria-pressed={side === 'before'} onClick={() => choose('before')}>
-          {SIDE_LABEL.before}
-        </button>
-        <button aria-pressed={side === 'after'} onClick={() => choose('after')}>
-          {SIDE_LABEL.after}
-        </button>
-      </div>
-      <Transport item={itemFor(side)} label={`${pair.title}, ${side === 'before' ? '1971' : '1974'}`} />
-    </li>
-  );
-}
-
-const T74 = TAPES.bowl1974;
-const T71 = TAPES.palladium1971;
-
-/** The Wall on its own: the Bowl tape. */
+/** The Wall, from the nearest night that was released. */
 export function ListenWall() {
+  const release = RELEASES[FEATURED.release];
   return (
     <div className="ls">
       <ul className="ls-list">
-        {WALL_TRACKS.map((t) => (
-          <TrackRow key={t.file} track={t} />
+        {FEATURED.tracks.map((t) => (
+          <li key={t.spotify} className="ls-row">
+            <span className="ls-title">{t.title}</span>
+            <iframe
+              className="ls-embed"
+              src={spotifyTrackEmbed(t.spotify)}
+              title={`${t.title}, ${FEATURED.venue}, ${FEATURED.dates}: Spotify player`}
+              loading="lazy"
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            />
+          </li>
         ))}
       </ul>
       <p className="ls-credit">
-        {T74.venue}, {T74.date}. Taped by {T74.taper} from the crowd ({T74.position.toLowerCase()}); transfer by{' '}
-        {T74.transfer}. <a href={tapeUrl('bowl1974')}>On the Internet Archive</a>
+        {FEATURED.venue}, {FEATURED.dates}, from {release.title}. Played by Spotify: signed in, you hear each song
+        whole; if not, a preview. <a href={spotifyAlbumUrl(release.spotify!)}>The album on Spotify</a>
       </p>
     </div>
   );
 }
 
-/** Before and after: the same songs, the same taper and microphones, three years apart. */
-export function ListenCompare() {
+const MONTH = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+/** "March 23", or "August 4–5" for a run of nights. */
+export function showDates(s: Show): string {
+  const day = (iso: string) => Number(iso.slice(8));
+  return `${MONTH[Number(s.date.slice(5, 7)) - 1]} ${day(s.date)}${s.to ? `–${day(s.to)}` : ''}`;
+}
+
+/** Every show the Wall played, and where each can be heard. */
+export function ShowList() {
   return (
-    <div className="ls">
-      <ul className="ls-list">
-        {PAIRS.map((p) => (
-          <PairRow key={p.title} pair={p} />
+    <div className="sh">
+      <ol className="sh-list">
+        {SHOWS.map((s, i) => (
+          <li key={s.date} className="sh-row">
+            {s.leg !== SHOWS[i - 1]?.leg && <h3 className="sh-leg">{s.leg}</h3>}
+            <span className="sh-when">{showDates(s)}</span>
+            <span className="sh-where">
+              <b>{s.venue}</b> {s.city}
+            </span>
+            {s.heard.length === 0 ? (
+              <span className="sh-heard sh-none">Never released</span>
+            ) : (
+              <ul className="sh-heard">
+                {s.heard.map(({ release, holds }) => {
+                  const r = RELEASES[release];
+                  return (
+                    <li key={release}>
+                      {r.title}: {holds}.{' '}
+                      {r.spotify ? (
+                        <a className="sh-link" href={spotifyAlbumUrl(r.spotify)} aria-label={`${r.title} on Spotify`}>
+                          Spotify
+                        </a>
+                      ) : (
+                        <span className="sh-none">Not on Spotify</span>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </li>
         ))}
-      </ul>
-      <p className="ls-credit">
-        Both taped by Rob Bertrando with Sony ECM-22P microphones. 1971: {T71.venue}, {T71.date},{' '}
-        {T71.position.toLowerCase()}; transfer by {T71.transfer}. <a href={tapeUrl('palladium1971')}>1971 tape</a>{' '}
-        <a href={tapeUrl('bowl1974')}>1974 tape</a>
-      </p>
-      <ul className="ls-caveats">
-        {COMPARISON_CAVEATS.map((c) => (
-          <li key={c}>{c}</li>
-        ))}
-      </ul>
+      </ol>
+      <p className="ls-credit">Checked on Spotify, November 17, 2026. Apple Music and Play Dead links are to come.</p>
     </div>
   );
 }
 
-/** Early in the story: one song, before and after, starting on 1971. The full comparison waits for the listen step. */
-export function ListenTeaser() {
-  return (
-    <div className="ls ls-teaser">
-      <p className="ls-head">Hear the difference</p>
-      <ul className="ls-list">
-        <PairRow pair={PAIRS[0]} start="before" />
-      </ul>
-      <p className="ls-credit">
-        The same taper and microphones, three years apart: {T71.venue}, 1971, and {T74.venue}, 1974. The 1971 tape is
-        the better recorder, reel-to-reel against cassette. More, and what else differs, at “Now listen.”
-      </p>
-    </div>
-  );
-}
-
-/** The explorer's Listen panel: both players in a dialog over the scene. */
+/** The explorer's Listen panel: the players and the shows, in a dialog over the scene. */
 export function ListenPanel({ onClose }: { onClose: () => void }) {
   const dialog = useRef<HTMLDivElement>(null);
-  const { item: current } = usePlayer();
   useEffect(() => {
     dialog.current?.focus();
-    // Opened from the now-playing pill: start at the song that's playing.
-    const row = Array.from(dialog.current?.querySelectorAll<HTMLElement>('[data-track]') ?? []).find((r) => r.dataset.track === current?.id);
-    row?.scrollIntoView({ block: 'center' });
-    // Only on opening: the rows below can change what's playing.
   }, []);
   return (
     <div className="about-backdrop" onClick={onClose}>
@@ -194,15 +114,19 @@ export function ListenPanel({ onClose }: { onClose: () => void }) {
           ×
         </button>
         <h1>Listen</h1>
-        <p className="lede">The Wall from the crowd at the Hollywood Bowl, on a cassette recorder, July 21, 1974.</p>
+        <p className="lede">{LISTEN_LEDE}</p>
         <ListenWall />
-        <h2>The same songs, three years apart</h2>
-        <p>
-          The same taper recorded the band in Hollywood in 1971, before the Wall, with the same kind of microphone.
-          Switch between them as they play.
-        </p>
-        <ListenCompare />
+        <h2>{SHOWS_HEAD}</h2>
+        <p>{SHOWS_LEDE}</p>
+        <ShowList />
       </div>
     </div>
   );
 }
+
+/** The words the story's steps and the panel share. */
+export const LISTEN_LEDE =
+  "No recording of that afternoon at the Bowl has ever been released. This is the Wall two weeks later, in Philadelphia, from the band's own tapes. A tape like this is fed from the stage, so it holds what went into the Wall, not what came out of it.";
+export const SHOWS_HEAD = `The ${SHOW_COUNT} shows`;
+export const SHOWS_LEDE =
+  'Every night the Wall stood, with the official releases that hold its music. Many nights were never released, the Hollywood Bowl among them.';

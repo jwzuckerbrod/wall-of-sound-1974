@@ -59,6 +59,7 @@ export type SourceId =
   | 'blueprints'
   | 'juliens'
   | 'tapes'
+  | 'shows'
   | 'duncan1982'
   | 'pell'
   | 'coules2021'
@@ -177,8 +178,14 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   tapes: {
     title:
-      "Audience recordings by Rob Bertrando: Hollywood Bowl, July 21, 1974, and Hollywood Palladium, August 6, 1971 (Internet Archive, Grateful Dead collection; src/data/recordings.ts)",
+      "Audience recording by Rob Bertrando: Hollywood Bowl, July 21, 1974 (Internet Archive, Grateful Dead collection; src/data/recordings.ts)",
     url: 'https://archive.org/details/GratefulDead',
+    kind: 'recording',
+  },
+  shows: {
+    title:
+      "The 1974 shows and their releases: the Grateful Dead setlist list (cs.cmu.edu/~gdead/74.html) and deaddisc.com's releases by recording date; what is on Spotify checked there November 17, 2026 (src/data/shows.ts)",
+    url: 'https://deaddisc.com/GDFD_Dead_By_Date.htm',
     kind: 'recording',
   },
   duncan1982: {

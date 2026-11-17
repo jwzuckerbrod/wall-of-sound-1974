@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts'],
+   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts', 'src/data/shows.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -299,6 +299,15 @@ console.log('\nThe buses and the 737, for scale');
   check('beside: at the depth of the speakers\' face', scale.planePlace('beside', L).pos[2], 0, 1e-9);
   check('behind: its near wing clear of the stage', scale.planePlace('behind', L).pos[2] + P.span / 2 < L.deck.minZ, true);
   check('in front: its near wing clear of the stage', scale.planePlace('front', L).pos[2] - P.span / 2 > L.deck.maxZ, true);
+}
+
+console.log('\nThe shows (src/data/shows.ts)');
+{
+  const shows = await load('data/shows.js');
+  check('every night is listed', shows.SHOW_COUNT, cfg.wall.meta.showCount);
+  check('in date order', shows.SHOWS.every((s, i, a) => i === 0 || a[i - 1].date < s.date), true);
+  check('every release a show names exists', shows.SHOWS.every((s) => s.heard.every((h) => shows.RELEASES[h.release])), true);
+  check('the players\' release is on Spotify', !!shows.RELEASES[shows.FEATURED.release].spotify, true);
 }
 
 console.log('\nProvenance, for the About page');

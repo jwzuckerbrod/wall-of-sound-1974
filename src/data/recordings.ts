@@ -1,16 +1,12 @@
 /**
- * The recordings the site plays: audience tapes of the Grateful Dead from the
- * Internet Archive's Grateful Dead collection, streamed from archive.org (never
- * copied here). Audience tapes, not soundboards: a soundboard tape is the mixing
- * desk's feed and never passed through the PA; an audience tape is the PA as the
- * crowd heard it.
- *
- * The comparison holds the recording steady: both tapes are Rob Bertrando's,
- * made with the same model of microphone (Sony ECM-22P) at shows in Hollywood.
- * What it can't hold steady is said in COMPARISON_CAVEATS and on the page.
+ * The one recording the site still streams from the Internet Archive: Rob
+ * Bertrando's audience tape of the Hollywood Bowl, July 21, 1974, played by the
+ * first screen's sound button (src/story/Landing.tsx). Everything else plays
+ * from a licensed service (src/data/shows.ts). The show was never released, so
+ * this tape is the only record of what the crowd heard that afternoon.
  */
 
-export type TapeId = 'bowl1974' | 'palladium1971';
+export type TapeId = 'bowl1974';
 
 export interface Tape {
   id: TapeId;
@@ -40,17 +36,6 @@ export const TAPES: Record<TapeId, Tape> = {
     position: 'In front of the mixing desk',
     pa: 'The Wall of Sound',
   },
-  palladium1971: {
-    id: 'palladium1971',
-    identifier: 'gd71-08-06.aud.bertrando.yerys.129.sbeok.shnf',
-    date: 'August 6, 1971',
-    venue: 'Hollywood Palladium',
-    taper: 'Rob Bertrando',
-    transfer: 'Ben Kasper',
-    rig: 'Sony ECM-22P microphones into a Sony 770 reel-to-reel at 7½ inches a second',
-    position: '40 to 50 feet back, dead center',
-    pa: 'A conventional PA, three years before the Wall',
-  },
 };
 
 export interface Track {
@@ -67,25 +52,4 @@ export const tapeUrl = (id: TapeId) => `https://archive.org/details/${TAPES[id].
 export const WALL_TRACKS: Track[] = [
   { tape: 'bowl1974', file: 'gd1974-07-21.motb.0056.s1t09.mp3', title: 'Scarlet Begonias' },
   { tape: 'bowl1974', file: 'gd1974-07-21.motb.0056.sEt01.mp3', title: 'U.S. Blues (the encore)' },
-];
-
-/** The same song before and after: the 1971 tape first, then the Wall. */
-export const PAIRS: { title: string; before: Track; after: Track }[] = [
-  {
-    title: 'Sugar Magnolia',
-    before: { tape: 'palladium1971', file: 'gd08-06-71d2t05.mp3', title: 'Sugar Magnolia' },
-    after: { tape: 'bowl1974', file: 'gd1974-07-21.motb.0056.s3t11.mp3', title: 'Sugar Magnolia' },
-  },
-  {
-    title: 'Me and My Uncle',
-    before: { tape: 'palladium1971', file: 'gd08-06-71d2t02.mp3', title: 'Me and My Uncle' },
-    after: { tape: 'bowl1974', file: 'gd1974-07-21.motb.0056.s1t03.mp3', title: 'Me and My Uncle' },
-  },
-];
-
-/** What the pair can't hold steady. Shown with the comparison. */
-export const COMPARISON_CAVEATS = [
-  'A hall indoors in 1971; an open-air bowl in 1974.',
-  'The 1971 tape was made on reel-to-reel, the better recorder; 1974 on cassette. Any edge the Wall has, it has in spite of the tape.',
-  'Three years of the band: different performances, and different nights.',
 ];

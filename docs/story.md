@@ -94,18 +94,20 @@ thumb, and labeled so). Sources in PROVENANCE `comparison.signalPath` and
 
 ### 3½. Listen
 
-Real recordings, streamed from the Internet Archive (never copied here), in
-`src/data/recordings.ts` and played by `src/ui/Listen.tsx` (also the explorer's
-Listen button). Audience tapes only: a soundboard tape is the desk's feed and
-never went through the Wall.
+Licensed sources only. The players are Spotify's own embedded players
+(`src/ui/Listen.tsx`, also the explorer's Listen button); what they play and
+every show's releases are in `src/data/shows.ts`.
 
-- The Wall on its own: Rob Bertrando's tape of the Bowl, July 21, 1974,
-  front of the desk, Sony ECM-22Ps on cassette (*Scarlet Begonias*, *U.S. Blues*).
-- Before and after: the same songs (*Sugar Magnolia*, *Me and My Uncle*) from
-  Bertrando's tape of the Hollywood Palladium, August 6, 1971, same microphones,
-  40–50 ft back, on reel-to-reel. One switch flips between them and keeps the
-  place. The page says what isn't held steady: indoors v. outdoors, the better
-  recorder on the older show, three years of the band.
+- The Hollywood Bowl show (July 21, 1974) was never released, and the step says
+  so. The players hold the nearest released nights: Philadelphia, August 4–5,
+  from Dick's Picks Vol. 31 ("Scarlet Begonias", "U.S. Blues", "Sugar Magnolia").
+- These are the band's own tapes, fed from the stage: what went into the Wall,
+  not what came out of it. The earlier before-and-after comparison (audience
+  tapes of 1971 and 1974 from the Internet Archive) is gone with them.
+- **The shows** step (`shows`) lists all 37 nights with their releases and
+  Spotify links. Apple Music and Play Dead links are to come.
+- Still on the Internet Archive: the first screen's sound button
+  (`src/story/Landing.tsx`, `src/data/recordings.ts`), part of the landing test.
 
 ### 4. Each player's own wall
 

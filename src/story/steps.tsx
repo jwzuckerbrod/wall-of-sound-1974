@@ -5,7 +5,7 @@ import type { CompareId } from '../scene/ScaleObjects';
 import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
 import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
-import { ListenCompare, ListenTeaser, ListenWall } from '../ui/Listen';
+import { LISTEN_LEDE, ListenWall, SHOWS_LEDE, ShowList } from '../ui/Listen';
 import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, type StoryImage } from './images';
 import { MicDiagram } from './MicDiagram';
@@ -108,7 +108,6 @@ export const STEPS: Step[] = [
         <DiagramFigure label="signal-path">
           <PathDiagram />
         </DiagramFigure>
-        <ListenTeaser />
         <p className="aside">
           The typical PA here is a composite: practice varied from band to band and changed fast.
         </p>
@@ -265,19 +264,17 @@ export const STEPS: Step[] = [
     id: 'listen',
     name: 'Listen',
     act: ACT2,
-    sources: ['tapes'],
+    sources: ['shows'],
     still: IMAGES.photoBowl,
     full: true,
     body: (
       <>
         <p className="figure">Now listen.</p>
-        <p>This is the Wall that afternoon, taped on a cassette recorder in the crowd at the Bowl.</p>
+        <p>{LISTEN_LEDE}</p>
         <ListenWall />
-        <p>
-          The same taper recorded the band in Hollywood in 1971, before the Wall, with the same kind of microphone.
-          Switch between them as they play.
+        <p className="links">
+          <a href="#shows">Every show, and where to hear it</a>
         </p>
-        <ListenCompare />
       </>
     ),
   },
@@ -330,6 +327,20 @@ export const STEPS: Step[] = [
           It played {wall.meta.showCount} shows. The last were at {wall.meta.retired.venue}, {wall.meta.retired.run}.
           Seven months after it first stood, the Wall was taken apart, and then never again.
         </p>
+      </>
+    ),
+  },
+  {
+    id: 'shows',
+    name: 'The shows',
+    act: ACT3,
+    sources: ['shows'],
+    full: true,
+    body: (
+      <>
+        <p className="figure">{wall.meta.showCount} shows.</p>
+        <p>{SHOWS_LEDE}</p>
+        <ShowList />
       </>
     ),
   },

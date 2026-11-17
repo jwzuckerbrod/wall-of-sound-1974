@@ -277,6 +277,15 @@ export default function App() {
   }, [inStory, storyAt, portrait, setOptions, closeCard]);
 
   const goToStep = useCallback((n: number) => setStoryAt(Math.min(STEPS.length - 1, Math.max(0, n))), []);
+  // A link in the story's words to another step ("#shows"): go there.
+  useEffect(() => {
+    const on = () => {
+      const n = STEPS.findIndex((x) => x.id === window.location.hash.slice(1));
+      if (n >= 0) goToStep(n);
+    };
+    window.addEventListener('hashchange', on);
+    return () => window.removeEventListener('hashchange', on);
+  }, [goToStep]);
   /** Put the story away: the explorer, as the step left it. */
   const leaveStory = useCallback(() => {
     setInStory(false);
