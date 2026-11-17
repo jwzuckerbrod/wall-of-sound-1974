@@ -128,7 +128,6 @@ const nights = (s: Show) => (s.to ? Number(s.to.slice(-2)) - Number(s.date.slice
 export const SHOW_COUNT = SHOWS.reduce((n, s) => n + nights(s), 0);
 
 export const spotifyAlbumUrl = (id: string) => `https://open.spotify.com/album/${id}`;
-export const spotifyTrackUrl = (id: string) => `https://open.spotify.com/track/${id}`;
 export const spotifyTrackEmbed = (id: string) => `https://open.spotify.com/embed/track/${id}?theme=0`;
 
 /**

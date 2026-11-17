@@ -106,8 +106,7 @@ every show's releases are in `src/data/shows.ts`.
   tapes of 1971 and 1974 from the Internet Archive) is gone with them.
 - **The shows** step (`shows`) lists all 37 nights with their releases and
   Spotify links. Apple Music and Play Dead links are to come.
-- The first screen links to the first of those songs on Spotify (`src/story/Landing.tsx`);
-  the click is still logged as `landing-sound`, so the landing test's events keep their names.
+- The first screen has no sound: a link out to Spotify was tried and dropped.
 
 ### 4. Each player's own wall
 

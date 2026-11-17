@@ -101,16 +101,13 @@ export const STEPS: Step[] = [
       <>
         <p className="figure">Before the Wall.</p>
         <p>
-          At a typical concert of the early 1970s, before the Wall existed, every microphone ran to one mixing desk in
-          the crowd. It all came back as one mix, out of two speaker stacks at the corners of the stage. Musicians on
-          those stages, the band's 1974 technical report said, “don't really know how they sound.”
+          At a concert of the early 1970s, every microphone ran to one desk and came back as one mix. Musicians on
+          those stages, the band's 1974 report said, “don't really know how they sound.”
         </p>
         <DiagramFigure label="signal-path">
           <PathDiagram />
         </DiagramFigure>
-        <p className="aside">
-          The typical PA here is a composite: practice varied from band to band and changed fast.
-        </p>
+        <p className="aside">The typical PA here is a composite: practice varied from band to band.</p>
       </>
     ),
   },
