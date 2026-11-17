@@ -22,6 +22,7 @@ const MODELLING: { name: string; what: string; licence: string; url: string }[] 
   { name: 'Poly Haven', what: 'trees, shrubs, ground and the late-afternoon sky at the Bowl', licence: 'CC0', url: 'https://polyhaven.com' },
   { name: 'The MakeHuman community', what: 'the people in the crowd, built with MPFB from the community asset packs', licence: 'CC0', url: 'http://www.makehumancommunity.org' },
   { name: 'Elvs, CulturaLibre, punkduck, o4saken and other MakeHuman community artists', what: 'hairstyles (Hair packs 02 and 03)', licence: 'CC-BY 4.0', url: 'http://www.makehumancommunity.org' },
+  { name: 'Natural Earth', what: 'the outlines on the map of the shows', licence: 'public domain', url: 'https://www.naturalearthdata.com' },
   { name: 'Blender', what: 'modeling and Cycles rendering', licence: 'GPL', url: 'https://www.blender.org' },
 ];
 

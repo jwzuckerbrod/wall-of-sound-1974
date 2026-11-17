@@ -284,7 +284,7 @@ export function TopBar({
           {storyUnfinished ? 'Back to the story' : 'The story'}
         </button>
         <button className="pill pill-listen" onClick={openListen}>
-          Listen
+          The shows
         </button>
         <button className="pill pill-about" onClick={openAbout}>
           About

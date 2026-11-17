@@ -12,11 +12,12 @@ import { createServer } from 'vite';
 
 const OUT = 'dist/index.html';
 const vite = await createServer({ server: { middlewareMode: true }, appType: 'custom', logLevel: 'error' });
-let steps, tour, sources, meta;
+let steps, tour, sources, meta, shows;
 try {
   ({ STEPS: steps } = await vite.ssrLoadModule('/src/story/steps.tsx'));
   ({ TOUR: tour } = await vite.ssrLoadModule('/src/scene/tour.ts'));
   ({ SOURCES: sources, wall: meta } = await vite.ssrLoadModule('/src/data/wall.config.ts'));
+  shows = await vite.ssrLoadModule('/src/data/shows.ts');
 } finally {
   await vite.close();
 }
@@ -41,6 +42,19 @@ function html(node) {
   return '';
 }
 
+// The shows: the list the map's step folds away, as plain text with its links (src/data/shows.ts)
+const when = (iso) => new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', { month: 'long', day: 'numeric', timeZone: 'UTC' });
+const showsHtml = `<ul>${shows.SHOWS.map((s) => {
+  const dates = s.to ? `${when(s.date)}–${Number(s.to.slice(-2))}` : when(s.date);
+  const heard = s.heard.map(({ release, holds }) => {
+    const r = shows.RELEASES[release];
+    return `${esc(r.title)}: ${esc(holds)}${r.spotify ? ` (<a href="${shows.spotifyAlbumUrl(r.spotify)}">Spotify</a>)` : ''}`;
+  });
+  const nights = shows.playDeadNights(s).map((n) => `<a href="${n.url}">Play Dead, ${when(n.date)}</a>`);
+  const where = [...heard, ...nights].join('; ') || 'never released';
+  return `<li>${dates}, 1974: ${esc(s.venue)}, ${esc(s.city)}. ${where}.</li>`;
+}).join('')}</ul>`;
+
 // One step's words; its first <h1>/<h2> stays as its heading, otherwise its dashboard name becomes one
 const parts = [];
 let act = null;
@@ -57,6 +71,7 @@ for (const s of steps) {
   }
   if (!/^<h[1-3]>/.test(body)) body = `<h3>${esc(s.name)}</h3>${body}`;
   else body = body.replace(/^<h[12]>(.*?)<\/h[12]>/, '<h3>$1</h3>');
+  if (s.id === 'shows') body += showsHtml;
   parts.push(`<section id="read-${esc(s.id)}">${body}</section>`);
 }
 

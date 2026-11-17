@@ -15,7 +15,7 @@ function WhatYouCanDo() {
       <li><strong>View</strong> has {PLACES.length} places to stand, from the crowd to Keith&rsquo;s piano.</li>
       <li><strong>{tap} any speaker</strong> to read about it.</li>
       <li><strong>Take it apart</strong> with the slider below, or {tap.toLowerCase()} <strong>Color</strong> to see its six systems.</li>
-      <li><strong>Listen</strong> to it, on tapes from 1974.</li>
+      <li><strong>The shows</strong> has a map of every night, and the band on its own tapes.</li>
     </ul>
   );
 }

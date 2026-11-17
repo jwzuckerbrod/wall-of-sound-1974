@@ -45,7 +45,7 @@ from Cycles renders. Read `docs/handoff.md` first for where things stand.
   state. `#<step id>` opens a step; `#explore` or any `?query` opens the explorer
   (except share tags and `?landing=`).
 - The shows and the map: `src/data/shows.ts` (every night, its venue's coordinates, its releases and
-  links) feeds the Listen players, the list and the map (`src/ui/TourMap.tsx`, projection in
+  its Spotify and Play Dead links) feeds the Listen players, the list and the map (`src/ui/TourMap.tsx`, projection in
   `src/geometry/tourmap.ts`). The map's outlines are baked from Natural Earth by
   `node scripts/make-map.mjs <folder of its GeoJSON>`; rerun only if the projection changes.
 - The story's first screen is an **A/B test** (from November 2026): `src/story/Landing.tsx`

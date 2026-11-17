@@ -177,7 +177,7 @@ export const SOURCES: Record<SourceId, SourceRef> = {
   },
   shows: {
     title:
-      "The 1974 shows and their releases: the Grateful Dead setlist list (cs.cmu.edu/~gdead/74.html) and deaddisc.com's releases by recording date; what is on Spotify checked there November 17, 2026 (src/data/shows.ts)",
+      "The 1974 shows and their releases: the Grateful Dead setlist list (cs.cmu.edu/~gdead/74.html) and deaddisc.com's releases by recording date; what is on Spotify checked there November 17, 2026; each venue's coordinates from Wikipedia (src/data/shows.ts)",
     url: 'https://deaddisc.com/GDFD_Dead_By_Date.htm',
     kind: 'recording',
   },

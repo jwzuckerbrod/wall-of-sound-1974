@@ -92,23 +92,28 @@ seems to come from, by the precedence effect (arrival times only: a rule of
 thumb, and labeled so). Sources in PROVENANCE `comparison.signalPath` and
 `comparison.localization`.
 
-### 3½. Listen
+### 3½. Listen, and the road
 
-Licensed sources only. The players are Spotify's own embedded players
-(`src/ui/Listen.tsx`, also the explorer's Listen button); what they play and
-every show's releases are in `src/data/shows.ts`.
+Licensed sources only. The player is Spotify's own embedded player
+(`src/ui/Listen.tsx`, also the explorer's "The shows" button); what it plays and
+every show's releases and links are in `src/data/shows.ts`.
 
-- The Hollywood Bowl show (July 21, 1974) was never released, and the step says
-  so. The players hold the nearest released nights: Philadelphia, August 4–5,
-  from Dick's Picks Vol. 31 ("Scarlet Begonias", "U.S. Blues", "Sugar Magnolia").
-- These are the band's own tapes, fed from the stage: what went into the Wall,
-  not what came out of it. The earlier before-and-after comparison (audience
-  tapes of 1971 and 1974 from the Internet Archive) is gone with them.
-- **The shows** step (`shows`) has a map of every stop in order (`src/ui/TourMap.tsx`:
-  step, play, or tap a stop) over the list of all 37 nights with their releases and
-  Spotify links. Each stop gives the straight-line miles and the days from the one
-  before; the lines are not the trucks' roads, and the page says so. Apple Music
-  and Play Dead links are to come.
+- **Listen** (`listen`) is no longer the page's climax: with licensed audio only
+  there is no "hear the Wall" moment. It is headed "What went into it" and plays
+  one song, the band's own tape from Philadelphia, August 4–5 (Dick's Picks
+  Vol. 31): fed from the stage, so what went into the Wall, not what came out.
+  It says the Bowl was never released. The seats step is the act's payoff.
+  The explorer's panel has all three songs. The earlier before-and-after
+  comparison (audience tapes of 1971 and 1974) is gone.
+- **The road** (`shows`) sits in act 3 between the amplifiers and the last night:
+  the cost of moving the Wall, then where it went, ending at Winterland. A map
+  of every stop in order (`src/ui/TourMap.tsx`: step, play, or tap a stop), with
+  the list of all 37 nights folded away under it. Each stop gives the
+  straight-line miles and the days from the one before; the lines are not the
+  trucks' roads, and the page says so.
+- Each night links to its albums on Spotify and to its page on Play Dead (24 of
+  the 37 nights, read from Play Dead's 1974 list on November 17, 2026; the Bowl
+  is not among them). Apple Music links are to come.
 - The first screen has no sound: a link out to Spotify was tried and dropped.
 
 ### 4. Each player's own wall
@@ -201,13 +206,14 @@ marked **(needs a source)** are not, and can't go on the page until they are.
 | 6 | Each player's own wall | The Wall was the monitor. Garcia's guitar came out of the columns behind him. **(config:** `arrays.verticalSplit`**)** | `garcia-mark` |
 | 7 | The singing problem | A microphone in front of 26 kilowatts should howl. The paired microphones. **(config:** `channels.vocalMics`**)** | `cluster-up`, the mic diagram |
 | 8 | What it did for the crowd | The seat diagram: the band has a width. Clear at 180 meters. **(config:** `system.usableThrowMetres`**)** | The seat diagram over a new high, wide still |
-| 9 | Listen | The act's climax, and the page's. The Bowl tape, then 1971 against 1974. Last in the act, so the reader knows what they are hearing. | The Bowl photograph |
+| 9 | Listen | What went into the Wall: one song from the band's own tape, Philadelphia, two weeks after the Bowl (licensed audio only; see 3½). No longer the climax: beat 8 is. | The dimmed model |
 
 ### Act 3. The cost, and the end
 
 | # | Beat | What it says | Picture |
 |---|---|---|---|
 | 10 | What it took | $350,000 to build. Two identical scaffolds leapfrogging from city to city so one was always standing when the speakers arrived. 21 people to load it; four hours for the stage, four for the sound. $100,000 a month to move. 120 decibels on stage. **(config:** `system.buildCostUsd1974`, `stagingSets`, `crew`, `setupHours`, `transportLabourUsdPerMonth`, `onstageSplDb`**)** | `amps-close` with the needles; or the crew on the scaffold (`crew.glb`) as a new render |
+| 10½ | The road | The map of every stop in order, the list folded under it (see 3½). Ends at Winterland, which is beat 11. | The map |
 | 11 | The last night | Winterland, San Francisco, 16 to October 20, 1974. Seven months after its first show, the Wall came down for the last time. **(config:** `meta.retired`, `meta.debut`**)** Why it ended, and what the band did next: **(needs a source)**. | A new render: the Wall half-struck, or the empty stage at dusk |
 | 12 | What's left | Budman, the amplifier that drove Garcia's guitar, sold at Sotheby's in 2021, still in its road case. Six cabinets. A handful of photographs. **(config:** `docs/surviving-gear.md`**)** What it left behind in how concerts sound: **(needs a source)**. | A photograph of a surviving piece **(needs a credit)**, or `amps-close` if beat 10 takes the crew |
 
@@ -257,7 +263,7 @@ next; what concert sound took from it; what it was like to play through.
 
 1. **Tone.** The copy above is plain and factual. Warmer and more personal, or
    keep it like a museum label?
-2. ~~**Sound.**~~ Settled in practice: the Listen players and the now-playing bar.
+2. ~~**Sound.**~~ Settled: licensed sources only (Spotify's player, links to Play Dead); see 3½.
 3. ~~**Photographs.**~~ Decided: photographs stay, credited generously (§17).
 4. **The name.** The page uses "the Grateful Dead", a trademark, in a factual
    way. Any plan for the project's own title?

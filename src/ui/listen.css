@@ -60,3 +60,7 @@
 .tm-stop .sh-heard { margin-top: 6px; }
 .tm-note { margin-top: 6px !important; font-size: 0.92em; opacity: 0.7; }
 @media (prefers-reduced-motion: reduce) { .tm-here { transition: none; } }
+.sh-fold { margin-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1); }
+.sh-fold summary { min-height: 44px; display: flex; align-items: center; gap: 8px; cursor: pointer; font-weight: 600; color: #e9b85a; }
+.sh-fold summary:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.sh-pd { margin-right: 8px; }

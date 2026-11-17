@@ -307,6 +307,9 @@ console.log('\nThe shows (src/data/shows.ts)');
   check('every night is listed', shows.SHOW_COUNT, cfg.wall.meta.showCount);
   check('in date order', shows.SHOWS.every((s, i, a) => i === 0 || a[i - 1].date < s.date), true);
   check('every release a show names exists', shows.SHOWS.every((s) => s.heard.every((h) => shows.RELEASES[h.release])), true);
+  const linked = shows.SHOWS.flatMap((s) => shows.playDeadNights(s)).length;
+  check('every Play Dead night belongs to a show', linked, Object.keys(shows.PLAY_DEAD).length);
+  check('the Bowl is not on Play Dead', shows.PLAY_DEAD['1974-07-21'], undefined);
   const map = await load('geometry/tourmap.js');
   const onMap = shows.SHOWS.every((s) => {
     const v = map.VIEWS[map.viewOf(s.at[0], s.at[1])];

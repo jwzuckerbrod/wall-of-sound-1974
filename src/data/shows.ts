@@ -10,7 +10,12 @@
  * Releases: deaddisc.com's list by recording date. Each Spotify id below was
  * found on Spotify itself on November 17, 2026 (US catalog), and the track
  * counts are Spotify's. A release without a Spotify id was searched for and not
- * found there. Apple Music and Play Dead links are not filled in yet.
+ * found there. Apple Music links are not filled in yet.
+ *
+ * Play Dead (the band's own streaming service, by subscription): the ids in
+ * PLAY_DEAD are its pages for single nights, read from its 1974 list while
+ * signed in on November 17, 2026. A night without one was not in that list;
+ * the Hollywood Bowl is one of them. Its list holds nights that no album does.
  *
  * Coordinates: each venue's, from its Wikipedia article (read November 17,
  * 2026). Three stand in: the University of Nevada show is placed at Mackay
@@ -49,7 +54,6 @@ export interface Release {
   spotify?: string;
   /** Not filled in yet. */
   appleMusic?: string;
-  playDead?: string;
 }
 
 export const RELEASES: Record<ReleaseId, Release> = {
@@ -139,6 +143,45 @@ export const EUROPE_NOTE = "The Wall was set up at Alexandra Palace. How much of
 const nights = (s: Show) => (s.to ? Number(s.to.slice(-2)) - Number(s.date.slice(-2)) + 1 : 1);
 /** Every night, counting the runs. Checked against wall.meta.showCount by `npm run verify`. */
 export const SHOW_COUNT = SHOWS.reduce((n, s) => n + nights(s), 0);
+
+/** Play Dead's page for a night, by its date: vault.playdead.app/release/<id>. */
+export const PLAY_DEAD: Record<string, number> = {
+  '1974-03-23': 47642,
+  '1974-05-12': 47641,
+  '1974-05-14': 47640,
+  '1974-05-17': 47639,
+  '1974-05-19': 47638,
+  '1974-05-21': 47637,
+  '1974-06-16': 47959,
+  '1974-06-18': 48258,
+  '1974-06-22': 47636,
+  '1974-06-23': 47635,
+  '1974-06-26': 48398,
+  '1974-06-28': 48397,
+  '1974-07-19': 47634,
+  '1974-07-27': 49139,
+  '1974-07-29': 47633,
+  '1974-07-31': 47632,
+  '1974-08-04': 47631,
+  '1974-08-05': 47630,
+  '1974-08-06': 47629,
+  '1974-09-18': 47628,
+  '1974-10-17': 49030,
+  '1974-10-18': 49029,
+  '1974-10-19': 49028,
+  '1974-10-20': 49027,
+};
+
+/** The nights of a show that Play Dead holds, each with its link. */
+export function playDeadNights(s: Show): { date: string; url: string }[] {
+  const out: { date: string; url: string }[] = [];
+  const last = Number((s.to ?? s.date).slice(-2));
+  for (let d = Number(s.date.slice(-2)); d <= last; d++) {
+    const date = `${s.date.slice(0, 8)}${String(d).padStart(2, '0')}`;
+    if (PLAY_DEAD[date]) out.push({ date, url: `https://vault.playdead.app/release/${PLAY_DEAD[date]}` });
+  }
+  return out;
+}
 
 export const spotifyAlbumUrl = (id: string) => `https://open.spotify.com/album/${id}`;
 export const spotifyTrackEmbed = (id: string) => `https://open.spotify.com/embed/track/${id}?theme=0`;

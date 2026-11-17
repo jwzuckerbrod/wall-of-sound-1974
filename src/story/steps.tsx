@@ -5,7 +5,7 @@ import type { CompareId } from '../scene/ScaleObjects';
 import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
 import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
-import { LISTEN_LEDE, ListenWall, SHOWS_LEDE, Shows } from '../ui/Listen';
+import { LISTEN_LEDE, ListenWall, ROAD_LEDE, Shows } from '../ui/Listen';
 import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, type StoryImage } from './images';
 import { MicDiagram } from './MicDiagram';
@@ -262,16 +262,12 @@ export const STEPS: Step[] = [
     name: 'Listen',
     act: ACT2,
     sources: ['shows'],
-    still: IMAGES.photoBowl,
     full: true,
     body: (
       <>
-        <p className="figure">Now listen.</p>
+        <p className="figure">What went into it.</p>
         <p>{LISTEN_LEDE}</p>
-        <ListenWall />
-        <p className="links">
-          <a href="#shows">Every show, and where to hear it</a>
-        </p>
+        <ListenWall count={1} />
       </>
     ),
   },
@@ -311,6 +307,20 @@ export const STEPS: Step[] = [
     ),
   },
   {
+    id: 'shows',
+    name: 'The shows',
+    act: ACT3,
+    sources: ['shows'],
+    full: true,
+    body: (
+      <>
+        <p className="figure">The road.</p>
+        <p>{ROAD_LEDE}</p>
+        <Shows fold />
+      </>
+    ),
+  },
+  {
     id: 'end',
     name: 'The last night',
     act: ACT3,
@@ -324,20 +334,6 @@ export const STEPS: Step[] = [
           It played {wall.meta.showCount} shows. The last were at {wall.meta.retired.venue}, {wall.meta.retired.run}.
           Seven months after it first stood, the Wall was taken apart, and then never again.
         </p>
-      </>
-    ),
-  },
-  {
-    id: 'shows',
-    name: 'The shows',
-    act: ACT3,
-    sources: ['shows'],
-    full: true,
-    body: (
-      <>
-        <p className="figure">{wall.meta.showCount} shows.</p>
-        <p>{SHOWS_LEDE}</p>
-        <Shows />
       </>
     ),
   },
