@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { Suspense, lazy, useEffect, useRef, useState } from 'react';
 import { FEATURED, RELEASES, SHOWS, SHOW_COUNT, spotifyAlbumUrl, spotifyTrackEmbed, type Show } from '../data/shows';
 import './listen.css';
 
@@ -43,43 +43,69 @@ export function showDates(s: Show): string {
   return `${MONTH[Number(s.date.slice(5, 7)) - 1]} ${day(s.date)}${s.to ? `–${day(s.to)}` : ''}`;
 }
 
-/** Every show the Wall played, and where each can be heard. */
-export function ShowList() {
+/** Where a show can be heard: its releases and their links, or that it was never released. */
+export function HeardList({ show }: { show: Show }) {
+  if (show.heard.length === 0) return <span className="sh-heard sh-none">Never released</span>;
+  return (
+    <ul className="sh-heard">
+      {show.heard.map(({ release, holds }) => {
+        const r = RELEASES[release];
+        return (
+          <li key={release}>
+            {r.title}: {holds}.{' '}
+            {r.spotify ? (
+              <a className="sh-link" href={spotifyAlbumUrl(r.spotify)} aria-label={`${r.title} on Spotify`}>
+                Spotify
+              </a>
+            ) : (
+              <span className="sh-none">Not on Spotify</span>
+            )}
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** Every show the Wall played, and where each can be heard. A row's date and place put it on the map. */
+export function ShowList({ at, pick }: { at: number; pick: (i: number) => void }) {
   return (
     <div className="sh">
       <ol className="sh-list">
         {SHOWS.map((s, i) => (
-          <li key={s.date} className="sh-row">
+          <li key={s.date} className="sh-row" data-on={i === at || undefined}>
             {s.leg !== SHOWS[i - 1]?.leg && <h3 className="sh-leg">{s.leg}</h3>}
-            <span className="sh-when">{showDates(s)}</span>
-            <span className="sh-where">
-              <b>{s.venue}</b> {s.city}
-            </span>
-            {s.heard.length === 0 ? (
-              <span className="sh-heard sh-none">Never released</span>
-            ) : (
-              <ul className="sh-heard">
-                {s.heard.map(({ release, holds }) => {
-                  const r = RELEASES[release];
-                  return (
-                    <li key={release}>
-                      {r.title}: {holds}.{' '}
-                      {r.spotify ? (
-                        <a className="sh-link" href={spotifyAlbumUrl(r.spotify)} aria-label={`${r.title} on Spotify`}>
-                          Spotify
-                        </a>
-                      ) : (
-                        <span className="sh-none">Not on Spotify</span>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+            <button className="sh-pick" onClick={() => pick(i)} aria-label={`${showDates(s)}, ${s.venue}, ${s.city}: show on the map`}>
+              <span className="sh-when">{showDates(s)}</span>
+              <span className="sh-where">
+                <b>{s.venue}</b> {s.city}
+              </span>
+            </button>
+            <HeardList show={s} />
           </li>
         ))}
       </ol>
       <p className="ls-credit">Checked on Spotify, November 17, 2026. Apple Music and Play Dead links are to come.</p>
+    </div>
+  );
+}
+
+const TourMap = lazy(() => import('./TourMap'));
+
+/** The map and the list together: one stop is chosen in both. */
+export function Shows() {
+  const [at, setAt] = useState(0);
+  const top = useRef<HTMLDivElement>(null);
+  const pick = (i: number) => {
+    setAt(i);
+    top.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  return (
+    <div ref={top} className="shows">
+      <Suspense fallback={<div className="tm tm-wait" />}>
+        <TourMap at={at} setAt={setAt} />
+      </Suspense>
+      <ShowList at={at} pick={pick} />
     </div>
   );
 }
@@ -109,7 +135,7 @@ export function ListenPanel({ onClose }: { onClose: () => void }) {
         <ListenWall />
         <h2>{SHOWS_HEAD}</h2>
         <p>{SHOWS_LEDE}</p>
-        <ShowList />
+        <Shows />
       </div>
     </div>
   );
@@ -120,4 +146,4 @@ export const LISTEN_LEDE =
   "No recording of that afternoon at the Bowl has ever been released. This is the Wall two weeks later, in Philadelphia, from the band's own tapes. A tape like this is fed from the stage, so it holds what went into the Wall, not what came out of it.";
 export const SHOWS_HEAD = `The ${SHOW_COUNT} shows`;
 export const SHOWS_LEDE =
-  'Every night the Wall stood, with the official releases that hold its music. Many nights were never released, the Hollywood Bowl among them.';
+  'Every night the Wall stood, in order, with the official releases that hold its music. Many nights were never released, the Hollywood Bowl among them.';

@@ -5,7 +5,7 @@ import type { CompareId } from '../scene/ScaleObjects';
 import type { Pose } from '../scene/TourCamera';
 import { TOUR } from '../scene/tour';
 import { COMPARE_VIEW, standIn, viewIn } from '../scene/views';
-import { LISTEN_LEDE, ListenWall, SHOWS_LEDE, ShowList } from '../ui/Listen';
+import { LISTEN_LEDE, ListenWall, SHOWS_LEDE, Shows } from '../ui/Listen';
 import { DiagramFigure } from './DiagramFigure';
 import { IMAGES, type StoryImage } from './images';
 import { MicDiagram } from './MicDiagram';
@@ -337,7 +337,7 @@ export const STEPS: Step[] = [
       <>
         <p className="figure">{wall.meta.showCount} shows.</p>
         <p>{SHOWS_LEDE}</p>
-        <ShowList />
+        <Shows />
       </>
     ),
   },

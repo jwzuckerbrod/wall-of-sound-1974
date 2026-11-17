@@ -104,8 +104,11 @@ every show's releases are in `src/data/shows.ts`.
 - These are the band's own tapes, fed from the stage: what went into the Wall,
   not what came out of it. The earlier before-and-after comparison (audience
   tapes of 1971 and 1974 from the Internet Archive) is gone with them.
-- **The shows** step (`shows`) lists all 37 nights with their releases and
-  Spotify links. Apple Music and Play Dead links are to come.
+- **The shows** step (`shows`) has a map of every stop in order (`src/ui/TourMap.tsx`:
+  step, play, or tap a stop) over the list of all 37 nights with their releases and
+  Spotify links. Each stop gives the straight-line miles and the days from the one
+  before; the lines are not the trucks' roads, and the page says so. Apple Music
+  and Play Dead links are to come.
 - The first screen has no sound: a link out to Spotify was tried and dropped.
 
 ### 4. Each player's own wall

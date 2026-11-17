@@ -15,7 +15,7 @@ execFileSync(
   process.execPath,
   ['node_modules/typescript/bin/tsc', '--outDir', tmp, '--target', 'ES2022', '--module', 'ESNext',
    '--moduleResolution', 'bundler', 'src/geometry/arrays.ts', 'src/geometry/scaffold.ts',
-   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts', 'src/data/shows.ts'],
+   'src/geometry/footprints.ts', 'src/geometry/deckdressing.ts', 'src/geometry/scale.ts', 'src/scene/views.ts', 'src/scene/tour.ts', 'src/data/shows.ts', 'src/geometry/tourmap.ts'],
   { stdio: 'inherit' },
 );
 // tsc emits extensionless relative imports, which node's ESM loader rejects.
@@ -307,6 +307,17 @@ console.log('\nThe shows (src/data/shows.ts)');
   check('every night is listed', shows.SHOW_COUNT, cfg.wall.meta.showCount);
   check('in date order', shows.SHOWS.every((s, i, a) => i === 0 || a[i - 1].date < s.date), true);
   check('every release a show names exists', shows.SHOWS.every((s) => s.heard.every((h) => shows.RELEASES[h.release])), true);
+  const map = await load('geometry/tourmap.js');
+  const onMap = shows.SHOWS.every((s) => {
+    const v = map.VIEWS[map.viewOf(s.at[0], s.at[1])];
+    const [x, y] = v.project(s.at[1], s.at[0]);
+    return x > 0 && x < v.width && y > 0 && y < v.height;
+  });
+  check('every show is on the map', onMap, true);
+  check('the European stops are on the European view', shows.SHOWS.filter((s) => s.leg === 'Europe').every((s) => map.viewOf(s.at[0], s.at[1]) === 'europe'), true);
+  const at = (date) => shows.SHOWS.find((s) => s.date === date).at;
+  // Fresno to the Hollywood Bowl is about 205 miles in a straight line.
+  check('straight-line miles, Fresno to the Bowl', Math.abs(map.milesBetween(at('1974-07-19'), at('1974-07-21')) - 205) < 10, true);
   check('the players\' release is on Spotify', !!shows.RELEASES[shows.FEATURED.release].spotify, true);
 }
 
